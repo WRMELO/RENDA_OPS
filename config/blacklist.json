@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "task_id": "A-001",
+    "description": "Blacklist de qualidade de dados - Tickers com dados não confiáveis identificados na auditoria forense A-001 da SSOT_CANONICAL_BASE",
+    "generated_at": "2026-02-27T22:00:00Z",
+    "source_report": "00_Strategy/Task_History/A-001/audit_report.md",
+    "criteria": [
+      "G3_RETURN_SANITY: |X_real| > 1.0 (fisicamente implausível)",
+      "G3_RETURN_SANITY: |média X_real por ticker| > 0.05 (distorção sistemática)"
+    ],
+    "owner_decision": "CERTIFIED WITH NOTE - Owner aprovou base com exclusão destes tickers do ranking operacional"
+  },
+  "blacklist": [
+    {"ticker": "AFLT3",  "reason": "|X_real| > 1.0 em 2019-09-18"},
+    {"ticker": "AZUL53", "reason": "média X_real = -0.117 (viés sistemático)"},
+    {"ticker": "BFPX39", "reason": "média X_real = -0.120 (viés sistemático)"},
+    {"ticker": "BIET39", "reason": "|X_real| > 1.0 em múltiplas datas (BDR ilíquido)"},
+    {"ticker": "BIHE39", "reason": "|X_real| > 1.0 em 2024-03-01 (BDR ilíquido)"},
+    {"ticker": "BIHF39", "reason": "|X_real| > 1.0 em múltiplas datas (BDR ilíquido)"},
+    {"ticker": "BMEB3",  "reason": "|X_real| = 3.11 em 2021-12-06 (micro-cap)"},
+    {"ticker": "BMEB4",  "reason": "|X_real| = -4.54 em 2021-12-03 (micro-cap)"},
+    {"ticker": "BPAR3",  "reason": "média X_real = +0.187 (viés sistemático)"},
+    {"ticker": "CASN3",  "reason": "média X_real = -0.061 (viés sistemático)"},
+    {"ticker": "DEFT31", "reason": "média X_real = -0.050 (viés sistemático)"},
+    {"ticker": "EMAE3",  "reason": "média X_real = +0.108 (viés sistemático)"},
+    {"ticker": "FIGE3",  "reason": "média X_real = +0.626 (viés extremo)"},
+    {"ticker": "ODER4",  "reason": "média X_real = +0.146 (viés sistemático)"},
+    {"ticker": "SHUL3",  "reason": "média X_real = -0.691 (viés extremo)"},
+    {"ticker": "TKNO3",  "reason": "média X_real = +0.059 (viés sistemático)"}
+  ],
+  "tickers_list": [
+    "AFLT3", "AZUL53", "BFPX39", "BIET39", "BIHE39", "BIHF39",
+    "BMEB3", "BMEB4", "BPAR3", "CASN3", "DEFT31", "EMAE3",
+    "FIGE3", "ODER4", "SHUL3", "TKNO3"
+  ],
+  "total_blacklisted": 16,
+  "usage": "Qualquer simulação/ranking deve filtrar estes tickers ANTES do cálculo de scores e seleção"
+}

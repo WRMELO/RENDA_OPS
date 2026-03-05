@@ -1,0 +1,47 @@
+{
+  "h_in": 2,
+  "h_out": 4,
+  "initial_mode": "B_T067_CONTROLE_REGIME",
+  "profiles_fixed": {
+    "mode_a": {
+      "cadence_days": 3,
+      "max_pct": 0.15,
+      "target_pct": 0.1,
+      "top_n": 10
+    },
+    "mode_b": {
+      "cadence_days": 10,
+      "in_hyst_days": 4,
+      "market_slope_window": 30,
+      "max_pct": 0.15,
+      "out_hyst_days": 4,
+      "target_pct": 0.1,
+      "top_n": 10
+    }
+  },
+  "selected_candidate_id": "W30_T0p0005_HI2_HO4_SINAL-2_B0",
+  "selection_order": [
+    "equity_final_total_train DESC",
+    "min(excess_return_P1_vs_T037_train, excess_return_P2train_vs_T067) DESC",
+    "Sharpe_train DESC",
+    "turnover_total_train ASC",
+    "candidate_id ASC"
+  ],
+  "signal_variant": "SINAL-2",
+  "signal_w": 30,
+  "task_id": "T072-DUAL-MODE-ENGINE-ABLATION-V1",
+  "thr": 0.0005,
+  "thresholds": {
+    "MDD_holdout_min": -0.3,
+    "MDD_total_train_min": -0.3,
+    "excess_return_2023plus_vs_t044_holdout_min": 0.0,
+    "excess_return_P1_vs_T037_train_min": -0.2,
+    "excess_return_P2train_vs_T067_min": -0.2
+  },
+  "walk_forward": {
+    "holdout_end": "2026-02-26",
+    "holdout_start": "2023-01-02",
+    "train_end": "2022-12-30",
+    "train_start": "2018-07-02"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "created_utc": "2026-03-05T12:16:53.364958+00:00",
+    "source_repo": "/home/wilson/AGNO_WORKSPACE",
+    "source_commit": "0ab1bce188489e218dba327e84013538e33ef854",
+    "target_repo": "/home/wilson/RENDA_OPS",
+    "winner": "C060X (THR0.22, h_in=3, h_out=2, top_n=10)"
+  },
+  "mappings": [
+    {
+      "renda_ops_path": "data/ssot/canonical_br.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_CANONICAL_BASE_BR_EXPANDED.parquet",
+      "sha256_source": "e4bd48eac563741487f1ae01009601b01476394268ee2556dec16b9648e881f2",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/ssot/macro.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_MACRO_EXPANDED.parquet",
+      "sha256_source": "08fc8b52c741f7aefb07c3a4e2b57d9fbdb0ad5e4f7f206b0468c69e7adf4442",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/ssot/universe.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_UNIVERSE_OPERATIONAL_EXPANDED.parquet",
+      "sha256_source": "7e547b33e3e51773984315aeaa40da76815a06dcdcef55535491c3af622e7093",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/ssot/fx_ptax.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_FX_PTAX_USDBRL.parquet",
+      "sha256_source": "22136054263d9dfb0f8003bd70e634ed0f06b40dd010e91ba7dc5c4c3a3d1f87",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/ssot/bdr_universe.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_BDR_B3_UNIVERSE.parquet",
+      "sha256_source": "e965f99994cfb63df184be01c6a7b08a773b6b96b37c3b6f750e97fb597d4be2",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/ssot/bdr_synth.parquet",
+      "agno_path": "src/data_engine/ssot/SSOT_BDR_SYNTH_MARKET_DATA_RAW.parquet",
+      "sha256_source": "5ed0f38235cbb111269f5f12735457af1d4a1fa4187a4a5eb789ff2c5f122dea",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/features/scores_m3.parquet",
+      "agno_path": "src/data_engine/features/T037_M3_SCORES_DAILY.parquet",
+      "sha256_source": "af584905d9aa46c89f5d197d1fabce9806d8441aa5806f5a593dd0baca52288f",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/features/macro_features.parquet",
+      "agno_path": "src/data_engine/features/T103_MACRO_FEATURES_EXPANDED_DAILY.parquet",
+      "sha256_source": "3c0544d024f3f9ecf2aa0c5f6e3be54503cf0ef7d66de88411bd5cf547007545",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/features/dataset.parquet",
+      "agno_path": "src/data_engine/features/T104_DATASET_DAILY.parquet",
+      "sha256_source": "f8f834bce4a0c09acc9339ee3eefa1f21733a38e333543d0aa3b638dd71b818b",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/features/predictions.parquet",
+      "agno_path": "src/data_engine/features/T105_V1_PREDICTIONS.parquet",
+      "sha256_source": "00cbcdeab53f0e4c10e0edb33366e75ded72c9b4f49e888952d5f8c689e56675",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/portfolio/winner_curve.parquet",
+      "agno_path": "src/data_engine/portfolio/CTO_C060_EXPANDED_ABLATION_WINNER_CURVE.parquet",
+      "sha256_source": "6754e428f39d9d46dee77567bc860405a0027029f30df074c80dc41cef2d361b",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "data/portfolio/winner_results.parquet",
+      "agno_path": "src/data_engine/portfolio/CTO_C060_EXPANDED_ABLATION_RESULTS.parquet",
+      "sha256_source": "23570ca2cc74020af59ab1f6a5e9f378ee7f74abe7aed2c3eb0aa21664854b9c",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "config/winner.json",
+      "agno_path": "src/data_engine/portfolio/BR_WINNER_DECLARATION.json",
+      "sha256_source": "1ec4c0d101e7c8c7dc44001aef6773ce4984eb4c4ab87d914c298ef6eb9cf20a",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "config/dual_mode.json",
+      "agno_path": "src/data_engine/portfolio/T072_DUAL_MODE_SELECTED_CONFIG.json",
+      "sha256_source": "760f210543e61e287e124a369f61b4b5d9bd9ed4238b87ae251dd7d9ec2a71c4",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "config/ml_model.json",
+      "agno_path": "src/data_engine/models/T105_V1_XGB_SELECTED_MODEL.json",
+      "sha256_source": "6237c41122f912c0bf65b936ed2cda4d39304d2c3eccf62c2a9eba0245d1b8ac",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "config/blacklist.json",
+      "agno_path": "src/data_engine/ssot/SSOT_QUALITY_BLACKLIST_A001.json",
+      "sha256_source": "f4750735c2e5fffd229728703e9bb87a674c3a9799832e0df8c8e0a49aa23cc8",
+      "transform": "copy+rename"
+    },
+    {
+      "renda_ops_path": "pipeline/01_ingest_macro.py",
+      "agno_path": "scripts/t022_build_macro_ssot.py",
+      "sha256_source": "718e1c2e8a19383842d2e81bc76a5b5aee9f78844ba44ecdc48b2fd5d64a07a0",
+      "transform": "rewrite"
+    },
+    {
+      "renda_ops_path": "pipeline/02_ingest_prices_br.py",
+      "agno_path": "scripts/t021_mass_ingestion.py",
+      "sha256_source": "c9be4e5986d9e1172c760f16bbbd5c9ba8f549e723aaa5f3020d2769a4af4e9d",
+      "transform": "rewrite"
+    },
+    {
+      "renda_ops_path": "pipeline/03_ingest_ptax_bdr.py",
+      "agno_path": "scripts/t101_ingest_ptax_bdr_synth.py",
+      "sha256_source": "985a9b3330d943409f658081695b0772f2c513ea4154cbfd1621b1a8ed7241e8",
+      "transform": "rewrite"
+    },
+    {
+      "renda_ops_path": "pipeline/04_build_canonical.py",
+      "agno_path": "scripts/t102_build_ssot_br_expanded_brl.py",
+      "sha256_source": "085f81f4cdd7346483068747372cee5ff24340005a66805d2808f6c6e55d9e37",
+      "transform": "rewrite"
+    },
+    {
+      "renda_ops_path": "pipeline/05_build_macro_expanded.py",
+      "agno_path": "scripts/t086_build_ssot_br_us_unified.py",
+      "sha256_source": "db7ed38e137f544262f7ac58c3a64e61167651eb43d1a3521af950f87ab0212c",
+      "transform": "rewrite"
+    },
+    {
+      "renda_ops_path": "pipeline/06_compute_scores.py",
+      "agno_path": "scripts/cto_analysis_c060_expanded_ablation.py",
+      "sha256_source": "a92c50f87089af45aaad3420bc5878badac42e3d5837ad1009e47f3a5213a529",
+      "transform": "extract(compute_m3_scores)"
+    },
+    {
+      "renda_ops_path": "pipeline/07_build_features.py",
+      "agno_path": "scripts/t103_feature_engineering_expanded_universe.py",
+      "sha256_source": "2018a978bfd390571d7733f5bfec26dd2267080aae603f964f17d35b1a7ba3bc",
+      "transform": "rewrite+merge"
+    },
+    {
+      "renda_ops_path": "pipeline/08_predict.py",
+      "agno_path": "scripts/t105_xgboost_retrain_expanded_walkforward_v1.py",
+      "sha256_source": "e118b146c356c3a006f5f3012a5dba20ffce56702b24caeca2cfc6c01172f6af",
+      "transform": "extract(inference)"
+    },
+    {
+      "renda_ops_path": "pipeline/09_decide.py",
+      "agno_path": "scripts/cto_analysis_c060_expanded_ablation.py",
+      "sha256_source": "a92c50f87089af45aaad3420bc5878badac42e3d5837ad1009e47f3a5213a529",
+      "transform": "extract(hysteresis+top_n)"
+    },
+    {
+      "renda_ops_path": "pipeline/run_daily.py",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    },
+    {
+      "renda_ops_path": "lib/adapters.py",
+      "agno_path": "src/data_engine/adapters/",
+      "sha256_source": null,
+      "transform": "extract+merge"
+    },
+    {
+      "renda_ops_path": "lib/metrics.py",
+      "agno_path": "scripts/cto_analysis_c060_expanded_ablation.py",
+      "sha256_source": "a92c50f87089af45aaad3420bc5878badac42e3d5837ad1009e47f3a5213a529",
+      "transform": "extract(metrics)"
+    },
+    {
+      "renda_ops_path": "lib/engine.py",
+      "agno_path": "scripts/cto_analysis_c060_expanded_ablation.py",
+      "sha256_source": "a92c50f87089af45aaad3420bc5878badac42e3d5837ad1009e47f3a5213a529",
+      "transform": "extract(m3+hysteresis)"
+    },
+    {
+      "renda_ops_path": "lib/io.py",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    },
+    {
+      "renda_ops_path": "backtest/run_backtest.py",
+      "agno_path": "scripts/cto_analysis_c060_expanded_ablation.py",
+      "sha256_source": "a92c50f87089af45aaad3420bc5878badac42e3d5837ad1009e47f3a5213a529",
+      "transform": "rewrite(simplified)"
+    },
+    {
+      "renda_ops_path": "README.md",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    },
+    {
+      "renda_ops_path": "requirements.txt",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    },
+    {
+      "renda_ops_path": ".gitignore",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    },
+    {
+      "renda_ops_path": "MANIFESTO_ORIGEM.json",
+      "agno_path": null,
+      "sha256_source": null,
+      "transform": "new"
+    }
+  ]
+}

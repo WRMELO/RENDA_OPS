@@ -1,0 +1,38 @@
+{
+  "task_id": "T131-A",
+  "run_id": "T131A-C060X-SHARPE-FIX-V1",
+  "decision_reference": {
+    "decision_date_utc": "2026-03-05T11:46:26Z",
+    "owner_decision": "Winner BR oficial é C060X. T107+ML deve ser tratado como baseline informativo da Phase 8, não como winner BR."
+  },
+  "status_note": "Declaração canônica criada para eliminar ambiguidade futura sobre winner BR.",
+  "winner_label": "BR Winner (C060X)",
+  "winner_factory": "BR",
+  "winner_task_family": "CTO_C060_EXPANDED_ABLATION",
+  "winner_pipeline_script": "scripts/cto_analysis_c060_expanded_ablation.py",
+  "winner_curve_path": "src/data_engine/portfolio/CTO_C060_EXPANDED_ABLATION_WINNER_CURVE.parquet",
+  "winner_results_path": "src/data_engine/portfolio/CTO_C060_EXPANDED_ABLATION_RESULTS.parquet",
+  "winner_candidate_id": "THR0.22_MDDnone",
+  "winner_config_snapshot": {
+    "thr": 0.22,
+    "h_in": 3,
+    "h_out": 2,
+    "top_n": 10,
+    "mdd_limit": null
+  },
+  "holdout_period": {
+    "start": "2023-01-02",
+    "end": "2026-02-26"
+  },
+  "holdout_metrics": {
+    "equity_final": 697606.1374779186,
+    "cagr": 0.311200128005356,
+    "mdd": -0.06317888457240839,
+    "sharpe": 1.3618101966188696,
+    "sharpe_raw": 2.417900239234444
+  },
+  "traceability": {
+    "supersedes_implicit_memory_only": true,
+    "notes": "A partir desta declaração, BR winner deve ser lido deste JSON canônico."
+  }
+}
