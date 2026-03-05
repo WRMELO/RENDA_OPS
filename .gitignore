@@ -4,8 +4,10 @@ __pycache__/
 *.pyc
 *.pyo
 data/daily/
+data/**/*.parquet
 logs/
 *.egg-info/
 dist/
 build/
 .DS_Store
+.obsidian/
