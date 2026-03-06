@@ -1,0 +1,99 @@
+{
+  "date": "2026-03-04",
+  "reference_decision": "2026-03-04",
+  "positions": [
+    {
+      "ticker": "PNVL3",
+      "recommended": "VENDER",
+      "executed": "VENDI",
+      "qtd": 4614,
+      "preco": 15.2,
+      "source": "recommended"
+    },
+    {
+      "ticker": "AURA33",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 490,
+      "preco": 147.1,
+      "source": "recommended"
+    },
+    {
+      "ticker": "M1RN34",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 5472,
+      "preco": 13.01,
+      "source": "recommended"
+    },
+    {
+      "ticker": "GOLL54",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 6563,
+      "preco": 11.5,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BIED3",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 9815,
+      "preco": 7.55,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CBAV3",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 7265,
+      "preco": 10.14,
+      "source": "recommended"
+    },
+    {
+      "ticker": "T2ER34",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 800,
+      "preco": 89.45,
+      "source": "recommended"
+    },
+    {
+      "ticker": "K1SG34",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 92,
+      "preco": 801.09,
+      "source": "recommended"
+    },
+    {
+      "ticker": "G1LW34",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 90,
+      "preco": 777.36,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BGIP3",
+      "recommended": "MANTER",
+      "executed": "MANTIVE",
+      "qtd": 1219,
+      "preco": 65,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PRIO3",
+      "recommended": "AGUARDAR",
+      "executed": "AGUARDANDO",
+      "qtd": 1344,
+      "preco": 55.12,
+      "source": "recommended"
+    }
+  ],
+  "off_system": [],
+  "cash_movements": [],
+  "caixa_liquidando": 70132.8,
+  "cash_balance": 71606.28,
+  "equity_total": 732578.53
+}

@@ -41,33 +41,65 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 4. **Seguranca**: `.env` e credenciais nunca no repositorio.
 5. **Evidencias**: execucoes de governanca produzem gates verificaveis com status PASS/FAIL.
 
-## 5) Politicas tecnicas
+## 5) Fluxos de governanca por natureza de trabalho (D-013, D-014)
 
-### 5.1 Branch e versionamento
+### 5.1 Tasks tecnicas (backlog do ROADMAP.md)
+
+Mudancas estruturais no sistema (nova feature, refactor, infra) passam pela cadeia completa:
+
+```text
+CTO orienta → Architect planeja → Owner autoriza → Executor implementa → Auditor valida → Curator registra
+```
+
+Artefato de referencia: `ROADMAP.md`
+
+### 5.2 Rotina operacional diaria (CICLO_DIARIO.md)
+
+O ciclo diario (ingestao, report, boletim) segue fluxo fluido (D-006):
+
+- Owner opera diretamente (pipeline + boletim)
+- Validacao automatica no pipeline
+- Auditoria consolidada semanal
+
+Artefato de referencia: `CICLO_DIARIO.md`
+
+### 5.3 Hotfixes
+
+Correcoes urgentes durante a simulacao:
+
+- Passam pela cadeia completa se envolvem logica de pipeline
+- Registrados no CHANGELOG como `fix:`
+- Referenciados no CICLO_DIARIO.md do dia em que ocorrem
+
+---
+
+## 6) Politicas tecnicas
+
+### 6.1 Branch e versionamento
 
 - Branch principal: `main`.
 - Commits seguem conventional commits (`feat:`, `fix:`, `chore:`, `docs:`).
 - Push para `main` somente com working tree limpa.
 
-### 5.2 Dados
+### 6.2 Dados
 
 - Formato canonico: Parquet.
 - Dados em `data/` sao regeneraveis e excluidos do git via `.gitignore`.
 - SSOT (Single Source of Truth) vive em `data/ssot/`.
 
-### 5.3 Ambiente
+### 6.3 Ambiente
 
 - Python via `.venv/` local ao workspace.
 - Dependencias em `requirements.txt`.
 - Variaveis sensiveis em `.env` (nunca commitado).
 
-### 5.4 Pipeline
+### 6.4 Pipeline
 
 - Orquestrador: `pipeline/run_daily.py` (9 etapas sequenciais).
 - Cada etapa deve ser idempotente para o mesmo dia.
 - Logs em `logs/` (excluidos do git).
 
-## 6) Vigencia
+## 7) Vigencia
 
 Esta governanca entra em vigor com o primeiro commit que a inclui.
 Alteracoes exigem registro previo no `DECISION_LOG.md`.
