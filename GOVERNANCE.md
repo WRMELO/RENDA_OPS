@@ -100,6 +100,23 @@ Correcoes urgentes durante a simulacao:
 - Cada etapa deve ser idempotente para o mesmo dia.
 - Logs em `logs/` (excluidos do git).
 
+### 6.5 Blindagem do Motor Operacional (D-025)
+
+**Arquivos protegidos** (auditados e selados em `v1.0.0-motor`):
+
+| Arquivo | Funcao | Auditorias |
+|---------|--------|------------|
+| `pipeline/painel_diario.py` | CEP defensivo, quarentena SPC, C2 K=15, proventos automaticos | Sonnet, Gemini, Kimi, Kimi re-audit |
+| `pipeline/02_ingest_prices_br.py` | Ingestao BRAPI + dividendos/JCP | Sonnet, Gemini |
+| `pipeline/04_build_canonical.py` | Canonical com dividend_rate/dividend_label | Sonnet, Gemini |
+
+**Regras de protecao**:
+
+1. Alteracoes nestes arquivos exigem ciclo completo: `Architect → Executor → Auditor duplo (Gemini + Kimi) → Curator`, com autorizacao explicita do Owner.
+2. Um **pre-commit hook** no git bloqueia commits que alterem esses arquivos. Para sobrepor, usar: `MOTOR_OVERRIDE=1 git commit -m "descricao"`.
+3. A tag `v1.0.0-motor` marca o snapshot auditado. Para restaurar: `git checkout v1.0.0-motor`.
+4. Novas versoes do motor devem gerar nova tag (`v1.1.0-motor`, etc.) apos novo ciclo completo de auditoria.
+
 ## 7) Vigencia
 
 Esta governanca entra em vigor com o primeiro commit que a inclui.
