@@ -238,6 +238,31 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
         final = pd.concat([keep_old, legacy_non_operational, new_window], ignore_index=True)
 
     final = final.drop_duplicates(subset=["ticker", "date"], keep="last").sort_values(["ticker", "date"]).reset_index(drop=True)
+
+    MIN_RECENT_DAYS = 20
+    STALE_WINDOW_DAYS = 100
+    final["_date_ts"] = pd.to_datetime(final["date"], errors="coerce")
+    cutoff_date = final["_date_ts"].max() - pd.Timedelta(days=STALE_WINDOW_DAYS)
+    recent_counts = final[final["_date_ts"] >= cutoff_date].groupby("ticker").size()
+    stale_tickers = set(recent_counts[recent_counts < MIN_RECENT_DAYS].index)
+    never_recent = set(final["ticker"].unique()) - set(recent_counts.index)
+    zombie_tickers = stale_tickers | never_recent
+
+    if zombie_tickers:
+        archive_path = ROOT / "data" / "ssot" / "canonical_br_archive.parquet"
+        archive = final[final["ticker"].isin(zombie_tickers)].drop(columns=["_date_ts"]).copy()
+        if archive_path.exists():
+            old_archive = pd.read_parquet(archive_path)
+            archive = pd.concat([old_archive, archive], ignore_index=True)
+            archive = archive.drop_duplicates(subset=["ticker", "date"], keep="last")
+        archive.to_parquet(archive_path, index=False)
+        final = final[~final["ticker"].isin(zombie_tickers)].copy()
+        print(
+            f"[04] Purged {len(zombie_tickers)} zombie tickers to {archive_path.name} "
+            f"(< {MIN_RECENT_DAYS} days in last {STALE_WINDOW_DAYS}d)"
+        )
+
+    final = final.drop(columns=["_date_ts"])
     final.to_parquet(OUT_CANONICAL, index=False)
 
     n_tickers = int(final["ticker"].nunique())

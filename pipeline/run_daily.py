@@ -1,12 +1,16 @@
-"""Daily pipeline orchestrator — runs steps 04-09 in sequence.
+"""Daily pipeline orchestrator — runs steps 04-12 in sequence.
 
 Steps 01-03 (data ingestion from external APIs) are intentionally skipped
 in the default dry-run mode since historical data is already present.
 Use --full to run ingestion steps as well.
 
+Operational front (D-016):
+- `pipeline/painel_diario.py` is the official daily HTML artifact.
+- Legacy separated fronts (`report_daily.py`/`boletim_execucao.py`) are deprecated.
+
 Usage:
-    python pipeline/run_daily.py              # dry-run (steps 04-09)
-    python pipeline/run_daily.py --full       # full pipeline (steps 01-09)
+    python pipeline/run_daily.py              # dry-run (steps 04-12)
+    python pipeline/run_daily.py --full       # full pipeline (steps 01-12)
     python pipeline/run_daily.py --date 2025-06-15  # specific date
 """
 from __future__ import annotations
@@ -16,6 +20,7 @@ import importlib.util
 import logging
 import sys
 import traceback
+from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 
@@ -148,6 +153,7 @@ def run(
     full: bool = False,
     retrain: bool = False,
     refresh_macro_features: bool = True,
+    on_step: Callable[[int, int, str], None] | None = None,
 ) -> dict:
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
@@ -155,41 +161,47 @@ def run(
     run_date = target_date or date.today()
     logger = setup_logging(run_date)
     logger.info(f"=== RENDA_OPS daily pipeline started (date={run_date}, mode={'FULL' if full else 'DRY-RUN'}) ===")
+    total_steps = 12
+
+    def _step(n: int, label: str) -> None:
+        logger.info(label)
+        if on_step:
+            on_step(n, total_steps, label)
 
     try:
         if full:
-            logger.info("Step 01: Ingest macro...")
+            _step(1, "Step 01: Ingest macro...")
             _load_step("01_ingest_macro").run(end_date=run_date)
 
-            logger.info("Step 02: Ingest prices BR...")
+            _step(2, "Step 02: Ingest prices BR...")
             _load_step("02_ingest_prices_br").run(end_date=run_date)
 
-            logger.info("Step 03: Ingest PTAX/BDR...")
+            _step(3, "Step 03: Ingest PTAX/BDR...")
             _load_step("03_ingest_ptax_bdr").run(end_date=run_date)
 
-        logger.info("Step 04: Rebuild canonical BR...")
+        _step(4, "Step 04: Rebuild canonical BR...")
         _load_step("04_build_canonical").run(end_date=run_date)
 
         if refresh_macro_features:
-            logger.info("Step 05: Build macro expanded features...")
+            _step(5, "Step 05: Build macro expanded features...")
             _load_step("05_build_macro_expanded").run(end_date=run_date)
         else:
             if _macro_features_cover_date(run_date):
-                logger.info("Step 05: Reuse existing macro features (coverage OK).")
+                _step(5, "Step 05: Reuse existing macro features (coverage OK).")
             else:
-                logger.info("Step 05: Coverage insufficient, building macro expanded features...")
+                _step(5, "Step 05: Coverage insufficient, building macro expanded features...")
                 _load_step("05_build_macro_expanded").run(end_date=run_date)
 
-        logger.info("Step 06: Compute M3 scores...")
+        _step(6, "Step 06: Compute M3 scores...")
         score_data = _load_step("06_compute_scores").run()
 
-        logger.info("Step 07: Build/extend features dataset...")
+        _step(7, "Step 07: Build/extend features dataset...")
         _load_step("07_build_features").run(end_date=run_date)
 
-        logger.info("Step 08: Predict (persisted model)...")
+        _step(8, "Step 08: Predict (persisted model)...")
         predictions = _load_step("08_predict").run(end_date=run_date, retrain=retrain)
 
-        logger.info("Step 09: Decide...")
+        _step(9, "Step 09: Decide...")
         decision = _load_step("09_decide").run(
             scores_by_day=score_data["scores_by_day"],
             predictions=predictions,
@@ -197,6 +209,38 @@ def run(
         )
 
         logger.info(f"Decision: {decision.get('action')} | proba={decision.get('y_proba_cash')} | {len(decision.get('portfolio', []))} tickers")
+
+        _step(10, "Step 10: Extend winner curve...")
+        try:
+            import importlib.util
+            spec10 = importlib.util.spec_from_file_location(
+                "extend_curve", ROOT / "pipeline" / "10_extend_curve.py"
+            )
+            mod10 = importlib.util.module_from_spec(spec10)
+            spec10.loader.exec_module(mod10)
+            mod10.extend_curve(run_date)
+        except Exception as e:
+            logger.warning(f"Step 10 extend curve skipped: {e}")
+
+        _step(11, "Step 11: Reconcile metrics...")
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "reconcile_metrics", ROOT / "pipeline" / "11_reconcile_metrics.py"
+            )
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            recon = mod.reconcile()
+            if recon["status"] != "PASS":
+                logger.warning("Metrics reconciliation FAIL — check logs/metrics_reconciliation.json")
+        except Exception as e:
+            logger.warning(f"Step 11 reconcile skipped: {e}")
+
+        _step(12, "Step 12: Build unified daily panel...")
+        panel_mod = _load_step("painel_diario")
+        panel_path = panel_mod.run(run_date)
+        logger.info(f"Unified panel generated at: {panel_path}")
+
         _write_t003_sanity(run_date)
         logger.info("=== Pipeline completed successfully ===")
         return decision

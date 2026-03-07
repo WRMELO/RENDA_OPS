@@ -86,6 +86,7 @@ Correcoes urgentes durante a simulacao:
 - Formato canonico: Parquet.
 - Dados em `data/` sao regeneraveis e excluidos do git via `.gitignore`.
 - SSOT (Single Source of Truth) vive em `data/ssot/`.
+- **Purga de zumbis (D-015)**: tickers com menos de 20 pregoes nos ultimos 100 dias sao removidos do `canonical_br.parquet` e movidos para `canonical_br_archive.parquet`. Aplica-se automaticamente no step 04.
 
 ### 6.3 Ambiente
 

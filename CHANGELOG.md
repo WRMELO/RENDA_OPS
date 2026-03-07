@@ -16,3 +16,20 @@
 - 2026-03-05 | test: T-004 — validacao ponta-a-ponta baseline (2026-02-28) para destravar Phase 3 de simulacao. Artefatos: logs/T-004_baseline_2026-02-28.json.
 - fix: T-013 — corrigir quantidade default em VENDA no boletim (usar prev_qtd) e alinhar resumo/caixa_liquidando. Ref: D-007/D-012. Artefatos: pipeline/boletim_execucao.py, pipeline/report_daily.py
 - docs: reestruturar governanca documental — ROADMAP (so backlog tecnico), novo CICLO_DIARIO.md (rotina operacional), GOVERNANCE.md (secao 5 fluxos por natureza). Ref: D-013/D-014. Artefatos: ROADMAP.md, CICLO_DIARIO.md, GOVERNANCE.md, DECISION_LOG.md
+
+## 2026-03-06
+
+- fix: T-014 — isolar lifecycle da carteira: blindar prev_qtd para MANTER em boletim e report, separar carteira real de recomendada. Ref: D-015/D-007/D-012. Artefatos: pipeline/boletim_execucao.py, pipeline/report_daily.py
+- feat: T-015 — documentar escala equity (base R$100k) em winner.json e criar script de reconciliacao de metricas (CAGR/MDD/Sharpe). Ref: D-015. Artefatos: config/winner.json, pipeline/11_reconcile_metrics.py, pipeline/run_daily.py, logs/metrics_reconciliation.json
+- fix: T-016 — purga ativa de 231 tickers zumbis do canonical para arquivo morto; documentar politica no GOVERNANCE. Ref: D-015. Artefatos: pipeline/04_build_canonical.py, data/ssot/canonical_br_archive.parquet, GOVERNANCE.md
+- refactor: T-017 — extensao persistente do winner_curve com dados LIVE (step 10); report_daily lê curva já estendida. Ref: D-015. Artefatos: pipeline/10_extend_curve.py, pipeline/report_daily.py, pipeline/run_daily.py
+- feat: T-018 — painel diário único (relatório+boletim) com carteira comprada por lote, carteira atual (D-1) e duplo-caixa (contábil vs livre). Ref: D-016. Artefatos: pipeline/painel_diario.py, pipeline/run_daily.py
+- fix: T-019 — desativar artefatos legados separados e consolidar painel_diario como unico front operacional. Ref: D-016. Artefatos: pipeline/run_daily.py, pipeline/report_daily.py, pipeline/boletim_execucao.py, CICLO_DIARIO.md
+- fix: T-020 — corrigir pt-BR (datas/acentos), recorte temporal (dia D sem compras) e layout/tabela de operacoes no painel diario. Ref: D-016. Artefatos: pipeline/painel_diario.py
+- fix: T-021 — adicionar totais gerais nas tabelas de carteira e corrigir regra/validação do Caixa Livre (com movimentações extraordinárias; sem vendas no livre sem transferência; bloquear saldo negativo); alinhar colunas das tabelas (table-layout fixed + colgroup), remover pré-preenchimento de operações, detectar modo file:// e criar semente D-2 (02/03). Ref: D-016. Artefatos: pipeline/painel_diario.py, data/real/2026-03-02.json
+- feat: T-012 — lancador autonomo via browser com pagina inicial (rodar ciclo) e calendario de historico somente leitura. Ref: D-017. Artefatos: pipeline/servidor.py, iniciar.sh, CICLO_DIARIO.md
+- fix: T-022 — padronizar artefatos pt-BR (strings + formatos) com modulo unico e validacao minima anti-regressao. Artefatos: pipeline/ptbr.py, pipeline/painel_diario.py, pipeline/servidor.py, pipeline/run_daily.py
+
+## 2026-03-07
+
+- feat: T-023 — redesenhar painel (paisagem+A3, Plotly 252+Base100, Sessão Caixa com Balanço Simplificado+DFC) e reiniciar artefatos para gerar apenas 04/03. Ref: D-018. Artefatos: pipeline/painel_diario.py, pipeline/run_daily.py

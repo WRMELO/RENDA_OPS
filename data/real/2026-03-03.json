@@ -6,86 +6,86 @@
       "ticker": "AURA33",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 490,
-      "preco": 151,
-      "source": "recommended"
-    },
-    {
-      "ticker": "BIED3",
-      "recommended": "COMPRAR",
-      "executed": "COMPREI",
-      "qtd": 9815,
-      "preco": 7.55,
+      "qtd": 508,
+      "preco": 145.65,
       "source": "recommended"
     },
     {
       "ticker": "CBAV3",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 7265,
-      "preco": 10.2,
+      "qtd": 7300,
+      "preco": 10.15,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BIED3",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 10962,
+      "preco": 6.76,
       "source": "recommended"
     },
     {
       "ticker": "GOLL54",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 6563,
-      "preco": 11.29,
+      "qtd": 6449,
+      "preco": 11.49,
       "source": "recommended"
     },
     {
       "ticker": "BGIP3",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 1219,
-      "preco": 60.77,
+      "qtd": 1347,
+      "preco": 55.0,
       "source": "recommended"
     },
     {
       "ticker": "M1RN34",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 5472,
-      "preco": 13.54,
+      "qtd": 5468,
+      "preco": 13.55,
       "source": "recommended"
     },
     {
       "ticker": "T2ER34",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 800,
-      "preco": 92.57,
+      "qtd": 827,
+      "preco": 89.5,
       "source": "recommended"
     },
     {
       "ticker": "K1SG34",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 92,
-      "preco": 798,
+      "qtd": 95,
+      "preco": 779.22,
       "source": "recommended"
     },
     {
       "ticker": "G1LW34",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 90,
-      "preco": 816.97,
+      "qtd": 96,
+      "preco": 765.21,
       "source": "recommended"
     },
     {
       "ticker": "PNVL3",
       "recommended": "COMPRAR",
       "executed": "COMPREI",
-      "qtd": 4614,
-      "preco": 16.06,
+      "qtd": 4574,
+      "preco": 16.2,
       "source": "recommended"
     }
   ],
   "off_system": [],
   "cash_movements": [],
   "caixa_liquidando": 0,
-  "cash_balance": 1473.48,
+  "cash_balance": 970.56,
   "equity_total": 741035.65
 }

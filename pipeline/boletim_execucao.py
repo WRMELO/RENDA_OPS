@@ -121,16 +121,25 @@ def build_boletim(exec_date: date) -> Path:
         else:
             default_action = "COMPRAR"
 
+        prev_qtd = prev_positions.get(t, {}).get("qtd", 0)
+        display_qtd = prev_qtd if default_action == "MANTER" and prev_qtd > 0 else qtd_rec
+
         rec_rows_js.append({
             "ticker": t,
             "mercado": classify_ticker(t),
             "score": p["score_m3"],
             "preco_ref": round(preco, 2),
-            "qtd_rec": qtd_rec,
+            "qtd_rec": display_qtd,
             "default_action": default_action,
             "was_held": was_held,
-            "prev_qtd": prev_positions.get(t, {}).get("qtd", 0),
+            "prev_qtd": prev_qtd,
         })
+
+    for row in rec_rows_js:
+        if row["default_action"] == "MANTER" and row["prev_qtd"] > 0:
+            assert row["qtd_rec"] == row["prev_qtd"], (
+                f"T-014 guard: MANTER {row['ticker']} qtd_rec={row['qtd_rec']} != prev_qtd={row['prev_qtd']}"
+            )
 
     exit_tickers = []
     for t, pos in prev_positions.items():
@@ -598,15 +607,10 @@ a.boletim {{ background: #1565c0; }}
 
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--date", type=str, default=None)
-    parser.add_argument("--port", type=int, default=8787)
-    parser.add_argument("--no-serve", action="store_true",
-                        help="Gerar HTML sem servir (modo legado)")
-    args = parser.parse_args()
-    d = date.fromisoformat(args.date) if args.date else date.today()
-    if args.no_serve:
-        build_boletim(d)
-    else:
-        serve_boletim(d, port=args.port)
+    raise SystemExit(
+        "DEPRECATED (D-016): `pipeline/boletim_execucao.py` nao e mais front operacional.\n"
+        "Use o documento unico:\n"
+        "  .venv/bin/python pipeline/painel_diario.py --date YYYY-MM-DD --serve\n"
+        "ou rode o orquestrador:\n"
+        "  .venv/bin/python pipeline/run_daily.py --date YYYY-MM-DD"
+    )

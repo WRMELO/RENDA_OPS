@@ -25,11 +25,14 @@
     "end": "2026-02-26"
   },
   "holdout_metrics": {
+    "equity_base": 100000,
+    "holdout_start_equity": 299636.787136,
     "equity_final": 697606.1374779186,
     "cagr": 0.311200128005356,
     "mdd": -0.06317888457240839,
     "sharpe": 1.3618101966188696,
-    "sharpe_raw": 2.417900239234444
+    "sharpe_raw": 2.417900239234444,
+    "note_cagr": "CAGR calculado como (equity_final / holdout_start_equity)^(252/holdout_days) - 1. Equity em escala absoluta (base R$ 100.000), NÃO base 1.0."
   },
   "traceability": {
     "supersedes_implicit_memory_only": true,
