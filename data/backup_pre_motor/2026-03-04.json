@@ -1,0 +1,85 @@
+{
+  "date": "2026-03-04",
+  "reference_decision": "2026-03-04",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "PNVL3",
+      "qtd": 4574,
+      "preco": 15.2
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 970.5600000000559,
+  "cash_accounting": 69524.8,
+  "caixa_liquido_real": 960,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-03",
+      "qtd": 508,
+      "preco_compra": 145.65
+    },
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-03",
+      "qtd": 1347,
+      "preco_compra": 55
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-03",
+      "qtd": 10962,
+      "preco_compra": 6.76
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-03",
+      "qtd": 7300,
+      "preco_compra": 10.15
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-03-03",
+      "qtd": 96,
+      "preco_compra": 765.21
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-03",
+      "qtd": 6449,
+      "preco_compra": 11.49
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-03-03",
+      "qtd": 95,
+      "preco_compra": 779.22
+    },
+    {
+      "ticker": "M1RN34",
+      "data_compra": "2026-03-03",
+      "qtd": 5468,
+      "preco_compra": 13.55
+    },
+    {
+      "ticker": "T2ER34",
+      "data_compra": "2026-03-03",
+      "qtd": 827,
+      "preco_compra": 89.5
+    }
+  ],
+  "positions": [
+    {
+      "ticker": "PNVL3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 4574,
+      "preco": 15.2,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 970.5600000000559,
+  "caixa_liquidando": 69524.8
+}

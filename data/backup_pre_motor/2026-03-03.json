@@ -1,0 +1,91 @@
+{
+  "date": "2026-03-03",
+  "reference_decision": "2026-03-03",
+  "positions": [
+    {
+      "ticker": "AURA33",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 508,
+      "preco": 145.65,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CBAV3",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 7300,
+      "preco": 10.15,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BIED3",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 10962,
+      "preco": 6.76,
+      "source": "recommended"
+    },
+    {
+      "ticker": "GOLL54",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 6449,
+      "preco": 11.49,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BGIP3",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 1347,
+      "preco": 55.0,
+      "source": "recommended"
+    },
+    {
+      "ticker": "M1RN34",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 5468,
+      "preco": 13.55,
+      "source": "recommended"
+    },
+    {
+      "ticker": "T2ER34",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 827,
+      "preco": 89.5,
+      "source": "recommended"
+    },
+    {
+      "ticker": "K1SG34",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 95,
+      "preco": 779.22,
+      "source": "recommended"
+    },
+    {
+      "ticker": "G1LW34",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 96,
+      "preco": 765.21,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PNVL3",
+      "recommended": "COMPRAR",
+      "executed": "COMPREI",
+      "qtd": 4574,
+      "preco": 16.2,
+      "source": "recommended"
+    }
+  ],
+  "off_system": [],
+  "cash_movements": [],
+  "caixa_liquidando": 0,
+  "cash_balance": 970.56,
+  "equity_total": 741035.65
+}
