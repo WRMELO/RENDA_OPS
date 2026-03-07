@@ -1,3 +1,4 @@
 date,variant,ticker,event,split_factor,ratio_applied,shares_before,shares_after,buy_price_before,buy_price_after,buffer_k
-2021-06-30,C2,BPAC3,split_adjustment_drop_lot,4.0,0.25,1,0,19.0,,15.0
-2019-06-07,C3,AZEV4,split_adjustment,0.2,5.0,1,5,13.0,2.6,
+2021-06-30,C2,BPAC3,split_adjustment,4.0,4.0,1,4,19.0,4.75,15.0
+2019-06-07,C3,AZEV4,split_adjustment_drop_lot,0.2,0.2,1,0,13.0,,
+2021-06-30,C3,BPAC11,split_adjustment,4.0,4.0,1149,4596,22.41,5.6025,

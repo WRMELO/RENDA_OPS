@@ -35,3 +35,9 @@
 - feat: T-023 — redesenhar painel (paisagem+A3, Plotly 252+Base100, Sessão Caixa com Balanço Simplificado+DFC) e reiniciar artefatos para gerar apenas 04/03. Ref: D-018. Artefatos: pipeline/painel_diario.py, pipeline/run_daily.py
 - feat: T-020 — backtest comparativo realista (custos AGNO 2.5bps, liquidacao D+1/D+2, lotes e concentracao) para C1/C2/C3-CEP
 - fix: T-020v2 — backtest comparativo com venda defensiva permanente (AGNO), ajuste de splits e saidas Plotly. Ref: D-021. Artefatos: backtest/run_backtest_variants.py, backtest/plot_t020_plotly.py, backtest/results/*.html
+- fix: T-020v2-HF — inverter formula split_factor (ratio = sf, nao 1/sf) conforme auditoria Gemini. Ref: D-021. Artefatos: backtest/run_backtest_variants.py
+- audit: T-020v2/T-020v2-HF curada com PASS (auditoria forense adversarial). 3 findings (2 MEDIO, 1 BAIXO), nenhum CRITICO. Metricas recalculadas confirmam valores reportados. Decisao D-022 (C2 K=15) amparada pelos dados. Artefatos: backtest/results/*, DECISION_LOG.md (D-021, D-022)
+- feat: T-021 — integrar CEP defensivo (C2 K=15) e proventos automáticos (dividendos/JCP) no painel diário (preencher eventos extraordinários e consolidar no caixa ao salvar). Ref: D-022/D-023. Artefatos: pipeline/painel_diario.py, pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py
+- fix: T-021-HF1 — deduplicacao de proventos auto + corrigir release da quarentena defensiva. Ref: D-023. Artefatos: pipeline/painel_diario.py
+- fix: T-021-HF2 — liberar quarentena fora do regime defensivo (evitar bloqueio eterno) mantendo checks SPC completos. Ref: D-021/D-023. Artefatos: pipeline/painel_diario.py
+- audit: T-021-HF2 curada com PASS (re-auditoria Kimi). Bug F1 (quarentena persistente) corrigido e validado. 4/4 casos de teste PASS. Nenhuma regressão detectada. Artefatos: pipeline/painel_diario.py (D-021, D-023)

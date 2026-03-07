@@ -253,7 +253,7 @@ def _apply_split_adjustment(
     for lot in lots:
         sf = float(split_row.get(lot.ticker, np.nan))
         if np.isfinite(sf) and sf > 0 and abs(sf - 1.0) > 1e-12:
-            ratio = 1.0 / sf
+            ratio = float(sf)
             new_shares = int(round(lot.shares * ratio))
             if new_shares <= 0:
                 events_split.append(

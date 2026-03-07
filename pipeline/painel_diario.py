@@ -30,6 +30,7 @@ from pipeline.ptbr import (
     fmt_pct_br as _fmt_pct,
     validate_html_ptbr,
 )
+from lib.engine import compute_m3_scores, select_top_n
 
 PROJECT_START = date(2026, 3, 3)
 
@@ -202,7 +203,7 @@ def _extract_cash_movements(day_payload: dict[str, Any]) -> tuple[float, float]:
     for mv in day_payload.get("cash_movements", []):
         typ = str(mv.get("type", "")).upper().strip()
         val = _safe_float(mv.get("value", mv.get("valor", 0.0)), 0.0)
-        if typ in {"APORTE", "DEPOSITO"}:
+        if typ in {"APORTE", "DEPOSITO", "DIVIDENDO", "JCP", "BONIFICACAO", "BONUS", "SUBSCRICAO"}:
             aportes += val
         elif typ in {"RETIRADA", "SAQUE"}:
             retiradas += val
@@ -214,6 +215,65 @@ def _extract_transfers(day_payload: dict[str, Any]) -> float:
     for tr in day_payload.get("cash_transfers", []):
         transfers += _safe_float(tr.get("value", tr.get("valor", 0.0)), 0.0)
     return transfers
+
+
+def _extract_ticker_from_auto_desc(desc: str) -> str:
+    if not desc:
+        return ""
+    up = str(desc).upper().strip()
+    # Formato esperado: "TICKER — provento automatico (...)"
+    head = up.split("—", 1)[0].strip()
+    parts = head.split()
+    if not parts:
+        return ""
+    tk = "".join(ch for ch in parts[0] if ch.isalnum()).upper()
+    return tk
+
+
+def _collect_recent_provento_registry(
+    exec_day: date,
+    lookback_days: int = 10,
+) -> tuple[set[tuple[str, str, str]], set[tuple[str, str, float]]]:
+    # Chave forte: (ticker, event_date, tipo)
+    exact_keys: set[tuple[str, str, str]] = set()
+    # Fallback legado: (ticker, tipo, valor)
+    legacy_signatures: set[tuple[str, str, float]] = set()
+
+    min_day = exec_day - timedelta(days=lookback_days)
+    for p in list_real_files_upto(exec_day - timedelta(days=1)):
+        try:
+            d = date.fromisoformat(p.stem)
+        except Exception:
+            continue
+        if d < min_day:
+            continue
+        payload = _read_json(p)
+        for mv in payload.get("cash_movements", []):
+            typ = str(mv.get("type", "")).upper().strip()
+            if typ not in {"DIVIDENDO", "JCP"}:
+                continue
+            source = str(mv.get("source", "")).lower().strip()
+            val = round(_safe_float(mv.get("value", mv.get("valor", 0.0)), 0.0), 2)
+            desc = str(mv.get("description", mv.get("descricao", ""))).strip()
+
+            tk = str(mv.get("provento_ticker", "")).upper().strip()
+            if not tk:
+                tk = _extract_ticker_from_auto_desc(desc)
+
+            ev_raw = str(mv.get("provento_event_date", "")).strip()
+            ev_day = None
+            if ev_raw:
+                try:
+                    ev_day = date.fromisoformat(ev_raw)
+                except Exception:
+                    ev_day = None
+            if (ev_day is not None) and tk:
+                exact_keys.add((tk, ev_day.isoformat(), typ))
+
+            if tk and (source == "auto_provento" or "PROVENTO AUTOMATICO" in desc.upper()):
+                legacy_signatures.add((tk, typ, val))
+
+    return exact_keys, legacy_signatures
 
 
 def _pending_sales_for_transfer(exec_day: date) -> list[dict[str, Any]]:
@@ -333,16 +393,197 @@ def build_lot_ledger(until_day: date) -> tuple[list[Lot], list[str]]:
     return flat, warnings
 
 
+def _band_from_z(z: float) -> int:
+    if not math.isfinite(z):
+        return 0
+    if z < -3.0:
+        return 3
+    if z < -2.0:
+        return 2
+    if z < -1.0:
+        return 1
+    return 0
+
+
+def _persist_points(z_prev: float, z_prev2: float, z_prev3: float) -> int:
+    pts = 0
+    neg_count = int((z_prev < 0) + (z_prev2 < 0) + (z_prev3 < 0))
+    if neg_count >= 2:
+        pts += 1
+    if z_prev < -2 and z_prev2 < -2:
+        pts += 1
+    return pts
+
+
+def _regime_defensivo_from_holdings(
+    canonical: pd.DataFrame,
+    holdings: dict[str, int],
+    as_of_day: date,
+) -> bool:
+    held = sorted([t for t, q in holdings.items() if q > 0])
+    if not held:
+        return False
+    sub = canonical[(canonical["ticker"].isin(held)) & (canonical["date"] <= pd.Timestamp(as_of_day))].copy()
+    if sub.empty:
+        return False
+    i_wide = sub.pivot_table(index="date", columns="ticker", values="i_value", aggfunc="first").sort_index()
+    # Proxy do portfolio defensivo: media de i_value dos papeis em carteira.
+    proxy = i_wide.mean(axis=1, skipna=True).fillna(0.0)
+    if len(proxy) < 4:
+        return False
+    defensive_state = False
+    in_streak = 0
+    out_streak = 0
+    vals = proxy.tolist()
+    for i in range(len(vals)):
+        if i < 3:
+            continue
+        window = vals[i - 3 : i + 1]
+        x = [0.0, 1.0, 2.0, 3.0]
+        # slope por regressao linear simples
+        x_mean = sum(x) / 4.0
+        y_mean = sum(window) / 4.0
+        num = sum((x[j] - x_mean) * (window[j] - y_mean) for j in range(4))
+        den = sum((x[j] - x_mean) ** 2 for j in range(4))
+        slope = (num / den) if den > 0 else 0.0
+        if slope < 0:
+            in_streak += 1
+            out_streak = 0
+        elif slope > 0:
+            out_streak += 1
+            in_streak = 0
+        else:
+            in_streak = 0
+            out_streak = 0
+        if not defensive_state and in_streak >= 2:
+            defensive_state = True
+        elif defensive_state and out_streak >= 3:
+            defensive_state = False
+    return defensive_state
+
+
+def _build_defensive_candidates(
+    canonical: pd.DataFrame,
+    holdings_qty: dict[str, int],
+    as_of_day: date,
+) -> list[dict[str, Any]]:
+    held = sorted([t for t, q in holdings_qty.items() if q > 0])
+    if not held:
+        return []
+    sub = canonical[(canonical["ticker"].isin(held)) & (canonical["date"] <= pd.Timestamp(as_of_day))].copy()
+    if sub.empty:
+        return []
+    candidates: list[dict[str, Any]] = []
+    for tk in held:
+        s = sub[sub["ticker"] == tk].sort_values("date")
+        if len(s) < 25:
+            continue
+        i_series = pd.to_numeric(s["i_value"], errors="coerce")
+        mean60 = i_series.rolling(window=60, min_periods=20).mean()
+        std60 = i_series.rolling(window=60, min_periods=20).std(ddof=0).replace(0.0, pd.NA)
+        z = (i_series - mean60) / std60
+        z = pd.to_numeric(z, errors="coerce")
+        if len(z) < 3:
+            continue
+        z_prev = _safe_float(z.iloc[-1], float("nan"))
+        z_prev2 = _safe_float(z.iloc[-2], float("nan"))
+        z_prev3 = _safe_float(z.iloc[-3], float("nan"))
+        if not math.isfinite(z_prev):
+            continue
+        band = _band_from_z(z_prev)
+        persist = _persist_points(z_prev, z_prev2, z_prev3)
+        last = s.iloc[-1]
+        any_rule = (
+            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
+            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
+            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
+            or (_safe_float(last.get("r_value"), float("nan")) > _safe_float(last.get("r_ucl"), float("nan")))
+            or (_safe_float(last.get("xbar_value"), float("nan")) > _safe_float(last.get("xbar_ucl"), float("nan")))
+            or (_safe_float(last.get("xbar_value"), float("nan")) < _safe_float(last.get("xbar_lcl"), float("nan")))
+        )
+        strong_rule = (
+            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
+            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
+            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
+        )
+        evidence = (1 if any_rule else 0) + (2 if strong_rule else 0)
+        score = int(min(6, band + persist + evidence))
+        if z_prev < 0 and score >= 4:
+            candidates.append({"ticker": tk, "score": score, "z_prev": z_prev, "any_rule": any_rule, "strong_rule": strong_rule})
+    candidates.sort(key=lambda x: (-int(x["score"]), float(x["z_prev"])))
+    return candidates[:5]
+
+
+def _detect_proventos_cash_movements(
+    canonical: pd.DataFrame,
+    holdings_qty: dict[str, int],
+    exec_day: date,
+    existing_provento_keys: set[tuple[str, str, str]] | None = None,
+    existing_provento_signatures: set[tuple[str, str, float]] | None = None,
+) -> list[dict[str, Any]]:
+    held = sorted([t for t, q in holdings_qty.items() if q > 0])
+    if not held or canonical.empty or "dividend_rate" not in canonical.columns:
+        return []
+    existing_keys = existing_provento_keys or set()
+    existing_signatures = existing_provento_signatures or set()
+    valid_days = {pd.Timestamp(exec_day), pd.Timestamp(exec_day - timedelta(days=1)), pd.Timestamp(exec_day - timedelta(days=2))}
+    sub = canonical[
+        (canonical["ticker"].isin(held))
+        & (canonical["date"].isin(valid_days))
+    ].copy()
+    if sub.empty:
+        return []
+    sub["dividend_rate"] = pd.to_numeric(sub["dividend_rate"], errors="coerce").fillna(0.0)
+    sub = sub[sub["dividend_rate"] > 0].copy()
+    if sub.empty:
+        return []
+    sub = sub.sort_values("date").drop_duplicates(subset=["ticker"], keep="last")
+    out: list[dict[str, Any]] = []
+    for _, row in sub.iterrows():
+        tk = str(row["ticker"]).upper().strip()
+        qtd = int(holdings_qty.get(tk, 0))
+        if qtd <= 0:
+            continue
+        rate = _safe_float(row.get("dividend_rate"), 0.0)
+        total = rate * qtd
+        if total <= 0:
+            continue
+        label = str(row.get("dividend_label", "")).upper().strip()
+        mov_type = "JCP" if "JCP" in label else "DIVIDENDO"
+        event_date = pd.Timestamp(row["date"]).date().isoformat()
+        key = (tk, event_date, mov_type)
+        signature = (tk, mov_type, round(total, 2))
+        if key in existing_keys:
+            continue
+        if signature in existing_signatures:
+            continue
+        out.append(
+            {
+                "type": mov_type,
+                "value": round(total, 2),
+                "description": f"{tk} — provento automatico ({mov_type})",
+                "source": "auto_provento",
+                "provento_event_date": event_date,
+                "provento_ticker": tk,
+            }
+        )
+    return out
+
+
 def _build_sell_suggestions(
     decision: dict[str, Any] | None,
     holdings_qty: dict[str, int],
     prices_d1: dict[str, float],
-) -> list[dict[str, Any]]:
+    canonical: pd.DataFrame,
+    as_of_day: date,
+    prev_quarantine: set[str],
+) -> tuple[list[dict[str, Any]], set[str]]:
     if not decision:
-        return []
+        return [], set(prev_quarantine)
     action = str(decision.get("action", "")).upper().strip()
     current_port = {str(x.get("ticker", "")).upper().strip() for x in decision.get("portfolio", [])}
     suggestions: list[dict[str, Any]] = []
+    quarantine = set(prev_quarantine)
 
     if action == "CAIXA":
         for t, qtd in sorted(holdings_qty.items()):
@@ -355,20 +596,93 @@ def _build_sell_suggestions(
                     "reason": "Sinal de regime CAIXA (histerese): liquidar posição.",
                 }
             )
-        return suggestions
+        return suggestions, quarantine
 
+    # Camada 1 — venda defensiva permanente (antes do rebalanceamento).
+    defensive_state = _regime_defensivo_from_holdings(canonical=canonical, holdings=holdings_qty, as_of_day=as_of_day)
+    defensive_tickers: set[str] = set()
+    candidates = (
+        _build_defensive_candidates(canonical=canonical, holdings_qty=holdings_qty, as_of_day=as_of_day)
+        if defensive_state
+        else []
+    )
+    cand_set = {str(c["ticker"]) for c in candidates}
+
+    # Release de quarentena: sempre reavaliar diariamente (com ou sem regime defensivo).
+    for tk in list(quarantine):
+        s = canonical[(canonical["ticker"] == tk) & (canonical["date"] <= pd.Timestamp(as_of_day))].sort_values("date")
+        if s.empty:
+            continue
+        last = s.iloc[-1]
+        any_rule = (
+            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
+            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
+            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
+            or (_safe_float(last.get("r_value"), float("nan")) > _safe_float(last.get("r_ucl"), float("nan")))
+            or (_safe_float(last.get("xbar_value"), float("nan")) > _safe_float(last.get("xbar_ucl"), float("nan")))
+            or (_safe_float(last.get("xbar_value"), float("nan")) < _safe_float(last.get("xbar_lcl"), float("nan")))
+        )
+        strong_rule = (
+            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
+            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
+            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
+        )
+        if (not any_rule) and (not strong_rule) and (tk not in cand_set):
+            quarantine.remove(tk)
+
+    if defensive_state:
+        for c in candidates:
+            tk = str(c["ticker"])
+            qtd = int(holdings_qty.get(tk, 0))
+            if qtd <= 0:
+                continue
+            score = int(c["score"])
+            if score >= 6:
+                pct = 100.0
+            elif score == 5:
+                pct = 50.0
+            else:
+                pct = 25.0
+            sell_qtd = max(1, int(round(qtd * (pct / 100.0))))
+            suggestions.append(
+                {
+                    "ticker": tk,
+                    "sell_pct": pct,
+                    "qtd": min(qtd, sell_qtd),
+                    "close_d1": _safe_float(prices_d1.get(tk, 0.0), 0.0),
+                    "reason": f"DEFESA CEP/SPC: score={score} (venda parcial por severidade).",
+                }
+            )
+            quarantine.add(tk)
+            defensive_tickers.add(tk)
+
+    # Camada 2 — rebalanceamento C2 K=15 (buffer de histerese).
+    if canonical.empty:
+        return suggestions, quarantine
+    px_rank_wide = canonical.pivot_table(index="date", columns="ticker", values="close_operational", aggfunc="first").sort_index().ffill()
+    scores_by_day = compute_m3_scores(px_rank_wide)
+    prev_scores = scores_by_day.get(pd.Timestamp(as_of_day))
+    if prev_scores is None or prev_scores.empty:
+        return suggestions, quarantine
+    target_top10 = set(select_top_n(prev_scores, top_n=10, blacklist=set()))
+    ranks = prev_scores["m3_rank"].to_dict()
     for t, qtd in sorted(holdings_qty.items()):
-        if t not in current_port:
+        if qtd <= 0:
+            continue
+        if t in defensive_tickers:
+            continue
+        rank_t = _safe_float(ranks.get(t, float("inf")), float("inf"))
+        if (t not in target_top10) and (rank_t > 15):
             suggestions.append(
                 {
                     "ticker": t,
                     "sell_pct": 100.0,
                     "qtd": qtd,
                     "close_d1": _safe_float(prices_d1.get(t, 0.0), 0.0),
-                    "reason": "Saiu do Top-10 no ranking M3 (rebalanceamento).",
+                    "reason": "REBALANCEAMENTO C2 (K=15): fora do Top-10 e rank > 15.",
                 }
             )
-    return suggestions
+    return suggestions, quarantine
 
 
 def _make_positions_snapshot(lots: list[Lot]) -> list[dict[str, Any]]:
@@ -766,6 +1080,7 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         "retirada_acumulada": retirada_acc,
         "carteira_valor_d1": total_current,
         "pending_sales": _pending_sales_for_transfer(exec_day),
+        "prev_defensive_quarantine": list((d1_payload or {}).get("defensive_quarantine", [])),
     }
     return tables_html, report_ctx, warnings
 
@@ -779,10 +1094,34 @@ def build_painel(exec_day: date) -> Path:
     top_tickers = [x.get("ticker", "") for x in top10]
     prices_top = get_latest_prices(top_tickers, as_of_day=d1)
 
-    sell_suggestions = _build_sell_suggestions(
+    canonical = pd.DataFrame()
+    canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if canon_path.exists():
+        canonical = pd.read_parquet(canon_path)
+        if not canonical.empty:
+            canonical["date"] = pd.to_datetime(canonical["date"], errors="coerce")
+            canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
+            canonical = canonical.dropna(subset=["date", "ticker"])
+
+    prev_quarantine = {str(x).upper().strip() for x in ctx.get("prev_defensive_quarantine", [])}
+    existing_provento_keys, existing_provento_signatures = _collect_recent_provento_registry(
+        exec_day=exec_day, lookback_days=10
+    )
+    sell_suggestions, next_quarantine = _build_sell_suggestions(
         decision=decision,
         holdings_qty=ctx["holdings_qty"],
         prices_d1=ctx["prices_d1"],
+        canonical=canonical,
+        as_of_day=d1,
+        prev_quarantine=prev_quarantine,
+    )
+
+    proventos_prefill = _detect_proventos_cash_movements(
+        canonical=canonical,
+        holdings_qty=ctx["holdings_qty"],
+        exec_day=exec_day,
+        existing_provento_keys=existing_provento_keys,
+        existing_provento_signatures=existing_provento_signatures,
     )
 
     tank_total = _safe_float(load_tank_original().get("tank_total_bruto", 0.0), 0.0)
@@ -1011,8 +1350,10 @@ const CAIXA_ORIGINAL = {ctx["caixa_original"]};
 const APORTE_ACC = {ctx["aporte_acumulado"]};
 const RETIRADA_ACC = {ctx["retirada_acumulada"]};
 const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
+const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
+const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
 
 let opIdx = 0;
 let cashIdx = 0;
@@ -1082,12 +1423,23 @@ function addCash(pref = null) {{
   const typ = pref?.type || 'APORTE';
   const val = pref?.value || 0;
   const desc = pref?.description || '';
+  const source = pref?.source || '';
+  const proventoEventDate = pref?.provento_event_date || '';
+  const proventoTicker = pref?.provento_ticker || '';
   const row = document.createElement('div');
   row.className = 'cash-grid';
   row.id = `cash_row_${{i}}`;
+  row.dataset.source = source;
+  row.dataset.proventoEventDate = proventoEventDate;
+  row.dataset.proventoTicker = proventoTicker;
   row.innerHTML = `
     <select id="cash_type_${{i}}" onchange="recalc()">
       <option value="APORTE" ${{typ==='APORTE'?'selected':''}}>APORTE</option>
+      <option value="DIVIDENDO" ${{typ==='DIVIDENDO'?'selected':''}}>DIVIDENDO</option>
+      <option value="JCP" ${{typ==='JCP'?'selected':''}}>JCP</option>
+      <option value="BONIFICACAO" ${{typ==='BONIFICACAO'?'selected':''}}>BONIFICACAO</option>
+      <option value="BONUS" ${{typ==='BONUS'?'selected':''}}>BONUS</option>
+      <option value="SUBSCRICAO" ${{typ==='SUBSCRICAO'?'selected':''}}>SUBSCRICAO</option>
       <option value="RETIRADA" ${{typ==='RETIRADA'?'selected':''}}>RETIRADA</option>
     </select>
     <input id="cash_val_${{i}}" type="number" min="0" step="0.01" value="${{val}}" onchange="recalc()" />
@@ -1138,12 +1490,20 @@ function collectOps() {{
 function collectCashMovs() {{
   const out = [];
   for (let i = 0; i < cashIdx; i++) {{
-    if (!document.getElementById(`cash_row_${{i}}`)) continue;
+    const row = document.getElementById(`cash_row_${{i}}`);
+    if (!row) continue;
     const type = document.getElementById(`cash_type_${{i}}`).value;
     const value = parseFloat(document.getElementById(`cash_val_${{i}}`).value || '0');
     const description = (document.getElementById(`cash_desc_${{i}}`).value || '').trim();
     if (value <= 0) continue;
-    out.push({{ type, value, description }});
+    const item = {{ type, value, description }};
+    const source = (row.dataset.source || '').trim();
+    const proventoEventDate = (row.dataset.proventoEventDate || '').trim();
+    const proventoTicker = (row.dataset.proventoTicker || '').trim().toUpperCase();
+    if (source) item.source = source;
+    if (proventoEventDate) item.provento_event_date = proventoEventDate;
+    if (proventoTicker) item.provento_ticker = proventoTicker;
+    out.push(item);
   }}
   return out;
 }}
@@ -1180,7 +1540,7 @@ function recalc() {{
   const transfers = collectTransfers();
   const buy = ops.filter(x => x.type === 'COMPRA').reduce((a,b) => a + b.qtd*b.preco, 0);
   const sell = ops.filter(x => x.type === 'VENDA').reduce((a,b) => a + b.qtd*b.preco, 0);
-  const aporte = cashMovs.filter(x => x.type === 'APORTE').reduce((a,b) => a + b.value, 0);
+  const aporte = cashMovs.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
   const retirada = cashMovs.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
   const transfer = transfers.reduce((a,b) => a + b.value, 0);
 
@@ -1282,7 +1642,7 @@ function savePanel() {{
   const cashTransfers = collectTransfers();
   const buy = ops.filter(x => x.type === 'COMPRA').reduce((a,b) => a + b.qtd*b.preco, 0);
   const sell = ops.filter(x => x.type === 'VENDA').reduce((a,b) => a + b.qtd*b.preco, 0);
-  const aporte = cashMovements.filter(x => x.type === 'APORTE').reduce((a,b) => a + b.value, 0);
+  const aporte = cashMovements.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
   const retirada = cashMovements.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
   const transfer = cashTransfers.reduce((a,b) => a + b.value, 0);
   const cash_free = PREV_FREE + transfer + aporte - retirada - buy;
@@ -1320,6 +1680,7 @@ function savePanel() {{
     cash_accounting: cash_accounting,
     caixa_liquido_real: caixaLiquidoReal,
     positions_snapshot: buildSnapshotAfterOps(ops),
+    defensive_quarantine: DEFENSIVE_QUARANTINE_NEXT,
     positions: positions_legacy,
     cash_balance: cash_free,
     caixa_liquidando: cash_accounting
@@ -1346,6 +1707,9 @@ function savePanel() {{
 }}
 
 renderPendingSales();
+for (const c of PREFILL_CASH_ROWS) {{
+  addCash(c);
+}}
 recalc();
 
 if (window.location.protocol === 'file:') {{

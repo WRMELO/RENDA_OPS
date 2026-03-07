@@ -11,6 +11,7 @@ from __future__ import annotations
 import sys
 import time
 from datetime import date
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -82,6 +83,38 @@ def _parse_date_mixed(value) -> pd.Timestamp | pd.NaT:
         return pd.to_datetime(value, errors="coerce")
 
 
+def _parse_brapi_iso_date(raw: object) -> pd.Timestamp | pd.NaT:
+    if raw is None:
+        return pd.NaT
+    if not isinstance(raw, str):
+        return pd.NaT
+    try:
+        return pd.Timestamp(datetime.fromisoformat(raw.replace("Z", "+00:00")).date())
+    except ValueError:
+        return pd.NaT
+
+
+def _extract_dividend_maps(result: dict) -> tuple[dict[pd.Timestamp, float], dict[pd.Timestamp, str]]:
+    by_date_rate: dict[pd.Timestamp, float] = {}
+    by_date_label: dict[pd.Timestamp, str] = {}
+    dividends_data = result.get("dividendsData") or {}
+    for item in dividends_data.get("cashDividends") or []:
+        ex_date = _parse_brapi_iso_date(item.get("lastDatePrior"))
+        if pd.isna(ex_date):
+            # Fallback: if BRAPI does not provide ex-date, use payment date.
+            ex_date = _parse_brapi_iso_date(item.get("paymentDate"))
+        if pd.isna(ex_date):
+            continue
+        rate = pd.to_numeric(item.get("rate"), errors="coerce")
+        if pd.isna(rate) or float(rate) <= 0:
+            continue
+        by_date_rate[ex_date] = float(by_date_rate.get(ex_date, 0.0) + float(rate))
+        label = str(item.get("label", "DIVIDENDO")).strip()
+        if label:
+            by_date_label[ex_date] = label
+    return by_date_rate, by_date_label
+
+
 def _fetch_history(adapter, ticker: str) -> pd.DataFrame:
     payload = adapter._request(  # noqa: SLF001
         f"quote/{ticker}",
@@ -90,7 +123,8 @@ def _fetch_history(adapter, ticker: str) -> pd.DataFrame:
     results = payload.get("results") or []
     if not results:
         return pd.DataFrame()
-    rows = results[0].get("historicalDataPrice") or []
+    result = results[0]
+    rows = result.get("historicalDataPrice") or []
     if not rows:
         return pd.DataFrame()
     df = pd.DataFrame(rows)
@@ -102,6 +136,9 @@ def _fetch_history(adapter, ticker: str) -> pd.DataFrame:
             df[col] = None
     out = df[["date", "open", "high", "low", "close", "volume", "adjustedClose", "dividends", "splits"]].copy()
     out = out.rename(columns={"adjustedClose": "adjusted_close"})
+    div_rate_map, div_label_map = _extract_dividend_maps(result)
+    out["dividend_rate"] = out["date"].map(div_rate_map).fillna(0.0).astype(float)
+    out["dividend_label"] = out["date"].map(div_label_map).fillna("")
     out["ticker"] = ticker
     out["date"] = pd.to_datetime(out["date"], errors="coerce")
     return out.dropna(subset=["date", "close"])
@@ -134,7 +171,20 @@ def run(end_date: date | None = None) -> Path:
                 if not df.empty:
                     frames.append(
                         df[
-                            ["ticker", "date", "open", "high", "low", "close", "volume", "adjusted_close", "dividends", "splits"]
+                            [
+                                "ticker",
+                                "date",
+                                "open",
+                                "high",
+                                "low",
+                                "close",
+                                "volume",
+                                "adjusted_close",
+                                "dividends",
+                                "splits",
+                                "dividend_rate",
+                                "dividend_label",
+                            ]
                         ].copy()
                     )
             ok += 1
@@ -147,12 +197,16 @@ def run(end_date: date | None = None) -> Path:
                 )
                 results = payload.get("results") or []
                 if results and results[0].get("historicalDataPrice"):
-                    df2 = pd.DataFrame(results[0]["historicalDataPrice"])
+                    result = results[0]
+                    df2 = pd.DataFrame(result["historicalDataPrice"])
                     df2["date"] = df2["date"].apply(_parse_date_mixed)
                     for col in ["open", "high", "low", "close", "adjustedClose", "volume", "splits", "dividends"]:
                         if col not in df2.columns:
                             df2[col] = None
                     df2 = df2.rename(columns={"adjustedClose": "adjusted_close"})
+                    div_rate_map, div_label_map = _extract_dividend_maps(result)
+                    df2["dividend_rate"] = pd.to_datetime(df2["date"], errors="coerce").map(div_rate_map).fillna(0.0).astype(float)
+                    df2["dividend_label"] = pd.to_datetime(df2["date"], errors="coerce").map(div_label_map).fillna("")
                     df2["ticker"] = ticker
                     df2 = df2[df2["date"] <= pd.Timestamp(end)]
                     if ticker_last:
@@ -160,7 +214,20 @@ def run(end_date: date | None = None) -> Path:
                     if not df2.empty:
                         frames.append(
                             df2[
-                                ["ticker", "date", "open", "high", "low", "close", "volume", "adjusted_close", "dividends", "splits"]
+                                [
+                                    "ticker",
+                                    "date",
+                                    "open",
+                                    "high",
+                                    "low",
+                                    "close",
+                                    "volume",
+                                    "adjusted_close",
+                                    "dividends",
+                                    "splits",
+                                    "dividend_rate",
+                                    "dividend_label",
+                                ]
                             ].copy()
                         )
                 ok += 1
@@ -186,6 +253,12 @@ def run(end_date: date | None = None) -> Path:
     else:
         combined = new_data
 
+    if "dividend_rate" not in combined.columns:
+        combined["dividend_rate"] = 0.0
+    if "dividend_label" not in combined.columns:
+        combined["dividend_label"] = ""
+    combined["dividend_rate"] = pd.to_numeric(combined["dividend_rate"], errors="coerce").fillna(0.0).astype(float)
+    combined["dividend_label"] = combined["dividend_label"].fillna("").astype(str)
     combined = combined.sort_values(["ticker", "date"]).reset_index(drop=True)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     combined.to_parquet(TARGET, index=False)

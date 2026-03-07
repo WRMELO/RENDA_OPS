@@ -158,6 +158,12 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     raw["close_raw"] = pd.to_numeric(raw["close"], errors="coerce")
     if "splits" not in raw.columns:
         raw["splits"] = ""
+    if "dividend_rate" not in raw.columns:
+        raw["dividend_rate"] = 0.0
+    if "dividend_label" not in raw.columns:
+        raw["dividend_label"] = ""
+    raw["dividend_rate"] = pd.to_numeric(raw["dividend_rate"], errors="coerce").fillna(0.0).astype(float)
+    raw["dividend_label"] = raw["dividend_label"].fillna("").astype(str)
     raw["split_factor"] = raw["splits"].apply(parse_split_factor)
     raw = raw.dropna(subset=["ticker", "date", "close_raw"])
     raw = raw[raw["ticker"].isin(operational_tickers)].copy()
@@ -214,7 +220,7 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     output_cols = [
         "ticker", "date", "close_operational", "close_raw", "X_real", "i_value", "i_ucl", "i_lcl",
         "mr_value", "mr_ucl", "xbar_value", "xbar_ucl", "xbar_lcl", "r_value", "r_ucl", "sector",
-        "mr_bar", "r_bar", "center_line", "splits", "split_factor",
+        "mr_bar", "r_bar", "center_line", "splits", "split_factor", "dividend_rate", "dividend_label",
     ]
     new_window = data[output_cols].copy()
     new_window["date"] = pd.to_datetime(new_window["date"]).dt.strftime("%Y-%m-%d")
@@ -238,6 +244,12 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
         final = pd.concat([keep_old, legacy_non_operational, new_window], ignore_index=True)
 
     final = final.drop_duplicates(subset=["ticker", "date"], keep="last").sort_values(["ticker", "date"]).reset_index(drop=True)
+    if "dividend_rate" not in final.columns:
+        final["dividend_rate"] = 0.0
+    if "dividend_label" not in final.columns:
+        final["dividend_label"] = ""
+    final["dividend_rate"] = pd.to_numeric(final["dividend_rate"], errors="coerce").fillna(0.0).astype(float)
+    final["dividend_label"] = final["dividend_label"].fillna("").astype(str)
 
     MIN_RECENT_DAYS = 20
     STALE_WINDOW_DAYS = 100
