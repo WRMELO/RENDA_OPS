@@ -33,3 +33,5 @@
 ## 2026-03-07
 
 - feat: T-023 — redesenhar painel (paisagem+A3, Plotly 252+Base100, Sessão Caixa com Balanço Simplificado+DFC) e reiniciar artefatos para gerar apenas 04/03. Ref: D-018. Artefatos: pipeline/painel_diario.py, pipeline/run_daily.py
+- feat: T-020 — backtest comparativo realista (custos AGNO 2.5bps, liquidacao D+1/D+2, lotes e concentracao) para C1/C2/C3-CEP
+- fix: T-020v2 — backtest comparativo com venda defensiva permanente (AGNO), ajuste de splits e saidas Plotly. Ref: D-021. Artefatos: backtest/run_backtest_variants.py, backtest/plot_t020_plotly.py, backtest/results/*.html

@@ -23,6 +23,9 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 6 | T-019 | Quarentena de front legado + alinhar docs/orquestrador ao painel unico | D-016 | pipeline/run_daily.py, CICLO_DIARIO.md, pipeline/report_daily.py, pipeline/boletim_execucao.py | DONE |
 | 7 | T-011 | Recomposicao pos-liquidacao (endpoint + botao) | D-012 | pipeline/recompor.py, endpoint /recompor, botao no painel | CANCELLED (superada por D-016/D-017) |
 | 8 | T-012 | Lancador autonomo com calendario (rodar ciclo + historico via browser) | D-012, D-017 | pipeline/servidor.py, iniciar.sh, pagina inicial com botao + calendario | DONE |
+| 9 | T-020 | Backtest comparativo C1/C2/C3-CEP (criterios de venda) | D-019 | backtest/run_backtest_variants.py, tabela Sharpe/MDD/CAGR/switches | PENDING |
+| 10 | T-021 | Integrar CEP defensivo em _build_sell_suggestions | D-019 | pipeline/painel_diario.py, data/ssot/canonical_br.parquet | PENDING |
+| 11 | T-022 | Atualizar BRIEFING_CRITERIO_VENDA com CEP como criterio defensivo | D-019 | docs/BRIEFING_CRITERIO_VENDA.md | PENDING |
 
 ### Futuro (sem data, sem detalhe)
 
