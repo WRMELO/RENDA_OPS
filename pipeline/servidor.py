@@ -14,7 +14,7 @@ import sys
 import threading
 import webbrowser
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
@@ -56,6 +56,197 @@ def _list_available_panels() -> list[date]:
 
 def _panel_path(day: date) -> Path:
     return ROOT / "data" / "cycles" / day.isoformat() / "painel.html"
+
+
+def _list_pregoes() -> list[date]:
+    """Lista pregões (dias úteis B3) a partir do SSOT (macro.parquet)."""
+    try:
+        import pandas as pd
+    except Exception:
+        return []
+
+    macro_path = ROOT / "data" / "ssot" / "macro.parquet"
+    if macro_path.exists():
+        try:
+            df = pd.read_parquet(macro_path, columns=["date"])
+            if not df.empty:
+                df["date"] = pd.to_datetime(df["date"], errors="coerce")
+                days = sorted(set(df["date"].dt.date.dropna().tolist()))
+                if days:
+                    return days
+        except Exception:
+            pass
+
+    canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if canon_path.exists():
+        try:
+            df = pd.read_parquet(canon_path, columns=["date"])
+            if not df.empty:
+                df["date"] = pd.to_datetime(df["date"], errors="coerce")
+                days = sorted(set(df["date"].dt.date.dropna().tolist()))
+                if days:
+                    return days
+        except Exception:
+            pass
+    return []
+
+
+def _pregao_alvo_para_analise(analysis_day: date) -> date:
+    """Regra operacional: o painel do dia D analisa o pregão D-1 (último pregão < D)."""
+    try:
+        d1 = painel_diario.get_d_minus_1(analysis_day)
+        return d1 if d1 < analysis_day else analysis_day
+    except Exception:
+        return analysis_day
+
+
+def _collect_covered_pregoes(pregoes_set: set[date]) -> set[date]:
+    """Cobertura é por reference_decision (pregão). Fallback: filename se já for pregão."""
+    covered: set[date] = set()
+    real_dir = ROOT / "data" / "real"
+    if not real_dir.exists():
+        return covered
+    for p in sorted(real_dir.glob("*.json")):
+        try:
+            file_day = date.fromisoformat(p.stem)
+        except Exception:
+            file_day = None
+        try:
+            payload = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            payload = {}
+
+        ref = str(payload.get("reference_decision", "")).strip()
+        if ref:
+            try:
+                ref_day = date.fromisoformat(ref)
+                if ref_day in pregoes_set:
+                    covered.add(ref_day)
+            except Exception:
+                pass
+        if file_day and file_day in pregoes_set:
+            covered.add(file_day)
+    return covered
+
+
+def _missing_pregoes_para_catchup(analysis_day: date) -> list[date]:
+    """Retorna pregões sem cobertura entre o primeiro JSON e D-1 (inclusive)."""
+    pregoes = _list_pregoes()
+    if not pregoes:
+        return []
+    pregoes_set = set(pregoes)
+    covered = _collect_covered_pregoes(pregoes_set)
+    if not covered:
+        return []
+    start = min(covered)
+    target_pregao = _pregao_alvo_para_analise(analysis_day)
+    needed = [d for d in pregoes if start <= d <= target_pregao]
+    return [d for d in needed if d not in covered]
+
+
+def _extract_panel_recommendations(panel_path: Path) -> dict[str, Any]:
+    if not panel_path.exists():
+        return {}
+    try:
+        html = panel_path.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return {}
+
+    def _read_const(name: str):
+        marker = f"const {name} = "
+        i = html.find(marker)
+        if i < 0:
+            return None
+        j = html.find(";", i + len(marker))
+        if j < 0:
+            return None
+        raw = html[i + len(marker) : j].strip()
+        try:
+            return json.loads(raw)
+        except Exception:
+            return None
+
+    action_rows = _read_const("ACTION_ROWS")
+    cash_rows = _read_const("PREFILL_CASH_ROWS")
+    out: dict[str, Any] = {}
+    if action_rows is not None:
+        out["action_rows"] = action_rows
+    if cash_rows is not None:
+        out["cash_rows"] = cash_rows
+    return out
+
+
+def _load_decision_for_pregao(pregao: date) -> dict[str, Any] | None:
+    p = ROOT / "data" / "daily" / f"{pregao.isoformat()}.json"
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _write_observational_boletim(pregao: date) -> list[str]:
+    """Cria boletim observacional para um pregão faltante (sem ações)."""
+    prev_day, prev_payload = painel_diario.load_latest_real_before(pregao - timedelta(days=1))
+    prev_payload = prev_payload or {}
+
+    def _sf(v: Any, default: float = 0.0) -> float:
+        try:
+            if v is None:
+                return default
+            return float(v)
+        except Exception:
+            return default
+
+    cash_free = _sf(prev_payload.get("cash_free", prev_payload.get("cash_balance", 0.0)), 0.0)
+    cash_acc = _sf(prev_payload.get("cash_accounting", prev_payload.get("caixa_liquidando", 0.0)), 0.0)
+    positions_snapshot = prev_payload.get("positions_snapshot", [])
+    defensive_quarantine = prev_payload.get("defensive_quarantine", [])
+
+    recs = _extract_panel_recommendations(_panel_path(pregao))
+    decision = _load_decision_for_pregao(pregao)
+    if decision is not None:
+        recs = {**recs, "decision": decision}
+
+    payload: dict[str, Any] = {
+        "date": pregao.isoformat(),
+        "reference_decision": pregao.isoformat(),
+        "operations": [],
+        "cash_movements": [],
+        "cash_transfers": [],
+        "cash_free": cash_free,
+        "cash_accounting": cash_acc,
+        "caixa_liquido_real": None,
+        "positions_snapshot": positions_snapshot,
+        "defensive_quarantine": defensive_quarantine,
+        "positions": [],
+        "cash_balance": cash_free,
+        "caixa_liquidando": cash_acc,
+    }
+    if recs:
+        payload["recommendations"] = recs
+    if prev_day:
+        payload["catchup_prev_real_day"] = prev_day.isoformat()
+
+    out_json = json.dumps(payload, indent=2, ensure_ascii=False)
+
+    written: list[str] = []
+    cycle_dir = ROOT / "data" / "cycles" / pregao.isoformat()
+    cycle_dir.mkdir(parents=True, exist_ok=True)
+    real_dir = ROOT / "data" / "real"
+    real_dir.mkdir(parents=True, exist_ok=True)
+
+    dest_cycle = cycle_dir / "boletim_preenchido.json"
+    dest_real = real_dir / f"{pregao.isoformat()}.json"
+
+    if not dest_cycle.exists():
+        dest_cycle.write_text(out_json, encoding="utf-8")
+        written.append(str(dest_cycle.relative_to(ROOT)))
+    if not dest_real.exists():
+        dest_real.write_text(out_json, encoding="utf-8")
+        written.append(str(dest_real.relative_to(ROOT)))
+    return written
 
 
 def _inject_readonly_mode(html: str, day: date) -> str:
@@ -104,23 +295,51 @@ def _start_daily_job(target_day: date) -> bool:
             return False
         JOB_STATE.status = "RUNNING"
         JOB_STATE.day = target_day.isoformat()
-        JOB_STATE.message = "Rodando pipeline completo..."
+        JOB_STATE.message = "Rodando pipeline completo (com catch-up de pregões)..."
         JOB_STATE.error = ""
         JOB_STATE.progress_current = 0
         JOB_STATE.progress_total = 12
         JOB_STATE.progress_label = "Iniciando..."
 
-    def _on_step(current: int, total: int, label: str) -> None:
+    def _set_progress(cur: int, tot: int, label: str) -> None:
         with JOB_LOCK:
-            JOB_STATE.progress_current = current
-            JOB_STATE.progress_total = total
+            JOB_STATE.progress_current = cur
+            JOB_STATE.progress_total = tot
             JOB_STATE.progress_label = label
 
     def _runner() -> None:
         try:
-            run_daily.run(target_date=target_day, full=True, on_step=_on_step)
-            if not _panel_path(target_day).exists():
-                painel_diario.build_painel(target_day)
+            analysis_day = target_day
+
+            missing = _missing_pregoes_para_catchup(analysis_day)
+            total_runs = len(missing) + 1
+            total_steps = 12 * total_runs
+            _set_progress(0, total_steps, "Iniciando...")
+
+            for i, p in enumerate(missing):
+                base = i * 12
+
+                def _on_step_c(cur: int, tot: int, label: str, _base: int = base, _p: date = p) -> None:
+                    _set_progress(_base + cur, total_steps, f"Catch-up {_p.isoformat()} — {label}")
+
+                run_daily.run(target_date=p, full=False, refresh_macro_features=False, on_step=_on_step_c)
+                if not _panel_path(p).exists():
+                    painel_diario.build_painel(p)
+                written = _write_observational_boletim(p)
+                if written:
+                    _set_progress(base + 12, total_steps, f"Catch-up {p.isoformat()} — boletim observacional salvo")
+                else:
+                    _set_progress(base + 12, total_steps, f"Catch-up {p.isoformat()} — já existia, nada a salvar")
+
+            base_main = len(missing) * 12
+
+            def _on_step_main(cur: int, tot: int, label: str) -> None:
+                _set_progress(base_main + cur, total_steps, f"Dia {analysis_day.isoformat()} — {label}")
+
+            run_daily.run(target_date=analysis_day, full=True, on_step=_on_step_main)
+
+            if not _panel_path(analysis_day).exists():
+                painel_diario.build_painel(analysis_day)
             with JOB_LOCK:
                 JOB_STATE.status = "OK"
                 JOB_STATE.message = "Pipeline concluído com sucesso."

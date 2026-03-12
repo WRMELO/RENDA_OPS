@@ -1,0 +1,222 @@
+{
+  "date": "2026-03-09",
+  "reference_decision": "2026-03-09",
+  "operations": [],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 461.5599999999977,
+  "cash_accounting": 213246.02999999997,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-03",
+      "qtd": 490,
+      "preco_compra": 151
+    },
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-03",
+      "qtd": 1219,
+      "preco_compra": 60.77
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-03",
+      "qtd": 9815,
+      "preco_compra": 7.55
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-03",
+      "qtd": 7265,
+      "preco_compra": 10.2
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-03-03",
+      "qtd": 22,
+      "preco_compra": 816.97
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-03",
+      "qtd": 6563,
+      "preco_compra": 11.29
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-07",
+      "qtd": 3000,
+      "preco_compra": 11.52
+    },
+    {
+      "ticker": "M1RN34",
+      "data_compra": "2026-03-03",
+      "qtd": 5472,
+      "preco_compra": 13.54
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-04",
+      "qtd": 26,
+      "preco_compra": 55.12
+    }
+  ],
+  "defensive_quarantine": [
+    "G1LW34",
+    "K1SG34",
+    "T2ER34"
+  ],
+  "positions": [],
+  "cash_balance": 461.5599999999977,
+  "caixa_liquidando": 213246.02999999997,
+  "recommendations": {
+    "action_rows": [
+      {
+        "type": "VENDA",
+        "ticker": "G1LW34",
+        "qtd": 11,
+        "preco": 645.33
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "GOLL54",
+        "qtd": 6432,
+        "preco": 11.52
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "M1RN34",
+        "qtd": 5505,
+        "preco": 13.46
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "AURA33",
+        "qtd": 529,
+        "preco": 139.96
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "CBAV3",
+        "qtd": 7336,
+        "preco": 10.1
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "PRIO3",
+        "qtd": 1247,
+        "preco": 59.39
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "BGIP3",
+        "qtd": 1190,
+        "preco": 62.24
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "TPIS3",
+        "qtd": 10249,
+        "preco": 7.23
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "LMTB34",
+        "qtd": 21,
+        "preco": 3521.49
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "BIED3",
+        "qtd": 9867,
+        "preco": 7.51
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "BRAV3",
+        "qtd": 3755,
+        "preco": 19.73
+      }
+    ],
+    "cash_rows": [],
+    "decision": {
+      "date": "2026-03-09",
+      "state_cash": 0,
+      "y_proba_cash": 0.0117,
+      "consecutive_above_thr": 0,
+      "consecutive_below_thr": 66,
+      "action": "MERCADO",
+      "config": {
+        "thr": 0.22,
+        "h_in": 3,
+        "h_out": 2,
+        "top_n": 10
+      },
+      "portfolio": [
+        {
+          "rank": 1,
+          "ticker": "GOLL54",
+          "score_m3": 5.5828,
+          "weight": 0.1
+        },
+        {
+          "rank": 2,
+          "ticker": "M1RN34",
+          "score_m3": 5.4937,
+          "weight": 0.1
+        },
+        {
+          "rank": 3,
+          "ticker": "AURA33",
+          "score_m3": 5.0219,
+          "weight": 0.1
+        },
+        {
+          "rank": 4,
+          "ticker": "CBAV3",
+          "score_m3": 4.9964,
+          "weight": 0.1
+        },
+        {
+          "rank": 5,
+          "ticker": "PRIO3",
+          "score_m3": 4.347,
+          "weight": 0.1
+        },
+        {
+          "rank": 6,
+          "ticker": "BGIP3",
+          "score_m3": 4.1179,
+          "weight": 0.1
+        },
+        {
+          "rank": 7,
+          "ticker": "TPIS3",
+          "score_m3": 4.1012,
+          "weight": 0.1
+        },
+        {
+          "rank": 8,
+          "ticker": "LMTB34",
+          "score_m3": 4.0817,
+          "weight": 0.1
+        },
+        {
+          "rank": 9,
+          "ticker": "BIED3",
+          "score_m3": 3.9522,
+          "weight": 0.1
+        },
+        {
+          "rank": 10,
+          "ticker": "BRAV3",
+          "score_m3": 3.6166,
+          "weight": 0.1
+        }
+      ]
+    }
+  },
+  "catchup_prev_real_day": "2026-03-07"
+}

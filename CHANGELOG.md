@@ -42,3 +42,7 @@
 - fix: T-021-HF2 — liberar quarentena fora do regime defensivo (evitar bloqueio eterno) mantendo checks SPC completos. Ref: D-021/D-023. Artefatos: pipeline/painel_diario.py
 - audit: T-021-HF2 curada com PASS (re-auditoria Kimi). Bug F1 (quarentena persistente) corrigido e validado. 4/4 casos de teste PASS. Nenhuma regressão detectada. Artefatos: pipeline/painel_diario.py (D-021, D-023)
 - chore: BLINDAGEM MOTOR OPERACIONAL — tag v1.0.0-motor selada + pre-commit hook ativo + politica 6.5 no GOVERNANCE. Arquivos protegidos: pipeline/painel_diario.py, pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py. Ref: D-025. Artefatos: .git/hooks/pre-commit, GOVERNANCE.md, DECISION_LOG.md
+
+## 2026-03-11
+
+- feat: T-024 — catch-up automático de pregões perdidos no lançador (D-026). Artefatos: pipeline/servidor.py
