@@ -21,7 +21,7 @@ import logging
 import sys
 import traceback
 from collections.abc import Callable
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -131,21 +131,74 @@ def _write_t003_sanity(run_date: date) -> None:
     out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
-def _macro_features_cover_date(run_date: date) -> bool:
+def _macro_features_date_max() -> date | None:
     import pandas as pd
-    from datetime import timedelta
+
     mf_path = ROOT / "data" / "features" / "macro_features.parquet"
     if not mf_path.exists():
-        return False
+        return None
     try:
         df = pd.read_parquet(mf_path, columns=["date"])
         if df.empty:
-            return False
+            return None
         date_max = pd.to_datetime(df["date"], errors="coerce").max()
-        # Accept D-1 since macro/FRED data arrives with 1-day lag
-        return bool(pd.notna(date_max) and date_max.date() >= run_date - timedelta(days=1))
+        if pd.isna(date_max):
+            return None
+        return date_max.date()
     except Exception:
+        return None
+
+
+def _macro_features_cover_date(run_date: date, tolerance_days: int = 2) -> bool:
+    date_max = _macro_features_date_max()
+    if date_max is None:
         return False
+    # Accept up to D-2 (D-027): if FRED is unstable, reuse nearby macro coverage.
+    return bool(date_max >= run_date - timedelta(days=tolerance_days))
+
+
+def _pad_macro_features_to_date(run_date: date) -> bool:
+    import pandas as pd
+
+    mf_path = ROOT / "data" / "features" / "macro_features.parquet"
+    if not mf_path.exists():
+        return False
+    df = pd.read_parquet(mf_path).copy()
+    if "date" not in df.columns or df.empty:
+        return False
+
+    df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.normalize()
+    df = df.dropna(subset=["date"]).sort_values("date").reset_index(drop=True)
+    if df.empty:
+        return False
+
+    date_max_ts = pd.to_datetime(df["date"]).max()
+    if pd.isna(date_max_ts):
+        return False
+    date_max = date_max_ts.date()
+    if date_max >= run_date:
+        return False
+
+    last_row = df.loc[df["date"] == date_max_ts].iloc[-1].copy()
+    missing_dates = pd.date_range(
+        start=pd.Timestamp(date_max + timedelta(days=1)),
+        end=pd.Timestamp(run_date),
+        freq="D",
+    )
+    if len(missing_dates) == 0:
+        return False
+
+    padded_rows = []
+    for dt in missing_dates:
+        row = last_row.copy()
+        row["date"] = pd.Timestamp(dt).normalize()
+        padded_rows.append(row.to_dict())
+
+    padded_df = pd.DataFrame(padded_rows, columns=df.columns)
+    out = pd.concat([df, padded_df], ignore_index=True)
+    out = out.sort_values("date").drop_duplicates(subset=["date"], keep="first").reset_index(drop=True)
+    out.to_parquet(mf_path, index=False)
+    return True
 
 
 def run(
@@ -184,10 +237,31 @@ def run(
 
         if refresh_macro_features:
             _step(5, "Step 05: Build macro expanded features...")
-            _load_step("05_build_macro_expanded").run(end_date=run_date)
+            try:
+                _load_step("05_build_macro_expanded").run(end_date=run_date)
+            except Exception as step5_exc:
+                logger.warning(f"Step 05 build failed via FRED: {step5_exc}")
+                if _macro_features_cover_date(run_date, tolerance_days=2):
+                    padded = _pad_macro_features_to_date(run_date)
+                    if padded:
+                        logger.warning(
+                            "Step 05: FRED failed; using tolerance fallback "
+                            "(padded macro_features with last known values) — D-027."
+                        )
+                    else:
+                        logger.warning(
+                            "Step 05: FRED failed; using tolerance fallback "
+                            "(reusing existing macro_features, no padding needed) — D-027."
+                        )
+                else:
+                    raise
         else:
-            if _macro_features_cover_date(run_date):
-                _step(5, "Step 05: Reuse existing macro features (coverage OK).")
+            if _macro_features_cover_date(run_date, tolerance_days=2):
+                date_max = _macro_features_date_max()
+                if date_max is not None and date_max < run_date:
+                    _step(5, "Step 05: Reuse existing macro features (coverage OK, tolerance D-2 applied — D-027).")
+                else:
+                    _step(5, "Step 05: Reuse existing macro features (coverage OK).")
             else:
                 _step(5, "Step 05: Coverage insufficient, building macro expanded features...")
                 _load_step("05_build_macro_expanded").run(end_date=run_date)

@@ -46,3 +46,11 @@
 ## 2026-03-11
 
 - feat: T-024 — catch-up automático de pregões perdidos no lançador (D-026). Artefatos: pipeline/servidor.py
+
+## 2026-03-12
+
+- fix: T-025 — resiliencia do step 05 contra instabilidade do FRED: retry/backoff exponencial no FredAdapter + fallback com tolerancia D-2 (padding do macro_features) quando o FRED falhar (D-027). Artefatos: lib/adapters.py, pipeline/run_daily.py
+
+## 2026-03-13
+
+- fix: T-026 — corrigir ticker digitado errado (MUC34→MUTC34) que contaminou carteira/boletins e gerou venda defensiva indevida; regenerar paineis 11-13/03. Artefatos: data/real/2026-03-{11,12,13}.json, data/cycles/2026-03-{11,12,13}/*

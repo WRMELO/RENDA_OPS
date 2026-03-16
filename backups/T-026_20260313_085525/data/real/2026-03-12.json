@@ -1,0 +1,245 @@
+{
+  "date": "2026-03-12",
+  "reference_decision": "2026-03-12",
+  "operations": [],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 119.86000000000058,
+  "cash_accounting": -4.3655745685100555e-11,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-03",
+      "qtd": 490,
+      "preco_compra": 151
+    },
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-11",
+      "qtd": 200,
+      "preco_compra": 145.34
+    },
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-03",
+      "qtd": 1219,
+      "preco_compra": 60.77
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-03",
+      "qtd": 9815,
+      "preco_compra": 7.55
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-11",
+      "qtd": 4000,
+      "preco_compra": 7.45
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-03",
+      "qtd": 7265,
+      "preco_compra": 10.2
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-03",
+      "qtd": 6563,
+      "preco_compra": 11.29
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-07",
+      "qtd": 3000,
+      "preco_compra": 11.52
+    },
+    {
+      "ticker": "LMTB34",
+      "data_compra": "2026-03-10",
+      "qtd": 19,
+      "preco_compra": 3521.49
+    },
+    {
+      "ticker": "M1RN34",
+      "data_compra": "2026-03-03",
+      "qtd": 5472,
+      "preco_compra": 13.54
+    },
+    {
+      "ticker": "MUC34",
+      "data_compra": "2026-03-11",
+      "qtd": 73,
+      "preco_compra": 347
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-04",
+      "qtd": 26,
+      "preco_compra": 55.12
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-10",
+      "qtd": 1300,
+      "preco_compra": 59.39
+    }
+  ],
+  "defensive_quarantine": [
+    "K1SG34",
+    "T2ER34"
+  ],
+  "positions": [],
+  "cash_balance": 119.86000000000058,
+  "caixa_liquidando": -4.3655745685100555e-11,
+  "recommendations": {
+    "action_rows": [
+      {
+        "type": "VENDA",
+        "ticker": "MUC34",
+        "qtd": 73,
+        "preco": 0.0
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "GOLL54",
+        "qtd": 6427,
+        "preco": 11.53
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "AURA33",
+        "qtd": 512,
+        "preco": 144.63
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "CBAV3",
+        "qtd": 7236,
+        "preco": 10.24
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "BIED3",
+        "qtd": 9946,
+        "preco": 7.45
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "BGIP3",
+        "qtd": 1190,
+        "preco": 62.24
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "TPIS3",
+        "qtd": 10378,
+        "preco": 7.14
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "PRIO3",
+        "qtd": 1258,
+        "preco": 58.9
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "PNVL3",
+        "qtd": 4846,
+        "preco": 15.29
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "C1FI34",
+        "qtd": 120,
+        "preco": 615.03
+      },
+      {
+        "type": "COMPRA",
+        "ticker": "M1RN34",
+        "qtd": 5017,
+        "preco": 14.77
+      }
+    ],
+    "cash_rows": [],
+    "decision": {
+      "date": "2026-03-12",
+      "state_cash": 0,
+      "y_proba_cash": 0.0125,
+      "consecutive_above_thr": 0,
+      "consecutive_below_thr": 69,
+      "action": "MERCADO",
+      "config": {
+        "thr": 0.22,
+        "h_in": 3,
+        "h_out": 2,
+        "top_n": 10
+      },
+      "portfolio": [
+        {
+          "rank": 1,
+          "ticker": "GOLL54",
+          "score_m3": 5.4878,
+          "weight": 0.1
+        },
+        {
+          "rank": 2,
+          "ticker": "AURA33",
+          "score_m3": 4.9751,
+          "weight": 0.1
+        },
+        {
+          "rank": 3,
+          "ticker": "CBAV3",
+          "score_m3": 4.8473,
+          "weight": 0.1
+        },
+        {
+          "rank": 4,
+          "ticker": "BIED3",
+          "score_m3": 4.533,
+          "weight": 0.1
+        },
+        {
+          "rank": 5,
+          "ticker": "BGIP3",
+          "score_m3": 4.2277,
+          "weight": 0.1
+        },
+        {
+          "rank": 6,
+          "ticker": "TPIS3",
+          "score_m3": 4.2111,
+          "weight": 0.1
+        },
+        {
+          "rank": 7,
+          "ticker": "PRIO3",
+          "score_m3": 4.1394,
+          "weight": 0.1
+        },
+        {
+          "rank": 8,
+          "ticker": "PNVL3",
+          "score_m3": 4.0575,
+          "weight": 0.1
+        },
+        {
+          "rank": 9,
+          "ticker": "C1FI34",
+          "score_m3": 3.9442,
+          "weight": 0.1
+        },
+        {
+          "rank": 10,
+          "ticker": "M1RN34",
+          "score_m3": 3.7854,
+          "weight": 0.1
+        }
+      ]
+    }
+  },
+  "catchup_prev_real_day": "2026-03-11"
+}

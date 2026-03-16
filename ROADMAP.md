@@ -76,6 +76,9 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | ID | Descricao | Artefatos | Data | Ref |
 | --- | --- | --- | --- | --- |
 | T-013-HF | Corrigir default de quantidade em VENDA (usar prev_qtd) | pipeline/boletim_execucao.py, pipeline/report_daily.py | 2026-03-05 | D-007, D-012 |
+| T-024 | Catch-up automático de pregões perdidos no lançador autonomo | pipeline/servidor.py | 2026-03-11 | D-026 |
+| T-025 | Resiliência do step 05 contra instabilidade do FRED (retry/backoff + fallback D-2) | lib/adapters.py, pipeline/run_daily.py | 2026-03-12 | D-027 |
+| T-026 | Correção de ticker digitado errado (MUC34→MUTC34) em carteira/boletins e regeneração de painéis 11-13/03 | data/real/2026-03-{11,12,13}.json, data/cycles/2026-03-{11,12,13}/* | 2026-03-13 | D-026 |
 
 ---
 

@@ -194,7 +194,7 @@ class FredAdapter:
         "DFF": "fed_funds_rate",
     }
 
-    def __init__(self, timeout_seconds: float = 30.0, max_retries: int = 3) -> None:
+    def __init__(self, timeout_seconds: float = 30.0, max_retries: int = 5) -> None:
         self.timeout = timeout_seconds
         self.max_retries = max_retries
 
@@ -215,7 +215,12 @@ class FredAdapter:
             except Exception:
                 if attempt == self.max_retries:
                     raise
-                time.sleep(1.0 * attempt)
+                wait_s = min(2 ** attempt, 60)
+                print(
+                    f"[FRED] Attempt {attempt}/{self.max_retries} failed for {series_id}; "
+                    f"retrying in {wait_s}s..."
+                )
+                time.sleep(float(wait_s))
         return pd.DataFrame(columns=["date", alias])
 
     def fetch_all(self) -> dict[str, pd.DataFrame]:

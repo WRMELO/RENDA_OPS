@@ -1,38 +1,22 @@
 {
-  "date": "2026-03-11",
-  "reference_decision": "2026-03-10",
+  "date": "2026-03-14",
+  "reference_decision": "2026-03-13",
   "operations": [
     {
       "type": "COMPRA",
-      "ticker": "AURA33",
-      "qtd": 200,
-      "preco": 145.34
-    },
-    {
-      "type": "COMPRA",
-      "ticker": "BIED3",
-      "qtd": 4000,
-      "preco": 7.45
-    },
-    {
-      "type": "COMPRA",
-      "ticker": "MUTC34",
-      "qtd": 73,
-      "preco": 347
+      "ticker": "PETR3",
+      "qtd": 1290,
+      "preco": 49.65
     }
   ],
   "cash_movements": [],
   "cash_transfers": [
     {
-      "value": 69025.44,
-      "note": "VENDA PNVL3 2026-03-07"
-    },
-    {
-      "value": 14726.58,
-      "note": "VENDA G1LW34 2026-03-10"
+      "value": 63999.78999999999,
+      "note": "VENDA LMTB34 2026-03-13"
     }
   ],
-  "cash_free": 119.86000000000058,
+  "cash_free": 71.14999999999418,
   "cash_accounting": -4.3655745685100555e-11,
   "caixa_liquido_real": null,
   "positions_snapshot": [
@@ -85,12 +69,6 @@
       "preco_compra": 11.52
     },
     {
-      "ticker": "LMTB34",
-      "data_compra": "2026-03-10",
-      "qtd": 19,
-      "preco_compra": 3521.49
-    },
-    {
       "ticker": "M1RN34",
       "data_compra": "2026-03-03",
       "qtd": 5472,
@@ -101,6 +79,12 @@
       "data_compra": "2026-03-11",
       "qtd": 73,
       "preco_compra": 347
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-14",
+      "qtd": 1290,
+      "preco_compra": 49.65
     },
     {
       "ticker": "PRIO3",
@@ -115,36 +99,17 @@
       "preco_compra": 59.39
     }
   ],
-  "defensive_quarantine": [
-    "K1SG34",
-    "T2ER34"
-  ],
+  "defensive_quarantine": [],
   "positions": [
     {
-      "ticker": "AURA33",
+      "ticker": "PETR3",
       "recommended": "COMPRA",
       "executed": "COMPREI",
-      "qtd": 200,
-      "preco": 145.34,
-      "source": "recommended"
-    },
-    {
-      "ticker": "BIED3",
-      "recommended": "COMPRA",
-      "executed": "COMPREI",
-      "qtd": 4000,
-      "preco": 7.45,
-      "source": "recommended"
-    },
-    {
-      "ticker": "MUTC34",
-      "recommended": "COMPRA",
-      "executed": "COMPREI",
-      "qtd": 73,
-      "preco": 347,
+      "qtd": 1290,
+      "preco": 49.65,
       "source": "recommended"
     }
   ],
-  "cash_balance": 119.86000000000058,
+  "cash_balance": 71.14999999999418,
   "caixa_liquidando": -4.3655745685100555e-11
 }
