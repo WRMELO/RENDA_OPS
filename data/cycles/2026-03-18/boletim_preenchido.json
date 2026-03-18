@@ -1,0 +1,94 @@
+{
+  "date": "2026-03-18",
+  "reference_decision": "2026-03-17",
+  "operations": [],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 71.14999999999418,
+  "cash_accounting": -4.3655745685100555e-11,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-03",
+      "qtd": 490,
+      "preco_compra": 151
+    },
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-03-11",
+      "qtd": 200,
+      "preco_compra": 145.34
+    },
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-03",
+      "qtd": 1219,
+      "preco_compra": 60.77
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-03",
+      "qtd": 9815,
+      "preco_compra": 7.55
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-11",
+      "qtd": 4000,
+      "preco_compra": 7.45
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-03",
+      "qtd": 7265,
+      "preco_compra": 10.2
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-03",
+      "qtd": 6563,
+      "preco_compra": 11.29
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-07",
+      "qtd": 3000,
+      "preco_compra": 11.52
+    },
+    {
+      "ticker": "M1RN34",
+      "data_compra": "2026-03-03",
+      "qtd": 5472,
+      "preco_compra": 13.54
+    },
+    {
+      "ticker": "MUTC34",
+      "data_compra": "2026-03-11",
+      "qtd": 73,
+      "preco_compra": 347
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-14",
+      "qtd": 1290,
+      "preco_compra": 49.65
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-04",
+      "qtd": 26,
+      "preco_compra": 55.12
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-10",
+      "qtd": 1300,
+      "preco_compra": 59.39
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [],
+  "cash_balance": 71.14999999999418,
+  "caixa_liquidando": -4.3655745685100555e-11
+}

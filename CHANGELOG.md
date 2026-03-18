@@ -54,3 +54,7 @@
 ## 2026-03-13
 
 - fix: T-026 — corrigir ticker digitado errado (MUC34→MUTC34) que contaminou carteira/boletins e gerou venda defensiva indevida; regenerar paineis 11-13/03. Artefatos: data/real/2026-03-{11,12,13}.json, data/cycles/2026-03-{11,12,13}/*
+
+## 2026-03-17
+
+- T-027 | 2026-03-17 | Resiliência BCB+Yahoo: retry/backoff exponencial nos adapters externos | lib/adapters.py | D-030

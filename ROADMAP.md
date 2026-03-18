@@ -27,6 +27,12 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 10 | T-021 | Integrar CEP defensivo (C2 K=15) + proventos automaticos no painel | D-019, D-022, D-023 | pipeline/painel_diario.py, pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py | DONE |
 | 11 | T-022 | ~~Atualizar BRIEFING_CRITERIO_VENDA~~ | D-019 | docs/BRIEFING_CRITERIO_VENDA.md | CANCELLED (D-023) |
 
+### Marcos Estratégicos
+
+| Marco | Descrição | Status | Ref |
+|-------|-----------|--------|-----|
+| Fábrica US (USA_OPS) | Repo independente ~/USA_OPS criado com governança, plano e briefing. Russell 1000 + SmallCap 600 − BDRs (~1.100 tickers). Motor a descobrir. | INICIADO | D-029 |
+
 ### Futuro (sem data, sem detalhe)
 
 - Scheduler/cron para `pipeline/run_daily.py`

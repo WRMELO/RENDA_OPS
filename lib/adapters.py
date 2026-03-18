@@ -125,18 +125,28 @@ class BcbAdapter:
 
     BASE_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs."
 
-    def __init__(self, timeout_seconds: float = 20.0) -> None:
+    def __init__(self, timeout_seconds: float = 20.0, max_retries: int = 5) -> None:
         self.timeout = timeout_seconds
+        self.max_retries = max_retries
 
     def get_series(self, series_id: int, start: date, end: date) -> pd.DataFrame:
         url = f"{self.BASE_URL}{series_id}/dados"
         params = {"formato": "json", "dataInicial": start.strftime("%d/%m/%Y"), "dataFinal": end.strftime("%d/%m/%Y")}
-        try:
-            resp = requests.get(url, params=params, timeout=self.timeout)
-            resp.raise_for_status()
-            payload: list[dict[str, Any]] = resp.json()
-        except RequestException as exc:
-            raise RuntimeError(f"BCB series {series_id} fetch failed.") from exc
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                resp = requests.get(url, params=params, timeout=self.timeout)
+                resp.raise_for_status()
+                payload: list[dict[str, Any]] = resp.json()
+                break
+            except (RequestException, ValueError) as exc:
+                if attempt == self.max_retries:
+                    raise RuntimeError(f"BCB series {series_id} fetch failed.") from exc
+                wait_s = min(2 ** attempt, 60)
+                print(
+                    f"[BCB] Attempt {attempt}/{self.max_retries} failed for {series_id}; "
+                    f"retrying in {wait_s}s..."
+                )
+                time.sleep(float(wait_s))
         if not payload:
             return pd.DataFrame(columns=["date", "value"])
         df = pd.DataFrame(payload)
@@ -153,8 +163,9 @@ class YahooAdapter:
 
     BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart"
 
-    def __init__(self, timeout_seconds: float = 20.0) -> None:
+    def __init__(self, timeout_seconds: float = 20.0, max_retries: int = 5) -> None:
         self.timeout = timeout_seconds
+        self.max_retries = max_retries
 
     def get_daily_close(self, symbol: str, start: date, end: date) -> pd.DataFrame:
         start_ts = int(datetime.combine(start, datetime.min.time(), tzinfo=UTC).timestamp())
@@ -162,12 +173,21 @@ class YahooAdapter:
         url = f"{self.BASE_URL}/{symbol}"
         params = {"period1": start_ts, "period2": end_ts, "interval": "1d", "events": "div,splits", "includeAdjustedClose": "true"}
         headers = {"User-Agent": "Mozilla/5.0"}
-        try:
-            resp = requests.get(url, params=params, headers=headers, timeout=self.timeout)
-            resp.raise_for_status()
-            payload: dict[str, Any] = resp.json()
-        except RequestException as exc:
-            raise RuntimeError(f"Yahoo fetch failed for {symbol}.") from exc
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                resp = requests.get(url, params=params, headers=headers, timeout=self.timeout)
+                resp.raise_for_status()
+                payload: dict[str, Any] = resp.json()
+                break
+            except (RequestException, ValueError) as exc:
+                if attempt == self.max_retries:
+                    raise RuntimeError(f"Yahoo fetch failed for {symbol}.") from exc
+                wait_s = min(2 ** attempt, 60)
+                print(
+                    f"[Yahoo] Attempt {attempt}/{self.max_retries} failed for {symbol}; "
+                    f"retrying in {wait_s}s..."
+                )
+                time.sleep(float(wait_s))
         result = ((payload.get("chart") or {}).get("result") or [None])[0]
         if not result:
             return pd.DataFrame(columns=["date", "close"])
