@@ -65,15 +65,21 @@ def run(end_date: date | None = None) -> Path:
 
     prev_sp = np.nan
     prev_ib = np.nan
+    prev_cdi_log = np.nan
     if not existing.empty:
         if "sp500_close" in existing.columns and not existing["sp500_close"].dropna().empty:
             prev_sp = float(existing["sp500_close"].dropna().iloc[-1])
         if "ibov_close" in existing.columns and not existing["ibov_close"].dropna().empty:
             prev_ib = float(existing["ibov_close"].dropna().iloc[-1])
+        if "cdi_log_daily" in existing.columns and not existing["cdi_log_daily"].dropna().empty:
+            prev_cdi_log = float(pd.to_numeric(existing["cdi_log_daily"], errors="coerce").dropna().iloc[-1])
         if np.isfinite(prev_sp):
             macro["sp500_close"] = macro["sp500_close"].fillna(prev_sp)
         if np.isfinite(prev_ib):
             macro["ibov_close"] = macro["ibov_close"].fillna(prev_ib)
+    if np.isfinite(prev_cdi_log):
+        prev_cdi_rate_annual_pct = float(np.expm1(prev_cdi_log) * 100.0)
+        macro["cdi_rate_annual_pct"] = macro["cdi_rate_annual_pct"].fillna(prev_cdi_rate_annual_pct)
     macro["cdi_rate_annual_pct"] = macro["cdi_rate_annual_pct"].ffill().bfill()
     macro["sp500_close"] = macro["sp500_close"].ffill().bfill()
     macro["ibov_close"] = macro["ibov_close"].ffill().bfill()
@@ -106,6 +112,8 @@ def run(end_date: date | None = None) -> Path:
 
     combined["date"] = pd.to_datetime(combined["date"], errors="coerce")
     combined = combined.drop_duplicates(subset=["date"], keep="last").sort_values("date").reset_index(drop=True)
+    if "cdi_log_daily" in combined.columns:
+        combined["cdi_log_daily"] = pd.to_numeric(combined["cdi_log_daily"], errors="coerce").ffill().bfill()
 
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     combined.to_parquet(TARGET, index=False)

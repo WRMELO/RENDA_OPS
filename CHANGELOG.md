@@ -58,3 +58,8 @@
 ## 2026-03-17
 
 - T-027 | 2026-03-17 | Resiliência BCB+Yahoo: retry/backoff exponencial nos adapters externos | lib/adapters.py | D-030
+
+## 2026-03-18
+
+- fix: T-028 — corrigir atraso do CDI (BCB) no Step 01 com fallback do último valor + backfill de NaNs no macro.parquet. Ref: D-031. Artefatos: pipeline/01_ingest_macro.py, data/ssot/macro.parquet
+- fix: T-029 — Base 1 com patrimônio real (consistente com Balanço), CDI normalizado (D0=1.0) e barras de variação diária no eixo secundário. Ref: D-032. Artefatos: pipeline/painel_diario.py

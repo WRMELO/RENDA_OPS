@@ -714,6 +714,108 @@ def _load_curve_until(as_of_day: date) -> pd.DataFrame:
     return curve
 
 
+def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
+    records: list[dict[str, Any]] = []
+    real_dir = ROOT / "data" / "real"
+    if not real_dir.exists():
+        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
+    for p in sorted(real_dir.glob("*.json")):
+        try:
+            exec_day = date.fromisoformat(p.stem)
+        except Exception:
+            continue
+        payload = _read_json(p)
+
+        ref_raw = str(payload.get("reference_decision", "")).strip()
+        try:
+            ref_day = date.fromisoformat(ref_raw) if ref_raw else exec_day
+        except Exception:
+            ref_day = exec_day
+        if ref_day < PROJECT_START or ref_day > as_of_day:
+            continue
+
+        snapshot = payload.get("positions_snapshot", [])
+        cash_free = _safe_float(payload.get("cash_free", payload.get("cash_balance", 0.0)), 0.0)
+        cash_acc = _safe_float(payload.get("cash_accounting", payload.get("caixa_liquidando", 0.0)), 0.0)
+        if (not snapshot) and abs(cash_free) < 1e-9 and abs(cash_acc) < 1e-9:
+            continue
+
+        records.append(
+            {
+                "exec_day": exec_day,
+                "ref_day": ref_day,
+                "snapshot": snapshot,
+                "cash_free": cash_free,
+                "cash_acc": cash_acc,
+            }
+        )
+
+    if not records:
+        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
+
+    # Se houver reprocessamentos do mesmo pregão de referência, manter o JSON mais recente.
+    by_ref_day: dict[date, dict[str, Any]] = {}
+    for rec in records:
+        current = by_ref_day.get(rec["ref_day"])
+        if current is None or rec["exec_day"] > current["exec_day"]:
+            by_ref_day[rec["ref_day"]] = rec
+    ordered = [by_ref_day[d] for d in sorted(by_ref_day.keys())]
+
+    tickers: set[str] = set()
+    for rec in ordered:
+        for pos in rec["snapshot"]:
+            tk = str(pos.get("ticker", "")).upper().strip()
+            if tk:
+                tickers.add(tk)
+
+    canon = pd.DataFrame(columns=["date", "ticker", "close_raw"])
+    canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if tickers and canon_path.exists():
+        canon = pd.read_parquet(canon_path, columns=["date", "ticker", "close_raw"])
+        canon["date"] = pd.to_datetime(canon["date"], errors="coerce")
+        canon["ticker"] = canon["ticker"].astype(str).str.upper().str.strip()
+        canon["close_raw"] = pd.to_numeric(canon["close_raw"], errors="coerce")
+        canon = canon.dropna(subset=["date", "ticker", "close_raw"])
+        canon = canon[(canon["date"] <= pd.Timestamp(as_of_day)) & (canon["ticker"].isin(tickers))]
+        canon = canon.sort_values(["ticker", "date"]).reset_index(drop=True)
+
+    by_ticker: dict[str, pd.DataFrame] = {}
+    if not canon.empty:
+        for tk in canon["ticker"].unique():
+            by_ticker[tk] = canon[canon["ticker"] == tk][["date", "close_raw"]].copy()
+
+    rows: list[dict[str, Any]] = []
+    for rec in ordered:
+        ref_ts = pd.Timestamp(rec["ref_day"])
+        total_mkt = 0.0
+        for pos in rec["snapshot"]:
+            tk = str(pos.get("ticker", "")).upper().strip()
+            qtd = _safe_int(pos.get("qtd"), 0)
+            if not tk or qtd <= 0:
+                continue
+            px = _safe_float(pos.get("preco_compra"), 0.0)
+            sub = by_ticker.get(tk)
+            if sub is not None and not sub.empty:
+                sub_until = sub[sub["date"] <= ref_ts]
+                if not sub_until.empty:
+                    px = _safe_float(sub_until.iloc[-1]["close_raw"], px)
+            total_mkt += qtd * px
+
+        total_ativo = total_mkt + _safe_float(rec["cash_free"], 0.0) + _safe_float(rec["cash_acc"], 0.0)
+        rows.append({"date": ref_ts, "total_ativo": total_ativo})
+
+    out = pd.DataFrame(rows).sort_values("date").drop_duplicates(subset=["date"], keep="last").reset_index(drop=True)
+    if out.empty:
+        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
+
+    tank_total = _safe_float(load_tank_original().get("tank_total_bruto", 0.0), 0.0)
+    if tank_total <= 0:
+        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
+    out["base1"] = out["total_ativo"] / tank_total
+    out["daily_var_pct"] = out["base1"].pct_change() * 100.0
+    return out
+
+
 def _build_chart_252(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
     if curve.empty:
         return "<div class='chart-empty'>Curva de equity indisponível.</div>"
@@ -836,9 +938,8 @@ def _build_chart_252(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
 
 
 def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
-    if curve.empty:
-        return "<div class='chart-empty'>Base 1 indisponível.</div>"
-    proj = curve[curve["date"] >= pd.Timestamp(PROJECT_START)].copy()
+    _ = curve  # Mantido por compatibilidade da assinatura atual.
+    proj = _build_real_base1_series(as_of_day=as_of_day)
     if proj.empty:
         return "<div class='chart-empty'>Base 1 indisponível.</div>"
     if len(proj) < 2:
@@ -853,7 +954,7 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             font=dict(size=13, color="#666"),
         )
         fig.update_layout(
-            title=dict(text="Base 1 — Início: 03/03/2026", font_size=13),
+            title=dict(text=f"Base 1 — Início: {_fmt_date_br(proj['date'].iloc[0].date())}", font_size=13),
             height=430,
             template="plotly_white",
             margin=dict(l=50, r=20, t=50, b=30),
@@ -861,23 +962,40 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         )
         return fig.to_html(full_html=False, include_plotlyjs=False)
 
-    base_val = float(proj["equity_end_norm"].iloc[0])
-    proj["base1"] = proj["equity_end_norm"] / base_val if base_val > 0 else 1.0
-
     macro_path = ROOT / "data" / "ssot" / "macro.parquet"
     macro_proj = pd.DataFrame(columns=["date", "cdi_base1"])
+    base_start_ts = pd.Timestamp(proj["date"].min())
     if macro_path.exists():
         macro = pd.read_parquet(macro_path)
         if not macro.empty and "cdi_log_daily" in macro.columns:
             macro["date"] = pd.to_datetime(macro["date"], errors="coerce")
+            macro["cdi_log_daily"] = pd.to_numeric(macro["cdi_log_daily"], errors="coerce")
             macro = macro.dropna(subset=["date"]).sort_values("date")
-            macro = macro[macro["date"] >= pd.Timestamp(PROJECT_START)]
+            macro = macro.dropna(subset=["cdi_log_daily"])
+            macro = macro[macro["date"] >= base_start_ts]
             macro = macro[macro["date"] <= pd.Timestamp(as_of_day)]
             if not macro.empty:
                 macro["cdi_base1"] = macro["cdi_log_daily"].cumsum().apply(math.exp)
+                first = _safe_float(macro["cdi_base1"].iloc[0], 0.0)
+                if first > 0:
+                    macro["cdi_base1"] = macro["cdi_base1"] / first
                 macro_proj = macro[["date", "cdi_base1"]].copy()
 
-    fig = go.Figure()
+    bar_df = proj.dropna(subset=["daily_var_pct"]).copy()
+    bar_colors = ["#26a69a" if _safe_float(v, 0.0) >= 0 else "#ef5350" for v in bar_df["daily_var_pct"]]
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    if not bar_df.empty:
+        fig.add_trace(
+            go.Bar(
+                x=bar_df["date"],
+                y=bar_df["daily_var_pct"],
+                name="Var. Diária %",
+                marker=dict(color=bar_colors),
+                opacity=0.45,
+            ),
+            secondary_y=True,
+        )
     fig.add_trace(
         go.Scatter(
             x=proj["date"],
@@ -886,7 +1004,8 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             name="Carteira Real",
             line=dict(color="#1f77b4", width=2.5),
             marker=dict(size=6),
-        )
+        ),
+        secondary_y=False,
     )
     if not macro_proj.empty:
         fig.add_trace(
@@ -897,11 +1016,12 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
                 name="CDI",
                 line=dict(color="#8b8b8b", width=1.7, dash="dot"),
                 marker=dict(size=4),
-            )
+            ),
+            secondary_y=False,
         )
     fig.update_layout(
         title=dict(
-            text=f"Base 1 — Início: {_fmt_date_br(PROJECT_START)} | Até: {_fmt_date_br(as_of_day)}",
+            text=f"Base 1 — Início: {_fmt_date_br(proj['date'].iloc[0].date())} | Até: {_fmt_date_br(as_of_day)}",
             font_size=13,
         ),
         height=430,
@@ -910,7 +1030,8 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         separators=",.",
         legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="right", x=1),
     )
-    fig.update_yaxes(title_text="Base 1")
+    fig.update_yaxes(title_text="Base 1", secondary_y=False)
+    fig.update_yaxes(title_text="Var. Diária (%)", secondary_y=True)
     return fig.to_html(full_html=False, include_plotlyjs=False)
 
 
