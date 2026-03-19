@@ -32,7 +32,40 @@ from pipeline.ptbr import (
 )
 from lib.engine import compute_m3_scores, select_top_n
 
-PROJECT_START = date(2026, 3, 3)
+FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
+
+
+def _safe_date(v: Any, default: date) -> date:
+    try:
+        if isinstance(v, date):
+            return v
+        return date.fromisoformat(str(v))
+    except Exception:
+        return default
+
+
+def load_factory_start() -> dict[str, date]:
+    default_inauguration = date(2026, 3, 19)
+    default_project_start = date(2026, 3, 18)
+    payload: dict[str, Any] = {}
+    if FACTORY_START_CFG.exists():
+        try:
+            payload = json.loads(FACTORY_START_CFG.read_text(encoding="utf-8"))
+        except Exception:
+            payload = {}
+
+    inauguration_exec_day = _safe_date(payload.get("inauguration_exec_day"), default_inauguration)
+    project_start_ref_day = _safe_date(payload.get("project_start_ref_day"), default_project_start)
+    tank_open_date = _safe_date(payload.get("tank_open_date"), inauguration_exec_day)
+    return {
+        "inauguration_exec_day": inauguration_exec_day,
+        "project_start_ref_day": project_start_ref_day,
+        "tank_open_date": tank_open_date,
+    }
+
+
+FACTORY_START = load_factory_start()
+PROJECT_START = FACTORY_START["project_start_ref_day"]
 
 
 class Lot:
@@ -97,9 +130,11 @@ def load_tank_original() -> dict[str, Any]:
     tank_dir = ROOT / "data" / "tank"
     if not tank_dir.exists():
         return {"tank_total_bruto": 0.0}
-    fixed = tank_dir / "tank_2026-03-03.json"
-    if fixed.exists():
-        return _read_json(fixed)
+    tank_open_date = FACTORY_START.get("tank_open_date")
+    if isinstance(tank_open_date, date):
+        fixed = tank_dir / f"tank_{tank_open_date.isoformat()}.json"
+        if fixed.exists():
+            return _read_json(fixed)
     tanks = sorted(tank_dir.glob("tank_*.json"))
     if not tanks:
         return {"tank_total_bruto": 0.0}

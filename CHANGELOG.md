@@ -68,3 +68,4 @@
 ## 2026-03-19
 
 - docs: T-030 — adequar corpus BR e governanca pos-Fabrica US; formalizar stale_tickers rolling (D-033) sem tocar motor blindado. Ref: D-034. Artefatos: docs/CORPUS_FABRICA_BR.md, GOVERNANCE.md, pipeline/06_compute_scores.py
+- chore: T-031 — reinaugurar Day Zero BR (reset warm-up, PROJECT_START externalizado, novo aporte) mantendo SSOT/ML intactos. Ref: D-035. Artefatos: config/factory_start.json, pipeline/painel_diario.py, .gitignore, data/warmup/*

@@ -11,3 +11,7 @@ dist/
 build/
 .DS_Store
 .obsidian/
+data/real/*.json
+data/cycles/
+data/tank/tank_*.json
+data/warmup/
