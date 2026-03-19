@@ -929,7 +929,7 @@ def _build_chart_252(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
         line_dash="dash",
         line_color="purple",
         line_width=2,
-        annotation_text="INÍCIO REAL 03/03/2026",
+        annotation_text=f"INÍCIO REAL {_fmt_date_br(PROJECT_START)}",
         annotation_position="top left",
         annotation_font_size=10,
         annotation_font_color="purple",
