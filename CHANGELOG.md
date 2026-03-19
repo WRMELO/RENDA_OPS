@@ -63,3 +63,8 @@
 
 - fix: T-028 — corrigir atraso do CDI (BCB) no Step 01 com fallback do último valor + backfill de NaNs no macro.parquet. Ref: D-031. Artefatos: pipeline/01_ingest_macro.py, data/ssot/macro.parquet
 - fix: T-029 — Base 1 com patrimônio real (consistente com Balanço), CDI normalizado (D0=1.0) e barras de variação diária no eixo secundário. Ref: D-032. Artefatos: pipeline/painel_diario.py
+- fix: step06 — stale_tickers rolling por dia (remove lookahead em backtest; sem efeito no LIVE via gate de equivalência no último dia) (ref: D-033)
+
+## 2026-03-19
+
+- docs: T-030 — adequar corpus BR e governanca pos-Fabrica US; formalizar stale_tickers rolling (D-033) sem tocar motor blindado. Ref: D-034. Artefatos: docs/CORPUS_FABRICA_BR.md, GOVERNANCE.md, pipeline/06_compute_scores.py

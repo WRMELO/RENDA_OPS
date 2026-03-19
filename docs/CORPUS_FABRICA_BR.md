@@ -1,6 +1,6 @@
 # CORPUS DE CONHECIMENTO — Fábrica BR (RENDA_OPS)
 
-> Ref: D-028 | Data: 2026-03-07
+> Ref: D-028, D-034 | Data: 2026-03-19 (atualizado)
 > Consolidação de toda a experiência acumulada no desenvolvimento e operação da Fábrica BR (winner C060X).
 
 ---
@@ -12,8 +12,8 @@
 **Winner**: C060X — XGBoost (thr=0.22, h_in=3, h_out=2, top_n=10)
 **Mercado**: B3 (ações BR + BDRs)
 **Moeda**: BRL
-**Período de desenvolvimento**: 2025-03-05 a 2026-03-14
-**Status**: Operacional em dry-run, motor blindado (v1.0.0-motor)
+**Período de desenvolvimento**: 2025-03-05 a 2026-03-19
+**Status**: Operacional, motor blindado (v1.1.0-motor)
 
 ### Métricas do winner (C2 K=15, HOLDOUT 2023–2026)
 
@@ -42,8 +42,10 @@
 | Motor Operacional | CEP defensivo + C2 K=15 + proventos automáticos | T-021, HF1, HF2 | D-023 | 1 dia |
 | Blindagem | Tag v1.0.0-motor + pre-commit hook | — | D-025 | 1 dia |
 | Hotfixes | Catch-up, FRED, ticker errado | T-024, T-025, T-026 | D-026, D-027 | 3 dias |
+| Evoluções de resiliência e painel | Resiliência APIs externas + CDI + Base 1 real | T-027, T-028, T-029 | D-030, D-031, D-032 | 2 dias |
+| Cross-factory BR↔US | stale_tickers rolling + governança de paridade | T-030 | D-033, D-034 | 1 dia |
 
-**Total**: 27 decisões, 26+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit)
+**Total**: 34 decisões, 30+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit)
 
 ---
 
@@ -57,13 +59,13 @@
 03_ingest_ptax_bdr   → PTAX e universo BDR
 04_build_canonical   → SSOT canônico BR expandido [BLINDADO]
 05_build_macro_expanded → Features macro (FRED: VIX, DXY, Treasuries, Fed Funds)
-06_compute_scores    → Scores M3 (z-score cross-section)
+06_compute_scores    → Scores M3 (z-score cross-section; stale_tickers rolling anti-lookahead)
 07_build_features    → Dataset expandido para ML
 08_predict           → Inferência XGBoost (y_proba_cash)
 09_decide            → Histerese + seleção Top-N
 10_extend_curve      → Extensão da winner_curve com dados LIVE
 11_reconcile_metrics → Reconciliação CAGR/MDD/Sharpe
-12_painel_diario     → Geração do painel HTML [BLINDADO]
+12_painel_diario     → Geração do painel HTML (Base 1 por patrimônio real) [BLINDADO]
 ```
 
 **Orquestrador**: `pipeline/run_daily.py`
@@ -106,7 +108,7 @@ data/
 
 - **Servidor HTTP** (`pipeline/servidor.py`): porta 8787, botão "Rodar ciclo", calendário histórico
 - **Painel HTML único** (`pipeline/painel_diario.py`): relatório + boletim em documento único
-  - Sessão 1: Regime de mercado, ranking M3, gráficos Plotly (252 pregões + Base 100)
+  - Sessão 1: Regime de mercado, ranking M3, gráficos Plotly (252 pregões + Base 1 real + barras diárias)
   - Sessão 2: Carteira Comprada (lotes por data), Carteira Atual (D-1), Balanço Simplificado + DFC
   - Sessão 3: Boletim (operações recomendadas, campo de execução, caixa, eventos extraordinários)
 - **Catch-up automático**: gera JSONs observacionais para pregões faltantes ao clicar "Rodar ciclo"
@@ -148,7 +150,7 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 - **Auditor rotina**: Sonnet (pós-execução)
 - **Auditor forense profundo**: Gemini 3.1 Pro (lógica) + Kimi K2.5 (numérico)
 - **Barreira sanitária**: auditor forense não participa do desenvolvimento para evitar viés
-- **Blindagem pós-auditoria**: tag git + pre-commit hook para arquivos protegidos
+- **Blindagem pós-auditoria**: tag git + pre-commit hook para arquivos protegidos (atual: `v1.1.0-motor`)
 
 ### 4.5 Proveniência
 
@@ -224,6 +226,8 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | L-13 | **Catch-up automático** mantém cadeia contínua sem esforço humano | D-026: fins de semana e feriados criavam lacunas |
 | L-14 | **Backtest com custos reais** muda a conclusão sobre estratégias | D-020: C1 (Top-10) era melhor sem custos, C2 K=15 domina com custos |
 | L-15 | **Ajuste de splits é pré-requisito** para qualquer estratégia de baixa rotatividade | T-020v1: C3 gerou R$17M falsos por falta de ajuste |
+| L-16 | **Base 1 operacional deve usar patrimônio real** (`totalAtivo / tank`), não equity teórica de backtest | D-032/T-029: gráfico e balanço ficaram alinhados |
+| L-17 | **Filtro stale_tickers rolling por dia elimina lookahead sem mudar LIVE** | D-033: gate de equivalência garante paridade no último dia |
 
 ---
 
@@ -247,6 +251,8 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | E-07 | FRED timeout trava pipeline | Retry linear insuficiente (1s/2s/3s) | 3 falhas em 3 dias | D-027 |
 | E-08 | Catch-up chamava FRED para dados históricos | `full=True` desnecessário para dias passados | Timeout em API que não precisava ser chamada | T-024 fix |
 | E-09 | Qtd fantasma na carteira recomendada | Recalculava qtd todo dia com preço novo | Quantidades não correspondiam ao real | D-016 |
+| E-10 | CDI Base 1 começava acima de 1.0 no D0 | Acúmulo sem normalização do primeiro ponto | Linha CDI deslocada no gráfico | D-032/T-029 |
+| E-11 | Base 1 mostrava curva divergente do balanço | Uso de `equity_end_norm` teórico em vez de patrimônio real | Leitura operacional inconsistente para o Owner | D-032/T-029 |
 
 ### 7.3 Padrões de falha recorrentes
 
@@ -255,6 +261,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | **Pressa do CTO** | Implementar antes de validar fluxo completo | E-02, E-03 | Consultar corpus/AGNO antes de cada phase |
 | **Herança não revisada** | Copiar do AGNO sem adaptar à operação real | E-02, E-05, E-06 | MANIFESTO_ORIGEM + checklist de adaptação |
 | **API como ponto único de falha** | Pipeline sem fallback para APIs externas | E-07, E-08 | Retry + fallback + tolerância obrigatórios |
+| **Referência de baseline errada** | Indicador visual baseado em métrica teórica, não operacional | E-10, E-11 | Sempre alinhar painel ao balanço contábil real |
 | **Dado manual sem validação** | Owner digita e o sistema aceita sem checar | E-04 | Validação de ticker contra canonical no save |
 
 ---
@@ -302,13 +309,14 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | e8ef230f-3b00-4096-a74e-9ef2f1b8abee | Setup e Governança | D-001 a D-007, trinca operacional, dashboard + boletim |
 | 240ac244-3ee4-4ce2-b111-35bc1c21eeb2 | Simulação e Pipeline | T-002/T-003, ingestão BDR, auditoria T-002, D-008 a D-014 |
 | 3b53f4b8-09ae-49f9-a6be-439c237b3425 | Auditoria e Motor | CEP/SPC, backtest T-020, blindagem, hotfixes, D-015 a D-027 |
+| 3b53f4b8-09ae-49f9-a6be-439c237b3425 | Evoluções 2026-03-17..19 | D-030 a D-034, T-027 a T-030, integração de lições USA_OPS |
 
 ### 9.2 Documentos de governança
 
 | Documento | Path | Conteúdo |
 |-----------|------|----------|
 | GOVERNANCE.md | `/GOVERNANCE.md` | Regras, cadeia de comando, blindagem |
-| DECISION_LOG.md | `/DECISION_LOG.md` | 28 decisões com contexto |
+| DECISION_LOG.md | `/DECISION_LOG.md` | 34 decisões com contexto |
 | CHANGELOG.md | `/CHANGELOG.md` | Histórico técnico completo |
 | ROADMAP.md | `/ROADMAP.md` | Mapa de execução + backlog |
 | CICLO_DIARIO.md | `/CICLO_DIARIO.md` | Rotina operacional do Owner |
@@ -322,6 +330,17 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | winner.json | `/config/winner.json` | Declaração canônica C060X |
 | ml_model.json | `/config/ml_model.json` | XGBClassifier config + 35 features |
 | summary_t020_variants.json | `/backtest/results/summary_t020_variants.json` | Métricas de todas as variantes |
+
+---
+
+### 9.4 Fábrica irmã (USA_OPS)
+
+| Item | Referência | Nota |
+|------|------------|------|
+| Repositório | `~/USA_OPS` | Fábrica US independente (Russell 1000 + S&P SmallCap 600 - BDRs) |
+| Corpus US | `~/USA_OPS/docs/CORPUS_FABRICA_US.md` | Lições US consolidadas (motor C4, operação em produção) |
+| Propagação US → BR | D-033 | stale_tickers rolling anti-lookahead aplicado no Step 06 BR |
+| Governança cruzada | D-034 | BR incorpora gate de paridade metodológica inspirado no USA_OPS |
 
 ---
 
@@ -339,3 +358,4 @@ Antes de iniciar cada fase de um novo projeto, o CTO e o Architect devem verific
 - [ ] Ajuste de corporate actions (splits, grupamentos) verificado
 - [ ] Auditoria forense planejada antes de blindagem
 - [ ] Blindagem (hook + tag) após auditoria PASS
+- [ ] Gate de paridade metodológica aplicado em decisões de thresholds e parâmetros quantitativos

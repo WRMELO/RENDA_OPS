@@ -115,7 +115,19 @@ Correcoes urgentes durante a simulacao:
 1. Alteracoes nestes arquivos exigem ciclo completo: `Architect → Executor → Auditor duplo (Gemini + Kimi) → Curator`, com autorizacao explicita do Owner.
 2. Um **pre-commit hook** no git bloqueia commits que alterem esses arquivos. Para sobrepor, usar: `MOTOR_OVERRIDE=1 git commit -m "descricao"`.
 3. A tag `v1.1.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.1.0-motor`.
-4. Novas versoes do motor devem gerar nova tag (`v1.1.0-motor`, etc.) apos novo ciclo completo de auditoria.
+4. Novas versoes do motor devem gerar nova tag (`v1.2.0-motor`, etc.) apos novo ciclo completo de auditoria.
+
+### 6.6 Gate de Paridade Metodologica (D-034)
+
+Quando orientacoes do CTO para o Architect envolverem **thresholds, gates ou parametros quantitativos**, deve haver checklist minimo de paridade metodologica:
+
+1. **Evidencia empirica**: backtest/holdout ou metrica operacional que sustenta o valor escolhido.
+2. **Rastreabilidade**: referencia explicita a decisao anterior (`D-NNN`) ou componente previamente validado.
+3. **Sensibilidade**: impacto esperado caso o parametro seja 2x maior ou 2x menor.
+
+Regra de qualidade:
+- O Architect deve sinalizar orientacoes sem esse checklist como insuficientes para planejamento.
+- Este gate e documental (governanca), sem alterar o fluxo diario operacional.
 
 ## 7) Vigencia
 
