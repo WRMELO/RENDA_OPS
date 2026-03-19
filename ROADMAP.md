@@ -85,6 +85,8 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-024 | Catch-up automático de pregões perdidos no lançador autonomo | pipeline/servidor.py | 2026-03-11 | D-026 |
 | T-025 | Resiliência do step 05 contra instabilidade do FRED (retry/backoff + fallback D-2) | lib/adapters.py, pipeline/run_daily.py | 2026-03-12 | D-027 |
 | T-026 | Correção de ticker digitado errado (MUC34→MUTC34) em carteira/boletins e regeneração de painéis 11-13/03 | data/real/2026-03-{11,12,13}.json, data/cycles/2026-03-{11,12,13}/* | 2026-03-13 | D-026 |
+| T-030 | Adequação pós-Fábrica US: atualizar corpus BR, formalizar stale_tickers rolling (D-033), incorporar gate de paridade metodológica (D-034) | docs/CORPUS_FABRICA_BR.md, GOVERNANCE.md, pipeline/06_compute_scores.py | 2026-03-19 | D-034 |
+| T-031 | Reinaugurar Day Zero BR (reset warm-up, PROJECT_START externalizado, novo aporte) | config/factory_start.json, pipeline/painel_diario.py, .gitignore, data/warmup/* | 2026-03-19 | D-035 |
 
 ---
 
