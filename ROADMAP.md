@@ -26,6 +26,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 9 | T-020 | Backtest comparativo C1/C2/C3-CEP (criterios de venda) | D-019, D-021, D-022 | backtest/run_backtest_variants.py, backtest/plot_t020_plotly.py, backtest/results/*.csv, backtest/results/*.html | DONE |
 | 10 | T-021 | Integrar CEP defensivo (C2 K=15) + proventos automaticos no painel | D-019, D-022, D-023 | pipeline/painel_diario.py, pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py | DONE |
 | 11 | T-022 | ~~Atualizar BRIEFING_CRITERIO_VENDA~~ | D-019 | docs/BRIEFING_CRITERIO_VENDA.md | CANCELLED (D-023) |
+| 12 | T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | D-036 | pipeline/painel_diario.py | DONE |
 
 ### Marcos Estratégicos
 
@@ -87,6 +88,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-026 | Correção de ticker digitado errado (MUC34→MUTC34) em carteira/boletins e regeneração de painéis 11-13/03 | data/real/2026-03-{11,12,13}.json, data/cycles/2026-03-{11,12,13}/* | 2026-03-13 | D-026 |
 | T-030 | Adequação pós-Fábrica US: atualizar corpus BR, formalizar stale_tickers rolling (D-033), incorporar gate de paridade metodológica (D-034) | docs/CORPUS_FABRICA_BR.md, GOVERNANCE.md, pipeline/06_compute_scores.py | 2026-03-19 | D-034 |
 | T-031 | Reinaugurar Day Zero BR (reset warm-up, PROJECT_START externalizado, novo aporte) | config/factory_start.json, pipeline/painel_diario.py, .gitignore, data/warmup/* | 2026-03-19 | D-035 |
+| T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | pipeline/painel_diario.py | 2026-03-20 | D-036 |
 
 ---
 

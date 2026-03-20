@@ -1122,9 +1122,6 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
             "</tr>"
         )
 
-    tank = load_tank_original()
-    caixa_original = _safe_float(tank.get("tank_total_bruto", 0.0), 0.0)
-
     cash_free_prev = _safe_float((d2 or {}).get("cash_free", (d2 or {}).get("cash_balance", 0.0)), 0.0)
     cash_accounting_prev = _safe_float((d2 or {}).get("cash_accounting", (d2 or {}).get("caixa_liquidando", 0.0)), 0.0)
 
@@ -1231,7 +1228,6 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         "d1_aporte": d1_aporte,
         "d1_retirada": d1_retirada,
         "d1_transfer": d1_transfer,
-        "caixa_original": caixa_original,
         "aporte_acumulado": aporte_acc,
         "retirada_acumulada": retirada_acc,
         "carteira_valor_d1": total_current,
@@ -1464,9 +1460,9 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
           <div class="cash-row"><span>Caixa Livre</span><strong id="bal_caixa_livre">-</strong></div>
           <div class="cash-row"><span>Caixa Contábil</span><strong id="bal_caixa_contabil">-</strong></div>
           <div class="cash-row"><span><strong>Total do Ativo</strong></span><strong id="bal_total_ativo">-</strong></div>
-          <div class="cash-row"><span>Patrimônio Inicial (03/03/2026)</span><strong id="bal_patrimonio_inicial">-</strong></div>
           <div class="cash-row"><span>Aportes acumulados</span><strong id="bal_aporte_acc">-</strong></div>
           <div class="cash-row"><span>Retiradas acumuladas</span><strong id="bal_retirada_acc">-</strong></div>
+          <div class="cash-row"><span><strong>Capital Líquido Aportado</strong></span><strong id="bal_patrimonio_inicial">-</strong></div>
           <div class="cash-row"><span><strong>Resultado acumulado</strong></span><strong id="bal_resultado_acc">-</strong></div>
           <div class="cash-row"><span><strong>Rentabilidade acumulada</strong></span><strong id="bal_rent_acc">-</strong></div>
         </div>
@@ -1502,7 +1498,6 @@ const DECISION_DATE = "{decision_date}";
 const PREV_FREE = {ctx["cash_free_prev"]};
 const PREV_ACC = {ctx["cash_accounting_prev"]};
 const CARTEIRA_D1 = {ctx["carteira_valor_d1"]};
-const CAIXA_ORIGINAL = {ctx["caixa_original"]};
 const APORTE_ACC = {ctx["aporte_acumulado"]};
 const RETIRADA_ACC = {ctx["retirada_acumulada"]};
 const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
@@ -1705,7 +1700,7 @@ function recalc() {{
 
   const carteiraD = CARTEIRA_D1 + buy - sell;
   const totalAtivo = carteiraD + free + acc;
-  const basePatrimonio = CAIXA_ORIGINAL + APORTE_ACC - RETIRADA_ACC;
+  const basePatrimonio = (APORTE_ACC + aporte) - (RETIRADA_ACC + retirada);
   const resultadoAcc = totalAtivo - basePatrimonio;
   const rentAcc = basePatrimonio > 0 ? (resultadoAcc / basePatrimonio) * 100.0 : 0.0;
 
@@ -1724,9 +1719,9 @@ function recalc() {{
   document.getElementById('bal_caixa_livre').textContent = moneyBR(free);
   document.getElementById('bal_caixa_contabil').textContent = moneyBR(acc);
   document.getElementById('bal_total_ativo').textContent = moneyBR(totalAtivo);
-  document.getElementById('bal_patrimonio_inicial').textContent = moneyBR(CAIXA_ORIGINAL);
   document.getElementById('bal_aporte_acc').textContent = moneyBR(APORTE_ACC + aporte);
   document.getElementById('bal_retirada_acc').textContent = moneyBR(RETIRADA_ACC + retirada);
+  document.getElementById('bal_patrimonio_inicial').textContent = moneyBR(basePatrimonio);
   document.getElementById('bal_resultado_acc').textContent = moneyBR(resultadoAcc);
   document.getElementById('bal_rent_acc').textContent = pctBR(rentAcc);
 
