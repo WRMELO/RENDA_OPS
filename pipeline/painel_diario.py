@@ -1276,35 +1276,23 @@ def build_painel(exec_day: date) -> Path:
         existing_provento_signatures=existing_provento_signatures,
     )
 
-    tank_total = _safe_float(load_tank_original().get("tank_total_bruto", 0.0), 0.0)
-    buy_suggestions = []
-    top_n = max(len(top10), 1)
+    top_buy_rows: list[dict[str, Any]] = []
     for p in top10:
         t = str(p.get("ticker", "")).upper().strip()
-        px = _safe_float(prices_top.get(t, 0.0), 0.0)
-        qtd = int((tank_total * (1.0 / top_n)) // px) if px > 0 else 0
-        buy_suggestions.append({"type": "COMPRA", "ticker": t, "qtd": qtd, "preco": px})
+        if not t:
+            continue
+        top_buy_rows.append(
+            {
+                "ticker": t,
+                "m3": _safe_float(p.get("score_m3"), 0.0),
+                "close_d1": _safe_float(prices_top.get(t, 0.0), 0.0),
+            }
+        )
 
     action_rows = []
     # primeiro sugestoes de venda
     for s in sell_suggestions:
         action_rows.append({"type": "VENDA", "ticker": s["ticker"], "qtd": int(s["qtd"]), "preco": float(s["close_d1"])})
-    # depois sugestoes de compra
-    for b in buy_suggestions:
-        if b["ticker"] and b["qtd"] > 0:
-            action_rows.append(b)
-
-    rows_info_top = []
-    for p in top10:
-        t = str(p.get("ticker", "")).upper().strip()
-        rows_info_top.append(
-            "<tr>"
-            f"<td>{t}</td><td style='text-align:right'>{_safe_float(p.get('score_m3'), 0.0):.4f}</td>"
-            f"<td style='text-align:right'>{_fmt_money(_safe_float(prices_top.get(t, 0.0), 0.0))}</td>"
-            "</tr>"
-        )
-    if not rows_info_top:
-        rows_info_top.append("<tr><td colspan='3'>Top-10 indisponível (sem decisão).</td></tr>")
 
     rows_sell = []
     for s in sell_suggestions:
@@ -1375,6 +1363,7 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 .cash-row:last-child {{ border-bottom:none; }}
 .cash-row strong {{ color:#0f172a; }}
 .cash-real {{ margin-top:10px; }}
+.top-input {{ width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; }}
 @media (max-width: 1200px) {{
   .twocol, .chart-grid, .info-grid, .cash-layout {{ grid-template-columns: 1fr; }}
 }}
@@ -1406,8 +1395,8 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
         <div>
           <h3>Top-10 para compra (D-1)</h3>
           <table class="top10-table">
-            <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th></tr>
-            {''.join(rows_info_top)}
+            <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th><th>Preço</th><th>Qtd</th><th>Valor</th></tr>
+            <tbody id="topBuyBody"></tbody>
           </table>
         </div>
         <div>
@@ -1500,6 +1489,7 @@ const PREV_ACC = {ctx["cash_accounting_prev"]};
 const CARTEIRA_D1 = {ctx["carteira_valor_d1"]};
 const APORTE_ACC = {ctx["aporte_acumulado"]};
 const RETIRADA_ACC = {ctx["retirada_acumulada"]};
+const TOP_BUY_ROWS = {json.dumps(top_buy_rows, ensure_ascii=False)};
 const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
 const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
@@ -1540,6 +1530,28 @@ function renderPendingSales() {{
       <td style="text-align:right">${{moneyBR(s.pendente)}}</td>
     `;
     tbody.appendChild(tr);
+  }});
+}}
+
+function renderTopBuys() {{
+  const body = document.getElementById('topBuyBody');
+  if (!body) return;
+  body.innerHTML = '';
+  if (!TOP_BUY_ROWS || TOP_BUY_ROWS.length === 0) {{
+    body.innerHTML = "<tr><td colspan='6'>Top-10 indisponível (sem decisão).</td></tr>";
+    return;
+  }}
+  TOP_BUY_ROWS.forEach((r, i) => {{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${{r.ticker}}</td>
+      <td style="text-align:right">${{Number(r.m3 || 0).toFixed(4)}}</td>
+      <td style="text-align:right">${{moneyBR(r.close_d1 || 0)}}</td>
+      <td><input id="top_px_${{i}}" class="top-input" type="number" min="0" step="0.01" value="${{Number(r.close_d1 || 0)}}" oninput="recalc()" /></td>
+      <td><input id="top_qtd_${{i}}" class="top-input" type="number" min="0" step="1" value="0" oninput="recalc()" /></td>
+      <td id="top_val_${{i}}" style="text-align:right">R$ 0,00</td>
+    `;
+    body.appendChild(tr);
   }});
 }}
 
@@ -1638,6 +1650,22 @@ function collectOps() {{
   return out;
 }}
 
+function collectTopBuyOps() {{
+  const out = [];
+  for (let i = 0; i < TOP_BUY_ROWS.length; i++) {{
+    const base = TOP_BUY_ROWS[i];
+    const qtdEl = document.getElementById(`top_qtd_${{i}}`);
+    const pxEl = document.getElementById(`top_px_${{i}}`);
+    if (!qtdEl || !pxEl) continue;
+    const qtd = parseInt(qtdEl.value || '0');
+    const precoRaw = pxEl.value || '';
+    const preco = precoRaw === '' ? Number(base.close_d1 || 0) : parseFloat(precoRaw);
+    if (!base.ticker || !Number.isFinite(qtd) || qtd <= 0) continue;
+    out.push({{ type: 'COMPRA', ticker: base.ticker, qtd, preco }});
+  }}
+  return out;
+}}
+
 function collectCashMovs() {{
   const out = [];
   for (let i = 0; i < cashIdx; i++) {{
@@ -1678,7 +1706,9 @@ function collectTransfers() {{
 }}
 
 function recalc() {{
-  const ops = collectOps();
+  const opsManual = collectOps();
+  const opsTop = collectTopBuyOps();
+  const ops = [...opsManual, ...opsTop];
   for (let i = 0; i < opIdx; i++) {{
     if (!document.getElementById(`op_row_${{i}}`)) continue;
     const qtd = parseInt(document.getElementById(`op_qtd_${{i}}`).value || '0');
@@ -1686,11 +1716,22 @@ function recalc() {{
     const el = document.getElementById(`op_val_${{i}}`);
     if (el) el.value = moneyBR(qtd * preco);
   }}
+  for (let i = 0; i < TOP_BUY_ROWS.length; i++) {{
+    const qtd = parseInt((document.getElementById(`top_qtd_${{i}}`)?.value || '0'));
+    const pxRaw = document.getElementById(`top_px_${{i}}`)?.value || '';
+    const px = pxRaw === '' ? Number(TOP_BUY_ROWS[i].close_d1 || 0) : parseFloat(pxRaw);
+    const valEl = document.getElementById(`top_val_${{i}}`);
+    if (valEl) valEl.textContent = moneyBR((Number.isFinite(qtd) ? qtd : 0) * (Number.isFinite(px) ? px : 0));
+  }}
 
   const cashMovs = collectCashMovs();
   const transfers = collectTransfers();
-  const buy = ops.filter(x => x.type === 'COMPRA').reduce((a,b) => a + b.qtd*b.preco, 0);
-  const sell = ops.filter(x => x.type === 'VENDA').reduce((a,b) => a + b.qtd*b.preco, 0);
+  const buy = ops
+    .filter(x => x.type === 'COMPRA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const sell = ops
+    .filter(x => x.type === 'VENDA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
   const aporte = cashMovs.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
   const retirada = cashMovs.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
   const transfer = transfers.reduce((a,b) => a + b.value, 0);
@@ -1788,11 +1829,24 @@ function buildSnapshotAfterOps(ops) {{
 }}
 
 function savePanel() {{
-  const ops = collectOps();
+  const opsManual = collectOps();
+  const opsTop = collectTopBuyOps();
+  const invalidTopPrice = opsTop.some(op => !Number.isFinite(op.preco) || op.preco <= 0);
+  if (invalidTopPrice) {{
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'Compra inválida no Top-10: para Qtd > 0, informe Preço > 0.';
+    return;
+  }}
+  const ops = [...opsManual, ...opsTop];
   const cashMovements = collectCashMovs();
   const cashTransfers = collectTransfers();
-  const buy = ops.filter(x => x.type === 'COMPRA').reduce((a,b) => a + b.qtd*b.preco, 0);
-  const sell = ops.filter(x => x.type === 'VENDA').reduce((a,b) => a + b.qtd*b.preco, 0);
+  const buy = ops
+    .filter(x => x.type === 'COMPRA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const sell = ops
+    .filter(x => x.type === 'VENDA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
   const aporte = cashMovements.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
   const retirada = cashMovements.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
   const transfer = cashTransfers.reduce((a,b) => a + b.value, 0);
@@ -1858,6 +1912,10 @@ function savePanel() {{
 }}
 
 renderPendingSales();
+renderTopBuys();
+for (const a of ACTION_ROWS) {{
+  addOp(a);
+}}
 for (const c of PREFILL_CASH_ROWS) {{
   addCash(c);
 }}

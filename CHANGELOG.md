@@ -73,3 +73,4 @@
 ## 2026-03-20
 
 - 2026-03-20 | T-032 | fix: alinhar Balanço Simplificado (BR) — Patrimônio Inicial passa a Capital Líquido Aportado (aportes - retiradas), com formato/paridade USA_OPS (D-036)
+- 2026-03-20 | T-033 | feat: Top-10 ativo para compra — Qtd+Preço editáveis (default D-1) e Valor auto; Qtd>0 ao salvar vira COMPRA na carteira (D-037)
