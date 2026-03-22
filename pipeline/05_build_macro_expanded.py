@@ -128,12 +128,11 @@ def run(end_date: date | None = None) -> Path:
     if missing:
         raise RuntimeError(f"Macro features missing columns after build: {missing}")
 
-    # Explicit coverage check for end_date
-    # Macro/FRED data arrives with 1-day lag (no intraday data for today).
-    # Accept date_max >= end_date - 1 calendar day to handle daily runs.
+    # Coverage check aligned with run_daily tolerance (D-027): accept up to D-2.
+    # Weekends and FRED publication lag can create 2-day gaps naturally.
     from datetime import timedelta
     date_max = pd.to_datetime(out["date"]).max()
-    min_acceptable = end_date - timedelta(days=1) if end_date else None
+    min_acceptable = end_date - timedelta(days=2) if end_date else None
     if end_date and date_max.date() < min_acceptable:
         raise RuntimeError(f"macro_features date_max={date_max.date()} < min_acceptable={min_acceptable} (end_date={end_date})")
 
