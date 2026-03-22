@@ -28,6 +28,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 11 | T-022 | ~~Atualizar BRIEFING_CRITERIO_VENDA~~ | D-019 | docs/BRIEFING_CRITERIO_VENDA.md | CANCELLED (D-023) |
 | 12 | T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | D-036 | pipeline/painel_diario.py | DONE |
 | 13 | T-033 | Top-10 ativo para compra: Qtd+Preço editáveis (default D-1), Valor auto | D-037 | pipeline/painel_diario.py | DONE |
+| 14 | T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | D-039 | pipeline/painel_diario.py, pipeline/servidor.py | DONE |
 
 ### Marcos Estratégicos
 
@@ -91,6 +92,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-031 | Reinaugurar Day Zero BR (reset warm-up, PROJECT_START externalizado, novo aporte) | config/factory_start.json, pipeline/painel_diario.py, .gitignore, data/warmup/* | 2026-03-19 | D-035 |
 | T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | pipeline/painel_diario.py | 2026-03-20 | D-036 |
 | T-033 | Top-10 ativo para compra: Qtd+Preço editáveis (default D-1), Valor auto | pipeline/painel_diario.py | 2026-03-20 | D-037 |
+| T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | pipeline/painel_diario.py, pipeline/servidor.py | 2026-03-22 | D-039 |
 
 ---
 

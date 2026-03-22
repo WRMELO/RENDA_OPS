@@ -192,6 +192,36 @@ def get_latest_prices(tickers: list[str], as_of_day: date) -> dict[str, float]:
     return prices
 
 
+def load_valid_tickers() -> set[str]:
+    canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if not canon_path.exists():
+        return set()
+    try:
+        canon = pd.read_parquet(canon_path, columns=["ticker"])
+    except Exception:
+        return set()
+    if canon.empty:
+        return set()
+    tickers = canon["ticker"].astype(str).str.upper().str.strip()
+    return {t for t in tickers.tolist() if t}
+
+
+def find_invalid_operation_tickers(
+    operations: Any, valid_tickers: set[str] | None = None
+) -> list[str]:
+    valid = valid_tickers if valid_tickers is not None else load_valid_tickers()
+    if not isinstance(operations, list):
+        return []
+    invalid: set[str] = set()
+    for op in operations:
+        if not isinstance(op, dict):
+            continue
+        ticker = str(op.get("ticker", "")).upper().strip()
+        if ticker and ticker not in valid:
+            invalid.add(ticker)
+    return sorted(invalid)
+
+
 def _extract_operations(day_payload: dict[str, Any]) -> list[dict[str, Any]]:
     # Schema novo (T-018)
     ops = day_payload.get("operations")
@@ -1495,6 +1525,8 @@ const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
 const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
+const VALID_TICKERS = {json.dumps(sorted(load_valid_tickers()), ensure_ascii=False)};
+const VALID_TICKERS_SET = new Set(VALID_TICKERS);
 
 let opIdx = 0;
 let cashIdx = 0;
@@ -1666,6 +1698,16 @@ function collectTopBuyOps() {{
   return out;
 }}
 
+function invalidTickers(ops) {{
+  const out = [];
+  for (const op of (ops || [])) {{
+    const ticker = String(op?.ticker || '').trim().toUpperCase();
+    if (!ticker) continue;
+    if (!VALID_TICKERS_SET.has(ticker)) out.push(ticker);
+  }}
+  return [...new Set(out)].sort();
+}}
+
 function collectCashMovs() {{
   const out = [];
   for (let i = 0; i < cashIdx; i++) {{
@@ -1831,6 +1873,13 @@ function buildSnapshotAfterOps(ops) {{
 function savePanel() {{
   const opsManual = collectOps();
   const opsTop = collectTopBuyOps();
+  const invalidManualTickers = invalidTickers(opsManual);
+  if (invalidManualTickers.length > 0) {{
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'Ticker(s) inválido(s): ' + invalidManualTickers.join(', ') + '. Verifique a digitação.';
+    return;
+  }}
   const invalidTopPrice = opsTop.some(op => !Number.isFinite(op.preco) || op.preco <= 0);
   if (invalidTopPrice) {{
     const msg = document.getElementById('saveMsg');
@@ -1963,7 +2012,17 @@ def serve_painel(exec_day: date, port: int = 8787) -> None:
             length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(length)
             try:
-                json.loads(body)
+                payload = json.loads(body)
+                invalid_tickers = find_invalid_operation_tickers(payload.get("operations", []))
+                if invalid_tickers:
+                    self._respond(
+                        400,
+                        "application/json",
+                        json.dumps(
+                            {"ok": False, "error": f"Ticker(s) inválido(s): {', '.join(invalid_tickers)}"}
+                        ).encode("utf-8"),
+                    )
+                    return
                 dest_cycle = cycle_dir / "boletim_preenchido.json"
                 dest_real = real_dir / f"{exec_day.isoformat()}.json"
                 dest_cycle.write_bytes(body)

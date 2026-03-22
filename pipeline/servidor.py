@@ -472,6 +472,14 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                     except Exception:
                         pass
 
+                invalid_tickers = painel_diario.find_invalid_operation_tickers(payload.get("operations", []))
+                if invalid_tickers:
+                    self._respond_json(
+                        {"ok": False, "error": f"Ticker(s) inválido(s): {', '.join(invalid_tickers)}"},
+                        code=400,
+                    )
+                    return
+
                 cycle_dir = ROOT / "data" / "cycles" / save_day.isoformat()
                 cycle_dir.mkdir(parents=True, exist_ok=True)
                 real_dir = ROOT / "data" / "real"
