@@ -212,6 +212,9 @@ def _write_observational_boletim(pregao: date) -> list[str]:
     payload: dict[str, Any] = {
         "date": pregao.isoformat(),
         "reference_decision": pregao.isoformat(),
+        "exec_day": pregao.isoformat(),
+        "market_day": pregao.isoformat(),
+        "trade_day": pregao.isoformat(),
         "operations": [],
         "cash_movements": [],
         "cash_transfers": [],
@@ -486,7 +489,15 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                 real_dir.mkdir(parents=True, exist_ok=True)
 
                 dest_cycle = cycle_dir / "boletim_preenchido.json"
-                dest_real = real_dir / f"{save_day.isoformat()}.json"
+                market_day_raw = str(payload.get("market_day", "")).strip()
+                if market_day_raw:
+                    try:
+                        market_day = date.fromisoformat(market_day_raw)
+                    except Exception:
+                        market_day = painel_diario.get_d_minus_1(save_day)
+                else:
+                    market_day = painel_diario.get_d_minus_1(save_day)
+                dest_real = real_dir / f"{market_day.isoformat()}.json"
                 dest_cycle.write_bytes(body)
                 dest_real.write_bytes(body)
                 self._respond_json(

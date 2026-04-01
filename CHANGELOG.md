@@ -78,3 +78,7 @@
 ## 2026-03-22
 
 - 2026-03-22 | T-034 | feat: validar tickers no salvamento (front+backend) para bloquear tickers inexistentes no canonical (D-039)
+
+## 2026-04-01
+
+- 2026-04-01 | T-035 | feat: desacoplar semântica temporal nos artefatos operacionais (exec_day, market_day, trade_day) — D-044, R-022. Toca painel_diario.py (blindado). MOTOR_OVERRIDE.

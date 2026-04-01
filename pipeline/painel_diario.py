@@ -172,6 +172,27 @@ def get_d_minus_1(exec_day: date) -> date:
     return max(eligible) if eligible else exec_day
 
 
+def _load_trading_days_br() -> list[date]:
+    macro_path = ROOT / "data" / "ssot" / "macro.parquet"
+    if not macro_path.exists():
+        return []
+    macro = pd.read_parquet(macro_path, columns=["date"])
+    if macro.empty:
+        return []
+    macro["date"] = pd.to_datetime(macro["date"], errors="coerce")
+    return sorted(set(macro["date"].dt.date.dropna().tolist()))
+
+
+def get_trade_day(exec_day: date) -> date:
+    trading_days = _load_trading_days_br()
+    if not trading_days:
+        return exec_day
+    if exec_day in trading_days:
+        return exec_day
+    nxt = [d for d in trading_days if d > exec_day]
+    return min(nxt) if nxt else exec_day
+
+
 def get_latest_prices(tickers: list[str], as_of_day: date) -> dict[str, float]:
     prices: dict[str, float] = {}
     if not tickers:
@@ -786,12 +807,17 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
         return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
     for p in sorted(real_dir.glob("*.json")):
         try:
-            exec_day = date.fromisoformat(p.stem)
+            file_day = date.fromisoformat(p.stem)
         except Exception:
             continue
         payload = _read_json(p)
+        exec_raw = str(payload.get("exec_day", payload.get("date", ""))).strip()
+        try:
+            exec_day = date.fromisoformat(exec_raw) if exec_raw else file_day
+        except Exception:
+            exec_day = file_day
 
-        ref_raw = str(payload.get("reference_decision", "")).strip()
+        ref_raw = str(payload.get("market_day", payload.get("reference_decision", ""))).strip()
         try:
             ref_day = date.fromisoformat(ref_raw) if ref_raw else exec_day
         except Exception:
@@ -1271,7 +1297,8 @@ def build_painel(exec_day: date) -> Path:
     report_html, ctx, warnings = _build_tables_and_cards(exec_day)
     d1 = get_d_minus_1(exec_day)
     decision = load_decision_for_day(exec_day)
-    decision_date = (decision or {}).get("date", "")
+    decision_date = d1.isoformat()
+    trade_day = get_trade_day(exec_day)
     top10 = decision.get("portfolio", []) if decision else []
     top_tickers = [x.get("ticker", "") for x in top10]
     prices_top = get_latest_prices(top_tickers, as_of_day=d1)
@@ -1406,7 +1433,7 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 </head>
 <body>
   <div class="wrap">
-    <h1>Painel Diário — {_fmt_date_br(exec_day)}</h1>
+    <h1>Painel Diário — Mercado: {_fmt_date_br(d1)} | Execução: {_fmt_date_br(exec_day)}</h1>
     <div class="sub">Documento único: Relatório + Boletim | D-1 de mercado: {ctx["d1_br"]}</div>
 
     <div class="block">
@@ -1513,6 +1540,8 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 
 <script>
 const EXEC_DATE = "{exec_day.isoformat()}";
+const MARKET_DAY = "{d1.isoformat()}";
+const TRADE_DAY = "{trade_day.isoformat()}";
 const DECISION_DATE = "{decision_date}";
 const PREV_FREE = {ctx["cash_free_prev"]};
 const PREV_ACC = {ctx["cash_accounting_prev"]};
@@ -1927,6 +1956,9 @@ function savePanel() {{
   const payload = {{
     date: EXEC_DATE,
     reference_decision: DECISION_DATE,
+    exec_day: EXEC_DATE,
+    market_day: MARKET_DAY,
+    trade_day: TRADE_DAY,
     operations: ops,
     cash_movements: cashMovements,
     cash_transfers: cashTransfers,
@@ -2024,7 +2056,12 @@ def serve_painel(exec_day: date, port: int = 8787) -> None:
                     )
                     return
                 dest_cycle = cycle_dir / "boletim_preenchido.json"
-                dest_real = real_dir / f"{exec_day.isoformat()}.json"
+                market_day_str = str(payload.get("market_day", "")).strip()
+                try:
+                    market_day = date.fromisoformat(market_day_str)
+                except Exception:
+                    market_day = get_d_minus_1(exec_day)
+                dest_real = real_dir / f"{market_day.isoformat()}.json"
                 dest_cycle.write_bytes(body)
                 dest_real.write_bytes(body)
                 paths = [str(dest_cycle.relative_to(ROOT)), str(dest_real.relative_to(ROOT))]
