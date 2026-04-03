@@ -384,11 +384,8 @@ def compute_cash(as_of_date: date) -> dict[str, float]:
     for ev in events:
         if ev.type != EventType.SELL:
             continue
-        if ev.settle_date and ev.settle_date <= as_of_date:
-            remain = float(ev.amount) - settled.get(ev.id, 0.0)
-            accounting += max(remain, 0.0)
-        else:
-            accounting += float(ev.amount)
+        remain = max(float(ev.amount) - settled.get(ev.id, 0.0), 0.0)
+        accounting += remain
     accounting = max(accounting - float(unmatched_total), 0.0)
     return {"cash_free": free, "cash_accounting": accounting}
 

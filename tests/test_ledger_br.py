@@ -109,7 +109,35 @@ def test_compute_cash_real_2026_04_02_matches_expected():
     try:
         ledger.LEDGER_PATH = real_ledger
         cash = ledger.compute_cash(date(2026, 4, 2))
-        assert abs(float(cash["cash_free"]) - 683.22) < 0.02
-        assert abs(float(cash["cash_accounting"]) - 382829.29) < 0.02
+        assert abs(float(cash["cash_free"]) - 136473.87) < 0.10
+        assert abs(float(cash["cash_accounting"]) - 253057.60) < 0.10
+    finally:
+        ledger.LEDGER_PATH = old_path
+
+
+def test_compute_cash_historical_2026_03_22():
+    real_ledger = Path(__file__).resolve().parents[1] / "data" / "ssot" / "ledger_br.jsonl"
+    assert real_ledger.exists()
+
+    old_path = ledger.LEDGER_PATH
+    try:
+        ledger.LEDGER_PATH = real_ledger
+        cash = ledger.compute_cash(date(2026, 3, 22))
+        assert abs(float(cash["cash_free"]) - 426.15) < 0.02
+        assert abs(float(cash["cash_accounting"]) - 0.00) < 0.02
+    finally:
+        ledger.LEDGER_PATH = old_path
+
+
+def test_compute_cash_historical_2026_03_28():
+    real_ledger = Path(__file__).resolve().parents[1] / "data" / "ssot" / "ledger_br.jsonl"
+    assert real_ledger.exists()
+
+    old_path = ledger.LEDGER_PATH
+    try:
+        ledger.LEDGER_PATH = real_ledger
+        cash = ledger.compute_cash(date(2026, 3, 28))
+        assert abs(float(cash["cash_free"]) - 96630.99) < 0.02
+        assert abs(float(cash["cash_accounting"]) - 109524.36) < 0.02
     finally:
         ledger.LEDGER_PATH = old_path

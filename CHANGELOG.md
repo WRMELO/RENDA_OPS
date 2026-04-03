@@ -91,3 +91,4 @@
 - chore: T-037-HF — commit com MOTOR_OVERRIDE + tag v1.5.0-motor selando T-036/T-037 (D-045/D-046). Auditoria Gemini exigiu rastreabilidade Git.
 - perf: T-048 — range adaptativo BRAPI no step 02 BR por staleness do ticker (D-047). Reduz volume de download em ~90% na operação diária. Toca 02_ingest_prices_br.py (blindado). MOTOR_OVERRIDE.
 - chore: T-048-HF — tag v1.6.0-motor selando T-048 range adaptativo BRAPI (D-047).
+- fix: T-049 — corrigir compute_cash() para descontar settlements em vendas com liquidação futura e cancelar 2 eventos fantasma OXYP34 via CORRECTION. Artefatos: pipeline/ledger_br.py, data/ssot/ledger_br.jsonl, tests/test_ledger_br.py
