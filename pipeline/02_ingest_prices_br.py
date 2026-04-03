@@ -3,8 +3,9 @@
 Operational mode:
 - Uses only B3-tradable tickers in BRL.
 - Excludes US_DIRECT tickers by decision D-004.
-- Fetches a rolling 2-year window per ticker (BRAPI range=2y) and merges
-  incrementally into market_data_raw.parquet.
+- Uses adaptive BRAPI ranges by ticker staleness (1mo/3mo/1y/2y) and
+  merges incrementally into market_data_raw.parquet.
+- Falls back to 2y when short-range fetch returns empty results.
 """
 from __future__ import annotations
 
@@ -25,6 +26,19 @@ BDR_UNIVERSE_FILE = ROOT / "data" / "ssot" / "bdr_universe.parquet"
 TARGET = ROOT / "data" / "ssot" / "market_data_raw.parquet"
 SLEEP_SECONDS = 0.05
 DEFAULT_RANGE = "2y"
+
+
+def _adaptive_range(ticker_last: date | None, end: date) -> str:
+    if ticker_last is None:
+        return DEFAULT_RANGE
+    gap_days = (end - ticker_last).days
+    if gap_days <= 5:
+        return "1mo"
+    if gap_days <= 30:
+        return "3mo"
+    if gap_days <= 180:
+        return "1y"
+    return DEFAULT_RANGE
 
 
 def _get_operational_tickers() -> list[str]:
@@ -115,10 +129,10 @@ def _extract_dividend_maps(result: dict) -> tuple[dict[pd.Timestamp, float], dic
     return by_date_rate, by_date_label
 
 
-def _fetch_history(adapter, ticker: str) -> pd.DataFrame:
+def _fetch_history(adapter, ticker: str, range_hint: str = DEFAULT_RANGE) -> pd.DataFrame:
     payload = adapter._request(  # noqa: SLF001
         f"quote/{ticker}",
-        params={"range": DEFAULT_RANGE, "interval": "1d", "dividends": "true"},
+        params={"range": range_hint, "interval": "1d", "dividends": "true"},
     )
     results = payload.get("results") or []
     if not results:
@@ -163,7 +177,10 @@ def run(end_date: date | None = None) -> Path:
             continue
 
         try:
-            df = _fetch_history(adapter, ticker=ticker)
+            chosen_range = _adaptive_range(ticker_last, end)
+            df = _fetch_history(adapter, ticker=ticker, range_hint=chosen_range)
+            if df.empty and chosen_range != DEFAULT_RANGE:
+                df = _fetch_history(adapter, ticker=ticker, range_hint=DEFAULT_RANGE)
             if not df.empty:
                 df = df[df["date"] <= pd.Timestamp(end)]
                 if ticker_last:

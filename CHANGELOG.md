@@ -89,3 +89,4 @@
 - fix: T-036-HF — corrigir colisão de ID (T-035→T-036) e reiniciar servidor para ativar integração ledger_br (auditoria T-036)
 - feat: T-037 — SSOT ledger BR Fase 2: painel lê caixa do ledger (D-046). painel_diario.py refatorado para usar compute_cash() do ledger como fonte primária de cash_free/cash_accounting, com fallback para fórmula normativa. MOTOR_OVERRIDE.
 - chore: T-037-HF — commit com MOTOR_OVERRIDE + tag v1.5.0-motor selando T-036/T-037 (D-045/D-046). Auditoria Gemini exigiu rastreabilidade Git.
+- perf: T-048 — range adaptativo BRAPI no step 02 BR por staleness do ticker (D-047). Reduz volume de download em ~90% na operação diária. Toca 02_ingest_prices_br.py (blindado). MOTOR_OVERRIDE.
