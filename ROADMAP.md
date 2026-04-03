@@ -35,6 +35,8 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 19 | T-048 | Range adaptativo BRAPI no step 02 BR por staleness do ticker | D-047 | pipeline/02_ingest_prices_br.py, CHANGELOG.md | DONE |
 | 20 | T-048-HF | Tag v1.6.0-motor selando T-048 range adaptativo BRAPI | D-047 | CHANGELOG.md, GOVERNANCE.md | DONE |
 | 21 | T-049 | Corrigir compute_cash e cancelar OXYP34 fantasma | D-048 | pipeline/ledger_br.py, data/ssot/ledger_br.jsonl, tests/test_ledger_br.py | DONE |
+| 22 | T-050 | Painel usa pendências de transferência do ledger SSOT | D-048 | pipeline/painel_diario.py, CHANGELOG.md, ROADMAP.md, GOVERNANCE.md | DONE |
+| 23 | T-050-HF | Corrigir fallback de _pending_sales_ledger para respeitar SSOT vazia | D-048 | pipeline/painel_diario.py, CHANGELOG.md, ROADMAP.md | DONE |
 
 ### Marcos Estratégicos
 

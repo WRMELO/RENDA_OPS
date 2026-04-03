@@ -33,8 +33,10 @@ from pipeline.ptbr import (
 from lib.engine import compute_m3_scores, select_top_n
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
+    from pipeline.ledger_br import pending_settlements as _pending_settlements_ledger
 except Exception:
     _compute_cash_ledger = None
+    _pending_settlements_ledger = None
 
 FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
 
@@ -423,6 +425,15 @@ def _pending_sales_for_transfer(exec_day: date) -> list[dict[str, Any]]:
                     "ref": sale_ref,
                 })
     return pending
+
+
+def _pending_sales_ledger(exec_day: date) -> list[dict[str, Any]]:
+    if _pending_settlements_ledger is None:
+        return _pending_sales_for_transfer(exec_day)
+    try:
+        return _pending_settlements_ledger(exec_day)
+    except Exception:
+        return _pending_sales_for_transfer(exec_day)
 
 
 def _calc_cash_balances(
@@ -1289,7 +1300,7 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         "aporte_acumulado": aporte_acc,
         "retirada_acumulada": retirada_acc,
         "carteira_valor_d1": total_current,
-        "pending_sales": _pending_sales_for_transfer(exec_day),
+        "pending_sales": _pending_sales_ledger(exec_day),
         "prev_defensive_quarantine": list((d1_payload or {}).get("defensive_quarantine", [])),
     }
     return tables_html, report_ctx, warnings
