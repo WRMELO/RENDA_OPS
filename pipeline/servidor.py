@@ -22,6 +22,15 @@ from urllib.parse import parse_qs, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from pipeline.ledger_br import (
+    EventType,
+    append_event,
+    compute_cash,
+    create_event,
+    export_snapshot,
+    is_duplicate,
+    pending_settlements,
+)
 from pipeline import painel_diario, run_daily
 from pipeline.ptbr import fmt_date_br, validate_html_ptbr
 
@@ -498,8 +507,85 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                 else:
                     market_day = painel_diario.get_d_minus_1(save_day)
                 dest_real = real_dir / f"{market_day.isoformat()}.json"
-                dest_cycle.write_bytes(body)
-                dest_real.write_bytes(body)
+
+                ops = payload.get("operations", [])
+                for op in ops:
+                    typ = str(op.get("type", "")).upper().strip()
+                    tk = str(op.get("ticker", "")).upper().strip()
+                    qtd = int(op.get("qtd", 0) or 0)
+                    px = float(op.get("preco", 0.0) or 0.0)
+                    if not tk or qtd <= 0 or px <= 0:
+                        continue
+                    amount = qtd * px
+                    if typ == "COMPRA":
+                        ev = create_event(EventType.BUY, exec_date=save_day, amount=amount, ticker=tk, qtd=qtd, price=px)
+                    elif typ == "VENDA":
+                        ev = create_event(EventType.SELL, exec_date=save_day, amount=amount, ticker=tk, qtd=qtd, price=px)
+                    else:
+                        continue
+                    if not is_duplicate(ev):
+                        append_event(ev)
+
+                cash_movements = payload.get("cash_movements", [])
+                for mv in cash_movements:
+                    typ = str(mv.get("type", "")).upper().strip()
+                    val = float(mv.get("value", mv.get("valor", 0.0)) or 0.0)
+                    desc = str(mv.get("description", "")).strip()
+                    if val <= 0:
+                        continue
+                    if typ in {"APORTE", "DEPOSITO"}:
+                        ev = create_event(EventType.APORTE, exec_date=save_day, amount=val, reason=desc)
+                    elif typ in {"DIVIDENDO", "JCP", "BONIFICACAO", "BONUS", "SUBSCRICAO"}:
+                        ev = create_event(EventType.DIVIDENDO, exec_date=save_day, amount=val, reason=desc)
+                    elif typ in {"RETIRADA", "SAQUE"}:
+                        ev = create_event(EventType.RETIRADA, exec_date=save_day, amount=val, reason=desc)
+                    else:
+                        continue
+                    if not is_duplicate(ev):
+                        append_event(ev)
+
+                pend_by_ref = {p.get("ref"): p for p in pending_settlements(save_day)}
+                cash_transfers = payload.get("cash_transfers", [])
+                for tr in cash_transfers:
+                    val = float(tr.get("value", tr.get("valor", 0.0)) or 0.0)
+                    note = str(tr.get("note", tr.get("ref", ""))).strip()
+                    if val <= 0:
+                        continue
+                    ref_id = note if note in pend_by_ref else None
+                    ev = create_event(
+                        EventType.SETTLEMENT,
+                        exec_date=save_day,
+                        settle_date=save_day,
+                        amount=val,
+                        ref_id=ref_id,
+                        reason=note or "cash_transfer",
+                    )
+                    if not is_duplicate(ev):
+                        append_event(ev)
+
+                cash = compute_cash(save_day)
+                derived_payload = {
+                    "date": payload.get("date", save_day.isoformat()),
+                    "reference_decision": payload.get("reference_decision", market_day.isoformat()),
+                    "exec_day": payload.get("exec_day", save_day.isoformat()),
+                    "market_day": payload.get("market_day", market_day.isoformat()),
+                    "trade_day": payload.get("trade_day", save_day.isoformat()),
+                    "operations": ops,
+                    "cash_movements": cash_movements,
+                    "cash_transfers": cash_transfers,
+                    "cash_free": float(cash.get("cash_free", 0.0)),
+                    "cash_accounting": float(cash.get("cash_accounting", 0.0)),
+                    "caixa_liquido_real": payload.get("caixa_liquido_real", None),
+                    "positions_snapshot": export_snapshot(save_day),
+                    "defensive_quarantine": payload.get("defensive_quarantine", []),
+                    "positions": payload.get("positions", []),
+                    "cash_balance": float(cash.get("cash_free", 0.0)),
+                    "caixa_liquidando": float(cash.get("cash_accounting", 0.0)),
+                }
+
+                content = json.dumps(derived_payload, ensure_ascii=False, indent=2)
+                dest_cycle.write_text(content, encoding="utf-8")
+                dest_real.write_text(content, encoding="utf-8")
                 self._respond_json(
                     {
                         "ok": True,

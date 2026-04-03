@@ -82,3 +82,10 @@
 ## 2026-04-01
 
 - 2026-04-01 | T-035 | feat: desacoplar semântica temporal nos artefatos operacionais (exec_day, market_day, trade_day) — D-044, R-022. Toca painel_diario.py (blindado). MOTOR_OVERRIDE.
+
+## 2026-04-03
+
+- feat: T-036 — SSOT ledger imutável BR Fase 1 (D-045). Módulo pipeline/ledger_br.py com T+1 BDR / T+2 ação. Migração de 10 boletins. Servidor refatorado para gravar no ledger.
+- fix: T-036-HF — corrigir colisão de ID (T-035→T-036) e reiniciar servidor para ativar integração ledger_br (auditoria T-036)
+- feat: T-037 — SSOT ledger BR Fase 2: painel lê caixa do ledger (D-046). painel_diario.py refatorado para usar compute_cash() do ledger como fonte primária de cash_free/cash_accounting, com fallback para fórmula normativa. MOTOR_OVERRIDE.
+- chore: T-037-HF — commit com MOTOR_OVERRIDE + tag v1.5.0-motor selando T-036/T-037 (D-045/D-046). Auditoria Gemini exigiu rastreabilidade Git.

@@ -31,6 +31,10 @@ from pipeline.ptbr import (
     validate_html_ptbr,
 )
 from lib.engine import compute_m3_scores, select_top_n
+try:
+    from pipeline.ledger_br import compute_cash as _compute_cash_ledger
+except Exception:
+    _compute_cash_ledger = None
 
 FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
 
@@ -1196,28 +1200,26 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         retirada=d1_retirada,
         transfer=d1_transfer,
     )
-    # Regra normativa: cards usam sempre o cálculo.
+
+    # Fonte primária: SSOT ledger. Fallback para fórmula normativa se ledger indisponível/sem cobertura.
     cash_free_actual = cash_free_calc
     cash_acc_actual = cash_acc_calc
-    if d1_payload:
-        declared_free = _safe_float(
-            d1_payload.get("cash_free", d1_payload.get("cash_balance", cash_free_calc)),
-            cash_free_calc,
-        )
-        declared_acc = _safe_float(
-            d1_payload.get("cash_accounting", d1_payload.get("caixa_liquidando", cash_acc_calc)),
-            cash_acc_calc,
-        )
-        if abs(declared_free - cash_free_calc) > 0.01:
-            warnings.append(
-                "Divergência no caixa livre declarado no boletim D-1; painel usa fórmula normativa "
-                f"({_fmt_money(cash_free_calc)})."
-            )
-        if abs(declared_acc - cash_acc_calc) > 0.01:
-            warnings.append(
-                "Divergência no caixa contábil declarado no boletim D-1; painel usa fórmula normativa "
-                f"({_fmt_money(cash_acc_calc)})."
-            )
+    if _compute_cash_ledger is None:
+        warnings.append("Ledger indisponível no painel; usando fallback de caixa pela fórmula normativa.")
+    else:
+        try:
+            ledger_cash = _compute_cash_ledger(d1)
+            ledger_free = _safe_float(ledger_cash.get("cash_free", 0.0), 0.0)
+            ledger_acc = _safe_float(ledger_cash.get("cash_accounting", 0.0), 0.0)
+            if abs(ledger_free) > 1e-9 or abs(ledger_acc) > 1e-9:
+                cash_free_actual = ledger_free
+                cash_acc_actual = ledger_acc
+            else:
+                warnings.append(
+                    "Ledger sem cobertura para o market_day; usando fallback de caixa pela fórmula normativa."
+                )
+        except Exception:
+            warnings.append("Falha ao consultar ledger no painel; usando fallback de caixa pela fórmula normativa.")
 
     total_buy_weight = 100.0 if total_buy > 0 else 0.0
     total_current_weight = 100.0 if total_current > 0 else 0.0

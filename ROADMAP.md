@@ -28,7 +28,8 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 11 | T-022 | ~~Atualizar BRIEFING_CRITERIO_VENDA~~ | D-019 | docs/BRIEFING_CRITERIO_VENDA.md | CANCELLED (D-023) |
 | 12 | T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | D-036 | pipeline/painel_diario.py | DONE |
 | 13 | T-033 | Top-10 ativo para compra: Qtd+Preço editáveis (default D-1), Valor auto | D-037 | pipeline/painel_diario.py | DONE |
-| 14 | T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | D-039 | pipeline/painel_diario.py, pipeline/servidor.py | DONE |
+| 15 | T-035 | Desacoplar semântica temporal nos artefatos operacionais (exec_day, market_day, trade_day) | D-044, R-022 | pipeline/painel_diario.py, pipeline/servidor.py | DONE |
+| 16 | T-036-HF | Corrigir colisão de ID (T-035→T-036) e reiniciar servidor para ativar integração ledger_br | D-045 | ROADMAP.md, CHANGELOG.md, pipeline/servidor.py | DONE |
 
 ### Marcos Estratégicos
 
@@ -93,6 +94,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-032 | Corrigir Patrimônio Inicial no Balanço BR: Capital Líquido Aportado (paridade USA_OPS) | pipeline/painel_diario.py | 2026-03-20 | D-036 |
 | T-033 | Top-10 ativo para compra: Qtd+Preço editáveis (default D-1), Valor auto | pipeline/painel_diario.py | 2026-03-20 | D-037 |
 | T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | pipeline/painel_diario.py, pipeline/servidor.py | 2026-03-22 | D-039 |
+| T-036 | SSOT ledger imutável BR — Fase 1 (módulo + migração + servidor) | pipeline/ledger_br.py, scripts/migrate_boletins_to_ledger_br.py, pipeline/servidor.py, tests/test_ledger_br.py | 2026-04-03 | D-045 |
 
 ---
 
