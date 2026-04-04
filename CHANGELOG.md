@@ -94,3 +94,8 @@
 - fix: T-049 — corrigir compute_cash() para descontar settlements em vendas com liquidação futura e cancelar 2 eventos fantasma OXYP34 via CORRECTION. Artefatos: pipeline/ledger_br.py, data/ssot/ledger_br.jsonl, tests/test_ledger_br.py
 - fix: T-050 — lista de transferências pendentes lê do ledger SSOT em vez de boletins históricos (D-048). Elimina fantasmas BIED3/K1SG34/OXYP34 da lista. Fallback para função antiga se ledger indisponível. MOTOR_OVERRIDE.
 - fix: T-050-HF — corrigir fallback de _pending_sales_ledger que ignorava lista vazia da SSOT e recorria a dados legados (D-048). MOTOR_OVERRIDE.
+
+## 2026-04-04
+
+- T-052: Separar pipeline em duas fases (--ingest-only / --decision-only) + --dry-run + orquestrador run_all.sh (D-052)
+- audit: T-052 curada com PASS. Artefatos: pipeline/run_daily.py, pipeline/painel_diario.py, pipeline/servidor.py, SALA_DE_CONTROLE/run_all.sh, SALA_DE_CONTROLE/iniciar.sh

@@ -1,0 +1,224 @@
+{
+  "date": "2026-03-19",
+  "reference_decision": "2026-03-19",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "BGIP3",
+      "qtd": 2000,
+      "preco": 62.24
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PRIO3",
+      "qtd": 1900,
+      "preco": 66.03
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "MUTC34",
+      "qtd": 280,
+      "preco": 409.7
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "CBAV3",
+      "qtd": 11100,
+      "preco": 10.29
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PETR3",
+      "qtd": 2200,
+      "preco": 51.63
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "BIED3",
+      "qtd": 17000,
+      "preco": 6.7
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "GOLL54",
+      "qtd": 10000,
+      "preco": 11.54
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PETR4",
+      "qtd": 2100,
+      "preco": 47
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "D1OW34",
+      "qtd": 2300,
+      "preco": 48.46
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "W1DC34",
+      "qtd": 70,
+      "preco": 1629.74
+    }
+  ],
+  "cash_movements": [
+    {
+      "type": "APORTE",
+      "value": 1146720.55,
+      "description": "APORTE INICIAL"
+    }
+  ],
+  "cash_transfers": [],
+  "cash_free": 722.75,
+  "cash_accounting": 0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-19",
+      "qtd": 2000,
+      "preco_compra": 62.24
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-19",
+      "qtd": 17000,
+      "preco_compra": 6.7
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-19",
+      "qtd": 11100,
+      "preco_compra": 10.29
+    },
+    {
+      "ticker": "D1OW34",
+      "data_compra": "2026-03-19",
+      "qtd": 2300,
+      "preco_compra": 48.46
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-19",
+      "qtd": 10000,
+      "preco_compra": 11.54
+    },
+    {
+      "ticker": "MUTC34",
+      "data_compra": "2026-03-19",
+      "qtd": 280,
+      "preco_compra": 409.7
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-19",
+      "qtd": 2200,
+      "preco_compra": 51.63
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-19",
+      "qtd": 2100,
+      "preco_compra": 47
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-19",
+      "qtd": 1900,
+      "preco_compra": 66.03
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-03-19",
+      "qtd": 70,
+      "preco_compra": 1629.74
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "BGIP3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2000,
+      "preco": 62.24,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PRIO3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1900,
+      "preco": 66.03,
+      "source": "recommended"
+    },
+    {
+      "ticker": "MUTC34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 280,
+      "preco": 409.7,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CBAV3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 11100,
+      "preco": 10.29,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2200,
+      "preco": 51.63,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BIED3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 17000,
+      "preco": 6.7,
+      "source": "recommended"
+    },
+    {
+      "ticker": "GOLL54",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 10000,
+      "preco": 11.54,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR4",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2100,
+      "preco": 47,
+      "source": "recommended"
+    },
+    {
+      "ticker": "D1OW34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2300,
+      "preco": 48.46,
+      "source": "recommended"
+    },
+    {
+      "ticker": "W1DC34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 70,
+      "preco": 1629.74,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 722.75,
+  "caixa_liquidando": 0
+}

@@ -1,0 +1,92 @@
+{
+  "date": "2026-03-20",
+  "reference_decision": "2026-03-19",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "D10W34",
+      "qtd": 70,
+      "preco": 1636.34
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 722.75,
+  "cash_accounting": 114543.79999999999,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-19",
+      "qtd": 2000,
+      "preco_compra": 62.24
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-03-19",
+      "qtd": 17000,
+      "preco_compra": 6.7
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-19",
+      "qtd": 11100,
+      "preco_compra": 10.29
+    },
+    {
+      "ticker": "D10W34",
+      "data_compra": "2026-03-19",
+      "qtd": 2230,
+      "preco_compra": 48.46
+    },
+    {
+      "ticker": "GOLL54",
+      "data_compra": "2026-03-19",
+      "qtd": 10000,
+      "preco_compra": 11.54
+    },
+    {
+      "ticker": "MUTC34",
+      "data_compra": "2026-03-19",
+      "qtd": 280,
+      "preco_compra": 409.7
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-19",
+      "qtd": 2200,
+      "preco_compra": 51.63
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-19",
+      "qtd": 2100,
+      "preco_compra": 47
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-19",
+      "qtd": 1900,
+      "preco_compra": 66.03
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-03-19",
+      "qtd": 70,
+      "preco_compra": 1629.74
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "D10W34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 70,
+      "preco": 1636.34,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 722.75,
+  "caixa_liquidando": 114543.79999999999
+}

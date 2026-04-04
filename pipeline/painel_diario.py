@@ -1387,7 +1387,7 @@ def build_painel(exec_day: date) -> Path:
     chart_252_html = _build_chart_252(curve=curve, thr=config_thr, as_of_day=d1)
     chart_base1_html = _build_chart_base1(curve=curve, as_of_day=d1)
 
-    cycle_dir = ROOT / "data" / "cycles" / exec_day.isoformat()
+    cycle_dir = ROOT / "data" / "cycles" / d1.isoformat()
     cycle_dir.mkdir(parents=True, exist_ok=True)
     out_path = cycle_dir / "painel.html"
 
@@ -1395,7 +1395,7 @@ def build_painel(exec_day: date) -> Path:
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Painel Diário — {_fmt_date_br(exec_day)}</title>
+<title>Painel Diário — {_fmt_date_br(d1)}</title>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
 body {{ font-family: Segoe UI, Tahoma, sans-serif; background:#f5f7fb; color:#1f2937; margin:0; }}
@@ -2038,7 +2038,8 @@ def serve_painel(exec_day: date, port: int = 8787) -> None:
 
     html_path = build_painel(exec_day)
     panel_content = html_path.read_bytes()
-    cycle_dir = ROOT / "data" / "cycles" / exec_day.isoformat()
+    _d1 = get_d_minus_1(exec_day)
+    cycle_dir = ROOT / "data" / "cycles" / _d1.isoformat()
     real_dir = ROOT / "data" / "real"
     real_dir.mkdir(parents=True, exist_ok=True)
     saved = threading.Event()

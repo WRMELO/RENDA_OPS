@@ -37,6 +37,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 21 | T-049 | Corrigir compute_cash e cancelar OXYP34 fantasma | D-048 | pipeline/ledger_br.py, data/ssot/ledger_br.jsonl, tests/test_ledger_br.py | DONE |
 | 22 | T-050 | Painel usa pendências de transferência do ledger SSOT | D-048 | pipeline/painel_diario.py, CHANGELOG.md, ROADMAP.md, GOVERNANCE.md | DONE |
 | 23 | T-050-HF | Corrigir fallback de _pending_sales_ledger para respeitar SSOT vazia | D-048 | pipeline/painel_diario.py, CHANGELOG.md, ROADMAP.md | DONE |
+| 24 | T-052 | Separar pipeline em duas fases + orquestrador `run_all.sh` | D-052 | pipeline/run_daily.py, pipeline/painel_diario.py, pipeline/servidor.py, SALA_DE_CONTROLE/run_all.sh, SALA_DE_CONTROLE/iniciar.sh | DONE |
 
 ### Marcos Estratégicos
 

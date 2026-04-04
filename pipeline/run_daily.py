@@ -201,11 +201,62 @@ def _pad_macro_features_to_date(run_date: date) -> bool:
     return True
 
 
+def _ssot_date_max_br() -> date | None:
+    import pandas as pd
+
+    path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if not path.exists():
+        return None
+    try:
+        df = pd.read_parquet(path, columns=["date"])
+        if df.empty:
+            return None
+        dt_max = pd.to_datetime(df["date"], errors="coerce").max()
+        if pd.isna(dt_max):
+            return None
+        return dt_max.date()
+    except Exception:
+        return None
+
+
+def _expected_ssot_min_date(run_date: date) -> date:
+    # Tolerância D-2 para cobrir feriados (ex: Good Friday).
+    # Seg=4 (quinta), Ter=4 (sexta), Dom=2 (sexta), demais=2 (D-2 útil).
+    wd = run_date.weekday()
+    if wd == 0:
+        delta = 3
+    elif wd == 6:
+        delta = 2
+    elif wd == 1:
+        delta = 4
+    else:
+        delta = 2
+    return run_date - timedelta(days=delta)
+
+
+def _assert_ssot_fresh_br(run_date: date) -> None:
+    dt_max = _ssot_date_max_br()
+    expected = _expected_ssot_min_date(run_date)
+    if dt_max is None:
+        raise RuntimeError(
+            f"SSOT desatualizado: canonical_br sem datas. Esperado >= {expected.isoformat()}. "
+            "Rode --ingest-only primeiro."
+        )
+    if dt_max < expected:
+        raise RuntimeError(
+            f"SSOT desatualizado: última data={dt_max.isoformat()}, esperado >= {expected.isoformat()}. "
+            "Rode --ingest-only primeiro."
+        )
+
+
 def run(
     target_date: date | None = None,
     full: bool = False,
     retrain: bool = False,
     refresh_macro_features: bool = True,
+    ingest_only: bool = False,
+    decision_only: bool = False,
+    dry_run: bool = False,
     on_step: Callable[[int, int, str], None] | None = None,
 ) -> dict:
     from dotenv import load_dotenv
@@ -213,7 +264,16 @@ def run(
 
     run_date = target_date or date.today()
     logger = setup_logging(run_date)
-    logger.info(f"=== RENDA_OPS daily pipeline started (date={run_date}, mode={'FULL' if full else 'DRY-RUN'}) ===")
+    if ingest_only and decision_only:
+        raise ValueError("--ingest-only e --decision-only são mutuamente exclusivos.")
+    mode = "FULL" if full else "DAILY"
+    if ingest_only:
+        mode = "INGEST_ONLY"
+    elif decision_only:
+        mode = "DECISION_ONLY"
+    if dry_run:
+        mode = f"{mode}+DRY_RUN"
+    logger.info(f"=== RENDA_OPS daily pipeline started (date={run_date}, mode={mode}) ===")
     total_steps = 12
 
     def _step(n: int, label: str) -> None:
@@ -221,40 +281,56 @@ def run(
         if on_step:
             on_step(n, total_steps, label)
 
+    def _run_step(n: int, label: str, fn) -> object | None:
+        _step(n, label)
+        if dry_run:
+            logger.info("[DRY-RUN] %s", label)
+            return None
+        return fn()
+
     try:
-        if full:
-            _step(1, "Step 01: Ingest macro...")
-            _load_step("01_ingest_macro").run(end_date=run_date)
+        run_ingest = bool(full or ingest_only)
 
-            _step(2, "Step 02: Ingest prices BR...")
-            _load_step("02_ingest_prices_br").run(end_date=run_date)
+        if run_ingest:
+            _run_step(1, "Step 01: Ingest macro...", lambda: _load_step("01_ingest_macro").run(end_date=run_date))
+            _run_step(2, "Step 02: Ingest prices BR...", lambda: _load_step("02_ingest_prices_br").run(end_date=run_date))
+            _run_step(3, "Step 03: Ingest PTAX/BDR...", lambda: _load_step("03_ingest_ptax_bdr").run(end_date=run_date))
+            _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
+            dt_max = _ssot_date_max_br()
+            logger.info("SSOT canonical_br date_max=%s", dt_max.isoformat() if dt_max else "N/A")
+            if ingest_only:
+                logger.info("=== Pipeline ingest-only concluído ===")
+                return {"mode": "INGEST_ONLY", "ssot_date_max": dt_max.isoformat() if dt_max else None}
 
-            _step(3, "Step 03: Ingest PTAX/BDR...")
-            _load_step("03_ingest_ptax_bdr").run(end_date=run_date)
+        if decision_only:
+            _assert_ssot_fresh_br(run_date)
+            logger.info("SSOT freshness check PASS (canonical_br)")
 
-        _step(4, "Step 04: Rebuild canonical BR...")
-        _load_step("04_build_canonical").run(end_date=run_date)
+        _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
 
         if refresh_macro_features:
             _step(5, "Step 05: Build macro expanded features...")
-            try:
-                _load_step("05_build_macro_expanded").run(end_date=run_date)
-            except Exception as step5_exc:
-                logger.warning(f"Step 05 build failed via FRED: {step5_exc}")
-                if _macro_features_cover_date(run_date, tolerance_days=2):
-                    padded = _pad_macro_features_to_date(run_date)
-                    if padded:
-                        logger.warning(
-                            "Step 05: FRED failed; using tolerance fallback "
-                            "(padded macro_features with last known values) — D-027."
-                        )
+            if dry_run:
+                logger.info("[DRY-RUN] Step 05: Build macro expanded features...")
+            else:
+                try:
+                    _load_step("05_build_macro_expanded").run(end_date=run_date)
+                except Exception as step5_exc:
+                    logger.warning(f"Step 05 build failed via FRED: {step5_exc}")
+                    if _macro_features_cover_date(run_date, tolerance_days=2):
+                        padded = _pad_macro_features_to_date(run_date)
+                        if padded:
+                            logger.warning(
+                                "Step 05: FRED failed; using tolerance fallback "
+                                "(padded macro_features with last known values) — D-027."
+                            )
+                        else:
+                            logger.warning(
+                                "Step 05: FRED failed; using tolerance fallback "
+                                "(reusing existing macro_features, no padding needed) — D-027."
+                            )
                     else:
-                        logger.warning(
-                            "Step 05: FRED failed; using tolerance fallback "
-                            "(reusing existing macro_features, no padding needed) — D-027."
-                        )
-                else:
-                    raise
+                        raise
         else:
             if _macro_features_cover_date(run_date, tolerance_days=2):
                 date_max = _macro_features_date_max()
@@ -264,58 +340,81 @@ def run(
                     _step(5, "Step 05: Reuse existing macro features (coverage OK).")
             else:
                 _step(5, "Step 05: Coverage insufficient, building macro expanded features...")
-                _load_step("05_build_macro_expanded").run(end_date=run_date)
+                if not dry_run:
+                    _load_step("05_build_macro_expanded").run(end_date=run_date)
+                else:
+                    logger.info("[DRY-RUN] Step 05: Coverage insufficient, building macro expanded features...")
 
         _step(6, "Step 06: Compute M3 scores...")
-        score_data = _load_step("06_compute_scores").run()
+        score_data = {"scores_by_day": {}}
+        if dry_run:
+            logger.info("[DRY-RUN] Step 06: Compute M3 scores...")
+        else:
+            score_data = _load_step("06_compute_scores").run()
 
-        _step(7, "Step 07: Build/extend features dataset...")
-        _load_step("07_build_features").run(end_date=run_date)
+        _run_step(7, "Step 07: Build/extend features dataset...", lambda: _load_step("07_build_features").run(end_date=run_date))
 
         _step(8, "Step 08: Predict (persisted model)...")
-        predictions = _load_step("08_predict").run(end_date=run_date, retrain=retrain)
+        predictions = None
+        if dry_run:
+            logger.info("[DRY-RUN] Step 08: Predict (persisted model)...")
+        else:
+            predictions = _load_step("08_predict").run(end_date=run_date, retrain=retrain)
 
         _step(9, "Step 09: Decide...")
-        decision = _load_step("09_decide").run(
-            scores_by_day=score_data["scores_by_day"],
-            predictions=predictions,
-            target_date=target_date,
-        )
+        if dry_run:
+            logger.info("[DRY-RUN] Step 09: Decide...")
+            decision = {"action": "DRY_RUN", "y_proba_cash": None, "portfolio": []}
+        else:
+            decision = _load_step("09_decide").run(
+                scores_by_day=score_data["scores_by_day"],
+                predictions=predictions,
+                target_date=target_date,
+            )
 
         logger.info(f"Decision: {decision.get('action')} | proba={decision.get('y_proba_cash')} | {len(decision.get('portfolio', []))} tickers")
 
         _step(10, "Step 10: Extend winner curve...")
-        try:
-            import importlib.util
-            spec10 = importlib.util.spec_from_file_location(
-                "extend_curve", ROOT / "pipeline" / "10_extend_curve.py"
-            )
-            mod10 = importlib.util.module_from_spec(spec10)
-            spec10.loader.exec_module(mod10)
-            mod10.extend_curve(run_date)
-        except Exception as e:
-            logger.warning(f"Step 10 extend curve skipped: {e}")
+        if dry_run:
+            logger.info("[DRY-RUN] Step 10: Extend winner curve...")
+        else:
+            try:
+                import importlib.util
+                spec10 = importlib.util.spec_from_file_location(
+                    "extend_curve", ROOT / "pipeline" / "10_extend_curve.py"
+                )
+                mod10 = importlib.util.module_from_spec(spec10)
+                spec10.loader.exec_module(mod10)
+                mod10.extend_curve(run_date)
+            except Exception as e:
+                logger.warning(f"Step 10 extend curve skipped: {e}")
 
         _step(11, "Step 11: Reconcile metrics...")
-        try:
-            import importlib.util
-            spec = importlib.util.spec_from_file_location(
-                "reconcile_metrics", ROOT / "pipeline" / "11_reconcile_metrics.py"
-            )
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            recon = mod.reconcile()
-            if recon["status"] != "PASS":
-                logger.warning("Metrics reconciliation FAIL — check logs/metrics_reconciliation.json")
-        except Exception as e:
-            logger.warning(f"Step 11 reconcile skipped: {e}")
+        if dry_run:
+            logger.info("[DRY-RUN] Step 11: Reconcile metrics...")
+        else:
+            try:
+                import importlib.util
+                spec = importlib.util.spec_from_file_location(
+                    "reconcile_metrics", ROOT / "pipeline" / "11_reconcile_metrics.py"
+                )
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                recon = mod.reconcile()
+                if recon["status"] != "PASS":
+                    logger.warning("Metrics reconciliation FAIL — check logs/metrics_reconciliation.json")
+            except Exception as e:
+                logger.warning(f"Step 11 reconcile skipped: {e}")
 
         _step(12, "Step 12: Build unified daily panel...")
-        panel_mod = _load_step("painel_diario")
-        panel_path = panel_mod.run(run_date)
-        logger.info(f"Unified panel generated at: {panel_path}")
-
-        _write_t003_sanity(run_date)
+        if dry_run:
+            logger.info("[DRY-RUN] Step 12: Build unified daily panel...")
+            panel_path = "DRY_RUN"
+        else:
+            panel_mod = _load_step("painel_diario")
+            panel_path = panel_mod.run(run_date)
+            logger.info(f"Unified panel generated at: {panel_path}")
+            _write_t003_sanity(run_date)
         logger.info("=== Pipeline completed successfully ===")
         return decision
 
@@ -328,6 +427,9 @@ def run(
 def main():
     parser = argparse.ArgumentParser(description="RENDA_OPS daily pipeline")
     parser.add_argument("--full", action="store_true", help="Run full pipeline including data ingestion")
+    parser.add_argument("--ingest-only", action="store_true", help="Run only ingestion/SSOT steps")
+    parser.add_argument("--decision-only", action="store_true", help="Run only decision/panel steps")
+    parser.add_argument("--dry-run", action="store_true", help="Execute flow without writing outputs")
     parser.add_argument("--date", type=str, default=None, help="Target date (YYYY-MM-DD)")
     parser.add_argument("--retrain", action="store_true", help="Retrain XGBoost model before inference")
     parser.add_argument(
@@ -336,6 +438,8 @@ def main():
         help="Reuse existing macro_features.parquet when it already covers target date",
     )
     args = parser.parse_args()
+    if args.ingest_only and args.decision_only:
+        parser.error("--ingest-only e --decision-only não podem ser usados juntos")
 
     target = date.fromisoformat(args.date) if args.date else None
     run(
@@ -343,6 +447,9 @@ def main():
         full=args.full,
         retrain=bool(args.retrain),
         refresh_macro_features=not bool(args.reuse_macro_features),
+        ingest_only=bool(args.ingest_only),
+        decision_only=bool(args.decision_only),
+        dry_run=bool(args.dry_run),
     )
 
 

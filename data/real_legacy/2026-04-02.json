@@ -1,0 +1,153 @@
+{
+  "date": "2026-04-02",
+  "reference_decision": "2026-04-02",
+  "exec_day": "2026-04-02",
+  "market_day": "2026-04-02",
+  "trade_day": "2026-04-02",
+  "operations": [],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 683.2199999999721,
+  "cash_accounting": 382829.29,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-19",
+      "qtd": 2000,
+      "preco_compra": 62.24
+    },
+    {
+      "ticker": "C1FI34",
+      "data_compra": "2026-04-01",
+      "qtd": 189,
+      "preco_compra": 714.96
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-19",
+      "qtd": 11100,
+      "preco_compra": 10.29
+    },
+    {
+      "ticker": "D1OW34",
+      "data_compra": "2026-03-26",
+      "qtd": 2024,
+      "preco_compra": 51.73
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-19",
+      "qtd": 2200,
+      "preco_compra": 51.63
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-22",
+      "qtd": 46,
+      "preco_compra": 50.34
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-19",
+      "qtd": 2100,
+      "preco_compra": 47
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-22",
+      "qtd": 340,
+      "preco_compra": 45.67
+    }
+  ],
+  "defensive_quarantine": [
+    "A1PA34",
+    "K1SG34",
+    "L1YB34",
+    "PRIO3"
+  ],
+  "positions": [],
+  "cash_balance": 683.2199999999721,
+  "caixa_liquidando": 382829.29,
+  "recommendations": {
+    "action_rows": [],
+    "cash_rows": [],
+    "decision": {
+      "date": "2026-04-02",
+      "state_cash": 0,
+      "y_proba_cash": 0.0172,
+      "consecutive_above_thr": 0,
+      "consecutive_below_thr": 84,
+      "action": "MERCADO",
+      "config": {
+        "thr": 0.22,
+        "h_in": 3,
+        "h_out": 2,
+        "top_n": 10
+      },
+      "portfolio": [
+        {
+          "rank": 1,
+          "ticker": "BIED3",
+          "score_m3": 6.1109,
+          "weight": 0.1
+        },
+        {
+          "rank": 2,
+          "ticker": "PETR3",
+          "score_m3": 4.9384,
+          "weight": 0.1
+        },
+        {
+          "rank": 3,
+          "ticker": "PETR4",
+          "score_m3": 4.64,
+          "weight": 0.1
+        },
+        {
+          "rank": 4,
+          "ticker": "MWET4",
+          "score_m3": 4.577,
+          "weight": 0.1
+        },
+        {
+          "rank": 5,
+          "ticker": "PRIO3",
+          "score_m3": 4.3821,
+          "weight": 0.1
+        },
+        {
+          "rank": 6,
+          "ticker": "A1PA34",
+          "score_m3": 4.3804,
+          "weight": 0.1
+        },
+        {
+          "rank": 7,
+          "ticker": "BGIP3",
+          "score_m3": 4.2823,
+          "weight": 0.1
+        },
+        {
+          "rank": 8,
+          "ticker": "CBAV3",
+          "score_m3": 4.0981,
+          "weight": 0.1
+        },
+        {
+          "rank": 9,
+          "ticker": "D1OW34",
+          "score_m3": 4.0265,
+          "weight": 0.1
+        },
+        {
+          "rank": 10,
+          "ticker": "L1YB34",
+          "score_m3": 3.8853,
+          "weight": 0.1
+        }
+      ]
+    }
+  },
+  "catchup_prev_real_day": "2026-04-01"
+}

@@ -1,0 +1,130 @@
+{
+  "date": "2026-04-02",
+  "reference_decision": "2026-04-01",
+  "exec_day": "2026-04-02",
+  "market_day": "2026-04-01",
+  "trade_day": "2026-04-02",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "PRIO3",
+      "qtd": 1900,
+      "preco": 66.21
+    },
+    {
+      "type": "VENDA",
+      "ticker": "L1YB34",
+      "qtd": 255,
+      "preco": 195.72
+    },
+    {
+      "type": "VENDA",
+      "ticker": "A1PA34",
+      "qtd": 364,
+      "preco": 212.5
+    },
+    {
+      "type": "VENDA",
+      "ticker": "OXYP34",
+      "qtd": 2427,
+      "preco": 53.47
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 683.2199999999721,
+  "cash_accounting": 382829.29,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-19",
+      "qtd": 2000,
+      "preco_compra": 62.24
+    },
+    {
+      "ticker": "C1FI34",
+      "data_compra": "2026-04-01",
+      "qtd": 189,
+      "preco_compra": 714.96
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-19",
+      "qtd": 11100,
+      "preco_compra": 10.29
+    },
+    {
+      "ticker": "D1OW34",
+      "data_compra": "2026-03-26",
+      "qtd": 2024,
+      "preco_compra": 51.73
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-19",
+      "qtd": 2200,
+      "preco_compra": 51.63
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-22",
+      "qtd": 46,
+      "preco_compra": 50.34
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-19",
+      "qtd": 2100,
+      "preco_compra": 47
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-22",
+      "qtd": 340,
+      "preco_compra": 45.67
+    }
+  ],
+  "defensive_quarantine": [
+    "A1PA34",
+    "K1SG34",
+    "L1YB34",
+    "PRIO3"
+  ],
+  "positions": [
+    {
+      "ticker": "PRIO3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 1900,
+      "preco": 66.21,
+      "source": "recommended"
+    },
+    {
+      "ticker": "L1YB34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 255,
+      "preco": 195.72,
+      "source": "recommended"
+    },
+    {
+      "ticker": "A1PA34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 364,
+      "preco": 212.5,
+      "source": "recommended"
+    },
+    {
+      "ticker": "OXYP34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 2427,
+      "preco": 53.47,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 683.2199999999721,
+  "caixa_liquidando": 382829.29
+}

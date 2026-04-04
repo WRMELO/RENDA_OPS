@@ -350,7 +350,7 @@ def _start_daily_job(target_day: date) -> bool:
 
             run_daily.run(target_date=analysis_day, full=True, on_step=_on_step_main)
 
-            if not _panel_path(analysis_day).exists():
+            if not _panel_path(_pregao_alvo_para_analise(analysis_day)).exists():
                 painel_diario.build_painel(analysis_day)
             with JOB_LOCK:
                 JOB_STATE.status = "OK"
@@ -378,7 +378,8 @@ def _is_historical_referer_forbidden(headers: Any, today: date) -> bool:
         ref_day = date.fromisoformat(tail)
     except Exception:
         return False
-    return ref_day != today
+    # O painel "do dia" fica no market day (d-1); qualquer dia anterior é histórico
+    return ref_day != _pregao_alvo_para_analise(today)
 
 
 def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, override_date: date | None = None) -> None:
@@ -408,7 +409,7 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                 return
 
             if path == "/painel":
-                p = _panel_path(today)
+                p = _panel_path(_pregao_alvo_para_analise(today))
                 if not p.exists():
                     self._respond_html(
                         "<h3>Painel do dia ainda não existe.</h3>"
@@ -492,12 +493,9 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                     )
                     return
 
-                cycle_dir = ROOT / "data" / "cycles" / save_day.isoformat()
-                cycle_dir.mkdir(parents=True, exist_ok=True)
                 real_dir = ROOT / "data" / "real"
                 real_dir.mkdir(parents=True, exist_ok=True)
 
-                dest_cycle = cycle_dir / "boletim_preenchido.json"
                 market_day_raw = str(payload.get("market_day", "")).strip()
                 if market_day_raw:
                     try:
@@ -506,6 +504,10 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                         market_day = painel_diario.get_d_minus_1(save_day)
                 else:
                     market_day = painel_diario.get_d_minus_1(save_day)
+
+                cycle_dir = ROOT / "data" / "cycles" / market_day.isoformat()
+                cycle_dir.mkdir(parents=True, exist_ok=True)
+                dest_cycle = cycle_dir / "boletim_preenchido.json"
                 dest_real = real_dir / f"{market_day.isoformat()}.json"
 
                 ops = payload.get("operations", [])

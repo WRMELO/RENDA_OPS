@@ -1,0 +1,129 @@
+{
+  "date": "2026-04-01",
+  "reference_decision": "2026-03-31",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "C1FI34",
+      "qtd": 189,
+      "preco": 714.96
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "OXYP34",
+      "qtd": 2427,
+      "preco": 55.95
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 109524.35999999999,
+      "note": "VENDA BIED3 2026-03-28"
+    },
+    {
+      "value": 65445.96,
+      "note": "VENDA K1SG34 2026-03-31"
+    }
+  ],
+  "cash_free": 683.2199999999721,
+  "cash_accounting": 0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "A1PA34",
+      "data_compra": "2026-03-22",
+      "qtd": 364,
+      "preco_compra": 208.2
+    },
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-03-19",
+      "qtd": 2000,
+      "preco_compra": 62.24
+    },
+    {
+      "ticker": "C1FI34",
+      "data_compra": "2026-04-01",
+      "qtd": 189,
+      "preco_compra": 714.96
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-03-19",
+      "qtd": 11100,
+      "preco_compra": 10.29
+    },
+    {
+      "ticker": "D1OW34",
+      "data_compra": "2026-03-26",
+      "qtd": 2024,
+      "preco_compra": 51.73
+    },
+    {
+      "ticker": "L1YB34",
+      "data_compra": "2026-03-22",
+      "qtd": 255,
+      "preco_compra": 198
+    },
+    {
+      "ticker": "OXYP34",
+      "data_compra": "2026-04-01",
+      "qtd": 2427,
+      "preco_compra": 55.95
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-19",
+      "qtd": 2200,
+      "preco_compra": 51.63
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-03-22",
+      "qtd": 46,
+      "preco_compra": 50.34
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-19",
+      "qtd": 2100,
+      "preco_compra": 47
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-03-22",
+      "qtd": 340,
+      "preco_compra": 45.67
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-03-19",
+      "qtd": 1900,
+      "preco_compra": 66.03
+    }
+  ],
+  "defensive_quarantine": [
+    "K1SG34"
+  ],
+  "positions": [
+    {
+      "ticker": "C1FI34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 189,
+      "preco": 714.96,
+      "source": "recommended"
+    },
+    {
+      "ticker": "OXYP34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2427,
+      "preco": 55.95,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 683.2199999999721,
+  "caixa_liquidando": 0
+}
