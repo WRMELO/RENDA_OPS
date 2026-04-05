@@ -98,4 +98,5 @@
 ## 2026-04-04
 
 - T-052: Separar pipeline em duas fases (--ingest-only / --decision-only) + --dry-run + orquestrador run_all.sh (D-052)
-- audit: T-052 curada com PASS. Artefatos: pipeline/run_daily.py, pipeline/painel_diario.py, pipeline/servidor.py, SALA_DE_CONTROLE/run_all.sh, SALA_DE_CONTROLE/iniciar.sh
+- audit: T-052 — auditoria retroativa pós-commit (Gemini PASS + Kimi PASS + Auditor Principal FAIL governança -> saneado em T-053, D-053)
+- chore: T-053 — saneamento de governança pós-auditoria retroativa T-052. Tags v1.8.0-motor + v1.5.0-motor-us criadas. R-024 adicionada ao corpus. (D-053)
