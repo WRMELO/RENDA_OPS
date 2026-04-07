@@ -106,3 +106,4 @@
 - feat: T-054 — exchange_calendars como infraestrutura de pregões (B3/NYSE). lib/trading_calendar.py criado; run_daily _assert_ssot_fresh*, 01_ingest_macro, ledger_br, 05_build_macro_expanded, auto_simulate migrados para calendário real. Guard no iniciar.sh. (D-054)
 - audit: T-054 curada com PASS — calendários reais de B3/NYSE validados, dry-run e ingest-only sem regressão, sem blindados tocados. Artefatos: ROADMAP.md, DECISION_LOG.md, CHANGELOG.md (D-054)
 - feat: T-055-BR — deteccao automatica de corporate actions (split) no painel_diario.py BR: _detect_and_adjust_splits com filtro temporal as_of_day (fix H1 Gemini), alerta visual HTML, campo corporate_actions no JSON, base-1 com close_operational (D-055)
+- fix: T-055-BR-v2 — corrige fórmula de detecção event-based de splits em canonical_br (sf_now/sf_buy → events.prod()) em _detect_and_adjust_splits e _build_real_base1_series (D-055)

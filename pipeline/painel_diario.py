@@ -133,13 +133,11 @@ def _detect_and_adjust_splits(
     if df.empty:
         return lots, []
 
-    sf_latest: dict[str, float] = {}
     sf_by_ticker: dict[str, pd.DataFrame] = {}
     for tk in tickers:
         sub = df[df["ticker"] == tk]
         if sub.empty:
             continue
-        sf_latest[tk] = float(sub.iloc[-1]["split_factor"])
         sf_by_ticker[tk] = sub
 
     corporate_actions: list[dict[str, Any]] = []
@@ -154,17 +152,13 @@ def _detect_and_adjust_splits(
             continue
 
         buy_ts = pd.Timestamp(lot.buy_date)
-        sub_buy = sub[sub["date"] <= buy_ts]
-        if sub_buy.empty:
-            sub_buy = sub.head(1)
-        sf_buy = float(sub_buy.iloc[-1]["split_factor"])
-        sf_now = sf_latest.get(tk, sf_buy)
+        events = sub[(sub["date"] > buy_ts) & (sub["split_factor"] != 1.0) & (sub["split_factor"].notna())]
 
-        if abs(sf_buy - sf_now) < 1e-9:
+        if events.empty:
             adjusted.append(lot)
             continue
 
-        ratio = sf_now / sf_buy
+        ratio = float(events["split_factor"].prod())
         new_qtd = round(lot.qtd * ratio)
         new_price = round(lot.buy_price / ratio, 4)
         int_ratio = int(round(ratio))
@@ -179,7 +173,7 @@ def _detect_and_adjust_splits(
                     "ticker": tk,
                     "ratio": ratio_str,
                     "detection_date": as_of_day.isoformat(),
-                    "source": f"canonical_br.split_factor {sf_buy:.6f} -> {sf_now:.6f}",
+                    "source": f"canonical_br.split_factor prod(events) = {ratio:.6f}",
                     "adjustment_applied": {
                         "qtd_before": lot.qtd,
                         "qtd_after": new_qtd,
@@ -977,12 +971,10 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
         canon = canon.sort_values(["ticker", "date"]).reset_index(drop=True)
 
     by_ticker: dict[str, pd.DataFrame] = {}
-    sf_latest_map: dict[str, float] = {}
     if not canon.empty:
         for tk in canon["ticker"].unique():
             sub = canon[canon["ticker"] == tk][["date", "close_operational", "split_factor"]].copy()
             by_ticker[tk] = sub
-            sf_latest_map[tk] = float(sub.iloc[-1]["split_factor"])
 
     rows: list[dict[str, Any]] = []
     for rec in ordered:
@@ -997,12 +989,10 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             sub = by_ticker.get(tk)
             if sub is not None and not sub.empty and buy_date_str:
                 buy_ts = pd.Timestamp(buy_date_str)
-                sf_at_buy = sub[sub["date"] <= buy_ts]
-                if not sf_at_buy.empty:
-                    sf_buy = float(sf_at_buy.iloc[-1]["split_factor"])
-                    sf_now = sf_latest_map.get(tk, sf_buy)
-                    if abs(sf_buy - sf_now) > 1e-9:
-                        qtd = round(qtd * (sf_now / sf_buy))
+                events = sub[(sub["date"] > buy_ts) & (sub["date"] <= ref_ts) & (sub["split_factor"] != 1.0) & (sub["split_factor"].notna())]
+                if not events.empty:
+                    ratio = float(events["split_factor"].prod())
+                    qtd = round(qtd * ratio)
             px = _safe_float(pos.get("preco_compra", pos.get("buy_price", 0.0)), 0.0)
             if sub is not None and not sub.empty:
                 sub_until = sub[sub["date"] <= ref_ts]
