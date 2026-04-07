@@ -18,7 +18,7 @@
 ### Métricas do winner (C2 K=15, HOLDOUT 2023–2026)
 
 | Métrica | Valor |
-|---------|-------|
+| --------- | ------- |
 | CAGR | 19.2% |
 | MDD | -23.2% |
 | Sharpe excess | 0.43 |
@@ -32,7 +32,7 @@
 ## 2. Cronologia de Fases
 
 | Fase | Escopo | Tasks | Decisões-chave | Duração |
-|------|--------|-------|-----------------|---------|
+| ------ | -------- | ------- | ----------------- | --------- |
 | Phase 0 — Fundação | Setup repo, governança, pipeline skeleton | T-001 | D-001, D-002, D-003 | 1 dia |
 | Phase 1 — Dados Reais | Ingestão BR+BDR via BRAPI, SSOT canônico | T-002 | D-004, D-008, D-010 | 1 dia |
 | Phase 2 — Pipeline E2E | Steps 05-09 operacionais, XGBoost persistido | T-003, T-004 | D-009, D-011 | 1 dia |
@@ -53,7 +53,7 @@
 
 ### 3.1 Pipeline (12 steps sequenciais)
 
-```
+```text
 01_ingest_macro      → CDI (BCB), Ibov (BRAPI), S&P 500 (Yahoo)
 02_ingest_prices_br  → Preços BR + BDR via BRAPI [BLINDADO]
 03_ingest_ptax_bdr   → PTAX e universo BDR
@@ -69,6 +69,7 @@
 ```
 
 **Orquestrador**: `pipeline/run_daily.py`
+
 - `--full`: roda steps 01-12 (ingestão + processamento)
 - Default: roda steps 04-12 (só processamento, dados já ingeridos)
 - `refresh_macro_features`: controla se step 05 busca FRED ou reutiliza local
@@ -76,7 +77,7 @@
 ### 3.2 Bibliotecas compartilhadas (lib/)
 
 | Módulo | Função | Portabilidade |
-|--------|--------|---------------|
+| -------- | -------- | --------------- |
 | `engine.py` | Motor M3: `compute_m3_scores`, `apply_hysteresis`, `select_top_n` | Agnóstico de mercado |
 | `metrics.py` | `drawdown`, `metrics` (CAGR, MDD, Sharpe) | Agnóstico de mercado |
 | `io.py` | `read_parquet`, `write_parquet`, `read_json`, `write_json`, `sha256_file` | Agnóstico de mercado |
@@ -85,7 +86,7 @@
 ### 3.3 Configuração (config/)
 
 | Arquivo | Conteúdo | Portabilidade |
-|---------|----------|---------------|
+| --------- | ---------- | --------------- |
 | `winner.json` | Declaração canônica do winner (thr, h_in, h_out, top_n, métricas) | Template — recalibrar para cada mercado |
 | `ml_model.json` | XGBClassifier config (35 features, hiperparâmetros) | Template — retreinar para cada mercado |
 | `blacklist.json` | 16 tickers excluídos por qualidade | Específico por mercado |
@@ -93,7 +94,7 @@
 
 ### 3.4 Dados (data/)
 
-```
+```text
 data/
 ├── ssot/       → SSOT canônico (parquet): canonical_br, macro, market_data_raw, fx_ptax, bdr_universe
 ├── features/   → Features e predições: macro_features, dataset, predictions
@@ -120,7 +121,7 @@ data/
 ### 4.1 Trinca operacional
 
 | Documento | Finalidade | Quem escreve |
-|-----------|-----------|--------------|
+| ----------- | ----------- | -------------- |
 | `GOVERNANCE.md` | Regras fixas, políticas, restrições | CTO (com aprovação do Owner) |
 | `DECISION_LOG.md` | Decisões do Owner com contexto (D-NNN) | CTO (durante discussão) |
 | `CHANGELOG.md` | Log técnico cronológico de mudanças | Executor/Curator |
@@ -129,7 +130,7 @@ data/
 
 ### 4.2 Cadeia de comando
 
-```
+```text
 Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 ```
 
@@ -140,7 +141,7 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 ### 4.3 Fluxos por natureza de trabalho
 
 | Natureza | Fluxo |
-|----------|-------|
+| ---------- | ------- |
 | Task técnica (backlog ROADMAP) | Cadeia completa: CTO → Architect → Executor → Auditor → Curator |
 | Rotina diária (CICLO_DIARIO) | Fluido: Owner opera direto, validação automática, auditoria semanal |
 | Hotfix | Cadeia completa se envolve lógica de pipeline |
@@ -172,7 +173,7 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 ### 5.2 Duplo-caixa
 
 | Caixa | Significado |
-|-------|-------------|
+| ------- | ------------- |
 | **Caixa Livre** | Dinheiro disponível para compras (saldo real descontado) |
 | **Caixa Contábil** | Vendas em liquidação (D+2 ações, D+1 BDR) |
 
@@ -182,12 +183,14 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 
 1. **Camada 0**: Ajuste de splits (obrigatório antes de qualquer cálculo)
 2. **Camada 1**: Venda defensiva permanente (mecanismo AGNO completo)
+
    - Regime defensivo via market-slope
    - Severity Score composto (0–6) por ticker
    - Vendas graduais: 25% (score 4), 50% (score 5), 100% (score 6)
    - Quarentena pós-venda (ticker bloqueado por N dias)
    - SPC (Statistical Process Control): xbar, ucl, lcl
 3. **Camada 2**: Rebalanceamento C2 K=15 (histerese de portfolio)
+
    - Vender só quando cai fora do Top-15
    - Comprar quando entra no Top-10 e há caixa livre
 4. **Camada 3**: Sinal de CAIXA global (histerese h_in=3, h_out=2 sobre y_proba_cash)
@@ -205,7 +208,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 6.1 Processo
 
 | # | Lição | Evidência |
-|---|-------|-----------|
+| --- | ------- | ----------- |
 | L-01 | **Trinca de governança** separa regras, decisões e mudanças — nunca misturar | 27 decisões rastreáveis, cada task com D-NNN de origem |
 | L-02 | **Cadeia de skills** com separação de papéis evita viés (quem implementa não valida) | Auditorias Gemini/Kimi encontraram bugs que Sonnet não viu |
 | L-03 | **Decisões numeradas (D-NNN)** com alternativas explícitas forçam clareza | Owner sempre tem contexto para decidir, nunca "o que decidimos mesmo?" |
@@ -217,7 +220,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 6.2 Técnico
 
 | # | Lição | Evidência |
-|---|-------|-----------|
+| --- | ------- | ----------- |
 | L-08 | **Steps idempotentes** permitem re-execução sem efeito colateral | Pipeline re-rodado dezenas de vezes durante desenvolvimento |
 | L-09 | **SSOT em Parquet** regenerável é superior a CSV ou banco de dados para este caso | Compacto, tipado, rápido. Dados fora do git, regeneráveis pelo pipeline |
 | L-10 | **Modelo persistido** (treino raro, inferência diária) evita custo e variância | D-011: XGBoost treinado 2018-2022, inferência incremental diária |
@@ -236,7 +239,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 7.1 Erros de processo
 
 | # | Erro | Causa raiz | Impacto | Ref |
-|---|------|-----------|---------|-----|
+| --- | ------ | ----------- | --------- | ----- |
 | E-01 | Task marcada DONE sem auditoria | ROADMAP atualizado antes do ciclo completo | Task não auditada tratada como concluída | D-010 |
 | E-02 | CTO implementou antes de validar fluxo | Pressa — não consultou lições do AGNO | BDRs via síntese US+PTAX em vez de dados reais | D-008 |
 | E-03 | CEP/SPC abandonado como mecanismo de venda | Trazido como feature de ML, esquecido como stop-loss | Painel sem venda defensiva por ticker | D-019 |
@@ -245,7 +248,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 7.2 Erros técnicos
 
 | # | Erro | Causa raiz | Impacto | Ref |
-|---|------|-----------|---------|-----|
+| --- | ------ | ----------- | --------- | ----- |
 | E-05 | Split invertido no backtest | Fórmula `1/sf` em vez de `sf` | C3 com equity inflada | T-020v2-HF |
 | E-06 | Venda defensiva simplificada | Não consultou SPECs do AGNO (6 documentos) | xbar>ucl=100% ignorou severity score graduado | D-021 |
 | E-07 | FRED timeout trava pipeline | Retry linear insuficiente (1s/2s/3s) | 3 falhas em 3 dias | D-027 |
@@ -258,7 +261,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 7.3 Padrões de falha recorrentes
 
 | Padrão | Descrição | Ocorrências | Mitigação |
-|--------|-----------|-------------|-----------|
+| -------- | ----------- | ------------- | ----------- |
 | **Pressa do CTO** | Implementar antes de validar fluxo completo | E-02, E-03 | Consultar corpus/AGNO antes de cada phase |
 | **Herança não revisada** | Copiar do AGNO sem adaptar à operação real | E-02, E-05, E-06 | MANIFESTO_ORIGEM + checklist de adaptação |
 | **API como ponto único de falha** | Pipeline sem fallback para APIs externas | E-07, E-08 | Retry + fallback + tolerância obrigatórios |
@@ -272,7 +275,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 8.1 Portáveis (agnósticos de mercado)
 
 | Componente | Artefato | Função |
-|-----------|---------|--------|
+| ----------- | --------- | -------- |
 | Motor M3 + histerese | `lib/engine.py` | Scores z-score, histerese de estado, seleção Top-N |
 | Métricas | `lib/metrics.py` | CAGR, MDD, Sharpe, drawdown |
 | I/O | `lib/io.py` | Parquet/JSON read-write, SHA256 |
@@ -288,7 +291,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 8.2 Específicos do mercado BR
 
 | Componente | Artefato | O que muda para outro mercado |
-|-----------|---------|-------------------------------|
+| ----------- | --------- | ------------------------------- |
 | BrapiAdapter | `lib/adapters.py` | Substituir por API do mercado-alvo |
 | BcbAdapter | `lib/adapters.py` | Substituir por banco central do país-alvo |
 | Ingestão BR | `pipeline/01-03_*.py` | Adaptar fontes de dados |
@@ -306,7 +309,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 9.1 Transcripts das conversações
 
 | UUID | Título | Temas principais |
-|------|--------|------------------|
+| ------ | -------- | ------------------ |
 | e8ef230f-3b00-4096-a74e-9ef2f1b8abee | Setup e Governança | D-001 a D-007, trinca operacional, dashboard + boletim |
 | 240ac244-3ee4-4ce2-b111-35bc1c21eeb2 | Simulação e Pipeline | T-002/T-003, ingestão BDR, auditoria T-002, D-008 a D-014 |
 | 3b53f4b8-09ae-49f9-a6be-439c237b3425 | Auditoria e Motor | CEP/SPC, backtest T-020, blindagem, hotfixes, D-015 a D-027 |
@@ -315,7 +318,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 9.2 Documentos de governança
 
 | Documento | Path | Conteúdo |
-|-----------|------|----------|
+| ----------- | ------ | ---------- |
 | GOVERNANCE.md | `/GOVERNANCE.md` | Regras, cadeia de comando, blindagem |
 | DECISION_LOG.md | `/DECISION_LOG.md` | 34 decisões com contexto |
 | CHANGELOG.md | `/CHANGELOG.md` | Histórico técnico completo |
@@ -326,7 +329,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 9.3 Documentos técnicos
 
 | Documento | Path | Conteúdo |
-|-----------|------|----------|
+| ----------- | ------ | ---------- |
 | BRIEFING_CRITERIO_VENDA.md | `/docs/BRIEFING_CRITERIO_VENDA.md` | Comparação C1/C2/C3 |
 | winner.json | `/config/winner.json` | Declaração canônica C060X |
 | ml_model.json | `/config/ml_model.json` | XGBClassifier config + 35 features |
@@ -337,7 +340,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 ### 9.4 Fábrica irmã (USA_OPS)
 
 | Item | Referência | Nota |
-|------|------------|------|
+| ------ | ------------ | ------ |
 | Repositório | `~/USA_OPS` | Fábrica US independente (Russell 1000 + S&P SmallCap 600 - BDRs) |
 | Corpus US | `~/USA_OPS/docs/CORPUS_FABRICA_US.md` | Lições US consolidadas (motor C4, operação em produção) |
 | Propagação US → BR | D-033 | stale_tickers rolling anti-lookahead aplicado no Step 06 BR |
