@@ -100,3 +100,8 @@
 - T-052: Separar pipeline em duas fases (--ingest-only / --decision-only) + --dry-run + orquestrador run_all.sh (D-052)
 - audit: T-052 — auditoria retroativa pós-commit (Gemini PASS + Kimi PASS + Auditor Principal FAIL governança -> saneado em T-053, D-053)
 - chore: T-053 — saneamento de governança pós-auditoria retroativa T-052. Tags v1.8.0-motor + v1.5.0-motor-us criadas. R-024 adicionada ao corpus. (D-053)
+
+## 2026-04-07
+
+- feat: T-054 — exchange_calendars como infraestrutura de pregões (B3/NYSE). lib/trading_calendar.py criado; run_daily _assert_ssot_fresh*, 01_ingest_macro, ledger_br, 05_build_macro_expanded, auto_simulate migrados para calendário real. Guard no iniciar.sh. (D-054)
+- audit: T-054 curada com PASS — calendários reais de B3/NYSE validados, dry-run e ingest-only sem regressão, sem blindados tocados. Artefatos: ROADMAP.md, DECISION_LOG.md, CHANGELOG.md (D-054)

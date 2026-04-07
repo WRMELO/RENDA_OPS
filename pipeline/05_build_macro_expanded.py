@@ -131,8 +131,17 @@ def run(end_date: date | None = None) -> Path:
     # Coverage check aligned with run_daily tolerance (D-027): accept up to D-2.
     # Weekends and FRED publication lag can create 2-day gaps naturally.
     from datetime import timedelta
+    from lib.trading_calendar import prev_session
     date_max = pd.to_datetime(out["date"]).max()
-    min_acceptable = end_date - timedelta(days=2) if end_date else None
+    min_acceptable = None
+    if end_date:
+        try:
+            min_acceptable = prev_session(
+                prev_session(end_date, exchange="BVMF"),
+                exchange="BVMF",
+            )
+        except Exception:
+            min_acceptable = end_date - timedelta(days=2)
     if end_date and date_max.date() < min_acceptable:
         raise RuntimeError(f"macro_features date_max={date_max.date()} < min_acceptable={min_acceptable} (end_date={end_date})")
 

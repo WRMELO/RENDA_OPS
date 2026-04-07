@@ -26,6 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from lib.trading_calendar import prev_session
 
 
 def _load_step(name: str):
@@ -220,18 +221,8 @@ def _ssot_date_max_br() -> date | None:
 
 
 def _expected_ssot_min_date(run_date: date) -> date:
-    # Tolerância D-2 para cobrir feriados (ex: Good Friday).
-    # Seg=4 (quinta), Ter=4 (sexta), Dom=2 (sexta), demais=2 (D-2 útil).
-    wd = run_date.weekday()
-    if wd == 0:
-        delta = 3
-    elif wd == 6:
-        delta = 2
-    elif wd == 1:
-        delta = 4
-    else:
-        delta = 2
-    return run_date - timedelta(days=delta)
+    last = prev_session(run_date, exchange="BVMF")
+    return prev_session(last, exchange="BVMF")
 
 
 def _assert_ssot_fresh_br(run_date: date) -> None:

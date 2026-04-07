@@ -39,6 +39,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 23 | T-050-HF | Corrigir fallback de _pending_sales_ledger para respeitar SSOT vazia | D-048 | pipeline/painel_diario.py, CHANGELOG.md, ROADMAP.md | DONE |
 | 24 | T-052 | Separar pipeline em duas fases + orquestrador `run_all.sh` | D-052 | pipeline/run_daily.py, pipeline/painel_diario.py, pipeline/servidor.py, SALA_DE_CONTROLE/run_all.sh, SALA_DE_CONTROLE/iniciar.sh | DONE |
 | 25 | T-053 | Saneamento de governança pós-auditoria retroativa T-052 | D-053 | CHANGELOG.md, DECISION_LOG.md, GOVERNANCE.md, SALA_DE_CONTROLE/REGRAS_OPERACIONAIS.md | DONE |
+| 26 | T-054 | Calendário de pregões como infraestrutura (B3/NYSE) | D-054 | pipeline/run_daily.py, pipeline/01_ingest_macro.py, pipeline/ledger_br.py, pipeline/05_build_macro_expanded.py, scripts/auto_simulate.py, iniciar.sh | DONE |
 
 ### Marcos Estratégicos
 

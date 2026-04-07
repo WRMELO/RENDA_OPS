@@ -22,6 +22,7 @@ START_DATE = date(2018, 1, 1)
 def run(end_date: date | None = None) -> Path:
     load_dotenv(ROOT / ".env")
     from lib.adapters import BrapiAdapter, BcbAdapter, YahooAdapter
+    from lib.trading_calendar import sessions_in_range
 
     end = end_date or date.today()
 
@@ -41,8 +42,16 @@ def run(end_date: date | None = None) -> Path:
     bcb = BcbAdapter()
     yahoo = YahooAdapter()
 
+    pending_sessions = [d for d in sessions_in_range(fetch_start, end, exchange="BVMF") if d > last_existing]
+    if not pending_sessions:
+        print(f"[01] No new B3 trading days after {last_existing}")
+        return TARGET
+
     ibov_hist = brapi.get_historical_data(ticker="^BVSP", start=fetch_start, end=end)
     ibov_df = pd.DataFrame(ibov_hist.price_data)
+    if ibov_df.empty or "date" not in ibov_df.columns:
+        print(f"[01] BRAPI returned no usable data for ^BVSP ({last_existing}..{end})")
+        return TARGET
     ibov_df["date"] = pd.to_datetime(ibov_df["date"], errors="coerce")
     ibov_df["ibov_close"] = pd.to_numeric(ibov_df["close"], errors="coerce")
     ibov_df = ibov_df[["date", "ibov_close"]].dropna().drop_duplicates(subset=["date"]).sort_values("date")

@@ -19,13 +19,18 @@ sys.path.insert(0, str(ROOT))
 
 
 def _business_days(start: date, end: date) -> list[date]:
-    days = []
-    d = start
-    while d <= end:
-        if d.weekday() < 5:
-            days.append(d)
-        d += timedelta(days=1)
-    return days
+    from lib.trading_calendar import sessions_in_range
+
+    try:
+        return sessions_in_range(start, end, exchange="BVMF")
+    except Exception:
+        days = []
+        d = start
+        while d <= end:
+            if d.weekday() < 5:
+                days.append(d)
+            d += timedelta(days=1)
+        return days
 
 
 def _load_prev_real_json(exec_day: date) -> dict | None:

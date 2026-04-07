@@ -140,8 +140,9 @@ def _next_trading_day_br(from_day: date) -> date:
         for d in days:
             if d > from_day:
                 return d
+    from lib.trading_calendar import is_session
     candidate = from_day + timedelta(days=1)
-    while candidate.weekday() >= 5:
+    while not is_session(candidate, exchange="BVMF"):
         candidate += timedelta(days=1)
     return candidate
 
