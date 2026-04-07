@@ -253,6 +253,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | E-09 | Qtd fantasma na carteira recomendada | Recalculava qtd todo dia com preço novo | Quantidades não correspondiam ao real | D-016 |
 | E-10 | CDI Base 1 começava acima de 1.0 no D0 | Acúmulo sem normalização do primeiro ponto | Linha CDI deslocada no gráfico | D-032/T-029 |
 | E-11 | Base 1 mostrava curva divergente do balanço | Uso de `equity_end_norm` teórico em vez de patrimônio real | Leitura operacional inconsistente para o Owner | D-032/T-029 |
+| E-12 | `split_factor` event-based portado com lógica cumulativa do US | Coluna `split_factor` tem semântica diferente entre `canonical_br` (event-based: valor do split no dia, 1.0 nos demais) e `operational_window` US (cumulativo). Lógica `sf_now / sf_buy` falhava silenciosamente — ratio sempre ≈ 1.0 | Detecção de splits inoperante no BR até T-055-BR-v2 | T-055-BR / T-055-BR-v2, D-055 |
 
 ### 7.3 Padrões de falha recorrentes
 
