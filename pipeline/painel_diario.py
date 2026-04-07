@@ -108,6 +108,96 @@ def _safe_int(v: Any, default: int = 0) -> int:
         return default
 
 
+def _detect_and_adjust_splits(
+    lots: list["Lot"],
+    as_of_day: date,
+) -> tuple[list["Lot"], list[dict[str, Any]]]:
+    """Detecta splits via split_factor e ajusta qtd/preco dos lotes."""
+    if not lots:
+        return lots, []
+    path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if not path.exists():
+        return lots, []
+    tickers = sorted({lot.ticker for lot in lots})
+    try:
+        df = pd.read_parquet(path, columns=["date", "ticker", "split_factor"])
+    except Exception:
+        return lots, []
+
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df["ticker"] = df["ticker"].astype(str).str.upper().str.strip()
+    df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(1.0)
+    # Auditor Gemini H1: nunca usar split_factor futuro para boletim historico.
+    df = df[df["date"] <= pd.Timestamp(as_of_day)]
+    df = df[df["ticker"].isin(tickers)].sort_values(["ticker", "date"]).dropna(subset=["date"])
+    if df.empty:
+        return lots, []
+
+    sf_latest: dict[str, float] = {}
+    sf_by_ticker: dict[str, pd.DataFrame] = {}
+    for tk in tickers:
+        sub = df[df["ticker"] == tk]
+        if sub.empty:
+            continue
+        sf_latest[tk] = float(sub.iloc[-1]["split_factor"])
+        sf_by_ticker[tk] = sub
+
+    corporate_actions: list[dict[str, Any]] = []
+    adjusted: list[Lot] = []
+    seen_splits: set[tuple[str, str]] = set()
+
+    for lot in lots:
+        tk = lot.ticker
+        sub = sf_by_ticker.get(tk)
+        if sub is None:
+            adjusted.append(lot)
+            continue
+
+        buy_ts = pd.Timestamp(lot.buy_date)
+        sub_buy = sub[sub["date"] <= buy_ts]
+        if sub_buy.empty:
+            sub_buy = sub.head(1)
+        sf_buy = float(sub_buy.iloc[-1]["split_factor"])
+        sf_now = sf_latest.get(tk, sf_buy)
+
+        if abs(sf_buy - sf_now) < 1e-9:
+            adjusted.append(lot)
+            continue
+
+        ratio = sf_now / sf_buy
+        new_qtd = round(lot.qtd * ratio)
+        new_price = round(lot.buy_price / ratio, 4)
+        int_ratio = int(round(ratio))
+        ratio_str = f"{int_ratio}:1" if ratio > 1 else f"1:{int(round(1 / ratio))}"
+
+        key = (tk, ratio_str)
+        if key not in seen_splits:
+            seen_splits.add(key)
+            corporate_actions.append(
+                {
+                    "type": "SPLIT",
+                    "ticker": tk,
+                    "ratio": ratio_str,
+                    "detection_date": as_of_day.isoformat(),
+                    "source": f"canonical_br.split_factor {sf_buy:.6f} -> {sf_now:.6f}",
+                    "adjustment_applied": {
+                        "qtd_before": lot.qtd,
+                        "qtd_after": new_qtd,
+                        "preco_compra_before": lot.buy_price,
+                        "preco_compra_after": new_price,
+                    },
+                    "note": (
+                        f"Split {ratio_str} detectado. "
+                        f"Posicao ajustada: custo total invariante (R$ {lot.buy_value:,.2f})."
+                    ),
+                }
+            )
+
+        adjusted.append(Lot(ticker=tk, buy_date=lot.buy_date, qtd=new_qtd, buy_price=new_price))
+
+    return adjusted, corporate_actions
+
+
 def list_real_files_upto(max_day: date) -> list[Path]:
     real_dir = ROOT / "data" / "real"
     if not real_dir.exists():
@@ -874,21 +964,25 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             if tk:
                 tickers.add(tk)
 
-    canon = pd.DataFrame(columns=["date", "ticker", "close_raw"])
+    canon = pd.DataFrame(columns=["date", "ticker", "close_operational", "split_factor"])
     canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
     if tickers and canon_path.exists():
-        canon = pd.read_parquet(canon_path, columns=["date", "ticker", "close_raw"])
+        canon = pd.read_parquet(canon_path, columns=["date", "ticker", "close_operational", "split_factor"])
         canon["date"] = pd.to_datetime(canon["date"], errors="coerce")
         canon["ticker"] = canon["ticker"].astype(str).str.upper().str.strip()
-        canon["close_raw"] = pd.to_numeric(canon["close_raw"], errors="coerce")
-        canon = canon.dropna(subset=["date", "ticker", "close_raw"])
+        canon["close_operational"] = pd.to_numeric(canon["close_operational"], errors="coerce")
+        canon["split_factor"] = pd.to_numeric(canon["split_factor"], errors="coerce").fillna(1.0)
+        canon = canon.dropna(subset=["date", "ticker", "close_operational"])
         canon = canon[(canon["date"] <= pd.Timestamp(as_of_day)) & (canon["ticker"].isin(tickers))]
         canon = canon.sort_values(["ticker", "date"]).reset_index(drop=True)
 
     by_ticker: dict[str, pd.DataFrame] = {}
+    sf_latest_map: dict[str, float] = {}
     if not canon.empty:
         for tk in canon["ticker"].unique():
-            by_ticker[tk] = canon[canon["ticker"] == tk][["date", "close_raw"]].copy()
+            sub = canon[canon["ticker"] == tk][["date", "close_operational", "split_factor"]].copy()
+            by_ticker[tk] = sub
+            sf_latest_map[tk] = float(sub.iloc[-1]["split_factor"])
 
     rows: list[dict[str, Any]] = []
     for rec in ordered:
@@ -899,12 +993,21 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             qtd = _safe_int(pos.get("qtd"), 0)
             if not tk or qtd <= 0:
                 continue
-            px = _safe_float(pos.get("preco_compra"), 0.0)
+            buy_date_str = str(pos.get("data_compra", pos.get("buy_date", "")))
             sub = by_ticker.get(tk)
+            if sub is not None and not sub.empty and buy_date_str:
+                buy_ts = pd.Timestamp(buy_date_str)
+                sf_at_buy = sub[sub["date"] <= buy_ts]
+                if not sf_at_buy.empty:
+                    sf_buy = float(sf_at_buy.iloc[-1]["split_factor"])
+                    sf_now = sf_latest_map.get(tk, sf_buy)
+                    if abs(sf_buy - sf_now) > 1e-9:
+                        qtd = round(qtd * (sf_now / sf_buy))
+            px = _safe_float(pos.get("preco_compra", pos.get("buy_price", 0.0)), 0.0)
             if sub is not None and not sub.empty:
                 sub_until = sub[sub["date"] <= ref_ts]
                 if not sub_until.empty:
-                    px = _safe_float(sub_until.iloc[-1]["close_raw"], px)
+                    px = _safe_float(sub_until.iloc[-1]["close_operational"], px)
             total_mkt += qtd * px
 
         total_ativo = total_mkt + _safe_float(rec["cash_free"], 0.0) + _safe_float(rec["cash_acc"], 0.0)
@@ -1156,6 +1259,7 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         d2 = None
 
     lots, warnings = build_lot_ledger(cutoff_day)
+    lots, corporate_actions = _detect_and_adjust_splits(lots, as_of_day=d1)
     tickers = sorted({x.ticker for x in lots})
     prices_d1 = get_latest_prices(tickers, as_of_day=d1)
 
@@ -1302,6 +1406,7 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         "carteira_valor_d1": total_current,
         "pending_sales": _pending_sales_ledger(exec_day),
         "prev_defensive_quarantine": list((d1_payload or {}).get("defensive_quarantine", [])),
+        "corporate_actions": corporate_actions,
     }
     return tables_html, report_ctx, warnings
 
@@ -1382,6 +1487,28 @@ def build_painel(exec_day: date) -> Path:
         items = "".join(f"<li>{w}</li>" for w in warnings)
         warnings_html = f"<div class='warnings'><strong>Avisos de consistência:</strong><ul>{items}</ul></div>"
 
+    split_alert_html = ""
+    corporate_actions = ctx.get("corporate_actions", [])
+    if corporate_actions:
+        items = []
+        for ca in corporate_actions:
+            adj = ca.get("adjustment_applied", {})
+            items.append(
+                f"<li><strong>{ca['ticker']}</strong> — split {ca.get('ratio', '?')} detectado em "
+                f"{ca.get('detection_date', '?')}. Posição ajustada: "
+                f"{adj.get('qtd_before', '?')} → {adj.get('qtd_after', '?')} cotas, "
+                f"preço R$ {adj.get('preco_compra_before', 0):.2f} → R$ {adj.get('preco_compra_after', 0):.4f}. "
+                f"Custo total invariante.</li>"
+            )
+        split_alert_html = (
+            "<div class='split-alert'>"
+            "<strong>CORPORATE ACTION — Split detectado no SSOT</strong>"
+            f"<ul>{''.join(items)}</ul>"
+            "<p style='margin:6px 0 0;font-size:12px;'>O snapshot de posições foi ajustado automaticamente. "
+            "Confira o extrato da corretora e salve o boletim para registrar o ajuste.</p>"
+            "</div>"
+        )
+
     curve = _load_curve_until(d1)
     config_thr = _safe_float((decision or {}).get("config", {}).get("thr", 0.22), 0.22)
     chart_252_html = _build_chart_252(curve=curve, thr=config_thr, as_of_day=d1)
@@ -1425,6 +1552,9 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 .save-msg.error {{ color:#b91c1c; font-weight:600; }}
 .save-msg.ok {{ color:#166534; }}
 .warnings {{ background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; border-radius:8px; padding:10px; margin:10px 0; }}
+.split-alert {{ background:#fef2f2; border:2px solid #f87171; color:#991b1b; border-radius:10px; padding:14px; margin:10px 0; font-size:14px; }}
+.split-alert strong {{ font-size:15px; }}
+.split-alert ul {{ margin:6px 0 0 16px; padding:0; }}
 .top10-table td, .top10-table th {{ font-size:12px; padding:5px 6px; }}
 .cash-layout {{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px; }}
 .cash-panel {{ border:1px solid #dbe2ea; border-radius:8px; padding:10px; background:#fafcff; }}
@@ -1448,6 +1578,8 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
   <div class="wrap">
     <h1>Painel Diário — Mercado: {_fmt_date_br(d1)} | Execução: {_fmt_date_br(exec_day)}</h1>
     <div class="sub">Documento único: Relatório + Boletim | D-1 de mercado: {ctx["d1_br"]}</div>
+
+    {split_alert_html}
 
     <div class="block">
       <div class="section-title">Sessão Relatório</div>
@@ -1566,6 +1698,7 @@ const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
 const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
+const CORPORATE_ACTIONS = {json.dumps(corporate_actions, ensure_ascii=False)};
 const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
 const VALID_TICKERS = {json.dumps(sorted(load_valid_tickers()), ensure_ascii=False)};
 const VALID_TICKERS_SET = new Set(VALID_TICKERS);
@@ -1975,6 +2108,7 @@ function savePanel() {{
     operations: ops,
     cash_movements: cashMovements,
     cash_transfers: cashTransfers,
+    corporate_actions: CORPORATE_ACTIONS.length > 0 ? CORPORATE_ACTIONS : undefined,
     cash_free: cash_free,
     cash_accounting: cash_accounting,
     caixa_liquido_real: caixaLiquidoReal,
