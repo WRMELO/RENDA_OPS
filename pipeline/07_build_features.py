@@ -168,7 +168,8 @@ def run(end_date: date | None = None) -> Path:
     last_ibov = float(m.loc[last_wc_date, "ibov_close"]) if last_wc_date in m.index else float(m["ibov_close"].dropna().iloc[-1])
 
     equity_proxy = pd.Series(index=m.index, dtype=float)
-    equity_proxy.loc[wc["date"]] = wc.set_index("date")["equity_end_norm"]
+    wc_aligned = wc.set_index("date")["equity_end_norm"]
+    equity_proxy.update(wc_aligned)
     after = equity_proxy.index > last_wc_date
     equity_proxy.loc[after] = last_equity * (m.loc[after, "ibov_close"] / last_ibov)
     equity_proxy = equity_proxy.ffill()
