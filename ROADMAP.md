@@ -42,6 +42,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 26 | T-054 | Calendário de pregões como infraestrutura (B3/NYSE) | D-054 | pipeline/run_daily.py, pipeline/01_ingest_macro.py, pipeline/ledger_br.py, pipeline/05_build_macro_expanded.py, scripts/auto_simulate.py, iniciar.sh | DONE |
 | 27 | T-055-BR | Detecção automática de splits no painel diário BR | D-055 | pipeline/painel_diario.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 | 28 | T-055-BR-v2 | Correção da fórmula event-based de splits em canonical_br | D-055 | pipeline/painel_diario.py, CHANGELOG.md, DECISION_LOG.md | DONE |
+| 29 | T-SC-001 | Guarda de frescura no --ingest-only para evitar re-fetch de SSOT já fresco | D-055 | pipeline/run_daily.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 
 ### Marcos Estratégicos
 

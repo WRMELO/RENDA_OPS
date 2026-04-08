@@ -107,3 +107,8 @@
 - audit: T-054 curada com PASS — calendários reais de B3/NYSE validados, dry-run e ingest-only sem regressão, sem blindados tocados. Artefatos: ROADMAP.md, DECISION_LOG.md, CHANGELOG.md (D-054)
 - feat: T-055-BR — deteccao automatica de corporate actions (split) no painel_diario.py BR: _detect_and_adjust_splits com filtro temporal as_of_day (fix H1 Gemini), alerta visual HTML, campo corporate_actions no JSON, base-1 com close_operational (D-055)
 - fix: T-055-BR-v2 — corrige fórmula de detecção event-based de splits em canonical_br (sf_now/sf_buy → events.prod()) em _detect_and_adjust_splits e _build_real_base1_series (D-055)
+
+## 2026-04-08
+
+- feat: T-SC-001 — freshness guard no --ingest-only: skip automático quando SSOT date_max >= prev_session(run_date). Evita re-fetch desnecessário de brapi/Polygon após ingest do timer. (D-055)
+- audit: T-SC-001 curada com PASS — guarda de frescura validada em runtime para BR; ingest-only retorna SKIPPED com SSOT já fresco, --full e --decision-only sem regressão. Artefatos: pipeline/run_daily.py, CHANGELOG.md, ROADMAP.md (D-055)

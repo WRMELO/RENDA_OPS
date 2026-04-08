@@ -282,6 +282,18 @@ def run(
     try:
         run_ingest = bool(full or ingest_only)
 
+        if ingest_only and not full:
+            _dt = _ssot_date_max_br()
+            _exp = prev_session(run_date, exchange="BVMF")
+            if _dt is not None and _dt >= _exp:
+                logger.info(
+                    "SSOT already fresh (date_max=%s >= expected=%s), skipping ingest.",
+                    _dt.isoformat(),
+                    _exp.isoformat(),
+                )
+                logger.info("=== Pipeline ingest-only concluído (skipped) ===")
+                return {"mode": "INGEST_SKIPPED", "ssot_date_max": _dt.isoformat()}
+
         if run_ingest:
             _run_step(1, "Step 01: Ingest macro...", lambda: _load_step("01_ingest_macro").run(end_date=run_date))
             _run_step(2, "Step 02: Ingest prices BR...", lambda: _load_step("02_ingest_prices_br").run(end_date=run_date))
