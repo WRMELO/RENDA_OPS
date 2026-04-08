@@ -348,7 +348,8 @@ def _start_daily_job(target_day: date) -> bool:
             def _on_step_main(cur: int, tot: int, label: str) -> None:
                 _set_progress(base_main + cur, total_steps, f"Dia {analysis_day.isoformat()} — {label}")
 
-            run_daily.run(target_date=analysis_day, full=True, on_step=_on_step_main)
+            run_daily.run(target_date=analysis_day, ingest_only=True, on_step=_on_step_main)
+            run_daily.run(target_date=analysis_day, decision_only=True, on_step=_on_step_main)
 
             if not _panel_path(_pregao_alvo_para_analise(analysis_day)).exists():
                 painel_diario.build_painel(analysis_day)
