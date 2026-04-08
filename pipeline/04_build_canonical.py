@@ -20,6 +20,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from lib.trading_calendar import is_session
 
 IN_CANONICAL = ROOT / "data" / "ssot" / "canonical_br.parquet"
 IN_RAW = ROOT / "data" / "ssot" / "market_data_raw.parquet"
@@ -171,6 +172,7 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     target_end = pd.Timestamp(end_date) if end_date else raw["date"].max()
     window_start = target_end - timedelta(days=window_days)
     raw = raw[(raw["date"] >= window_start) & (raw["date"] <= target_end)].copy()
+    raw = raw[raw["date"].apply(lambda d: is_session(d.date(), exchange="BVMF"))].copy()
     if raw.empty:
         raise RuntimeError("No raw rows in operational window to rebuild canonical.")
 

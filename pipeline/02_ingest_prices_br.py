@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from lib.trading_calendar import is_session
 
 UNIVERSE_FILE = ROOT / "data" / "ssot" / "universe.parquet"
 BDR_UNIVERSE_FILE = ROOT / "data" / "ssot" / "bdr_universe.parquet"
@@ -185,6 +186,7 @@ def run(end_date: date | None = None) -> Path:
                 df = df[df["date"] <= pd.Timestamp(end)]
                 if ticker_last:
                     df = df[df["date"] > pd.Timestamp(ticker_last)]
+                df = df[df["date"].apply(lambda d: is_session(d.date(), exchange="BVMF"))]
                 if not df.empty:
                     frames.append(
                         df[
@@ -228,6 +230,7 @@ def run(end_date: date | None = None) -> Path:
                     df2 = df2[df2["date"] <= pd.Timestamp(end)]
                     if ticker_last:
                         df2 = df2[df2["date"] > pd.Timestamp(ticker_last)]
+                    df2 = df2[df2["date"].apply(lambda d: is_session(d.date(), exchange="BVMF"))]
                     if not df2.empty:
                         frames.append(
                             df2[
