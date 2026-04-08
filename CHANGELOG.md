@@ -113,3 +113,4 @@
 - feat: T-SC-001 — freshness guard no --ingest-only: skip automático quando SSOT date_max >= prev_session(run_date). Evita re-fetch desnecessário de brapi/Polygon após ingest do timer. (D-055)
 - audit: T-SC-001 curada com PASS — guarda de frescura validada em runtime para BR; ingest-only retorna SKIPPED com SSOT já fresco, --full e --decision-only sem regressão. Artefatos: pipeline/run_daily.py, CHANGELOG.md, ROADMAP.md (D-055)
 - fix(motor)[MOTOR-OVERRIDE]: T-057 — filtro calendário B3 em 02_ingest_prices_br.py e 04_build_canonical.py; linhas fantasma de feriado excluídas do raw e do canonical; SPC restaurado após phantoms de Sexta-Santa (D-057)
+- audit: T-057 curada com PASS — filtro de calendário B3 validado, fantasma 2026-04-03 removido e cobertura SPC restaurada em 06/04 e 07/04. Artefatos: pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py, ROADMAP.md, DECISION_LOG.md (D-057)
