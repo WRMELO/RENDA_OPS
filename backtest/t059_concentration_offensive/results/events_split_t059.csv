@@ -1,0 +1,5 @@
+date,variant,ticker,event,split_factor,ratio_applied,shares_before,shares_after,buy_price_before,buy_price_after
+2021-06-30,V0,BPAC3,split_adjustment,4.0,4.0,1,4,19.0,4.75
+2021-06-30,V1,BPAC3,split_adjustment,4.0,4.0,1,4,19.0,4.75
+2021-06-30,V2,BPAC3,split_adjustment,4.0,4.0,1,4,19.0,4.75
+2021-06-30,V3,BPAC3,split_adjustment,4.0,4.0,168,672,19.0,4.75

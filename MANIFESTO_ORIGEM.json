@@ -44,10 +44,11 @@
       "transform": "copy+rename"
     },
     {
-      "renda_ops_path": "data/features/scores_m3.parquet",
+      "renda_ops_path": "data/archive/scores_m3_legacy_20260226.parquet",
       "agno_path": "src/data_engine/features/T037_M3_SCORES_DAILY.parquet",
       "sha256_source": "af584905d9aa46c89f5d197d1fabce9806d8441aa5806f5a593dd0baca52288f",
-      "transform": "copy+rename"
+      "transform": "copy+rename",
+      "status": "ARCHIVED — artefato legado congelado em 2026-02-26, não consumido pelo pipeline operacional. Scores M3 são recalculados em memória pelo step 06 a partir do canonical_br.parquet."
     },
     {
       "renda_ops_path": "data/features/macro_features.parquet",
