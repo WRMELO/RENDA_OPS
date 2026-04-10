@@ -124,3 +124,4 @@
 ## 2026-04-10
 
 - fix: T-059 — pending_settlements() retorna vendas com liquidação futura (settle_date > as_of_date), eliminando janela cega T+2 no painel BR. Adiciona settle_date ao output.
+- docs: T-060 — formalizar lições do dia no corpus e nas skills: guard de porta por fabrica, classificação BDR por sufixo, denominador de carga termica sobre Total do Ativo e fonte viva de scores M3. Artefatos: DECISION_LOG.md, REGRAS_OPERACIONAIS.md, iniciar.sh, .cursor/skills/analista-br/SKILL.md, .cursor/skills/analista-usa/SKILL.md, ROADMAP.md

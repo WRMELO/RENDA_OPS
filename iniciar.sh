@@ -22,7 +22,7 @@ if ss -ltn "sport = :${PORT}" | rg -q LISTEN 2>/dev/null; then
 fi
 
 # Sobe o servidor em background, com log.
-nohup .venv/bin/python pipeline/servidor.py > "${LOG_FILE}" 2>&1 &
+nohup .venv/bin/python pipeline/servidor.py --host "${HOST}" --port "${PORT}" > "${LOG_FILE}" 2>&1 &
 SERVER_PID=$!
 disown
 
