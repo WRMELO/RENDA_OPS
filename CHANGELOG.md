@@ -120,3 +120,7 @@
 - feat: T-058 — backtest comparativo T-059 (concentração D-042 + venda ofensiva SPC+): 4 variantes V0/V1/V2/V3 sobre C2 K=15 em backtest/t059_concentration_offensive/
 - ref: D-059
 - audit: T-058 curada com PASS (V0 bateu o T-020v2 no SSOT atual; D-060 consolidou limites 15/20 sem ofensiva). Artefatos: backtest/t059_concentration_offensive/run_t059.py, backtest/t059_concentration_offensive/plot_t059.py, backtest/t059_concentration_offensive/results/*
+
+## 2026-04-10
+
+- fix: T-059 — pending_settlements() retorna vendas com liquidação futura (settle_date > as_of_date), eliminando janela cega T+2 no painel BR. Adiciona settle_date ao output.

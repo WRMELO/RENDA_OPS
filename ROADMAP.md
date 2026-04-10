@@ -45,6 +45,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 29 | T-SC-001 | Guarda de frescura no --ingest-only para evitar re-fetch de SSOT já fresco | D-055 | pipeline/run_daily.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 | 30 | T-057 | Filtro de calendário B3 nos steps blindados para remover linhas fantasma de feriado | D-057 | pipeline/02_ingest_prices_br.py, pipeline/04_build_canonical.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 | 31 | T-058 | Backtest T-059: concentração D-042 + venda ofensiva SPC+ (4 variantes) | D-059, D-060 | backtest/t059_concentration_offensive/run_t059.py, backtest/t059_concentration_offensive/plot_t059.py, backtest/t059_concentration_offensive/results/* | DONE |
+| 32 | T-059 | `pending_settlements()` retorna vendas com liquidação futura no painel BR | D-061 | pipeline/ledger_br.py, tests/test_ledger_br.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 
 ### Marcos Estratégicos
 

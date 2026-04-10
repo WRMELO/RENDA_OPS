@@ -336,8 +336,6 @@ def pending_settlements(as_of_date: date) -> list[dict[str, Any]]:
     for ev in events:
         if ev.type != EventType.SELL:
             continue
-        if ev.settle_date and ev.settle_date > as_of_date:
-            continue
         already = settled.get(ev.id, 0.0)
         remain = float(ev.amount) - already
         if remain > 0.50:
@@ -349,6 +347,7 @@ def pending_settlements(as_of_date: date) -> list[dict[str, Any]]:
                     "qtd": int(ev.qtd or 0),
                     "preco": float(ev.price or 0.0),
                     "valor_venda": float(ev.amount),
+                    "settle_date": ev.settle_date.isoformat() if ev.settle_date else None,
                     "ja_transferido": already,
                     "pendente": remain,
                     "ref": ev.id,

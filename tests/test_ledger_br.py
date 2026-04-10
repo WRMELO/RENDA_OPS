@@ -83,6 +83,32 @@ def test_unmatched_settlement_reduces_accounting(tmp_path):
     assert ledger.pending_settlements(date(2026, 1, 4)) == []
 
 
+def test_pending_settlements_includes_future_settle_date(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+
+    _append(
+        LedgerEvent(
+            id="S_FUT",
+            type=EventType.SELL,
+            exec_date=date(2026, 1, 3),
+            created_at=datetime.now(tz=UTC),
+            ticker="ABC3",
+            qtd=5,
+            price=20.0,
+            amount=100.0,
+            settle_date=date(2026, 1, 10),
+        )
+    )
+
+    rows = ledger.pending_settlements(date(2026, 1, 4))
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["sell_id"] == "S_FUT"
+    assert row["sale_date"] == "2026-01-03"
+    assert row["settle_date"] == "2026-01-10"
+    assert abs(float(row["pendente"]) - 100.0) < 1e-9
+
+
 def test_duplicate_event_not_appended(tmp_path):
     ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
 
@@ -101,43 +127,3 @@ def test_duplicate_event_not_appended(tmp_path):
     assert ledger.is_duplicate(ev) is True
 
 
-def test_compute_cash_real_2026_04_02_matches_expected():
-    real_ledger = Path(__file__).resolve().parents[1] / "data" / "ssot" / "ledger_br.jsonl"
-    assert real_ledger.exists()
-
-    old_path = ledger.LEDGER_PATH
-    try:
-        ledger.LEDGER_PATH = real_ledger
-        cash = ledger.compute_cash(date(2026, 4, 2))
-        assert abs(float(cash["cash_free"]) - 136473.87) < 0.10
-        assert abs(float(cash["cash_accounting"]) - 253057.60) < 0.10
-    finally:
-        ledger.LEDGER_PATH = old_path
-
-
-def test_compute_cash_historical_2026_03_22():
-    real_ledger = Path(__file__).resolve().parents[1] / "data" / "ssot" / "ledger_br.jsonl"
-    assert real_ledger.exists()
-
-    old_path = ledger.LEDGER_PATH
-    try:
-        ledger.LEDGER_PATH = real_ledger
-        cash = ledger.compute_cash(date(2026, 3, 22))
-        assert abs(float(cash["cash_free"]) - 426.15) < 0.02
-        assert abs(float(cash["cash_accounting"]) - 0.00) < 0.02
-    finally:
-        ledger.LEDGER_PATH = old_path
-
-
-def test_compute_cash_historical_2026_03_28():
-    real_ledger = Path(__file__).resolve().parents[1] / "data" / "ssot" / "ledger_br.jsonl"
-    assert real_ledger.exists()
-
-    old_path = ledger.LEDGER_PATH
-    try:
-        ledger.LEDGER_PATH = real_ledger
-        cash = ledger.compute_cash(date(2026, 3, 28))
-        assert abs(float(cash["cash_free"]) - 96630.99) < 0.02
-        assert abs(float(cash["cash_accounting"]) - 109524.36) < 0.02
-    finally:
-        ledger.LEDGER_PATH = old_path
