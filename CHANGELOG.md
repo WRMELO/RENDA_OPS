@@ -120,6 +120,8 @@
 - feat: T-058 — backtest comparativo T-059 (concentração D-042 + venda ofensiva SPC+): 4 variantes V0/V1/V2/V3 sobre C2 K=15 em backtest/t059_concentration_offensive/
 - ref: D-059
 - audit: T-058 curada com PASS (V0 bateu o T-020v2 no SSOT atual; D-060 consolidou limites 15/20 sem ofensiva). Artefatos: backtest/t059_concentration_offensive/run_t059.py, backtest/t059_concentration_offensive/plot_t059.py, backtest/t059_concentration_offensive/results/*
+- feat(backtest): T-060 — comparativo de cadência de avaliação (cad=1/5/10) + transplante incremental de critérios USA C4 no BR (V0..V4), com GATE V0 de paridade contra C2 K=15 no SSOT atual. Artefatos: backtest/t060_cadence_usa_criteria/run_t060.py, backtest/t060_cadence_usa_criteria/plot_t060.py, backtest/t060_cadence_usa_criteria/results/*
+- ref: D-068
 
 ## 2026-04-10
 
