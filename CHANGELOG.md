@@ -124,6 +124,7 @@
 - ref: D-068
 - docs(corpus): T-CORPUS-LL1 — lições aprendidas L-18..L-23 e erros E-13..E-16 do arco de calibração de cadência (D-068..D-071) persistidas em CORPUS_FABRICA_BR.md; novo padrão de falha 'Artefato de alinhamento temporal'; cronologia e referências cruzadas atualizadas. (ref: D-072).
 - docs(skills): T-SKILLS-CORPUS — CORPUS_FABRICA_BR.md adicionado como leitura obrigatoria em interlocutor-tecnico (secoes 3/6/7), cto-tecnico (secoes 6.1/7.1/7.3) e architect (secoes 6.2/7.2/7.3/10). Previne reincidencia de padroes de falha documentados. (ref: D-073).
+- chore(skills-git): T-SKILLS-GIT — repositorio Git inicializado em ~/.cursor/skills; 19 skills versionadas e publicadas em WRMELO/cursor-skills (privado) no GitHub. Snapshot inicial sem alteracao de conteudo. (ref: D-074).
 
 ## 2026-04-10
 

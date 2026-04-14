@@ -53,6 +53,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 37 | T-MOTOR-CAD7 | Implementar rebalance_cadence=7 na Camada 2 do motor BR (config + decide + painel + report) | D-071 | config/winner.json, pipeline/09_decide.py, pipeline/painel_diario.py, pipeline/report_daily.py, DECISION_LOG.md, ROADMAP.md | DONE |
 | 38 | T-CORPUS-LL1 | Capturar licoes aprendidas do arco T-060→T-MOTOR-CAD7 no CORPUS_FABRICA_BR | D-072 | docs/CORPUS_FABRICA_BR.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 39 | T-SKILLS-CORPUS | Adicionar CORPUS_FABRICA_BR como leitura obrigatoria nas skills interlocutor-tecnico, cto-tecnico e architect | D-073 | /home/wilson/.cursor/skills/interlocutor-tecnico/SKILL.md, /home/wilson/.cursor/skills/cto-tecnico/SKILL.md, /home/wilson/.cursor/skills/architect/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 40 | T-SKILLS-GIT | Inicializar repositorio Git em ~/.cursor/skills e publicar snapshot inicial das 19 skills em repositorio privado WRMELO/cursor-skills no GitHub | D-074 | /home/wilson/.cursor/skills/.git, /home/wilson/.cursor/skills/.gitignore, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 
