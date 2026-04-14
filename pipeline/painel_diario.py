@@ -841,6 +841,10 @@ def _build_sell_suggestions(
             quarantine.add(tk)
             defensive_tickers.add(tk)
 
+    is_rebalance_day_flag = bool((decision or {}).get("is_rebalance_day", True))
+    if not is_rebalance_day_flag:
+        return suggestions, quarantine
+
     # Camada 2 — rebalanceamento C2 K=15 (buffer de histerese).
     if canonical.empty:
         return suggestions, quarantine
