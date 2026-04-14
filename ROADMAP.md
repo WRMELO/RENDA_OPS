@@ -52,6 +52,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 36 | T-060-PHASE | Backtest sensibilidade de fase da cadência (cad=5/7/8/10/15, φ=0..N-1) com controle C01 | D-070 | backtest/t060_phase_sensitivity/run_t060_phase.py, backtest/t060_phase_sensitivity/plot_t060_phase.py, backtest/t060_phase_sensitivity/results/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 37 | T-MOTOR-CAD7 | Implementar rebalance_cadence=7 na Camada 2 do motor BR (config + decide + painel + report) | D-071 | config/winner.json, pipeline/09_decide.py, pipeline/painel_diario.py, pipeline/report_daily.py, DECISION_LOG.md, ROADMAP.md | DONE |
 | 38 | T-CORPUS-LL1 | Capturar licoes aprendidas do arco T-060→T-MOTOR-CAD7 no CORPUS_FABRICA_BR | D-072 | docs/CORPUS_FABRICA_BR.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 39 | T-SKILLS-CORPUS | Adicionar CORPUS_FABRICA_BR como leitura obrigatoria nas skills interlocutor-tecnico, cto-tecnico e architect | D-073 | /home/wilson/.cursor/skills/interlocutor-tecnico/SKILL.md, /home/wilson/.cursor/skills/cto-tecnico/SKILL.md, /home/wilson/.cursor/skills/architect/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 
