@@ -125,3 +125,7 @@
 
 - fix: T-059 — pending_settlements() retorna vendas com liquidação futura (settle_date > as_of_date), eliminando janela cega T+2 no painel BR. Adiciona settle_date ao output.
 - docs: T-060 — formalizar lições do dia no corpus e nas skills: guard de porta por fabrica, classificação BDR por sufixo, denominador de carga termica sobre Total do Ativo e fonte viva de scores M3. Artefatos: DECISION_LOG.md, REGRAS_OPERACIONAIS.md, iniciar.sh, .cursor/skills/analista-br/SKILL.md, .cursor/skills/analista-usa/SKILL.md, ROADMAP.md
+
+## 2026-04-14
+
+- fix(motor)[MOTOR-OVERRIDE]: T-061-BASE1-v2 — Base 1 BR com denominador vetorizado por ponto (patrimônio cumulativo `aportes - retiradas`), eliminando escalar final retroativo e preservando eixo operacional/categórico já aplicado. Artefatos: pipeline/painel_diario.py, DECISION_LOG.md (D-067).

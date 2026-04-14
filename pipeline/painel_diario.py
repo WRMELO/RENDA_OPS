@@ -934,6 +934,7 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             {
                 "exec_day": exec_day,
                 "ref_day": ref_day,
+                "payload": payload,
                 "snapshot": snapshot,
                 "cash_free": cash_free,
                 "cash_acc": cash_acc,
@@ -950,6 +951,18 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
         if current is None or rec["exec_day"] > current["exec_day"]:
             by_ref_day[rec["ref_day"]] = rec
     ordered = [by_ref_day[d] for d in sorted(by_ref_day.keys())]
+
+    cum_aportes = 0.0
+    cum_retiradas = 0.0
+    base_patrimonio_by_rec: list[float] = []
+    for rec in ordered:
+        aporte, retirada = _extract_cash_movements(rec.get("payload", {}))
+        cum_aportes += aporte
+        cum_retiradas += retirada
+        base_patrimonio_by_rec.append(cum_aportes - cum_retiradas)
+
+    if not base_patrimonio_by_rec or base_patrimonio_by_rec[0] <= 0:
+        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
 
     tickers: set[str] = set()
     for rec in ordered:
@@ -977,7 +990,7 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             by_ticker[tk] = sub
 
     rows: list[dict[str, Any]] = []
-    for rec in ordered:
+    for idx, rec in enumerate(ordered):
         ref_ts = pd.Timestamp(rec["ref_day"])
         total_mkt = 0.0
         for pos in rec["snapshot"]:
@@ -986,32 +999,42 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             if not tk or qtd <= 0:
                 continue
             buy_date_str = str(pos.get("data_compra", pos.get("buy_date", "")))
+            buy_ts: pd.Timestamp | None = None
+            if buy_date_str:
+                try:
+                    buy_ts = pd.Timestamp(buy_date_str)
+                except Exception:
+                    buy_ts = None
             sub = by_ticker.get(tk)
-            if sub is not None and not sub.empty and buy_date_str:
-                buy_ts = pd.Timestamp(buy_date_str)
+            if sub is not None and not sub.empty and buy_ts is not None:
                 events = sub[(sub["date"] > buy_ts) & (sub["date"] <= ref_ts) & (sub["split_factor"] != 1.0) & (sub["split_factor"].notna())]
                 if not events.empty:
                     ratio = float(events["split_factor"].prod())
                     qtd = round(qtd * ratio)
             px = _safe_float(pos.get("preco_compra", pos.get("buy_price", 0.0)), 0.0)
-            if sub is not None and not sub.empty:
+            if sub is not None and not sub.empty and (buy_ts is None or buy_ts <= ref_ts):
                 sub_until = sub[sub["date"] <= ref_ts]
                 if not sub_until.empty:
                     px = _safe_float(sub_until.iloc[-1]["close_operational"], px)
             total_mkt += qtd * px
 
         total_ativo = total_mkt + _safe_float(rec["cash_free"], 0.0) + _safe_float(rec["cash_acc"], 0.0)
-        rows.append({"date": ref_ts, "total_ativo": total_ativo})
+        plot_day = rec["exec_day"] if rec["exec_day"] <= as_of_day else as_of_day
+        rows.append(
+            {
+                "date": pd.Timestamp(plot_day),
+                "total_ativo": total_ativo,
+                "base_patrimonio": base_patrimonio_by_rec[idx],
+            }
+        )
 
     out = pd.DataFrame(rows).sort_values("date").drop_duplicates(subset=["date"], keep="last").reset_index(drop=True)
     if out.empty:
         return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
 
-    tank_total = _safe_float(load_tank_original().get("tank_total_bruto", 0.0), 0.0)
-    if tank_total <= 0:
-        return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
-    out["base1"] = out["total_ativo"] / tank_total
+    out["base1"] = out["total_ativo"] / out["base_patrimonio"]
     out["daily_var_pct"] = out["base1"].pct_change() * 100.0
+    out = out.drop(columns=["base_patrimonio"])
     return out
 
 
@@ -1229,6 +1252,7 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         separators=",.",
         legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="right", x=1),
     )
+    fig.update_xaxes(type="category")
     fig.update_yaxes(title_text="Base 1", secondary_y=False)
     fig.update_yaxes(title_text="Var. Diária (%)", secondary_y=True)
     return fig.to_html(full_html=False, include_plotlyjs=False)
