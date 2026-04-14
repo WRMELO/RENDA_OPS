@@ -91,6 +91,7 @@ def generate_operations(
     action: str,
     prices: dict[str, float],
     tank_total: float,
+    is_rebalance_day: bool = True,
 ) -> list[dict]:
     """Gera instrucoes operacionais comparando portfolio REAL do Owner com recomendacao atual.
     Respeita D-007: se ha vendas no dia, compras novas ficam bloqueadas (caixa nao liquidado)."""
@@ -112,6 +113,31 @@ def generate_operations(
         else:
             ops.append({"op": "MANTENHA", "ticker": "CAIXA", "qtd": 0, "preco": 0,
                         "motivo": "Permanecer em caixa"})
+        return ops
+
+    if action == "MERCADO" and not is_rebalance_day:
+        if held:
+            for t, pos in held.items():
+                ops.append(
+                    {
+                        "op": "MANTENHA",
+                        "ticker": t,
+                        "qtd": pos.get("qtd", 0),
+                        "preco": prices.get(t, 0),
+                        "motivo": "Dia sem rebalanceamento (cadencia 7 pregoes).",
+                    }
+                )
+            ops.sort(key=lambda x: x["ticker"])
+        else:
+            ops.append(
+                {
+                    "op": "AGUARDAR",
+                    "ticker": "CARTEIRA",
+                    "qtd": 0,
+                    "preco": 0,
+                    "motivo": "Dia sem rebalanceamento. Aguardar proximo dia de cadencia para entrar.",
+                }
+            )
         return ops
 
     curr_set = {p["ticker"]: p for p in curr_portfolio}
@@ -422,6 +448,7 @@ def build_report(report_date: date) -> Path:
 
     action = decision["action"]
     proba = decision["y_proba_cash"]
+    is_rebalance_day = bool(decision.get("is_rebalance_day", True))
     portfolio = decision.get("portfolio", [])
     config = decision["config"]
     decision_date = decision["date"]
@@ -444,7 +471,14 @@ def build_report(report_date: date) -> Path:
     rec_rows, equity_total, caixa_rec = build_portfolio_table(portfolio, tank_total, prices)
     real_rows, equity_real, caixa_real = build_real_portfolio_table(real_port, prices, portfolio)
 
-    operations = generate_operations(real_port, portfolio, action, prices, tank_total)
+    operations = generate_operations(
+        real_port,
+        portfolio,
+        action,
+        prices,
+        tank_total,
+        is_rebalance_day=is_rebalance_day,
+    )
 
     if action == "MERCADO":
         orientation = "MANTER EM MERCADO"

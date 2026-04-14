@@ -27,6 +27,9 @@ def run(
     h_in = int(cfg.get("h_in", 3))
     h_out = int(cfg.get("h_out", 2))
     top_n = int(cfg.get("top_n", 10))
+    rebalance_cadence = max(int(cfg.get("rebalance_cadence", 1)), 1)
+    rebalance_phase_offset = int(cfg.get("rebalance_phase_offset", 0))
+    rebalance_anchor_date_str = str(cfg.get("rebalance_anchor_date", "")).strip()
 
     pred = predictions.copy()
     pred = pred.sort_values("date")
@@ -44,6 +47,23 @@ def run(
         available = pred["date"].dt.date.tolist()
         target_ts = pd.Timestamp(max(available))
         row = pred[pred["date"] == target_ts]
+
+    is_rebalance_day = True
+    if rebalance_cadence > 1 and rebalance_anchor_date_str:
+        trading_dates = [pd.Timestamp(ts).normalize() for ts in sorted(pred["date"].dropna().dt.normalize().unique())]
+        trading_idx = {ts: idx for idx, ts in enumerate(trading_dates)}
+        target_norm = pd.Timestamp(target_ts).normalize()
+        try:
+            anchor_ts = pd.Timestamp(rebalance_anchor_date_str).normalize()
+        except Exception:
+            anchor_ts = None
+
+        if anchor_ts is not None and target_norm in trading_idx and anchor_ts in trading_idx:
+            days_since_anchor = trading_idx[target_norm] - trading_idx[anchor_ts]
+            if days_since_anchor >= 0:
+                is_rebalance_day = (days_since_anchor % rebalance_cadence) == (
+                    rebalance_phase_offset % rebalance_cadence
+                )
 
     current_state = int(row.iloc[0]["state_cash"])
     current_proba = float(row.iloc[0]["y_proba_cash"])
@@ -87,7 +107,16 @@ def run(
         "consecutive_above_thr": consecutive_above,
         "consecutive_below_thr": consecutive_below,
         "action": action,
-        "config": {"thr": thr, "h_in": h_in, "h_out": h_out, "top_n": top_n},
+        "is_rebalance_day": bool(is_rebalance_day),
+        "config": {
+            "thr": thr,
+            "h_in": h_in,
+            "h_out": h_out,
+            "top_n": top_n,
+            "rebalance_cadence": rebalance_cadence,
+            "rebalance_phase_offset": rebalance_phase_offset,
+            "rebalance_anchor_date": rebalance_anchor_date_str,
+        },
         "portfolio": portfolio,
     }
 
