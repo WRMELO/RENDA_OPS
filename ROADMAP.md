@@ -49,6 +49,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 33 | T-060 | Formalizar lições do dia: porta, BDR, denominador e fonte viva de scores | D-062, D-063, D-064, D-065 | DECISION_LOG.md, REGRAS_OPERACIONAIS.md, iniciar.sh, .cursor/skills/analista-br/SKILL.md, .cursor/skills/analista-usa/SKILL.md, CHANGELOG.md | DONE |
 | 34 | T-060 | Backtest comparativo cadência (cad=1/5/10) + critérios USA C4 no BR (V0..V4) | D-068 | backtest/t060_cadence_usa_criteria/run_t060.py, backtest/t060_cadence_usa_criteria/plot_t060.py, backtest/t060_cadence_usa_criteria/results/*, DECISION_LOG.md, CHANGELOG.md | DONE |
 | 35 | T-060-CAD2 | Backtest refinamento de cadência (cad=7/8/15/20) com âncoras C01/C10 | D-069 | backtest/t060_cadence_refinement_r2/run_t060_cad2.py, backtest/t060_cadence_refinement_r2/plot_t060_cad2.py, backtest/t060_cadence_refinement_r2/results/*, ROADMAP.md, CHANGELOG.md | DONE |
+| 36 | T-060-PHASE | Backtest sensibilidade de fase da cadência (cad=5/7/8/10/15, φ=0..N-1) com controle C01 | D-070 | backtest/t060_phase_sensitivity/run_t060_phase.py, backtest/t060_phase_sensitivity/plot_t060_phase.py, backtest/t060_phase_sensitivity/results/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 

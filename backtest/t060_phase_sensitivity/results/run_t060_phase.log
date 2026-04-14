@@ -1,0 +1,109 @@
+Backtest T-060-PHASE | thr=0.22 h_in=3 h_out=2
+========================================================================================================================
+Carregando ancora C01 | top_n=10 K=15 cad=1
+GATE C01 PASS: sharpe=0.3837 cagr=18.555 mdd=-18.687 cost=10868.65
+Rodando C05_P0 | top_n=10 K=15 cad=5 phase=0
+Rodando C05_P1 | top_n=10 K=15 cad=5 phase=1
+Rodando C05_P2 | top_n=10 K=15 cad=5 phase=2
+Rodando C05_P3 | top_n=10 K=15 cad=5 phase=3
+Rodando C05_P4 | top_n=10 K=15 cad=5 phase=4
+Rodando C07_P0 | top_n=10 K=15 cad=7 phase=0
+Rodando C07_P1 | top_n=10 K=15 cad=7 phase=1
+Rodando C07_P2 | top_n=10 K=15 cad=7 phase=2
+Rodando C07_P3 | top_n=10 K=15 cad=7 phase=3
+Rodando C07_P4 | top_n=10 K=15 cad=7 phase=4
+Rodando C07_P5 | top_n=10 K=15 cad=7 phase=5
+Rodando C07_P6 | top_n=10 K=15 cad=7 phase=6
+Rodando C08_P0 | top_n=10 K=15 cad=8 phase=0
+Rodando C08_P1 | top_n=10 K=15 cad=8 phase=1
+Rodando C08_P2 | top_n=10 K=15 cad=8 phase=2
+Rodando C08_P3 | top_n=10 K=15 cad=8 phase=3
+Rodando C08_P4 | top_n=10 K=15 cad=8 phase=4
+Rodando C08_P5 | top_n=10 K=15 cad=8 phase=5
+Rodando C08_P6 | top_n=10 K=15 cad=8 phase=6
+Rodando C08_P7 | top_n=10 K=15 cad=8 phase=7
+Rodando C10_P0 | top_n=10 K=15 cad=10 phase=0
+Rodando C10_P1 | top_n=10 K=15 cad=10 phase=1
+Rodando C10_P2 | top_n=10 K=15 cad=10 phase=2
+Rodando C10_P3 | top_n=10 K=15 cad=10 phase=3
+Rodando C10_P4 | top_n=10 K=15 cad=10 phase=4
+Rodando C10_P5 | top_n=10 K=15 cad=10 phase=5
+Rodando C10_P6 | top_n=10 K=15 cad=10 phase=6
+Rodando C10_P7 | top_n=10 K=15 cad=10 phase=7
+Rodando C10_P8 | top_n=10 K=15 cad=10 phase=8
+Rodando C10_P9 | top_n=10 K=15 cad=10 phase=9
+Rodando C15_P0 | top_n=10 K=15 cad=15 phase=0
+Rodando C15_P1 | top_n=10 K=15 cad=15 phase=1
+Rodando C15_P2 | top_n=10 K=15 cad=15 phase=2
+Rodando C15_P3 | top_n=10 K=15 cad=15 phase=3
+Rodando C15_P4 | top_n=10 K=15 cad=15 phase=4
+Rodando C15_P5 | top_n=10 K=15 cad=15 phase=5
+Rodando C15_P6 | top_n=10 K=15 cad=15 phase=6
+Rodando C15_P7 | top_n=10 K=15 cad=15 phase=7
+Rodando C15_P8 | top_n=10 K=15 cad=15 phase=8
+Rodando C15_P9 | top_n=10 K=15 cad=15 phase=9
+Rodando C15_P10 | top_n=10 K=15 cad=15 phase=10
+Rodando C15_P11 | top_n=10 K=15 cad=15 phase=11
+Rodando C15_P12 | top_n=10 K=15 cad=15 phase=12
+Rodando C15_P13 | top_n=10 K=15 cad=15 phase=13
+Rodando C15_P14 | top_n=10 K=15 cad=15 phase=14
+GATE C10_P0 PASS: sharpe=0.4514
+------------------------------------------------------------------------------------------------------------------------
+variant  rebalance_cadence_param  phase_offset  sharpe_excess   cagr     mdd  cost_total  n_rebalance_sells  n_concentration_trims
+    C01                        1           NaN         0.3837 18.555 -18.687    10868.65                385                    289
+ C05_P0                        5           0.0         0.2206 15.514 -19.364     6595.36                190                     63
+ C05_P1                        5           1.0         0.5111 21.060 -18.756     6673.75                169                     53
+ C05_P2                        5           2.0         0.1339 13.956 -18.175     6378.78                207                     64
+ C05_P3                        5           3.0         0.5183 21.227 -13.402     5802.56                181                     71
+ C05_P4                        5           4.0         0.2551 16.282 -20.955     7644.19                190                     65
+ C07_P0                        7           0.0         0.3165 17.178 -13.505     3716.47                131                     41
+ C07_P1                        7           1.0         0.6187 22.651 -13.376     5778.11                132                     42
+ C07_P2                        7           2.0         0.3293 17.829 -16.388     4588.07                164                     48
+ C07_P3                        7           3.0         0.5838 21.951 -15.556     4359.44                157                     39
+ C07_P4                        7           4.0         0.6547 23.584 -11.815     4742.14                166                     41
+ C07_P5                        7           5.0         0.3736 18.293 -16.537     3894.32                134                     40
+ C07_P6                        7           6.0         0.4485 19.532 -16.982     5065.85                149                     40
+ C08_P0                        8           0.0         0.0777 12.993 -14.470     4195.71                124                     37
+ C08_P1                        8           1.0         0.3879 18.563 -14.099     5281.68                149                     35
+ C08_P2                        8           2.0         0.7737 25.083 -17.458     5246.86                136                     39
+ C08_P3                        8           3.0         0.3993 19.611 -16.152     4365.92                138                     39
+ C08_P4                        8           4.0         0.5987 23.739 -15.149     3544.80                138                     33
+ C08_P5                        8           5.0         0.6331 22.109 -14.639     4629.20                134                     36
+ C08_P6                        8           6.0         0.4787 20.225 -11.246     4160.05                128                     30
+ C08_P7                        8           7.0         0.5021 20.626 -12.418     3684.93                137                     38
+ C10_P0                       10           0.0         0.4514 19.635 -14.260     4581.19                106                     25
+ C10_P1                       10           1.0         0.4625 19.677 -16.665     4200.79                108                     25
+ C10_P2                       10           2.0         0.3711 17.961 -13.213     4029.25                106                     28
+ C10_P3                       10           3.0         0.9007 27.713 -12.337     5031.34                116                     21
+ C10_P4                       10           4.0         0.1610 14.432 -17.562     4415.90                117                     22
+ C10_P5                       10           5.0         0.3105 17.442 -17.679     4526.74                127                     30
+ C10_P6                       10           6.0         0.3568 18.056 -15.203     3353.68                119                     21
+ C10_P7                       10           7.0         0.5011 20.596 -15.537     3729.88                134                     24
+ C10_P8                       10           8.0         0.2067 15.251 -12.890     3352.19                109                     25
+ C10_P9                       10           9.0         0.6197 22.356 -14.200     4014.82                120                     23
+ C15_P0                       15           0.0         0.3043 17.189 -23.407     3157.38                 58                     16
+ C15_P1                       15           1.0        -0.0297 10.878 -27.041     3429.75                 67                     16
+ C15_P2                       15           2.0         0.2581 16.285 -15.407     3431.11                 80                     17
+ C15_P3                       15           3.0         0.6921 25.895 -18.262     3634.47                 95                     20
+ C15_P4                       15           4.0         0.8687 28.162 -13.181     3334.19                 85                     16
+ C15_P5                       15           5.0         1.0902 33.423 -12.675     3863.29                 94                     14
+ C15_P6                       15           6.0         1.0057 30.265 -12.734     3573.86                 83                     14
+ C15_P7                       15           7.0         1.0900 31.195 -12.750     2197.47                 93                     13
+ C15_P8                       15           8.0         1.1158 29.701 -10.375     3391.27                 80                     15
+ C15_P9                       15           9.0         0.4927 19.136 -17.585     2627.17                 81                     12
+C15_P10                       15          10.0        -0.1532  9.229 -25.068     3415.59                 77                     15
+C15_P11                       15          11.0        -0.3217  6.712 -18.896     3084.30                 64                     12
+C15_P12                       15          12.0        -0.2222  8.444 -17.991     2491.96                 81                     15
+C15_P13                       15          13.0        -0.5411  3.580 -20.684     3172.43                 76                     10
+C15_P14                       15          14.0        -0.4442  5.259 -21.879     2842.19                 72                      9
+------------------------------------------------------------------------------------------------------------------------
+ cadence  sharpe_mean  sharpe_std  sharpe_min  sharpe_max  cagr_mean  cagr_std  cagr_min  cagr_max  mdd_mean  mdd_std  mdd_min  mdd_max  cost_mean  cost_std  cost_min  cost_max  rebalance_sells_mean  rebalance_sells_std  concentration_trims_mean  concentration_trims_std
+       5       0.3278      0.1763      0.1339      0.5183    17.6078    3.3352    13.956    21.227  -18.1304   2.8395  -20.955  -13.402  6618.9280  666.8678   5802.56   7644.19              187.4000              13.9392                   63.2000                   6.4962
+       7       0.4750      0.1427      0.3165      0.6547    20.1454    2.5606    17.178    23.584  -14.8799   1.9766  -16.982  -11.815  4592.0571  702.5362   3716.47   5778.11              147.5714              15.2846                   41.5714                   2.9921
+       8       0.4814      0.2074      0.0777      0.7737    20.3686    3.6827    12.993    25.083  -14.4539   1.9635  -17.458  -11.246  4388.6438  642.4503   3544.80   5281.68              135.5000               7.4450                   35.8750                   3.1368
+      10       0.4342      0.2132      0.1610      0.9007    19.3119    3.7850    14.432    27.713  -14.9546   1.9075  -17.679  -12.337  4123.5780  542.7196   3352.19   5031.34              116.2000               9.3310                   24.4000                   2.9136
+      15       0.3470      0.6053     -0.5411      1.1158    18.3569   10.6387     3.580    33.423  -17.8623   5.0404  -27.041  -10.375  3176.4287  458.7198   2197.47   3863.29               79.0667              10.7269                   14.2667                   2.7894
+------------------------------------------------------------------------------------------------------------------------
+Outputs: /home/wilson/RENDA_OPS/backtest/t060_phase_sensitivity/results/summary_t060_phase.csv | /home/wilson/RENDA_OPS/backtest/t060_phase_sensitivity/results/summary_t060_phase.json
+Aggregates: /home/wilson/RENDA_OPS/backtest/t060_phase_sensitivity/results/summary_t060_phase_agg.csv | /home/wilson/RENDA_OPS/backtest/t060_phase_sensitivity/results/summary_t060_phase_agg.json
+Events/Curves: /home/wilson/RENDA_OPS/backtest/t060_phase_sensitivity/results

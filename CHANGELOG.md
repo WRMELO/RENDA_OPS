@@ -132,3 +132,4 @@
 
 - fix(motor)[MOTOR-OVERRIDE]: T-061-BASE1-v2 — Base 1 BR com denominador vetorizado por ponto (patrimônio cumulativo `aportes - retiradas`), eliminando escalar final retroativo e preservando eixo operacional/categórico já aplicado. Artefatos: pipeline/painel_diario.py, DECISION_LOG.md (D-067).
 - feat(backtest): T-060-CAD2 — refinamento granular de cadência (cad=1/7/8/10/15/20), 6 variantes com âncoras C01/C10, GATE C01 PASS e validação de âncora C10. Artefatos: backtest/t060_cadence_refinement_r2/run_t060_cad2.py, backtest/t060_cadence_refinement_r2/plot_t060_cad2.py, backtest/t060_cadence_refinement_r2/results/* (ref: D-069).
+- feat(backtest): T-060-PHASE — sweep de sensibilidade de fase da cadência (46 variantes: cad=5/7/8/10/15 com phi=0..N-1) com controle C01 e gate C10_P0. Artefatos: backtest/t060_phase_sensitivity/run_t060_phase.py, backtest/t060_phase_sensitivity/plot_t060_phase.py, backtest/t060_phase_sensitivity/results/* (ref: D-070).
