@@ -44,8 +44,10 @@
 | Hotfixes | Catch-up, FRED, ticker errado | T-024, T-025, T-026 | D-026, D-027 | 3 dias |
 | Evoluções de resiliência e painel | Resiliência APIs externas + CDI + Base 1 real | T-027, T-028, T-029 | D-030, D-031, D-032 | 2 dias |
 | Cross-factory BR↔US | stale_tickers rolling + governança de paridade | T-030 | D-033, D-034 | 1 dia |
+| Calibração de Cadência | Backtests de cadência (cad=1/5/10), refinamento granular (cad=7/8/15/20), sensibilidade de fase (46 variantes, φ=0..N-1) e implementação cad=7 no motor blindado com gate is_rebalance_day | T-060, T-060-CAD2, T-060-PHASE, T-MOTOR-CAD7 | D-068, D-069, D-070, D-071 | 1 dia |
 
 **Total**: 34 decisões, 30+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit)
+**Total (atualizado em D-072)**: 71+ decisões, 37+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit) + auditoria dupla T-MOTOR-CAD7 (Gemini + Kimi)
 
 ---
 
@@ -216,6 +218,9 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | L-05 | **Blindagem técnica** (hook + tag) complementa governança documental | Pre-commit hook impediu edições acidentais em arquivos auditados |
 | L-06 | **MANIFESTO_ORIGEM** preserva proveniência end-to-end | Qualquer artefato rastreável até o commit original no AGNO |
 | L-07 | **Fluxo híbrido** (dia a dia fluido, cadeia completa para tasks) equilibra agilidade e rigor | D-006: Owner não precisa esperar Auditor/Curator para operar no dia |
+| L-18 | **Análise distribucional > otimização pontual** — sharpe_mean + sharpe_std + sharpe_min entre fases é critério mais robusto que Sharpe de um único alinhamento de calendário | cad=10 sharpe_std=0.2132 vs cad=7 sharpe_std=0.1427; faixa cad=10: 0.1610–0.9007 (D-071, T-060-PHASE) |
+| L-19 | **Phase sweep como teste de robustez barato para parâmetros temporais** — varrer φ=0..N-1 antes de adotar qualquer cadência ou parâmetro periódico | T-060-PHASE: 46 variantes, custo negligível, evitou adoção prematura de cad=10 (D-070) |
+| L-20 | **Correção de papel em tempo real não quebra a cadeia** — Owner identificou e corrigiu bleed entre Interlocutor Técnico e CTO Técnico; a governança se autocorrigiu sem acumular dívida | Discussão 'formalizar vs orientar' no arco T-060-PHASE; cadeia retomada corretamente |
 
 ### 6.2 Técnico
 
@@ -231,6 +236,9 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | L-15 | **Ajuste de splits é pré-requisito** para qualquer estratégia de baixa rotatividade | T-020v1: C3 gerou R$17M falsos por falta de ajuste |
 | L-16 | **Base 1 operacional deve usar patrimônio real** (`totalAtivo / tank`), não equity teórica de backtest | D-032/T-029: gráfico e balanço ficaram alinhados |
 | L-17 | **Filtro stale_tickers rolling por dia elimina lookahead sem mudar LIVE** | D-033: gate de equivalência garante paridade no último dia |
+| L-21 | **Critérios de outro mercado não transplantam diretamente** — parâmetro otimizado no mercado A pode colapsar no mercado B por diferença de regime | V4 (critério USA C4 integral no BR): Sharpe TRAIN=1.36, HOLDOUT=0.22 — D-069, T-060 |
+| L-22 | **Auditoria dupla com LLMs distintas dá confiança cruzada em motor blindado** — dois auditores com contextos e arquiteturas diferentes reduzem risco de falso PASS | T-MOTOR-CAD7: Gemini e Kimi ambos PASS independentemente (D-071) |
+| L-23 | **Cadência de rebalanceamento deve ser indexada por pregões, não por calendário civil** — anchor_date + trading_day_index torna o rebalanceamento robusto a feriados e fins de semana | T-MOTOR-CAD7: implementação em 09_decide.py com is_rebalance_day baseado em índice de pregões (D-071) |
 
 ---
 
@@ -244,6 +252,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | E-02 | CTO implementou antes de validar fluxo | Pressa — não consultou lições do AGNO | BDRs via síntese US+PTAX em vez de dados reais | D-008 |
 | E-03 | CEP/SPC abandonado como mecanismo de venda | Trazido como feature de ML, esquecido como stop-loss | Painel sem venda defensiva por ticker | D-019 |
 | E-04 | Ticker digitado errado pelo Owner | Dado manual sem validação de entrada | Venda indevida + contaminação de 3 dias | T-026 |
+| E-13 | Conclusão prematura por ponto único de calibração | D-069 adotou cad=10 como melhor com base apenas em φ=0 — sem verificar robustez por fase | Sessão adicional necessária (D-070, T-060-PHASE) para corrigir; custo de oportunidade de ~1 sessão | D-069 → D-070 |
 
 ### 7.2 Erros técnicos
 
@@ -257,6 +266,9 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | E-10 | CDI Base 1 começava acima de 1.0 no D0 | Acúmulo sem normalização do primeiro ponto | Linha CDI deslocada no gráfico | D-032/T-029 |
 | E-11 | Base 1 mostrava curva divergente do balanço | Uso de `equity_end_norm` teórico em vez de patrimônio real | Leitura operacional inconsistente para o Owner | D-032/T-029 |
 | E-12 | `split_factor` event-based portado com lógica cumulativa do US | Coluna `split_factor` tem semântica diferente entre `canonical_br` (event-based: valor do split no dia, 1.0 nos demais) e `operational_window` US (cumulativo). Lógica `sf_now / sf_buy` falhava silenciosamente — ratio sempre ≈ 1.0 | Detecção de splits inoperante no BR até T-055-BR-v2 | T-055-BR / T-055-BR-v2, D-055 |
+| E-14 | Relação cadência↔Sharpe é não-monotônica e não interpolável | Interação complexa entre rebalanceamento, custos e calendário de pregões | cad=5 pior que cad=1; cad=10 parecia melhor que cad=7 sem phase sweep — cada cadência exige teste individual | D-068, D-069 |
+| E-15 | `10_extend_curve.py` divergência semântica pós-cad=7 | Curva viva usa retorno hipotético Top-10 diário em vez de holdings reais sob cad=7 | Curva no painel pode divergir da realidade operacional em dias de não-rebalanceamento | T-MOTOR-CAD7 |
+| E-16 | `predictions.parquet` sem pregões futuros para validação forward | Predições geradas apenas para datas com dados de mercado disponíveis | GATE-4 de T-MOTOR-CAD7 falhou com dados reais; validação exigiu cenário sintético controlado | T-MOTOR-CAD7 |
 
 ### 7.3 Padrões de falha recorrentes
 
@@ -267,6 +279,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | **API como ponto único de falha** | Pipeline sem fallback para APIs externas | E-07, E-08 | Retry + fallback + tolerância obrigatórios |
 | **Referência de baseline errada** | Indicador visual baseado em métrica teórica, não operacional | E-10, E-11 | Sempre alinhar painel ao balanço contábil real |
 | **Dado manual sem validação** | Owner digita e o sistema aceita sem checar | E-04 | Validação de ticker contra canonical no save |
+| **Artefato de alinhamento temporal** | Parâmetro temporal parece ótimo por coincidir com grade favorável de pregões, não por mérito intrínseco — o resultado é artefato do alinhamento | E-13, E-14 | Phase sweep obrigatório antes de adotar qualquer parâmetro temporal ou periódico |
 
 ---
 
@@ -314,6 +327,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | 240ac244-3ee4-4ce2-b111-35bc1c21eeb2 | Simulação e Pipeline | T-002/T-003, ingestão BDR, auditoria T-002, D-008 a D-014 |
 | 3b53f4b8-09ae-49f9-a6be-439c237b3425 | Auditoria e Motor | CEP/SPC, backtest T-020, blindagem, hotfixes, D-015 a D-027 |
 | 3b53f4b8-09ae-49f9-a6be-439c237b3425 | Evoluções 2026-03-17..19 | D-030 a D-034, T-027 a T-030, integração de lições USA_OPS |
+| a0dfefa9-4cb4-470f-b7ac-222bd0d1d2de | Calibração de Cadência cad=7 | D-068..D-071, T-060 a T-MOTOR-CAD7, phase sweep 46 variantes, análise distribucional, is_rebalance_day |
 
 ### 9.2 Documentos de governança
 
