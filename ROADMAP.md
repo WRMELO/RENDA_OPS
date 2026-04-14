@@ -48,6 +48,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 32 | T-059 | `pending_settlements()` retorna vendas com liquidação futura no painel BR | D-061 | pipeline/ledger_br.py, tests/test_ledger_br.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 | 33 | T-060 | Formalizar lições do dia: porta, BDR, denominador e fonte viva de scores | D-062, D-063, D-064, D-065 | DECISION_LOG.md, REGRAS_OPERACIONAIS.md, iniciar.sh, .cursor/skills/analista-br/SKILL.md, .cursor/skills/analista-usa/SKILL.md, CHANGELOG.md | DONE |
 | 34 | T-060 | Backtest comparativo cadência (cad=1/5/10) + critérios USA C4 no BR (V0..V4) | D-068 | backtest/t060_cadence_usa_criteria/run_t060.py, backtest/t060_cadence_usa_criteria/plot_t060.py, backtest/t060_cadence_usa_criteria/results/*, DECISION_LOG.md, CHANGELOG.md | DONE |
+| 35 | T-060-CAD2 | Backtest refinamento de cadência (cad=7/8/15/20) com âncoras C01/C10 | D-069 | backtest/t060_cadence_refinement_r2/run_t060_cad2.py, backtest/t060_cadence_refinement_r2/plot_t060_cad2.py, backtest/t060_cadence_refinement_r2/results/*, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 
