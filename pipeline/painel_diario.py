@@ -31,6 +31,7 @@ from pipeline.ptbr import (
     validate_html_ptbr,
 )
 from lib.engine import compute_m3_scores, select_top_n
+from lib.trading_calendar import next_session as _next_session
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
     from pipeline.ledger_br import pending_settlements as _pending_settlements_ledger
@@ -1042,7 +1043,7 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
     return out
 
 
-def _build_chart_252(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
+def _build_chart_252_legacy(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
     if curve.empty:
         return "<div class='chart-empty'>Curva de equity indisponível.</div>"
     last_252 = curve.tail(252).copy()
@@ -1163,6 +1164,386 @@ def _build_chart_252(curve: pd.DataFrame, thr: float, as_of_day: date) -> str:
     return fig.to_html(full_html=False, include_plotlyjs=False)
 
 
+def _build_carga_termica_series(as_of_day: date) -> pd.DataFrame:
+    """Série histórica da carga térmica (% por ticker sobre Total do Ativo)."""
+    records: list[dict[str, Any]] = []
+    real_dir = ROOT / "data" / "real"
+    if not real_dir.exists():
+        return pd.DataFrame(columns=["date", "ticker", "valor", "weight_pct", "total_ativo"])
+
+    for p in sorted(real_dir.glob("*.json")):
+        try:
+            file_day = date.fromisoformat(p.stem)
+        except Exception:
+            continue
+        payload = _read_json(p)
+        exec_raw = str(payload.get("exec_day", payload.get("date", ""))).strip()
+        try:
+            exec_day = date.fromisoformat(exec_raw) if exec_raw else file_day
+        except Exception:
+            exec_day = file_day
+
+        ref_raw = str(payload.get("market_day", payload.get("reference_decision", ""))).strip()
+        try:
+            ref_day = date.fromisoformat(ref_raw) if ref_raw else exec_day
+        except Exception:
+            ref_day = exec_day
+        if ref_day < PROJECT_START or ref_day > as_of_day:
+            continue
+
+        snapshot = payload.get("positions_snapshot", [])
+        cash_free = _safe_float(payload.get("cash_free", payload.get("cash_balance", 0.0)), 0.0)
+        cash_acc = _safe_float(payload.get("cash_accounting", payload.get("caixa_liquidando", 0.0)), 0.0)
+        if (not snapshot) and abs(cash_free) < 1e-9 and abs(cash_acc) < 1e-9:
+            continue
+
+        records.append(
+            {
+                "exec_day": exec_day,
+                "ref_day": ref_day,
+                "snapshot": snapshot,
+                "cash_free": cash_free,
+                "cash_acc": cash_acc,
+            }
+        )
+
+    if not records:
+        return pd.DataFrame(columns=["date", "ticker", "valor", "weight_pct", "total_ativo"])
+
+    by_ref_day: dict[date, dict[str, Any]] = {}
+    for rec in records:
+        current = by_ref_day.get(rec["ref_day"])
+        if current is None or rec["exec_day"] > current["exec_day"]:
+            by_ref_day[rec["ref_day"]] = rec
+    ordered = [by_ref_day[d] for d in sorted(by_ref_day.keys())]
+
+    tickers: set[str] = set()
+    for rec in ordered:
+        for pos in rec["snapshot"]:
+            tk = str(pos.get("ticker", "")).upper().strip()
+            if tk:
+                tickers.add(tk)
+
+    canon = pd.DataFrame(columns=["date", "ticker", "close_operational", "split_factor"])
+    canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if tickers and canon_path.exists():
+        canon = pd.read_parquet(canon_path, columns=["date", "ticker", "close_operational", "split_factor"])
+        canon["date"] = pd.to_datetime(canon["date"], errors="coerce")
+        canon["ticker"] = canon["ticker"].astype(str).str.upper().str.strip()
+        canon["close_operational"] = pd.to_numeric(canon["close_operational"], errors="coerce")
+        canon["split_factor"] = pd.to_numeric(canon["split_factor"], errors="coerce").fillna(1.0)
+        canon = canon.dropna(subset=["date", "ticker", "close_operational"])
+        canon = canon[(canon["date"] <= pd.Timestamp(as_of_day)) & (canon["ticker"].isin(tickers))]
+        canon = canon.sort_values(["ticker", "date"]).reset_index(drop=True)
+
+    by_ticker: dict[str, pd.DataFrame] = {}
+    if not canon.empty:
+        for tk in canon["ticker"].unique():
+            sub = canon[canon["ticker"] == tk][["date", "close_operational", "split_factor"]].copy()
+            by_ticker[tk] = sub
+
+    rows: list[dict[str, Any]] = []
+    for rec in ordered:
+        ref_ts = pd.Timestamp(rec["ref_day"])
+        ticker_values: dict[str, float] = {}
+        total_mkt = 0.0
+
+        for pos in rec["snapshot"]:
+            tk = str(pos.get("ticker", "")).upper().strip()
+            qtd = _safe_int(pos.get("qtd"), 0)
+            if not tk or qtd <= 0:
+                continue
+
+            buy_date_str = str(pos.get("data_compra", pos.get("buy_date", "")))
+            buy_ts: pd.Timestamp | None = None
+            if buy_date_str:
+                try:
+                    buy_ts = pd.Timestamp(buy_date_str)
+                except Exception:
+                    buy_ts = None
+
+            sub = by_ticker.get(tk)
+            if sub is not None and not sub.empty and buy_ts is not None:
+                events = sub[(sub["date"] > buy_ts) & (sub["date"] <= ref_ts) & (sub["split_factor"] != 1.0) & (sub["split_factor"].notna())]
+                if not events.empty:
+                    ratio = float(events["split_factor"].prod())
+                    qtd = round(qtd * ratio)
+
+            px = _safe_float(pos.get("preco_compra", pos.get("buy_price", 0.0)), 0.0)
+            if sub is not None and not sub.empty and (buy_ts is None or buy_ts <= ref_ts):
+                sub_until = sub[sub["date"] <= ref_ts]
+                if not sub_until.empty:
+                    px = _safe_float(sub_until.iloc[-1]["close_operational"], px)
+
+            value = qtd * px
+            if value <= 0:
+                continue
+            ticker_values[tk] = ticker_values.get(tk, 0.0) + value
+            total_mkt += value
+
+        total_ativo = total_mkt + _safe_float(rec["cash_free"], 0.0) + _safe_float(rec["cash_acc"], 0.0)
+        if total_ativo <= 0:
+            continue
+
+        plot_day = rec["exec_day"] if rec["exec_day"] <= as_of_day else as_of_day
+        ts_day = pd.Timestamp(plot_day)
+        for tk, value in sorted(ticker_values.items()):
+            rows.append(
+                {
+                    "date": ts_day,
+                    "ticker": tk,
+                    "valor": value,
+                    "weight_pct": (value / total_ativo) * 100.0,
+                    "total_ativo": total_ativo,
+                }
+            )
+
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return pd.DataFrame(columns=["date", "ticker", "valor", "weight_pct", "total_ativo"])
+    # Em dias sem rebalanceamento, múltiplos ref_day podem cair no mesmo exec_day.
+    # Mantemos o último snapshot calculado por (date, ticker) para evitar soma duplicada no pivot.
+    out = out.drop_duplicates(subset=["date", "ticker"], keep="last")
+    out = out.sort_values(["date", "ticker"]).reset_index(drop=True)
+    return out
+
+
+def _calc_next_rebalance_day(anchor_date_str: str, cadence: int, as_of_day: date, phase_offset: int = 0) -> date | None:
+    cadence = max(int(cadence), 1)
+    trading_days = sorted(set(_load_trading_days_br()))
+    if not trading_days:
+        return None
+
+    # A série macro pode terminar em as_of_day. Estende o calendário com sessões
+    # futuras para conseguir calcular "próximo rebalanceamento".
+    future_horizon = max(cadence + 10, 15)
+    cursor = max(trading_days)
+    for _ in range(future_horizon):
+        cursor = _next_session(cursor, exchange="BVMF")
+        if cursor not in trading_days:
+            trading_days.append(cursor)
+    trading_days = sorted(set(trading_days))
+
+    if cadence == 1:
+        nxt = [d for d in trading_days if d > as_of_day]
+        return min(nxt) if nxt else None
+
+    try:
+        anchor = date.fromisoformat(str(anchor_date_str))
+    except Exception:
+        return None
+
+    idx_map = {d: i for i, d in enumerate(trading_days)}
+    if anchor not in idx_map:
+        next_anchor = [d for d in trading_days if d >= anchor]
+        if not next_anchor:
+            return None
+        anchor = min(next_anchor)
+
+    as_of_candidates = [d for d in trading_days if d <= as_of_day]
+    if not as_of_candidates:
+        return None
+    as_of_ref = max(as_of_candidates)
+
+    anchor_idx = idx_map[anchor]
+    as_of_idx = idx_map[as_of_ref]
+    phase = phase_offset % cadence
+
+    for i in range(as_of_idx + 1, len(trading_days)):
+        delta = i - anchor_idx
+        if delta < 0:
+            continue
+        if (delta % cadence) == phase:
+            return trading_days[i]
+    return None
+
+
+def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], as_of_day: date) -> str:
+    _ = ctx  # Contexto mantido por compatibilidade da assinatura planejada.
+    cfg = (decision or {}).get("config", {})
+    thr = _safe_float(cfg.get("thr", 0.22), 0.22)
+    cadence = max(_safe_int(cfg.get("rebalance_cadence", 1), 1), 1)
+    phase_offset = _safe_int(cfg.get("rebalance_phase_offset", 0), 0)
+    anchor_str = str(cfg.get("rebalance_anchor_date", "")).strip()
+    action = str((decision or {}).get("action", "N/D")).upper().strip() or "N/D"
+    p_caixa = _safe_float((decision or {}).get("y_proba_cash"), float("nan"))
+    is_rebalance_day = bool((decision or {}).get("is_rebalance_day", True))
+    consecutive_below = _safe_int((decision or {}).get("consecutive_below_thr"), 0)
+    consecutive_above = _safe_int((decision or {}).get("consecutive_above_thr"), 0)
+
+    pred_path = ROOT / "data" / "features" / "predictions.parquet"
+    pred = pd.DataFrame(columns=["date", "y_proba_cash"])
+    if pred_path.exists():
+        pred = pd.read_parquet(pred_path)
+        if not pred.empty:
+            pred["date"] = pd.to_datetime(pred["date"], errors="coerce")
+            pred["y_proba_cash"] = pd.to_numeric(pred.get("y_proba_cash"), errors="coerce")
+            pred = pred.dropna(subset=["date"])
+            pred = pred[pred["date"] <= pd.Timestamp(as_of_day)]
+            pred = pred.sort_values("date").tail(252)
+
+    carga = _build_carga_termica_series(as_of_day=as_of_day)
+
+    fig = make_subplots(
+        rows=3,
+        cols=1,
+        specs=[[{}], [{}], [{"type": "table"}]],
+        row_heights=[0.60, 0.15, 0.25],
+        vertical_spacing=0.06,
+        subplot_titles=("Carga Térmica — Composição da Carteira", "P(Caixa)", "Motor C060X — Status Operacional"),
+    )
+
+    if not carga.empty:
+        pivot = carga.pivot_table(index="date", columns="ticker", values="weight_pct", aggfunc="sum").sort_index().fillna(0.0)
+        ticker_order = pivot.mean(axis=0).sort_values(ascending=False).index.tolist()
+        for tk in ticker_order:
+            fig.add_trace(
+                go.Scatter(
+                    x=pivot.index,
+                    y=pivot[tk],
+                    mode="lines",
+                    line=dict(width=1.0),
+                    name=tk,
+                    stackgroup="one",
+                    hovertemplate=f"{tk}: %{{y:.2f}}%<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+    else:
+        fig.add_annotation(
+            text="Carga térmica indisponível.",
+            xref="x domain",
+            yref="y domain",
+            x=0.5,
+            y=0.5,
+            showarrow=False,
+            font=dict(size=12, color="#64748b"),
+            row=1,
+            col=1,
+        )
+
+    for lvl in range(12, 97, 12):
+        fig.add_hline(
+            y=float(lvl),
+            line_dash="dot",
+            line_color="rgba(100,116,139,0.45)",
+            line_width=1,
+            row=1,
+            col=1,
+        )
+    fig.add_hline(
+        y=15.0,
+        line_dash="dash",
+        line_color="#dc2626",
+        line_width=1.5,
+        annotation_text="máx 15%",
+        annotation_position="top right",
+        row=1,
+        col=1,
+    )
+
+    if not pred.empty:
+        fig.add_trace(
+            go.Scatter(
+                x=pred["date"],
+                y=pred["y_proba_cash"],
+                mode="lines",
+                name="P(Caixa)",
+                line=dict(color="#f59e0b", width=1.8),
+            ),
+            row=2,
+            col=1,
+        )
+    fig.add_hline(
+        y=thr,
+        line_dash="dot",
+        line_color="#dc2626",
+        annotation_text=f"thr={thr:.2f}",
+        annotation_position="top right",
+        row=2,
+        col=1,
+    )
+
+    consecutive_label = "Pregões abaixo thr" if action == "MERCADO" else "Pregões acima thr"
+    consecutive_value = consecutive_below if action == "MERCADO" else consecutive_above
+    next_rebalance = _calc_next_rebalance_day(anchor_str, cadence, as_of_day, phase_offset=phase_offset) if anchor_str else None
+
+    value_colors = [
+        "#22c55e" if action == "MERCADO" else ("#ef4444" if action == "CAIXA" else "#e2e8f0"),
+        "#e2e8f0",
+        "#94a3b8",
+        "#e2e8f0",
+        "#e2e8f0",
+        "#22c55e" if is_rebalance_day else "#ef4444",
+        "#f59e0b" if next_rebalance else "#94a3b8",
+        "#94a3b8",
+    ]
+
+    p_caixa_txt = "N/D" if math.isnan(p_caixa) else f"{p_caixa:.4f}".replace(".", ",")
+    thr_txt = f"{thr:.2f}".replace(".", ",")
+    anchor_txt = _fmt_date_br(anchor_str) if anchor_str else "N/D"
+    next_rebalance_txt = _fmt_date_br(next_rebalance) if next_rebalance else ("DIÁRIO" if cadence == 1 else "N/D")
+
+    fig.add_trace(
+        go.Table(
+            header=dict(
+                values=["Campo", "Valor"],
+                fill_color="#0f172a",
+                font=dict(color="#f8fafc", size=11),
+                align="left",
+                line_color="#0f172a",
+                height=28,
+            ),
+            cells=dict(
+                values=[
+                    [
+                        "Regime",
+                        "P(Caixa)",
+                        "Threshold",
+                        consecutive_label,
+                        "Cadência",
+                        "Hoje é rebalanceamento",
+                        "Próximo rebalanceamento",
+                        "Âncora",
+                    ],
+                    [
+                        action,
+                        p_caixa_txt,
+                        thr_txt,
+                        str(consecutive_value),
+                        f"{cadence} pregões",
+                        "SIM" if is_rebalance_day else "NÃO",
+                        next_rebalance_txt,
+                        anchor_txt,
+                    ],
+                ],
+                fill_color=[["#1e293b"] * 8, ["#1e293b"] * 8],
+                font=dict(color=[["#e2e8f0"] * 8, value_colors], size=10),
+                align="left",
+                line_color="#1e293b",
+                height=24,
+            ),
+        ),
+        row=3,
+        col=1,
+    )
+
+    fig.update_layout(
+        height=430,
+        template="plotly_white",
+        margin=dict(l=50, r=20, t=45, b=30),
+        separators=",.",
+        legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="left", x=0),
+        font_size=11,
+    )
+    fig.update_yaxes(title_text="% do Ativo", range=[0, 100], row=1, col=1)
+    fig.update_yaxes(title_text="P(Caixa)", range=[0, max(0.5, thr * 2)], row=2, col=1)
+    fig.update_xaxes(type="date", tickformat="%d/%m", row=1, col=1)
+    fig.update_xaxes(type="date", tickformat="%d/%m", row=2, col=1)
+    return fig.to_html(full_html=False, include_plotlyjs=False)
+
+
 def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
     _ = curve  # Mantido por compatibilidade da assinatura atual.
     proj = _build_real_base1_series(as_of_day=as_of_day)
@@ -1207,6 +1588,18 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
                     macro["cdi_base1"] = macro["cdi_base1"] / first
                 macro_proj = macro[["date", "cdi_base1"]].copy()
 
+    proj = proj.sort_values("date").drop_duplicates(subset=["date"], keep="last").reset_index(drop=True)
+    if not macro_proj.empty:
+        macro_proj = macro_proj.sort_values("date").drop_duplicates(subset=["date"], keep="last").reset_index(drop=True)
+
+    master_dates = sorted(set(pd.to_datetime(proj["date"]).tolist()) | set(pd.to_datetime(macro_proj.get("date", pd.Series([], dtype="datetime64[ns]"))).tolist()))
+    axis_df = pd.DataFrame({"date": pd.to_datetime(master_dates)})
+
+    carteira_line = axis_df.merge(proj[["date", "base1"]], on="date", how="left")
+    cdi_line = axis_df.merge(macro_proj[["date", "cdi_base1"]], on="date", how="left") if not macro_proj.empty else axis_df.assign(cdi_base1=float("nan"))
+    if "cdi_base1" in cdi_line.columns:
+        cdi_line["cdi_base1"] = pd.to_numeric(cdi_line["cdi_base1"], errors="coerce").ffill().bfill()
+
     bar_df = proj.dropna(subset=["daily_var_pct"]).copy()
     bar_colors = ["#26a69a" if _safe_float(v, 0.0) >= 0 else "#ef5350" for v in bar_df["daily_var_pct"]]
 
@@ -1222,22 +1615,25 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             ),
             secondary_y=True,
         )
+
     fig.add_trace(
         go.Scatter(
-            x=proj["date"],
-            y=proj["base1"],
+            x=carteira_line["date"],
+            y=carteira_line["base1"],
             mode="lines+markers",
             name="Carteira Real",
             line=dict(color="#1f77b4", width=2.5),
             marker=dict(size=6),
+            connectgaps=False,
         ),
         secondary_y=False,
     )
-    if not macro_proj.empty:
+
+    if not cdi_line["cdi_base1"].dropna().empty:
         fig.add_trace(
             go.Scatter(
-                x=macro_proj["date"],
-                y=macro_proj["cdi_base1"],
+                x=cdi_line["date"],
+                y=cdi_line["cdi_base1"],
                 mode="lines+markers",
                 name="CDI",
                 line=dict(color="#8b8b8b", width=1.7, dash="dot"),
@@ -1256,7 +1652,7 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         separators=",.",
         legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="right", x=1),
     )
-    fig.update_xaxes(type="category")
+    fig.update_xaxes(type="date", tickformat="%d/%m")
     fig.update_yaxes(title_text="Base 1", secondary_y=False)
     fig.update_yaxes(title_text="Var. Diária (%)", secondary_y=True)
     return fig.to_html(full_html=False, include_plotlyjs=False)
@@ -1528,8 +1924,7 @@ def build_painel(exec_day: date) -> Path:
         )
 
     curve = _load_curve_until(d1)
-    config_thr = _safe_float((decision or {}).get("config", {}).get("thr", 0.22), 0.22)
-    chart_252_html = _build_chart_252(curve=curve, thr=config_thr, as_of_day=d1)
+    chart_252_html = _build_chart_esquerdo(decision=decision, ctx=ctx, as_of_day=d1)
     chart_base1_html = _build_chart_base1(curve=curve, as_of_day=d1)
 
     cycle_dir = ROOT / "data" / "cycles" / d1.isoformat()
