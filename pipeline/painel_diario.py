@@ -1358,7 +1358,7 @@ def _calc_next_rebalance_day(anchor_date_str: str, cadence: int, as_of_day: date
     return None
 
 
-def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], as_of_day: date) -> str:
+def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], as_of_day: date) -> tuple[str, str]:
     _ = ctx  # Contexto mantido por compatibilidade da assinatura planejada.
     cfg = (decision or {}).get("config", {})
     thr = _safe_float(cfg.get("thr", 0.22), 0.22)
@@ -1380,21 +1380,31 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
             pred["y_proba_cash"] = pd.to_numeric(pred.get("y_proba_cash"), errors="coerce")
             pred = pred.dropna(subset=["date"])
             pred = pred[pred["date"] <= pd.Timestamp(as_of_day)]
-            pred = pred.sort_values("date").tail(252)
+            pred = pred.sort_values("date")
 
     carga = _build_carga_termica_series(as_of_day=as_of_day)
-
-    fig = make_subplots(
-        rows=3,
-        cols=1,
-        specs=[[{}], [{}], [{"type": "table"}]],
-        row_heights=[0.60, 0.15, 0.25],
-        vertical_spacing=0.06,
-        subplot_titles=("Carga Térmica — Composição da Carteira", "P(Caixa)", "Motor C060X — Status Operacional"),
-    )
-
+    pivot = pd.DataFrame()
+    carga_dates = pd.DatetimeIndex([])
     if not carga.empty:
         pivot = carga.pivot_table(index="date", columns="ticker", values="weight_pct", aggfunc="sum").sort_index().fillna(0.0)
+        carga_dates = pd.DatetimeIndex(pivot.index)
+
+    pred_line = pd.DataFrame(columns=["date", "y_proba_cash"])
+    if len(carga_dates) > 0:
+        pred_line = pd.DataFrame({"date": carga_dates}).merge(pred[["date", "y_proba_cash"]], on="date", how="left")
+        pred_line["y_proba_cash"] = pd.to_numeric(pred_line["y_proba_cash"], errors="coerce").ffill().bfill()
+    elif not pred.empty:
+        pred_line = pred.tail(252).copy()
+
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        shared_xaxes=True,
+        row_heights=[0.76, 0.24],
+        vertical_spacing=0.06,
+    )
+
+    if not pivot.empty:
         ticker_order = pivot.mean(axis=0).sort_values(ascending=False).index.tolist()
         for tk in ticker_order:
             fig.add_trace(
@@ -1437,20 +1447,20 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
         line_dash="dash",
         line_color="#dc2626",
         line_width=1.5,
-        annotation_text="máx 15%",
-        annotation_position="top right",
         row=1,
         col=1,
     )
 
-    if not pred.empty:
+    if not pred_line.empty and pred_line["y_proba_cash"].notna().any():
         fig.add_trace(
             go.Scatter(
-                x=pred["date"],
-                y=pred["y_proba_cash"],
-                mode="lines",
+                x=pred_line["date"],
+                y=pred_line["y_proba_cash"],
+                mode="lines+markers",
                 name="P(Caixa)",
                 line=dict(color="#f59e0b", width=1.8),
+                marker=dict(size=4),
+                connectgaps=True,
             ),
             row=2,
             col=1,
@@ -1459,89 +1469,54 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
         y=thr,
         line_dash="dot",
         line_color="#dc2626",
-        annotation_text=f"thr={thr:.2f}",
-        annotation_position="top right",
         row=2,
-        col=1,
-    )
-
-    consecutive_label = "Pregões abaixo thr" if action == "MERCADO" else "Pregões acima thr"
-    consecutive_value = consecutive_below if action == "MERCADO" else consecutive_above
-    next_rebalance = _calc_next_rebalance_day(anchor_str, cadence, as_of_day, phase_offset=phase_offset) if anchor_str else None
-
-    value_colors = [
-        "#22c55e" if action == "MERCADO" else ("#ef4444" if action == "CAIXA" else "#e2e8f0"),
-        "#e2e8f0",
-        "#94a3b8",
-        "#e2e8f0",
-        "#e2e8f0",
-        "#22c55e" if is_rebalance_day else "#ef4444",
-        "#f59e0b" if next_rebalance else "#94a3b8",
-        "#94a3b8",
-    ]
-
-    p_caixa_txt = "N/D" if math.isnan(p_caixa) else f"{p_caixa:.4f}".replace(".", ",")
-    thr_txt = f"{thr:.2f}".replace(".", ",")
-    anchor_txt = _fmt_date_br(anchor_str) if anchor_str else "N/D"
-    next_rebalance_txt = _fmt_date_br(next_rebalance) if next_rebalance else ("DIÁRIO" if cadence == 1 else "N/D")
-
-    fig.add_trace(
-        go.Table(
-            header=dict(
-                values=["Campo", "Valor"],
-                fill_color="#0f172a",
-                font=dict(color="#f8fafc", size=11),
-                align="left",
-                line_color="#0f172a",
-                height=28,
-            ),
-            cells=dict(
-                values=[
-                    [
-                        "Regime",
-                        "P(Caixa)",
-                        "Threshold",
-                        consecutive_label,
-                        "Cadência",
-                        "Hoje é rebalanceamento",
-                        "Próximo rebalanceamento",
-                        "Âncora",
-                    ],
-                    [
-                        action,
-                        p_caixa_txt,
-                        thr_txt,
-                        str(consecutive_value),
-                        f"{cadence} pregões",
-                        "SIM" if is_rebalance_day else "NÃO",
-                        next_rebalance_txt,
-                        anchor_txt,
-                    ],
-                ],
-                fill_color=[["#1e293b"] * 8, ["#1e293b"] * 8],
-                font=dict(color=[["#e2e8f0"] * 8, value_colors], size=10),
-                align="left",
-                line_color="#1e293b",
-                height=24,
-            ),
-        ),
-        row=3,
         col=1,
     )
 
     fig.update_layout(
         height=430,
         template="plotly_white",
-        margin=dict(l=50, r=20, t=45, b=30),
+        margin=dict(l=30, r=20, t=24, b=30),
         separators=",.",
-        legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="left", x=0),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
         font_size=11,
     )
-    fig.update_yaxes(title_text="% do Ativo", range=[0, 100], row=1, col=1)
-    fig.update_yaxes(title_text="P(Caixa)", range=[0, max(0.5, thr * 2)], row=2, col=1)
-    fig.update_xaxes(type="date", tickformat="%d/%m", row=1, col=1)
+    fig.update_yaxes(range=[0, 100], row=1, col=1)
+    fig.update_yaxes(range=[0, max(0.5, thr * 2)], row=2, col=1)
+    fig.update_xaxes(type="date", tickformat="%d/%m", row=1, col=1, showticklabels=False)
     fig.update_xaxes(type="date", tickformat="%d/%m", row=2, col=1)
-    return fig.to_html(full_html=False, include_plotlyjs=False)
+
+    consecutive_label = "Pregões abaixo thr" if action == "MERCADO" else "Pregões acima thr"
+    consecutive_value = consecutive_below if action == "MERCADO" else consecutive_above
+    next_rebalance = _calc_next_rebalance_day(anchor_str, cadence, as_of_day, phase_offset=phase_offset) if anchor_str else None
+
+    p_caixa_txt = "N/D" if math.isnan(p_caixa) else f"{p_caixa:.4f}".replace(".", ",")
+    thr_txt = f"{thr:.2f}".replace(".", ",")
+    anchor_txt = _fmt_date_br(anchor_str) if anchor_str else "N/D"
+    next_rebalance_txt = _fmt_date_br(next_rebalance) if next_rebalance else ("DIÁRIO" if cadence == 1 else "N/D")
+
+    motor_items = [
+        ("Regime", action, "ok" if action == "MERCADO" else ("bad" if action == "CAIXA" else "")),
+        ("P(Caixa)", p_caixa_txt, ""),
+        ("Threshold", thr_txt, ""),
+        (consecutive_label, str(consecutive_value), ""),
+        ("Cadência", f"{cadence} pregões", ""),
+        ("Hoje é rebalanceamento", "SIM" if is_rebalance_day else "NÃO", "ok" if is_rebalance_day else "bad"),
+        ("Próximo rebalanceamento", next_rebalance_txt, "warn" if next_rebalance else ""),
+        ("Âncora", anchor_txt, ""),
+    ]
+    motor_cells = "".join(
+        f"<div class='motor-item'><div class='motor-label'>{label}</div><div class='motor-value {klass}'>{value}</div></div>"
+        for label, value, klass in motor_items
+    )
+    motor_status_html = (
+        "<div class='motor-status-wrap'>"
+        "<div class='motor-status-title'>Motor C060X — Status Operacional</div>"
+        f"<div class='motor-status-grid'>{motor_cells}</div>"
+        "</div>"
+    )
+
+    return fig.to_html(full_html=False, include_plotlyjs=False), motor_status_html
 
 
 def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
@@ -1561,10 +1536,9 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             font=dict(size=13, color="#666"),
         )
         fig.update_layout(
-            title=dict(text=f"Base 1 — Início: {_fmt_date_br(proj['date'].iloc[0].date())}", font_size=13),
             height=430,
             template="plotly_white",
-            margin=dict(l=50, r=20, t=50, b=30),
+            margin=dict(l=30, r=20, t=24, b=30),
             separators=",.",
         )
         return fig.to_html(full_html=False, include_plotlyjs=False)
@@ -1592,10 +1566,21 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
     if not macro_proj.empty:
         macro_proj = macro_proj.sort_values("date").drop_duplicates(subset=["date"], keep="last").reset_index(drop=True)
 
-    master_dates = sorted(set(pd.to_datetime(proj["date"]).tolist()) | set(pd.to_datetime(macro_proj.get("date", pd.Series([], dtype="datetime64[ns]"))).tolist()))
-    axis_df = pd.DataFrame({"date": pd.to_datetime(master_dates)})
+    trading_days = sorted(set(_load_trading_days_br()))
+    axis_dates: list[pd.Timestamp] = []
+    if trading_days:
+        start_day = pd.Timestamp(proj["date"].min()).date()
+        axis_dates = [pd.Timestamp(d) for d in trading_days if start_day <= d <= as_of_day]
+    if not axis_dates:
+        axis_dates = sorted(
+            set(pd.to_datetime(proj["date"]).tolist())
+            | set(pd.to_datetime(macro_proj.get("date", pd.Series([], dtype="datetime64[ns]"))).tolist())
+        )
+    axis_df = pd.DataFrame({"date": pd.to_datetime(axis_dates)})
 
     carteira_line = axis_df.merge(proj[["date", "base1"]], on="date", how="left")
+    if "base1" in carteira_line.columns:
+        carteira_line["base1"] = pd.to_numeric(carteira_line["base1"], errors="coerce").ffill().bfill()
     cdi_line = axis_df.merge(macro_proj[["date", "cdi_base1"]], on="date", how="left") if not macro_proj.empty else axis_df.assign(cdi_base1=float("nan"))
     if "cdi_base1" in cdi_line.columns:
         cdi_line["cdi_base1"] = pd.to_numeric(cdi_line["cdi_base1"], errors="coerce").ffill().bfill()
@@ -1624,7 +1609,7 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             name="Carteira Real",
             line=dict(color="#1f77b4", width=2.5),
             marker=dict(size=6),
-            connectgaps=False,
+            connectgaps=True,
         ),
         secondary_y=False,
     )
@@ -1642,19 +1627,13 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
             secondary_y=False,
         )
     fig.update_layout(
-        title=dict(
-            text=f"Base 1 — Início: {_fmt_date_br(proj['date'].iloc[0].date())} | Até: {_fmt_date_br(as_of_day)}",
-            font_size=13,
-        ),
         height=430,
         template="plotly_white",
-        margin=dict(l=50, r=20, t=50, b=30),
+        margin=dict(l=30, r=20, t=24, b=30),
         separators=",.",
         legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="right", x=1),
     )
     fig.update_xaxes(type="date", tickformat="%d/%m")
-    fig.update_yaxes(title_text="Base 1", secondary_y=False)
-    fig.update_yaxes(title_text="Var. Diária (%)", secondary_y=True)
     return fig.to_html(full_html=False, include_plotlyjs=False)
 
 
@@ -1924,7 +1903,7 @@ def build_painel(exec_day: date) -> Path:
         )
 
     curve = _load_curve_until(d1)
-    chart_252_html = _build_chart_esquerdo(decision=decision, ctx=ctx, as_of_day=d1)
+    chart_252_html, motor_status_html = _build_chart_esquerdo(decision=decision, ctx=ctx, as_of_day=d1)
     chart_base1_html = _build_chart_base1(curve=curve, as_of_day=d1)
 
     cycle_dir = ROOT / "data" / "cycles" / d1.isoformat()
@@ -1946,6 +1925,15 @@ h1 {{ margin:0; font-size:24px; color:#0f172a; }}
 .twocol {{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }}
 .chart-grid {{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px; }}
 .chart-wrap {{ border:1px solid #dbe2ea; border-radius:8px; padding:8px; background:#fff; min-height:455px; }}
+.motor-status-wrap {{ border:1px solid #0f172a; border-radius:10px; background:#0f172a; padding:12px 14px; margin-top:14px; }}
+.motor-status-title {{ color:#f8fafc; font-size:16px; font-weight:700; margin-bottom:10px; }}
+.motor-status-grid {{ display:grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap:10px 12px; }}
+.motor-item {{ background:#1e293b; border:1px solid #334155; border-radius:8px; padding:8px 10px; }}
+.motor-label {{ color:#94a3b8; font-size:12px; margin-bottom:4px; }}
+.motor-value {{ color:#e2e8f0; font-size:16px; font-weight:700; line-height:1.2; }}
+.motor-value.ok {{ color:#22c55e; }}
+.motor-value.bad {{ color:#ef4444; }}
+.motor-value.warn {{ color:#f59e0b; }}
 .chart-empty {{ color:#64748b; font-size:13px; padding:10px; }}
 .info-grid {{ display:grid; grid-template-columns: 0.40fr 0.60fr; gap:14px; }}
 table {{ width:100%; border-collapse: collapse; font-size:13px; table-layout:fixed; }}
@@ -1979,6 +1967,7 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 .top-input {{ width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; }}
 @media (max-width: 1200px) {{
   .twocol, .chart-grid, .info-grid, .cash-layout {{ grid-template-columns: 1fr; }}
+  .motor-status-grid {{ grid-template-columns: repeat(2, minmax(160px, 1fr)); }}
 }}
 @media print {{
   @page {{ size: A3 landscape; margin: 8mm; }}
@@ -2002,6 +1991,7 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
         <div class="chart-wrap">{chart_252_html}</div>
         <div class="chart-wrap">{chart_base1_html}</div>
       </div>
+      {motor_status_html}
     </div>
 
     <div class="block">
