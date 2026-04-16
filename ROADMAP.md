@@ -57,6 +57,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 41 | T-PAINEL-GRAFICOS | Redesenhar seção gráfica do painel BR: Carga Térmica + card do motor + correção estrutural do Base 1 | D-075 | pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 42 | T-GOV-DOC-BR | Saneamento documental BR: regra per-factory + espelhamento D-077/D-078 + corpus atualizado | D-076 | GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md, docs/CORPUS_FABRICA_BR.md | DONE |
 | 43 | T-SSOT-BR-LOT-GATE | Tornar o ledger BR SSOT para ajustes de lote: CORRECTION+BUY, gate de lote na gravacao e boletim observacional derivado do ledger | D-079 | data/ssot/ledger_br.jsonl, pipeline/ledger_br.py, pipeline/servidor.py, tests/test_ledger_br.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 44 | T-SSOT-BR-PAINEL-F2 | Painel BR passa a consumir o ledger como SSOT de posições, caixa e séries (com fallback histórico) | D-080 | pipeline/painel_diario.py, DECISION_LOG.md, GOVERNANCE.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 

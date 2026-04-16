@@ -34,9 +34,13 @@ from lib.engine import compute_m3_scores, select_top_n
 from lib.trading_calendar import next_session as _next_session
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
+    from pipeline.ledger_br import compute_positions as _compute_positions_ledger
+    from pipeline.ledger_br import export_snapshot as _export_snapshot_ledger
     from pipeline.ledger_br import pending_settlements as _pending_settlements_ledger
 except Exception:
     _compute_cash_ledger = None
+    _compute_positions_ledger = None
+    _export_snapshot_ledger = None
     _pending_settlements_ledger = None
 
 FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
@@ -73,6 +77,7 @@ def load_factory_start() -> dict[str, date]:
 
 FACTORY_START = load_factory_start()
 PROJECT_START = FACTORY_START["project_start_ref_day"]
+LEDGER_SSOT_START_DAY = date(2026, 4, 3)
 
 
 class Lot:
@@ -455,6 +460,12 @@ def _collect_recent_provento_registry(
 
 def _pending_sales_for_transfer(exec_day: date) -> list[dict[str, Any]]:
     """Varre data/real/*.json até D-1 e retorna vendas cujo valor ainda não foi transferido para Caixa Livre."""
+    if _pending_settlements_ledger is not None:
+        try:
+            return _pending_settlements_ledger(exec_day)
+        except Exception:
+            pass
+
     real_dir = ROOT / "data" / "real"
     if not real_dir.exists():
         return []
@@ -535,7 +546,7 @@ def _calc_cash_balances(
     return free, acc
 
 
-def build_lot_ledger(until_day: date) -> tuple[list[Lot], list[str]]:
+def _build_lot_ledger_legacy(until_day: date) -> tuple[list[Lot], list[str]]:
     files = list_real_files_upto(until_day)
     lots_by_ticker: dict[str, list[Lot]] = {}
     warnings: list[str] = []
@@ -577,6 +588,29 @@ def build_lot_ledger(until_day: date) -> tuple[list[Lot], list[str]]:
     for t in sorted(lots_by_ticker.keys()):
         flat.extend(lots_by_ticker[t])
     return flat, warnings
+
+
+def build_lot_ledger(until_day: date) -> tuple[list[Lot], list[str]]:
+    if _compute_positions_ledger is None:
+        return _build_lot_ledger_legacy(until_day)
+    try:
+        positions_by_ticker = _compute_positions_ledger(until_day)
+    except Exception:
+        return _build_lot_ledger_legacy(until_day)
+
+    flat: list[Lot] = []
+    for ticker in sorted(positions_by_ticker.keys()):
+        tk = str(ticker).upper().strip()
+        if not tk:
+            continue
+        for lot in positions_by_ticker.get(ticker, []):
+            qtd = _safe_int(lot.get("qtd"), 0)
+            px = _safe_float(lot.get("buy_price"), 0.0)
+            buy_date = str(lot.get("buy_date", until_day.isoformat())).strip() or until_day.isoformat()
+            if qtd <= 0 or px <= 0:
+                continue
+            flat.append(Lot(ticker=tk, buy_date=buy_date, qtd=qtd, buy_price=px))
+    return flat, []
 
 
 def _band_from_z(z: float) -> int:
@@ -891,6 +925,28 @@ def _make_positions_snapshot(lots: list[Lot]) -> list[dict[str, Any]]:
     return out
 
 
+def _load_snapshot_and_cash(ref_day: date, payload: dict[str, Any]) -> tuple[list[dict[str, Any]], float, float]:
+    if (
+        ref_day >= LEDGER_SSOT_START_DAY
+        and _export_snapshot_ledger is not None
+        and _compute_cash_ledger is not None
+    ):
+        try:
+            snapshot = _export_snapshot_ledger(ref_day) or []
+            ledger_cash = _compute_cash_ledger(ref_day) or {}
+            cash_free = _safe_float(ledger_cash.get("cash_free", 0.0), 0.0)
+            cash_acc = _safe_float(ledger_cash.get("cash_accounting", 0.0), 0.0)
+            if snapshot or abs(cash_free) > 1e-9 or abs(cash_acc) > 1e-9:
+                return snapshot, cash_free, cash_acc
+        except Exception:
+            pass
+
+    snapshot = payload.get("positions_snapshot", [])
+    cash_free = _safe_float(payload.get("cash_free", payload.get("cash_balance", 0.0)), 0.0)
+    cash_acc = _safe_float(payload.get("cash_accounting", payload.get("caixa_liquidando", 0.0)), 0.0)
+    return snapshot, cash_free, cash_acc
+
+
 def _load_curve_until(as_of_day: date) -> pd.DataFrame:
     curve_path = ROOT / "data" / "portfolio" / "winner_curve.parquet"
     if not curve_path.exists():
@@ -929,9 +985,7 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
         if ref_day < PROJECT_START or ref_day > as_of_day:
             continue
 
-        snapshot = payload.get("positions_snapshot", [])
-        cash_free = _safe_float(payload.get("cash_free", payload.get("cash_balance", 0.0)), 0.0)
-        cash_acc = _safe_float(payload.get("cash_accounting", payload.get("caixa_liquidando", 0.0)), 0.0)
+        snapshot, cash_free, cash_acc = _load_snapshot_and_cash(ref_day, payload)
         if (not snapshot) and abs(cash_free) < 1e-9 and abs(cash_acc) < 1e-9:
             continue
 
@@ -1191,9 +1245,7 @@ def _build_carga_termica_series(as_of_day: date) -> pd.DataFrame:
         if ref_day < PROJECT_START or ref_day > as_of_day:
             continue
 
-        snapshot = payload.get("positions_snapshot", [])
-        cash_free = _safe_float(payload.get("cash_free", payload.get("cash_balance", 0.0)), 0.0)
-        cash_acc = _safe_float(payload.get("cash_accounting", payload.get("caixa_liquidando", 0.0)), 0.0)
+        snapshot, cash_free, cash_acc = _load_snapshot_and_cash(ref_day, payload)
         if (not snapshot) and abs(cash_free) < 1e-9 and abs(cash_acc) < 1e-9:
             continue
 
