@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import sys
 import threading
 import webbrowser
@@ -29,7 +30,9 @@ from pipeline.ledger_br import (
     create_event,
     export_snapshot,
     is_duplicate,
+    lot_size_br,
     pending_settlements,
+    read_all_events,
 )
 from pipeline import painel_diario, run_daily
 from pipeline.ptbr import fmt_date_br, validate_html_ptbr
@@ -48,6 +51,7 @@ class JobState:
 
 JOB_LOCK = threading.Lock()
 JOB_STATE = JobState()
+LOGGER = logging.getLogger(__name__)
 
 
 def _list_available_panels() -> list[date]:
@@ -208,9 +212,20 @@ def _write_observational_boletim(pregao: date) -> list[str]:
         except Exception:
             return default
 
-    cash_free = _sf(prev_payload.get("cash_free", prev_payload.get("cash_balance", 0.0)), 0.0)
-    cash_acc = _sf(prev_payload.get("cash_accounting", prev_payload.get("caixa_liquidando", 0.0)), 0.0)
-    positions_snapshot = prev_payload.get("positions_snapshot", [])
+    fallback_cash_free = _sf(prev_payload.get("cash_free", prev_payload.get("cash_balance", 0.0)), 0.0)
+    fallback_cash_acc = _sf(prev_payload.get("cash_accounting", prev_payload.get("caixa_liquidando", 0.0)), 0.0)
+    fallback_positions_snapshot = prev_payload.get("positions_snapshot", [])
+    cash_free = fallback_cash_free
+    cash_acc = fallback_cash_acc
+    positions_snapshot = fallback_positions_snapshot
+    try:
+        if read_all_events():
+            cash = compute_cash(pregao)
+            cash_free = _sf(cash.get("cash_free", 0.0), fallback_cash_free)
+            cash_acc = _sf(cash.get("cash_accounting", 0.0), fallback_cash_acc)
+            positions_snapshot = export_snapshot(pregao)
+    except Exception as exc:
+        LOGGER.warning("Falha ao derivar boletim observacional do ledger em %s: %s", pregao.isoformat(), exc)
     defensive_quarantine = prev_payload.get("defensive_quarantine", [])
 
     recs = _extract_panel_recommendations(_panel_path(pregao))
@@ -512,6 +527,28 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                 dest_real = real_dir / f"{market_day.isoformat()}.json"
 
                 ops = payload.get("operations", [])
+                invalid_lots: list[str] = []
+                for op in ops:
+                    typ = str(op.get("type", "")).upper().strip()
+                    if typ != "COMPRA":
+                        continue
+                    tk = str(op.get("ticker", "")).upper().strip()
+                    qtd = int(op.get("qtd", 0) or 0)
+                    if not tk or qtd <= 0:
+                        continue
+                    lot = lot_size_br(tk)
+                    if qtd % lot != 0:
+                        invalid_lots.append(f"{tk}={qtd} (lote {lot})")
+                if invalid_lots:
+                    self._respond_json(
+                        {
+                            "ok": False,
+                            "error": "Quantidade de COMPRA fora do lote padrao: " + ", ".join(invalid_lots),
+                        },
+                        code=400,
+                    )
+                    return
+
                 for op in ops:
                     typ = str(op.get("type", "")).upper().strip()
                     tk = str(op.get("ticker", "")).upper().strip()
@@ -525,6 +562,13 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                     elif typ == "VENDA":
                         ev = create_event(EventType.SELL, exec_date=save_day, amount=amount, ticker=tk, qtd=qtd, price=px)
                     else:
+                        LOGGER.warning(
+                            "Tipo de operacao nao suportado no ledger BR: type=%s ticker=%s qtd=%s preco=%s",
+                            typ,
+                            tk,
+                            qtd,
+                            px,
+                        )
                         continue
                     if not is_duplicate(ev):
                         append_event(ev)

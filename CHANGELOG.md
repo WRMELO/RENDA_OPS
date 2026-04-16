@@ -150,3 +150,4 @@
 ## 2026-04-16
 
 - docs(gov): T-GOV-DOC-BR — saneamento documental da Fabrica BR: regra de espelhamento per-factory em GOVERNANCE.md (secao 6.7), D-076/D-077/D-078 adicionados ao DECISION_LOG.md, entradas BR de 15/04 espelhadas no CHANGELOG.md, ROADMAP.md atualizado com T-GOV-DOC-BR, CORPUS_FABRICA_BR.md sincronizado com cronologia e estado atual. Ref: D-076.
+- fix(ssot): T-SSOT-BR-LOT-GATE — ledger_br.jsonl passa a carregar ajuste de lote por CORRECTION+BUY (UGPA3 1950->1900, PRIO3 260->200, BPAC5 8250->8200), com devolucao implicita de R$ 6.542,00 para cash_free; servidor ganhou gate de lote para COMPRA (acao BR=100, BDR=1), warning explicito para tipo de operacao nao suportado e derivacao do boletim observacional via compute_cash/export_snapshot do ledger (fallback para JSON previo). Testes adicionados em tests/test_ledger_br.py. Ref: D-079.

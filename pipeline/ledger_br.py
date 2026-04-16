@@ -134,6 +134,17 @@ def _is_bdr(ticker: str | None) -> bool:
     return str(ticker).upper().strip() in _bdr_set()
 
 
+def is_bdr_suffix(ticker: str | None) -> bool:
+    if not ticker:
+        return False
+    tk = str(ticker).upper().strip()
+    return len(tk) >= 2 and tk[-2:] in {"34", "32", "33", "39"}
+
+
+def lot_size_br(ticker: str | None) -> int:
+    return 1 if is_bdr_suffix(ticker) else 100
+
+
 def _next_trading_day_br(from_day: date) -> date:
     days = _trading_days()
     if days:

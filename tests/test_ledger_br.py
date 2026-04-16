@@ -127,3 +127,62 @@ def test_duplicate_event_not_appended(tmp_path):
     assert ledger.is_duplicate(ev) is True
 
 
+def test_correction_replaces_buy_lot(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+
+    _append(
+        LedgerEvent(
+            id="AP1",
+            type=EventType.APORTE,
+            exec_date=date(2026, 4, 7),
+            created_at=datetime.now(tz=UTC),
+            amount=100000.0,
+        )
+    )
+    original_buy = ledger.create_event(
+        EventType.BUY,
+        exec_date=date(2026, 4, 8),
+        amount=57603.0,
+        ticker="UGPA3",
+        qtd=1950,
+        price=29.54,
+        settle_date=date(2026, 4, 13),
+        event_id="BUY_ORIGINAL",
+    )
+    _append(original_buy)
+    _append(
+        ledger.create_event(
+            EventType.CORRECTION,
+            exec_date=date(2026, 4, 8),
+            amount=0.0,
+            ref_id=original_buy.id,
+            reason="ajuste_lote_D-079",
+        )
+    )
+    _append(
+        ledger.create_event(
+            EventType.BUY,
+            exec_date=date(2026, 4, 8),
+            amount=56126.0,
+            ticker="UGPA3",
+            qtd=1900,
+            price=29.54,
+            settle_date=date(2026, 4, 13),
+            reason="ajuste_lote_D-079",
+        )
+    )
+
+    pos = ledger.compute_positions(date(2026, 4, 16))
+    ugpa3_lots = pos.get("UGPA3", [])
+    assert len(ugpa3_lots) == 1
+    assert ugpa3_lots[0]["qtd"] == 1900
+    cash = ledger.compute_cash(date(2026, 4, 16))
+    assert abs(float(cash["cash_free"]) - 43874.0) < 1e-9
+
+
+def test_lot_size_br():
+    assert ledger.is_bdr_suffix("A1PA34") is True
+    assert ledger.is_bdr_suffix("BLAU3") is False
+    assert ledger.lot_size_br("A1PA34") == 1
+    assert ledger.lot_size_br("ABEV3") == 100
+
