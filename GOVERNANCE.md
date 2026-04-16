@@ -129,6 +129,17 @@ Regra de qualidade:
 - O Architect deve sinalizar orientacoes sem esse checklist como insuficientes para planejamento.
 - Este gate e documental (governanca), sem alterar o fluxo diario operacional.
 
+### 6.7 Regra de Documentacao por Fabrica (D-076)
+
+Decisoes, changelog e roadmap que afetam exclusivamente uma fabrica (`RENDA_OPS` ou `USA_OPS`)
+devem existir na trinca operacional dessa fabrica, independentemente de onde a discussao ocorreu.
+
+O `SALA_DE_CONTROLE` e instrumento operacional e nao pode ser a unica sede de rastreabilidade
+de desenvolvimento de produto de uma fabrica especifica.
+
+Quando uma decisao tomada no `SALA_DE_CONTROLE` afeta uma fabrica, ela deve ser espelhada
+no `DECISION_LOG.md` da fabrica correspondente com ID proprio e referencia cruzada ao ID de origem.
+
 ## 7) Vigencia
 
 Esta governanca entra em vigor com o primeiro commit que a inclui.

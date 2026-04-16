@@ -1,6 +1,6 @@
 # CORPUS DE CONHECIMENTO — Fábrica BR (RENDA_OPS)
 
-> Ref: D-028, D-034 | Data: 2026-03-19 (atualizado)
+> Ref: D-028, D-034, D-072, D-076 | Data: 2026-04-16 (atualizado)
 > Consolidação de toda a experiência acumulada no desenvolvimento e operação da Fábrica BR (winner C060X).
 
 ---
@@ -45,9 +45,10 @@
 | Evoluções de resiliência e painel | Resiliência APIs externas + CDI + Base 1 real | T-027, T-028, T-029 | D-030, D-031, D-032 | 2 dias |
 | Cross-factory BR↔US | stale_tickers rolling + governança de paridade | T-030 | D-033, D-034 | 1 dia |
 | Calibração de Cadência | Backtests de cadência (cad=1/5/10), refinamento granular (cad=7/8/15/20), sensibilidade de fase (46 variantes, φ=0..N-1) e implementação cad=7 no motor blindado com gate is_rebalance_day | T-060, T-060-CAD2, T-060-PHASE, T-MOTOR-CAD7 | D-068, D-069, D-070, D-071 | 1 dia |
+| Evolução de resiliência e painel (2026-03-19 a 2026-04-03) | Reset Day Zero, lote D+2/D+1 no painel, desacoplamento temporal (exec/market/trade_day), SSOT ledger BR Fase 1 e 2, calendar B3 infraestrutura | T-031, T-032, T-033, T-034, T-035, T-036, T-037, T-048, T-049, T-050, T-052 | D-035, D-036, D-037, D-038, D-039, D-040, D-041, D-042, D-043, D-044, D-045, D-046, D-047, D-048, D-050, D-052, D-053, D-054 | 15+ dias |
+| Operação Fábrica BR (2026-04-07 a 2026-04-15) | Filtro calendário B3 nos blindados, concentração revertida 15/20%, analista-br reformulado, lote padrão BR, redesenho gráfico do painel, saneamento documental | T-055-BR, T-057, T-058, T-059, T-060, T-ANALISTAS-PASSO9-LOTE-V1, T-LEDGER-BR-LOT-TRIM-V1, T-PAINEL-GRAFICOS, T-GOV-DOC-BR | D-054 a D-078 | 8 dias |
 
-**Total**: 34 decisões, 30+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit)
-**Total (atualizado em D-072)**: 71+ decisões, 37+ tasks, 4 auditorias forenses independentes (Sonnet, Gemini, Kimi, Kimi re-audit) + auditoria dupla T-MOTOR-CAD7 (Gemini + Kimi)
+**Total (atualizado em D-076)**: 78 decisões, 55+ tasks, 4 auditorias forenses independentes + auditoria dupla T-MOTOR-CAD7 (Gemini + Kimi)
 
 ---
 
@@ -98,7 +99,7 @@
 
 ```text
 data/
-├── ssot/       → SSOT canônico (parquet): canonical_br, macro, market_data_raw, fx_ptax, bdr_universe
+├── ssot/       → SSOT canônico (parquet): canonical_br, macro, market_data_raw, fx_ptax, bdr_universe + ledger_br.jsonl (event sourcing, D-045)
 ├── features/   → Features e predições: macro_features, dataset, predictions
 ├── models/     → XGBoost persistido: xgb_c060x.ubj
 ├── portfolio/  → winner_curve.parquet
@@ -180,6 +181,8 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 | **Caixa Contábil** | Vendas em liquidação (D+2 ações, D+1 BDR) |
 
 Transferência Contábil → Livre é manual (Owner registra no boletim quando liquida).
+
+Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.json` é espelho — gerado a partir do SSOT, não fonte independente.
 
 ### 5.3 Motor de venda
 
@@ -334,7 +337,7 @@ Transferência Contábil → Livre é manual (Owner registra no boletim quando l
 | Documento | Path | Conteúdo |
 | ----------- | ------ | ---------- |
 | GOVERNANCE.md | `/GOVERNANCE.md` | Regras, cadeia de comando, blindagem |
-| DECISION_LOG.md | `/DECISION_LOG.md` | 34 decisões com contexto |
+| DECISION_LOG.md | `/DECISION_LOG.md` | 78 decisões com contexto |
 | CHANGELOG.md | `/CHANGELOG.md` | Histórico técnico completo |
 | ROADMAP.md | `/ROADMAP.md` | Mapa de execução + backlog |
 | CICLO_DIARIO.md | `/CICLO_DIARIO.md` | Rotina operacional do Owner |

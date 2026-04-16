@@ -138,6 +138,15 @@
 - feat(backtest): T-060-PHASE — sweep de sensibilidade de fase da cadência (46 variantes: cad=5/7/8/10/15 com phi=0..N-1) com controle C01 e gate C10_P0. Artefatos: backtest/t060_phase_sensitivity/run_t060_phase.py, backtest/t060_phase_sensitivity/plot_t060_phase.py, backtest/t060_phase_sensitivity/results/* (ref: D-070).
 - feat(motor): T-MOTOR-CAD7 — rebalance_cadence=7 na Camada 2 com gate de `is_rebalance_day`, propagado em `config/winner.json`, `pipeline/09_decide.py`, `pipeline/painel_diario.py` e `pipeline/report_daily.py`. Auditoria dupla PASS. (ref: D-071).
 
+## 2026-04-15 (espelhamento D-076)
+
+- feat(skills): T-ANALISTAS-PASSO9-LOTE-V1 — substituicao do Passo 9 dos Analistas BR e USA por resumo operacional leve; lote padrao BR incorporado na skill analista-br (BDR=1 unidade, acao BR=100 unidades). Artefatos: /home/wilson/.cursor/skills/analista-br/SKILL.md, /home/wilson/.cursor/skills/analista-usa/SKILL.md. Ref: D-077. (Decisao e execucao originais em SALA_DE_CONTROLE, espelhado por D-076.)
+- fix(ledger): T-LEDGER-BR-LOT-TRIM-V1 — ajuste tecnico de lote no boletim BR: venda tecnica extracontabil dos excessos nao-multiplos de lote (BPAC5 -50, PRIO3 -60, UGPA3 -50) a preco de compra, com credito direto em cash_free sem T+2. Artefato: data/real/2026-04-14.json. Ref: D-078. Nota: pipeline nao processa VENDA_TECNICA; correcao estrutural pendente (Frente 1). (Decisao e execucao originais em SALA_DE_CONTROLE, espelhado por D-076.)
+
 ## 2026-04-15
 
 - feat(painel): T-PAINEL-GRAFICOS (MOTOR_OVERRIDE) — substituir curva de equity teórica por bloco operacional (Carga Térmica com grid a cada 12%, P(Caixa) compacto e card de status do Motor C060X) e corrigir Base 1 para eixo temporal cronológico com CDI alinhado à mesma grade de datas. Artefatos: pipeline/painel_diario.py, DECISION_LOG.md (D-075), ROADMAP.md.
+
+## 2026-04-16
+
+- docs(gov): T-GOV-DOC-BR — saneamento documental da Fabrica BR: regra de espelhamento per-factory em GOVERNANCE.md (secao 6.7), D-076/D-077/D-078 adicionados ao DECISION_LOG.md, entradas BR de 15/04 espelhadas no CHANGELOG.md, ROADMAP.md atualizado com T-GOV-DOC-BR, CORPUS_FABRICA_BR.md sincronizado com cronologia e estado atual. Ref: D-076.

@@ -55,6 +55,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 39 | T-SKILLS-CORPUS | Adicionar CORPUS_FABRICA_BR como leitura obrigatoria nas skills interlocutor-tecnico, cto-tecnico e architect | D-073 | /home/wilson/.cursor/skills/interlocutor-tecnico/SKILL.md, /home/wilson/.cursor/skills/cto-tecnico/SKILL.md, /home/wilson/.cursor/skills/architect/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 40 | T-SKILLS-GIT | Inicializar repositorio Git em ~/.cursor/skills e publicar snapshot inicial das 19 skills em repositorio privado WRMELO/cursor-skills no GitHub | D-074 | /home/wilson/.cursor/skills/.git, /home/wilson/.cursor/skills/.gitignore, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 41 | T-PAINEL-GRAFICOS | Redesenhar seção gráfica do painel BR: Carga Térmica + card do motor + correção estrutural do Base 1 | D-075 | pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 42 | T-GOV-DOC-BR | Saneamento documental BR: regra per-factory + espelhamento D-077/D-078 + corpus atualizado | D-076 | GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md, docs/CORPUS_FABRICA_BR.md | DONE |
 
 ### Marcos Estratégicos
 
