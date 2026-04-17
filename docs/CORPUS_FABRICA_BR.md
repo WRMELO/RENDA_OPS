@@ -242,6 +242,7 @@ Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.
 | L-21 | **Critérios de outro mercado não transplantam diretamente** — parâmetro otimizado no mercado A pode colapsar no mercado B por diferença de regime | V4 (critério USA C4 integral no BR): Sharpe TRAIN=1.36, HOLDOUT=0.22 — D-069, T-060 |
 | L-22 | **Auditoria dupla com LLMs distintas dá confiança cruzada em motor blindado** — dois auditores com contextos e arquiteturas diferentes reduzem risco de falso PASS | T-MOTOR-CAD7: Gemini e Kimi ambos PASS independentemente (D-071) |
 | L-23 | **Cadência de rebalanceamento deve ser indexada por pregões, não por calendário civil** — anchor_date + trading_day_index torna o rebalanceamento robusto a feriados e fins de semana | T-MOTOR-CAD7: implementação em 09_decide.py com is_rebalance_day baseado em índice de pregões (D-071) |
+| L-24 | **Computação idempotente separada de compromisso operacional** — steps de pipeline devem ser puramente funcionais; arquivos de estado de motor atualizam-se apenas no `/salvar`. BR já satisfaz este princípio por design (cadência absoluta). Registrado para proteger evoluções futuras | USA_OPS D-063 (bug real: reexecução sobrescrevia REBALANCE por HOLD via last_rebalance.json). RENDA_OPS D-081, R-030 (espelhamento documental) |
 
 ---
 
