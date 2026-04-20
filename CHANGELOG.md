@@ -156,3 +156,4 @@
 ## 2026-04-20
 
 - audit: T-REBALANCE-WEAKNESS curada com PASS — correção de H13 (lookback em pregões via trading_days), H14 (horizonte incluindo d_reb) e expansão de LOOKBACKS para [1, 2, 3, 5, 10]. Artefatos: backtest/t082_rebalance_weakness/run_t082.py, backtest/t082_rebalance_weakness/results/*.csv, backtest/t082_rebalance_weakness/results/phase_sweep_stats.json. Ref: D-082.
+- audit: T-REBALANCE-WEAKNESS-V2 curada com PASS — extensão confirmatória Top-30 da matriz rank×SPC, desambiguando SUBINDO em IGNITION_TRUE vs LATERAL_STRENGTH sem alterar o motor operacional. Artefatos: backtest/t083_rebalance_weakness_v2/run_t083.py, backtest/t083_rebalance_weakness_v2/results/*.csv, backtest/t083_rebalance_weakness_v2/results/phase_sweep_stats.json. Ref: D-083.
