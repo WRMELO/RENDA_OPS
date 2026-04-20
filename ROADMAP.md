@@ -58,6 +58,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 42 | T-GOV-DOC-BR | Saneamento documental BR: regra per-factory + espelhamento D-077/D-078 + corpus atualizado | D-076 | GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md, docs/CORPUS_FABRICA_BR.md | DONE |
 | 43 | T-SSOT-BR-LOT-GATE | Tornar o ledger BR SSOT para ajustes de lote: CORRECTION+BUY, gate de lote na gravacao e boletim observacional derivado do ledger | D-079 | data/ssot/ledger_br.jsonl, pipeline/ledger_br.py, pipeline/servidor.py, tests/test_ledger_br.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 44 | T-SSOT-BR-PAINEL-F2 | Painel BR passa a consumir o ledger como SSOT de posições, caixa e séries (com fallback histórico) | D-080 | pipeline/painel_diario.py, DECISION_LOG.md, GOVERNANCE.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 45 | T-REBALANCE-WEAKNESS | Backtest empirico do sinal rank-decay pre-rebalance para calibrar R-014 | D-082 | backtest/t082_rebalance_weakness/run_t082.py, backtest/t082_rebalance_weakness/results/, DECISION_LOG.md, ROADMAP.md | DONE |
 
 ### Marcos Estratégicos
 
