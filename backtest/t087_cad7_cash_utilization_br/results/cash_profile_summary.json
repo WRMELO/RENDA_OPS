@@ -1,0 +1,206 @@
+{
+  "methodology": "Leitura dos artefatos C07 do T-060-PHASE. Perfil por day_in_cycle com day 0 = rebalance. Desgaste A: opportunity cost sobre retorno diario da carteira. Desgaste B: CDI drag do capital em pending.",
+  "train_end": "2022-12-30",
+  "residual_cash_threshold": 200.0,
+  "curve_files": [
+    "curve_C07_P0.csv",
+    "curve_C07_P1.csv",
+    "curve_C07_P2.csv",
+    "curve_C07_P3.csv",
+    "curve_C07_P4.csv",
+    "curve_C07_P5.csv",
+    "curve_C07_P6.csv"
+  ],
+  "event_files": [
+    "events_C07_P0.csv",
+    "events_C07_P1.csv",
+    "events_C07_P2.csv",
+    "events_C07_P3.csv",
+    "events_C07_P4.csv",
+    "events_C07_P5.csv",
+    "events_C07_P6.csv"
+  ],
+  "n_phases_analyzed": 7,
+  "rows_pre_first_rebalance_dropped": 21,
+  "profile_by_day": {
+    "0": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5514231385308993,
+        "pct_pending_mean": 0.1366756570069124,
+        "pct_free_idle_mean": 0.31160648818948433,
+        "n_obs": 1115
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.24533055229162679,
+        "pct_pending_mean": 0.09952357278032763,
+        "pct_free_idle_mean": 0.6547085990592503,
+        "n_obs": 815
+      }
+    },
+    "1": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5431604657499586,
+        "pct_pending_mean": 0.09314599774125364,
+        "pct_free_idle_mean": 0.36281746053054914,
+        "n_obs": 1114
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.23897757282752516,
+        "pct_pending_mean": 0.06729597480245991,
+        "pct_free_idle_mean": 0.6932058352508124,
+        "n_obs": 815
+      }
+    },
+    "2": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5358629747809316,
+        "pct_pending_mean": 0.012902791006266429,
+        "pct_free_idle_mean": 0.45000198842565753,
+        "n_obs": 1113
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.23405803981533077,
+        "pct_pending_mean": 0.008271477997381824,
+        "pct_free_idle_mean": 0.7571174303936609,
+        "n_obs": 815
+      }
+    },
+    "3": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5298019242914538,
+        "pct_pending_mean": 0.010945512758977156,
+        "pct_free_idle_mean": 0.458019420038841,
+        "n_obs": 1112
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.23043590027364408,
+        "pct_pending_mean": 0.00573499838438567,
+        "pct_free_idle_mean": 0.7632673349952123,
+        "n_obs": 815
+      }
+    },
+    "4": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5229811341639331,
+        "pct_pending_mean": 0.010607677830449245,
+        "pct_free_idle_mean": 0.4651787897953659,
+        "n_obs": 1111
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.22642803989620952,
+        "pct_pending_mean": 0.004934706865953691,
+        "pct_free_idle_mean": 0.7680676518087907,
+        "n_obs": 815
+      }
+    },
+    "5": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5167185433468618,
+        "pct_pending_mean": 0.011454966196024654,
+        "pct_free_idle_mean": 0.47059498803785815,
+        "n_obs": 1110
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.22325185800752245,
+        "pct_pending_mean": 0.004974059538807912,
+        "pct_free_idle_mean": 0.7712027852466452,
+        "n_obs": 815
+      }
+    },
+    "6": {
+      "TRAIN": {
+        "pct_invested_mean": 0.5110941362199948,
+        "pct_pending_mean": 0.010286548848837949,
+        "pct_free_idle_mean": 0.4773888833366399,
+        "n_obs": 1109
+      },
+      "HOLDOUT": {
+        "pct_invested_mean": 0.21981184517191718,
+        "pct_pending_mean": 0.004589539425877008,
+        "pct_free_idle_mean": 0.775024073102072,
+        "n_obs": 815
+      }
+    }
+  },
+  "desgaste_opportunity_cost_train_pp_cagr": 8.499492795794502,
+  "desgaste_cdi_drag_train_pp_cagr": 0.2521289691663672,
+  "desgaste_opportunity_cost_holdout_pp_cagr": 9.772893080224446,
+  "desgaste_cdi_drag_holdout_pp_cagr": 0.3400185590585022,
+  "settle_lag_distribution": {
+    "HOLDOUT": {
+      "concentration_trim": {
+        "0": 1,
+        "1": 77,
+        "2": 104,
+        "3": 21,
+        "4": 80,
+        "5": 4,
+        "6": 4
+      },
+      "defensive_sell": {
+        "0": 1,
+        "1": 59,
+        "2": 121,
+        "3": 18,
+        "4": 54,
+        "5": 7,
+        "6": 2
+      },
+      "rebalance_sell": {
+        "0": 3,
+        "1": 251,
+        "2": 390,
+        "3": 83,
+        "4": 270,
+        "5": 14,
+        "6": 20,
+        "7": 2
+      }
+    },
+    "TRAIN": {
+      "concentration_trim": {
+        "1": 296,
+        "2": 366,
+        "3": 90,
+        "4": 255,
+        "5": 38,
+        "6": 16
+      },
+      "defensive_sell": {
+        "1": 276,
+        "2": 256,
+        "3": 43,
+        "4": 189,
+        "5": 34,
+        "6": 2
+      },
+      "rebalance_sell": {
+        "1": 755,
+        "2": 804,
+        "3": 197,
+        "4": 513,
+        "5": 75,
+        "6": 34
+      }
+    }
+  },
+  "real_cost_per_phase": {
+    "0": 1851.337554851978,
+    "1": 2890.9131016443202,
+    "2": 2289.6212386963934,
+    "3": 2170.072404810596,
+    "4": 2354.4948549592254,
+    "5": 1941.4022747232084,
+    "6": 2533.7088322885425
+  },
+  "real_cost_mean_c07": 2290.221465996324,
+  "reference_cost_mean_d071": 4592.06,
+  "refs": [
+    "D-071",
+    "D-085",
+    "R-006",
+    "L-23",
+    "E-13",
+    "E-14"
+  ]
+}

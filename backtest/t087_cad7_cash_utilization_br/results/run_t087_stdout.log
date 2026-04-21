@@ -1,0 +1,9 @@
+T-087 concluido.
+- Curvas analisadas: 7
+- Events analisados: 7
+- N phases: 7
+- Desgaste A HOLDOUT (pp CAGR): 9.772893
+- Desgaste B HOLDOUT (pp CAGR): 0.340019
+- Cost mean C07 (events): 2290.221466
+- Cost mean ref D-071: 4592.060000
+- Outputs: /home/wilson/RENDA_OPS/backtest/t087_cad7_cash_utilization_br/results/cash_profile_by_day_in_cycle.csv, /home/wilson/RENDA_OPS/backtest/t087_cad7_cash_utilization_br/results/settle_lag_distribution.csv, /home/wilson/RENDA_OPS/backtest/t087_cad7_cash_utilization_br/results/cash_profile_summary.json
