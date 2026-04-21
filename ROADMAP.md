@@ -60,6 +60,8 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 44 | T-SSOT-BR-PAINEL-F2 | Painel BR passa a consumir o ledger como SSOT de posições, caixa e séries (com fallback histórico) | D-080 | pipeline/painel_diario.py, DECISION_LOG.md, GOVERNANCE.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 45 | T-REBALANCE-WEAKNESS | Backtest empirico do sinal rank-decay pre-rebalance para calibrar R-014 | D-082 | backtest/t082_rebalance_weakness/run_t082.py, backtest/t082_rebalance_weakness/results/, DECISION_LOG.md, ROADMAP.md | DONE |
 | 46 | T-REBALANCE-WEAKNESS-V2 | Extensao confirmatoria Top-30 da matriz rank×SPC para desambiguar SUBINDO em IGNITION_TRUE vs LATERAL_STRENGTH | D-083 | backtest/t083_rebalance_weakness_v2/run_t083.py, backtest/t083_rebalance_weakness_v2/results/, DECISION_LOG.md, ROADMAP.md | DONE |
+| 47 | T-084-SKILL-ANALISTA-BR-L25 | Alerta duro na skill analista-br: candidato INSTAVEL nunca recomendado para ignicao (L-25) | D-084 | /home/wilson/.cursor/skills/analista-br/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 48 | T-085-GATE-SPC-IMPACTO-BR | Backtest de impacto historico do gate SPC de entrada: trades bloqueados, CAGR/MDD/Sharpe BASELINE vs GATE com phase sweep | D-084 | backtest/t085_spc_gate_impact_br/run_t085.py, backtest/t085_spc_gate_impact_br/results/, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 
