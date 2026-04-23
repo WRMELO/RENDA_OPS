@@ -36,13 +36,17 @@ from lib.trading_calendar import next_session as _next_session
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
     from pipeline.ledger_br import compute_positions as _compute_positions_ledger
+    from pipeline.ledger_br import EventType as _LedgerEventType
     from pipeline.ledger_br import export_snapshot as _export_snapshot_ledger
     from pipeline.ledger_br import pending_settlements as _pending_settlements_ledger
+    from pipeline.ledger_br import read_all_events as _read_all_events_ledger
 except Exception:
     _compute_cash_ledger = None
     _compute_positions_ledger = None
+    _LedgerEventType = None
     _export_snapshot_ledger = None
     _pending_settlements_ledger = None
+    _read_all_events_ledger = None
 
 FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
 
@@ -390,6 +394,36 @@ def _extract_cash_movements(day_payload: dict[str, Any]) -> tuple[float, float]:
             aportes += val
         elif typ in {"RETIRADA", "SAQUE"}:
             retiradas += val
+    return aportes, retiradas
+
+
+def _compute_aportes_retiradas_from_ledger(cutoff_day: date) -> tuple[float, float]:
+    if _read_all_events_ledger is None or _LedgerEventType is None:
+        return 0.0, 0.0
+
+    try:
+        all_events = _read_all_events_ledger()
+    except Exception:
+        return 0.0, 0.0
+
+    events_upto_cutoff = [ev for ev in all_events if ev.exec_date <= cutoff_day]
+    cancelled_ids = {
+        ev.ref_id
+        for ev in events_upto_cutoff
+        if ev.type == _LedgerEventType.CORRECTION and ev.ref_id
+    }
+
+    aportes = 0.0
+    retiradas = 0.0
+    for ev in events_upto_cutoff:
+        if ev.type == _LedgerEventType.CORRECTION:
+            continue
+        if ev.id in cancelled_ids:
+            continue
+        if ev.type == _LedgerEventType.APORTE:
+            aportes += _safe_float(ev.amount, 0.0)
+        elif ev.type == _LedgerEventType.RETIRADA:
+            retiradas += _safe_float(ev.amount, 0.0)
     return aportes, retiradas
 
 
@@ -1000,14 +1034,19 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             by_ref_day[rec["ref_day"]] = rec
     ordered = [by_ref_day[d] for d in sorted(by_ref_day.keys())]
 
-    cum_aportes = 0.0
-    cum_retiradas = 0.0
     base_patrimonio_by_rec: list[float] = []
-    for rec in ordered:
-        aporte, retirada = _extract_cash_movements(rec.get("payload", {}))
-        cum_aportes += aporte
-        cum_retiradas += retirada
-        base_patrimonio_by_rec.append(cum_aportes - cum_retiradas)
+    if _read_all_events_ledger is not None and _LedgerEventType is not None:
+        for rec in ordered:
+            aporte_acc, retirada_acc = _compute_aportes_retiradas_from_ledger(rec["ref_day"])
+            base_patrimonio_by_rec.append(aporte_acc - retirada_acc)
+    else:
+        cum_aportes = 0.0
+        cum_retiradas = 0.0
+        for rec in ordered:
+            aporte, retirada = _extract_cash_movements(rec.get("payload", {}))
+            cum_aportes += aporte
+            cum_retiradas += retirada
+            base_patrimonio_by_rec.append(cum_aportes - cum_retiradas)
 
     if not base_patrimonio_by_rec or base_patrimonio_by_rec[0] <= 0:
         return pd.DataFrame(columns=["date", "total_ativo", "base1", "daily_var_pct"])
@@ -1810,13 +1849,16 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
     </div>
     """
 
-    aporte_acc = 0.0
-    retirada_acc = 0.0
-    for p in list_real_files_upto(cutoff_day):
-        pp = _read_json(p)
-        a, r = _extract_cash_movements(pp)
-        aporte_acc += a
-        retirada_acc += r
+    if _read_all_events_ledger is not None and _LedgerEventType is not None:
+        aporte_acc, retirada_acc = _compute_aportes_retiradas_from_ledger(cutoff_day)
+    else:
+        aporte_acc = 0.0
+        retirada_acc = 0.0
+        for p in list_real_files_upto(cutoff_day):
+            pp = _read_json(p)
+            a, r = _extract_cash_movements(pp)
+            aporte_acc += a
+            retirada_acc += r
 
     report_ctx = {
         "d1": d1.isoformat(),
