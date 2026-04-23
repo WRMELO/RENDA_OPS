@@ -64,6 +64,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 48 | T-085-GATE-SPC-IMPACTO-BR | Backtest de impacto historico do gate SPC de entrada: trades bloqueados, CAGR/MDD/Sharpe BASELINE vs GATE com phase sweep | D-084 | backtest/t085_spc_gate_impact_br/run_t085.py, backtest/t085_spc_gate_impact_br/results/, ROADMAP.md, CHANGELOG.md | DONE |
 | 49 | T-085-V2-TAIL-COST-CHURN-BR | Extensao T-085 com metricas de cauda (CVaR), custo de transacao e churn evitado; criterio pre-registrado de decisao sobre T-086 | D-085 | backtest/t085_spc_gate_impact_br/run_t085_v2.py, backtest/t085_spc_gate_impact_br/results_v2/, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 50 | T-087-CAD7-CASH-UTILIZATION-BR | Diagnostico empirico do perfil de caixa e desgaste de liquidacao T+2 dentro do ciclo cad=7 | D-086 | backtest/t087_cad7_cash_utilization_br/run_t087.py, backtest/t087_cad7_cash_utilization_br/results/, backtest/t087_cad7_cash_utilization_br/REPORT.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 51 | T-088-SPC-ENRICHED-ABLATION-BR | Ablação de 3 braços para classificador SPC enriquecido com gate + release de quarentena e criterio pre-registrado | D-087 | backtest/t088_spc_enriched_ablation_br/run_t088.py, backtest/t088_spc_enriched_ablation_br/results/, backtest/t088_spc_enriched_ablation_br/decision_criterion_t088.json, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 

@@ -1,0 +1,30 @@
+{
+  "task_id": "T-088-SPC-ENRICHED-ABLATION-BR",
+  "arms": [
+    "Baseline",
+    "B",
+    "B_plus_C"
+  ],
+  "arm_definitions": {
+    "Baseline": "Regra 1 apenas (any_rule: ponto alem dos limites de 3-sigma em qualquer carta)",
+    "B": "Regra 1 + W2/W3/W4/N3 aplicadas na carta de valor (i_value)",
+    "B_plus_C": "Arm B + W4/N3 aplicadas na carta de dispersao (mr_value)"
+  },
+  "gate_scope": "Gate de entrada (select_top_n) E release de quarentena simulado (ticker bloqueado por arm em d_prev nao entra na arm_selected, independentemente de ciclos anteriores)",
+  "metrics": {
+    "cvar5": "CVaR5 do log_ret do cesto por ciclo no HOLDOUT",
+    "sharpe_cost_adj": "Sharpe do cesto ajustado por custo de churn (2.5bps por substituicao, one-way)",
+    "recidiva_avoidance_rate": "Fracao de ciclos onde ao menos 1 ticker em baseline_selected estava em blocked_baseline no ciclo anterior (mesmo phase), que o arm correntemente bloqueia"
+  },
+  "verdict_per_arm": {
+    "implementar": "arm_better_tail AND (arm_better_sharpe OR arm_recidiva_meaningful)",
+    "descartar": "NOT arm_better_tail AND NOT arm_better_sharpe AND NOT arm_recidiva_meaningful",
+    "inconclusivo": "qualquer outro caso"
+  },
+  "thresholds": {
+    "arm_better_tail": "mean(cvar5_arm_holdout) > mean(cvar5_baseline_holdout)",
+    "arm_better_sharpe": "mean(sharpe_arm_cost_adj_holdout) > mean(sharpe_baseline_holdout)",
+    "arm_recidiva_meaningful": "mean(recidiva_avoidance_rate_arm_holdout) > 0.30"
+  },
+  "final_verdict_logic": "Se B_plus_C IMPLEMENTAR e B IMPLEMENTAR: escolher braco com maior melhora cumulativa em cvar5 + sharpe. Se apenas um IMPLEMENTAR: esse braco. Se nenhum IMPLEMENTAR e todos DESCARTAR: DESCARTAR_ENRIQUECIMENTO. Caso contrario: INCONCLUSIVO."
+}
