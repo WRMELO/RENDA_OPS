@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise CEP (SPC) - PETR3</title>
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .chart-container {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Análise CEP (SPC) - PETR3 (Últimos 30 pregões)</h1>
+        
+        <div class="chart-container">
+            <div id="chart-i"></div>
+        </div>
+        
+        <div class="chart-container">
+            <div id="chart-mr"></div>
+        </div>
+    </div>
+
+    <script>
+        const rawData = [
+            {"date": "2026-03-02", "i_value": 0.04474478250548132, "i_ucl": 0.054843648451128976, "i_lcl": -0.0485429319136816, "mr_value": 0.0457638863167915, "mr_ucl": 0.06348946579921733}, 
+            {"date": "2026-03-03", "i_value": -0.007959430825915792, "i_ucl": 0.05658865435693524, "i_lcl": -0.04794962812547739, "mr_value": 0.05270421333139711, "mr_ucl": 0.06419672347181242}, 
+            {"date": "2026-03-04", "i_value": -0.007787734214725216, "i_ucl": 0.05731734413323603, "i_lcl": -0.04913430983950997, "mr_value": 0.00017169661119057628, "mr_ucl": 0.06537172058815059}, 
+            {"date": "2026-03-05", "i_value": -0.0025959162659527865, "i_ucl": 0.05707417314657586, "i_lcl": -0.04931050574963399, "mr_value": 0.00519181794877243, "mr_ucl": 0.06533059134472136}, 
+            {"date": "2026-03-06", "i_value": 0.03978857324722763, "i_ucl": 0.056753218345750915, "i_lcl": -0.049469721863316114, "mr_value": 0.04238448951318041, "mr_ucl": 0.06523126798177105}, 
+            {"date": "2026-03-09", "i_value": 0.02041578312580082, "i_ucl": 0.05890993956384476, "i_lcl": -0.050466511913803, "mr_value": 0.019372790121426807, "mr_ucl": 0.06716783213862315}, 
+            {"date": "2026-03-10", "i_value": -0.0024781472258865386, "i_ucl": 0.0586046625180279, "i_lcl": -0.04793474631529443, "mr_value": 0.02289393035168736, "mr_ucl": 0.06542561065008723}, 
+            {"date": "2026-03-11", "i_value": 0.047156633336767284, "i_ucl": 0.05674394568300915, "i_lcl": -0.04658190683061543, "mr_value": 0.04963478056265382, "mr_ucl": 0.0634521729627841}, 
+            {"date": "2026-03-12", "i_value": 0.013852174392181522, "i_ucl": 0.05932353461456082, "i_lcl": -0.04778091174322923, "mr_value": 0.033304458944585766, "mr_ucl": 0.06577259891934212}, 
+            {"date": "2026-03-13", "i_value": -0.006004064658622459, "i_ucl": 0.060818987017164074, "i_lcl": -0.048865852889707025, "mr_value": 0.01985623905080398, "mr_ucl": 0.0673572127773962}, 
+            {"date": "2026-03-16", "i_value": 0.014323488026359583, "i_ucl": 0.060949485453990634, "i_lcl": -0.048495771165304305, "mr_value": 0.020327552684982042, "mr_ucl": 0.06721008522090913}, 
+            {"date": "2026-03-17", "i_value": 0.011546163466256538, "i_ucl": 0.06045345246064983, "i_lcl": -0.04790698482710333, "mr_value": 0.002777324560103045, "mr_ucl": 0.06654390011637021}, 
+            {"date": "2026-03-18", "i_value": 0.01703428922848479, "i_ucl": 0.060192197020832866, "i_lcl": -0.04718233494333336, "mr_value": 0.005488125762228253, "mr_ucl": 0.06593845788100208}, 
+            {"date": "2026-03-19", "i_value": -0.0017139489131645911, "i_ucl": 0.06004014409956755, "i_lcl": -0.04551825630001134, "mr_value": 0.018748238141649384, "mr_ucl": 0.06482317558372636}, 
+            {"date": "2026-03-20", "i_value": -0.024691276440172178, "i_ucl": 0.05920661983099491, "i_lcl": -0.044949690414023476, "mr_value": 0.022977327527007586, "mr_ucl": 0.06396215518242011}, 
+            {"date": "2026-03-23", "i_value": 0.0061802076612940335, "i_ucl": 0.05945397823039201, "i_lcl": -0.04591964284743847, "mr_value": 0.03087148410146621, "mr_ucl": 0.06470970301903611}, 
+            {"date": "2026-03-24", "i_value": 0.02419920400782376, "i_ucl": 0.0603948091687838, "i_lcl": -0.04687152248902808, "mr_value": 0.018018996346529727, "mr_ucl": 0.06587201231693071}, 
+            {"date": "2026-03-25", "i_value": 0.005015609338464806, "i_ucl": 0.06142816312209318, "i_lcl": -0.04724266485900837, "mr_value": 0.019183594669358955, "mr_ucl": 0.06673451034102608}, 
+            {"date": "2026-03-26", "i_value": 0.020849147293203304, "i_ucl": 0.06145529533178633, "i_lcl": -0.04624135225408159, "mr_value": 0.0158335379547385, "mr_ucl": 0.0661362683577125}, 
+            {"date": "2026-03-27", "i_value": 0.016724278509561787, "i_ucl": 0.06120267328427064, "i_lcl": -0.045379326077643035, "mr_value": 0.0041248687836415165, "mr_ucl": 0.0654517653976263}, 
+            {"date": "2026-03-30", "i_value": 0.005873829598183324, "i_ucl": 0.061414186928336695, "i_lcl": -0.045232215257200586, "mr_value": 0.010850448911378464, "mr_ucl": 0.06549131502634403}, 
+            {"date": "2026-03-31", "i_value": -0.014184383243444674, "i_ucl": 0.06184005609539256, "i_lcl": -0.04569045241986121, "mr_value": 0.020058212841628, "mr_ucl": 0.06603424272919813}, 
+            {"date": "2026-04-01", "i_value": -0.037970489691824164, "i_ucl": 0.06194388445998937, "i_lcl": -0.04597124198777265, "mr_value": 0.023786106448379488, "mr_ucl": 0.0662704357339922}, 
+            {"date": "2026-04-02", "i_value": 0.021729112307191187, "i_ucl": 0.06227734547087655, "i_lcl": -0.0469900275905823, "mr_value": 0.05969960199901535, "mr_ucl": 0.06710084732928309}, 
+            {"date": "2026-04-06", "i_value": 0.010871117585000464, "i_ucl": 0.06550625717167154, "i_lcl": -0.04882981724013934, "mr_value": 0.010857994722190723, "mr_ucl": 0.07021352539537333}, 
+            {"date": "2026-04-07", "i_value": 0.0057591820833747896, "i_ucl": 0.06525950613589768, "i_lcl": -0.048234410961921916, "mr_value": 0.005111935501625675, "mr_ucl": 0.06969635848845424}, 
+            {"date": "2026-04-08", "i_value": -0.05491650170019982, "i_ucl": 0.06412678000145564, "i_lcl": -0.04771494873083303, "mr_value": 0.06067568378357461, "mr_ucl": 0.06868175333992238}, 
+            {"date": "2026-04-09", "i_value": 0.028330325667228106, "i_ucl": 0.06476325810939643, "i_lcl": -0.05010096792238882, "mr_value": 0.08324682736742793, "mr_ucl": 0.07053786211388013}, 
+            {"date": "2026-04-10", "i_value": 0.024007204258605617, "i_ucl": 0.0687563818264608, "i_lcl": -0.053183581215487934, "mr_value": 0.004323121408622489, "mr_ucl": 0.0748830562515125}, 
+            {"date": "2026-04-13", "i_value": 0.017070443265345212, "i_ucl": 0.0673804269928295, "i_lcl": -0.052107239898061763, "mr_value": 0.006936760993260405, "mr_ucl": 0.07337710671664319}, 
+            {"date": "2026-04-14", "i_value": -0.04596275656397289, "i_ucl": 0.06729267836659045, "i_lcl": -0.052621291314187524, "mr_value": 0.0630331998293181, "mr_ucl": 0.07363889829832737}, 
+            {"date": "2026-04-15", "i_value": -0.020163399849379426, "i_ucl": 0.06746440888506795, "i_lcl": -0.05396425626016226, "mr_value": 0.025799356714593463, "mr_ucl": 0.07456906936644117}, 
+            {"date": "2026-04-16", "i_value": 0.04053487924331311, "i_ucl": 0.06766402395786568, "i_lcl": -0.05490601707928435, "mr_value": 0.060698279092692535, "mr_ucl": 0.07526998572713704}, 
+            {"date": "2026-04-17", "i_value": -0.05512581747631185, "i_ucl": 0.07083504766420055, "i_lcl": -0.05688361463057908, "mr_value": 0.09566069671962496, "mr_ucl": 0.07843174242801598}, 
+            {"date": "2026-04-20", "i_value": 0.01758683306776803, "i_ucl": 0.07388498042333794, "i_lcl": -0.06203449032075434, "mr_value": 0.07271265054407988, "mr_ucl": 0.0834678403986747}, 
+            {"date": "2026-04-22", "i_value": 0.017833120704959064, "i_ucl": 0.0750502334165847, "i_lcl": -0.06408990785227084, "mr_value": 0.00024628763719103386, "mr_ucl": 0.08544564690326147}
+        ];
+
+        const dates = rawData.map(d => d.date);
+        const iValues = rawData.map(d => d.i_value);
+        const iUCL = rawData.map(d => d.i_ucl);
+        const iLCL = rawData.map(d => d.i_lcl);
+        
+        const mrValues = rawData.map(d => d.mr_value);
+        const mrUCL = rawData.map(d => d.mr_ucl);
+        const mrMean = rawData.map(d => d.mr_ucl / 3.2665);
+
+        const highlightDates = ['2026-04-17', '2026-04-20', '2026-04-22'];
+        
+        // Annotations for highlighted dates
+        const getAnnotations = (yValues) => {
+            return highlightDates.map(date => {
+                const idx = dates.indexOf(date);
+                if (idx !== -1) {
+                    return {
+                        x: date,
+                        y: yValues[idx],
+                        xref: 'x',
+                        yref: 'y',
+                        text: 'Atenção',
+                        showarrow: true,
+                        arrowhead: 2,
+                        ax: 0,
+                        ay: -40,
+                        font: { color: 'red' },
+                        arrowcolor: 'red'
+                    };
+                }
+                return null;
+            }).filter(a => a !== null);
+        };
+
+        const highlightShapes = highlightDates.map(date => ({
+            type: 'line',
+            x0: date,
+            y0: 0,
+            x1: date,
+            y1: 1,
+            xref: 'x',
+            yref: 'paper',
+            line: {
+                color: 'rgba(255, 0, 0, 0.3)',
+                width: 2,
+                dash: 'dot'
+            }
+        }));
+
+        // I Chart (Individuals)
+        const traceI = {
+            x: dates,
+            y: iValues,
+            mode: 'lines+markers',
+            name: 'I Value',
+            line: { color: '#1f77b4' },
+            marker: { size: 6 }
+        };
+        
+        const traceIUCL = {
+            x: dates,
+            y: iUCL,
+            mode: 'lines',
+            name: 'UCL',
+            line: { color: '#d62728', dash: 'dash' }
+        };
+        
+        const traceILCL = {
+            x: dates,
+            y: iLCL,
+            mode: 'lines',
+            name: 'LCL',
+            line: { color: '#d62728', dash: 'dash' }
+        };
+
+        const layoutI = {
+            title: 'Gráfico I (Individuais)',
+            xaxis: { title: 'Data', tickangle: -45 },
+            yaxis: { title: 'Valor' },
+            shapes: highlightShapes,
+            annotations: getAnnotations(iValues),
+            hovermode: 'x unified'
+        };
+
+        Plotly.newPlot('chart-i', [traceI, traceIUCL, traceILCL], layoutI);
+
+        // MR Chart (Moving Range)
+        const traceMR = {
+            x: dates,
+            y: mrValues,
+            mode: 'lines+markers',
+            name: 'MR Value',
+            line: { color: '#ff7f0e' },
+            marker: { size: 6 }
+        };
+        
+        const traceMRUCL = {
+            x: dates,
+            y: mrUCL,
+            mode: 'lines',
+            name: 'MR UCL',
+            line: { color: '#d62728', dash: 'dash' }
+        };
+        
+        const traceMRMean = {
+            x: dates,
+            y: mrMean,
+            mode: 'lines',
+            name: 'Média',
+            line: { color: '#2ca02c', dash: 'dot' }
+        };
+
+        const layoutMR = {
+            title: 'Gráfico MR (Amplitude Móvel)',
+            xaxis: { title: 'Data', tickangle: -45 },
+            yaxis: { title: 'Amplitude' },
+            shapes: highlightShapes,
+            annotations: getAnnotations(mrValues),
+            hovermode: 'x unified'
+        };
+
+        Plotly.newPlot('chart-mr', [traceMR, traceMRUCL, traceMRMean], layoutMR);
+    </script>
+</body>
+</html>
