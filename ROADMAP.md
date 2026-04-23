@@ -67,6 +67,8 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 51 | T-088-SPC-ENRICHED-ABLATION-BR | Ablação de 3 braços para classificador SPC enriquecido com gate + release de quarentena e criterio pre-registrado | D-087 | backtest/t088_spc_enriched_ablation_br/run_t088.py, backtest/t088_spc_enriched_ablation_br/results/, backtest/t088_spc_enriched_ablation_br/decision_criterion_t088.json, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 52 | T-089-SPC-BC-MOTOR-BR | Implementar classificador SPC enriquecido B+C no motor BR: gate de entrada (09_decide.py) e release de quarentena (painel_diario.py); novo lib/spc.py | D-088 | lib/spc.py, pipeline/09_decide.py, pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 53 | T-090-HF-SELAR-MOTOR-BR | Saneamento de blindagem: criar tag v1.10.0-motor selando T-089 auditado; atualizar GOVERNANCE.md §6.5 | D-089 | GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
+| 54 | T-REPLAY-HISTORICO-BR | Replay walk-forward 02/04-22/04 como nova realidade oficial da Fabrica BR (13 boletins com interacao do Owner, sem vazamento temporal) | D-091, D-093 | pipeline/replay_historico.py, data/ssot/ledger_br.jsonl, data/real/*.json, data/cycles/*, config/winner.json, DECISION_LOG.md, ROADMAP.md | PENDING |
+| 55 | T-EXECUTOR-STRICT-TOOLS-HARDENING | Endurecer skill executor com bloco MODO ESTRITO DE FERRAMENTAS (allowlist, denylist e reforco do guardrail ferramental) | D-094 | /home/wilson/.cursor/skills/executor/SKILL.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md, /home/wilson/SALA_DE_CONTROLE/DECISION_LOG.md | DONE |
 
 ### Marcos Estratégicos
 
