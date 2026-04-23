@@ -20,6 +20,7 @@ def run(
 ) -> dict:
     from lib.engine import apply_hysteresis, select_top_n
     from lib.io import read_json, write_json
+    from lib.spc import build_spc_bc_blocked_set as _build_spc_bc_blocked_set
 
     winner_cfg = read_json(ROOT / "config" / "winner.json")
     cfg = winner_cfg.get("winner_config_snapshot", {})
@@ -92,6 +93,32 @@ def run(
             for v in blacklist_data.values():
                 if isinstance(v, list):
                     blacklist.update(str(t).upper() for t in v)
+
+        # Gate B+C de entrada — T-088 / D-088.
+        # Bloqueia tickers com Regra1 | W2/W3/W4/N3(valor) | W4/N3(dispersao).
+        try:
+            _spc_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+            if _spc_path.exists():
+                _canonical_spc = pd.read_parquet(
+                    _spc_path,
+                    columns=[
+                        "date",
+                        "ticker",
+                        "i_value",
+                        "i_ucl",
+                        "i_lcl",
+                        "mr_value",
+                        "mr_ucl",
+                        "r_value",
+                        "r_ucl",
+                        "xbar_value",
+                        "xbar_ucl",
+                        "xbar_lcl",
+                    ],
+                )
+                blacklist = blacklist | _build_spc_bc_blocked_set(_canonical_spc, as_of_day=target_ts)
+        except Exception:
+            pass  # fallback conservador: manter blacklist original sem SPC B+C
 
         if target_ts in scores_by_day:
             selected = select_top_n(scores_by_day[target_ts], top_n=top_n, blacklist=blacklist)

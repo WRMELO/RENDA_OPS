@@ -31,6 +31,7 @@ from pipeline.ptbr import (
     validate_html_ptbr,
 )
 from lib.engine import compute_m3_scores, select_top_n
+from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked
 from lib.trading_calendar import next_session as _next_session
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
@@ -833,21 +834,9 @@ def _build_sell_suggestions(
         s = canonical[(canonical["ticker"] == tk) & (canonical["date"] <= pd.Timestamp(as_of_day))].sort_values("date")
         if s.empty:
             continue
-        last = s.iloc[-1]
-        any_rule = (
-            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
-            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
-            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
-            or (_safe_float(last.get("r_value"), float("nan")) > _safe_float(last.get("r_ucl"), float("nan")))
-            or (_safe_float(last.get("xbar_value"), float("nan")) > _safe_float(last.get("xbar_ucl"), float("nan")))
-            or (_safe_float(last.get("xbar_value"), float("nan")) < _safe_float(last.get("xbar_lcl"), float("nan")))
-        )
-        strong_rule = (
-            (_safe_float(last.get("i_value"), float("nan")) > _safe_float(last.get("i_ucl"), float("nan")))
-            or (_safe_float(last.get("i_value"), float("nan")) < _safe_float(last.get("i_lcl"), float("nan")))
-            or (_safe_float(last.get("mr_value"), float("nan")) > _safe_float(last.get("mr_ucl"), float("nan")))
-        )
-        if (not any_rule) and (not strong_rule) and (tk not in cand_set):
+        # Criterio B+C (T-088/D-088): liberar apenas se classificador nao bloquear.
+        # Equivale ao release de quarentena testado como gate_scope em T-088.
+        if (not _is_spc_bc_blocked(s)) and (tk not in cand_set):
             quarantine.remove(tk)
 
     if defensive_state:
