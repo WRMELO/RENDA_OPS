@@ -40,7 +40,7 @@ APORTE_INICIAL = 1_148_789.91
 EXEC_DAY_INICIAL = date(2026, 4, 3)
 TRADE_DAY_INICIAL = date(2026, 4, 6)
 ANCHOR_OVERRIDE = "2026-04-06"
-ANCHOR_EXPECTED_ORIGINAL = "2026-04-09"
+ANCHOR_EXPECTED_ORIGINAL = "2026-04-06"
 ANALYST_REQUIRED_DAYS = {date(2026, 4, 6), date(2026, 4, 15)}
 
 LEDGER_PATH = ROOT / "data" / "ssot" / "ledger_br.jsonl"
@@ -449,14 +449,17 @@ def _run_replay_step(step_idx: int, state: dict[str, Any]) -> None:
 def _build_terminal_summary() -> None:
     REPLAY_DIR.mkdir(parents=True, exist_ok=True)
 
-    canonical = pd.read_parquet(ROOT / "data" / "ssot" / "canonical_br.parquet", columns=["date", "ticker", "close"])
+    canonical = pd.read_parquet(
+        ROOT / "data" / "ssot" / "canonical_br.parquet",
+        columns=["date", "ticker", "close_operational"],
+    )
     canonical["date"] = pd.to_datetime(canonical["date"], errors="coerce").dt.date
     canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
-    canonical = canonical.dropna(subset=["date", "ticker", "close"]).copy()
+    canonical = canonical.dropna(subset=["date", "ticker", "close_operational"]).copy()
 
     ticker_prices: dict[str, list[tuple[date, float]]] = {}
     for tk, g in canonical.groupby("ticker", sort=False):
-        pairs = [(d, float(c)) for d, c in zip(g["date"].tolist(), g["close"].tolist(), strict=False)]
+        pairs = [(d, float(c)) for d, c in zip(g["date"].tolist(), g["close_operational"].tolist(), strict=False)]
         pairs.sort(key=lambda x: x[0])
         ticker_prices[tk] = pairs
 
@@ -561,6 +564,29 @@ def _build_terminal_summary() -> None:
     _log(f"Resumo final gravado em {SUMMARY_PATH.relative_to(ROOT)}")
 
 
+def finalize_replay() -> None:
+    state = _load_state()
+    if not state:
+        raise RuntimeError("Sem estado de replay. Rode --prepare para iniciar.")
+    if state.get("finished"):
+        _log("Replay ja finalizado. Nada a fazer.")
+        return
+
+    completed = {int(x) for x in state.get("completed_steps", [])}
+    expected = set(range(len(REPLAY_MARKET_DAYS)))
+    missing = sorted(expected - completed)
+    if missing:
+        raise RuntimeError(f"Replay incompleto. Steps faltantes: {missing}")
+
+    _assert_anchor_integrity(state)
+    _build_terminal_summary()
+    latest_state = _load_state()
+    latest_state["finished"] = True
+    latest_state["finished_at"] = datetime.now(tz=UTC).isoformat()
+    _save_state(latest_state)
+    _log("Replay finalizado com sucesso. Anchor preservada em 2026-04-06.")
+
+
 def run_step(step_idx: int) -> None:
     state = _load_state()
     _assert_step_sequence(step_idx, state)
@@ -572,13 +598,7 @@ def run_step(step_idx: int) -> None:
             return
         _run_replay_step(step_idx, state)
         if step_idx == len(REPLAY_MARKET_DAYS) - 1:
-            _build_terminal_summary()
-            latest_state = _load_state()
-            _restore_anchor_from_state(latest_state)
-            latest_state["finished"] = True
-            latest_state["finished_at"] = datetime.now(tz=UTC).isoformat()
-            _save_state(latest_state)
-            _log("Replay concluido com sucesso.")
+            finalize_replay()
     except Exception:
         raise
 
@@ -605,6 +625,7 @@ def main() -> None:
     parser.add_argument("--force", action="store_true", help="Sobrescreve arquivos de arquivo/estado existentes")
     parser.add_argument("--status", action="store_true", help="Mostra estado atual do replay")
     parser.add_argument("--fix-anchor", action="store_true", help="Corrige anchor drift: reaplica ANCHOR_OVERRIDE em config/winner.json")
+    parser.add_argument("--finalize", action="store_true", help="Finaliza replay: grava summary e finished=true sem restaurar anchor")
     args = parser.parse_args()
 
     if args.status:
@@ -614,12 +635,21 @@ def main() -> None:
         _set_anchor_date(ANCHOR_OVERRIDE)
         _log(f"Anchor corrigida para {ANCHOR_OVERRIDE} em config/winner.json")
         return
+    if getattr(args, "finalize", False):
+        finalize_replay()
+        return
     if args.prepare:
         prepare_workspace(force=bool(args.force))
     if args.step is not None:
         run_step(int(args.step))
-    if not args.prepare and args.step is None and not args.status and not getattr(args, 'fix_anchor', False):
-        parser.error("Informe --prepare, --step N, --status ou --fix-anchor")
+    if (
+        not args.prepare
+        and args.step is None
+        and not args.status
+        and not getattr(args, "fix_anchor", False)
+        and not getattr(args, "finalize", False)
+    ):
+        parser.error("Informe --prepare, --step N, --status, --fix-anchor ou --finalize")
 
 
 if __name__ == "__main__":

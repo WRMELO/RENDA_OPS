@@ -1,0 +1,560 @@
+{
+  "periodo": {
+    "inicio_market_day": "2026-04-02",
+    "fim_market_day": "2026-04-22"
+  },
+  "aporte_inicial": 1148789.91,
+  "equity_terminal": 1106667.57,
+  "pl_absoluto": -42122.34,
+  "cagr_anualizado": -0.51525307,
+  "sharpe_excess_anualizado": -5.50324707,
+  "mdd": -0.05286912,
+  "n_pregoes": 13,
+  "carga_termica_por_pregao": [
+    {
+      "market_day": "2026-04-02",
+      "distribuicao": [],
+      "total_ativo": 1148789.91,
+      "cash_free": 1148789.91,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-06",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.129309,
+          "valor": 149500.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.134656,
+          "valor": 155682.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.133699,
+          "valor": 154575.8
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.128931,
+          "valor": 149063.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.132397,
+          "valor": 153070.12
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.097558,
+          "valor": 112791.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.09736,
+          "valor": 112562.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.131783,
+          "valor": 152360.0
+        }
+      ],
+      "total_ativo": 1156143.47,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-07",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.128925,
+          "valor": 149500.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.134257,
+          "valor": 155682.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.132519,
+          "valor": 153667.52
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.128549,
+          "valor": 149063.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.133548,
+          "valor": 154860.58
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.097884,
+          "valor": 113505.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.097587,
+          "valor": 113160.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.132468,
+          "valor": 153608.0
+        }
+      ],
+      "total_ativo": 1159585.65,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-08",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.134121,
+          "valor": 151034.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.128106,
+          "valor": 144261.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.138536,
+          "valor": 156005.5
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.131635,
+          "valor": 148235.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.128434,
+          "valor": 144629.38
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.095461,
+          "valor": 107499.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.095198,
+          "valor": 107203.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.133821,
+          "valor": 150696.0
+        }
+      ],
+      "total_ativo": 1126102.43,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-09",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.138794,
+          "valor": 156910.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.124596,
+          "valor": 140859.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.13786,
+          "valor": 155854.12
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.12817,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.123833,
+          "valor": 139996.92
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.097874,
+          "valor": 110649.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.09745,
+          "valor": 110170.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.136793,
+          "valor": 154648.0
+        }
+      ],
+      "total_ativo": 1130526.59,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-10",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.136567,
+          "valor": 153374.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.116985,
+          "valor": 131382.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.138041,
+          "valor": 155029.94
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.129021,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.122378,
+          "valor": 137439.12
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.100973,
+          "valor": 113400.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.100411,
+          "valor": 112769.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.140896,
+          "valor": 158236.0
+        }
+      ],
+      "total_ativo": 1123069.61,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-13",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.133071,
+          "valor": 147784.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.114947,
+          "valor": 127656.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.133144,
+          "valor": 147864.62
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.130474,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.1235,
+          "valor": 137154.92
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.103925,
+          "valor": 115416.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.103095,
+          "valor": 114494.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.142951,
+          "valor": 158756.0
+        }
+      ],
+      "total_ativo": 1110565.09,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-14",
+      "distribuicao": [
+        {
+          "ticker": "CSMG3",
+          "peso": 0.135689,
+          "valor": 150046.0
+        },
+        {
+          "ticker": "GROP31",
+          "peso": 0.117858,
+          "valor": 130329.0
+        },
+        {
+          "ticker": "JBSS32",
+          "peso": 0.137351,
+          "valor": 151884.6
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.131035,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "OXYP34",
+          "peso": 0.122052,
+          "valor": 134966.58
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.099739,
+          "valor": 110292.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.099587,
+          "valor": 110124.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.141731,
+          "valor": 156728.0
+        }
+      ],
+      "total_ativo": 1105809.73,
+      "cash_free": 16539.55,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-15",
+      "distribuicao": [
+        {
+          "ticker": "MTSA4",
+          "peso": 0.13122,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.09794,
+          "valor": 108150.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.097665,
+          "valor": 107847.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.144522,
+          "valor": 159588.0
+        }
+      ],
+      "total_ativo": 1104250.73,
+      "cash_free": 16539.55,
+      "cash_accounting": 567226.18
+    },
+    {
+      "market_day": "2026-04-16",
+      "distribuicao": [
+        {
+          "ticker": "MTSA4",
+          "peso": 0.130416,
+          "valor": 144900.0
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.101422,
+          "valor": 112686.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.100565,
+          "valor": 111734.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.142185,
+          "valor": 157976.0
+        }
+      ],
+      "total_ativo": 1111061.73,
+      "cash_free": 16539.55,
+      "cash_accounting": 567226.18
+    },
+    {
+      "market_day": "2026-04-17",
+      "distribuicao": [
+        {
+          "ticker": "G1LW34",
+          "peso": 0.171954,
+          "valor": 188854.05
+        },
+        {
+          "ticker": "K1SG34",
+          "peso": 0.171478,
+          "valor": 188330.32
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.130091,
+          "valor": 142876.0
+        },
+        {
+          "ticker": "PETR3",
+          "peso": 0.097153,
+          "valor": 106701.0
+        },
+        {
+          "ticker": "PETR4",
+          "peso": 0.096793,
+          "valor": 106306.0
+        },
+        {
+          "ticker": "T2ER34",
+          "peso": 0.172058,
+          "valor": 188968.0
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.140904,
+          "valor": 154752.0
+        }
+      ],
+      "total_ativo": 1098279.38,
+      "cash_free": 21492.01,
+      "cash_accounting": 0.0
+    },
+    {
+      "market_day": "2026-04-20",
+      "distribuicao": [
+        {
+          "ticker": "G1LW34",
+          "peso": 0.172331,
+          "valor": 189420.0
+        },
+        {
+          "ticker": "K1SG34",
+          "peso": 0.17202,
+          "valor": 189078.38
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.129986,
+          "valor": 142876.0
+        },
+        {
+          "ticker": "T2ER34",
+          "peso": 0.17101,
+          "valor": 187968.65
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.141311,
+          "valor": 155324.0
+        }
+      ],
+      "total_ativo": 1099166.04,
+      "cash_free": 21492.01,
+      "cash_accounting": 213007.0
+    },
+    {
+      "market_day": "2026-04-22",
+      "distribuicao": [
+        {
+          "ticker": "G1LW34",
+          "peso": 0.175784,
+          "valor": 194534.34
+        },
+        {
+          "ticker": "K1SG34",
+          "peso": 0.172716,
+          "valor": 191139.5
+        },
+        {
+          "ticker": "MTSA4",
+          "peso": 0.127816,
+          "valor": 141450.0
+        },
+        {
+          "ticker": "T2ER34",
+          "peso": 0.174301,
+          "valor": 192892.72
+        },
+        {
+          "ticker": "UGPA3",
+          "peso": 0.137487,
+          "valor": 152152.0
+        }
+      ],
+      "total_ativo": 1106667.57,
+      "cash_free": 21492.01,
+      "cash_accounting": 213007.0
+    }
+  ],
+  "snapshot_posicoes_terminal": [
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "MTSA4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 64.82
+    },
+    {
+      "ticker": "T2ER34",
+      "data_compra": "2026-04-17",
+      "qtd": 1817,
+      "preco_compra": 104.0
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-06",
+      "qtd": 5200,
+      "preco_compra": 29.22
+    }
+  ],
+  "cash_terminal": {
+    "cash_free": 21492.009999999864,
+    "cash_accounting": 213007.0
+  },
+  "generated_at_utc": "2026-04-23T22:49:30.829611+00:00"
+}
