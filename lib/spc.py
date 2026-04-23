@@ -1,14 +1,16 @@
-"""Classificador SPC enriquecido B+C — T-088 / D-088.
+"""Classificador SPC enriquecido B+C — T-088 / D-088 / D-090.
 
-Braco B+C do backtest T-088-SPC-ENRICHED-ABLATION-BR:
+Braco B+C aplicado a todas as 4 cartas de controle:
   - Regra 1 (blocked_baseline): ponto alem dos limites 3-sigma em qualquer carta
-  - W2/W3/W4/N3 na carta de valor (i_value) -> runs_value
-  - W4/N3 na carta de dispersao (mr_value) -> runs_disp
-  blocked_bc = blocked_baseline | runs_value | runs_disp
+  - W2/W3/W4/N3 (bilateral) na carta I (i_value)              -> runs_value
+  - W4/N3 (unilateral superior) na carta MR (mr_value)        -> runs_disp
+  - W2/W3/W4/N3 (bilateral) na carta Xbar (xbar_value)        -> runs_xbar
+  - W2/W3/W4/N3 (unilateral superior) na carta R (r_value)    -> runs_r
+  blocked_bc = blocked_baseline | runs_value | runs_disp | runs_xbar | runs_r
 
-Fonte canonica: backtest/t088_spc_enriched_ablation_br/run_t088.py
-  funcoes _derive_center_and_sigma, _build_runs_flags_per_ticker, _build_arm_flags_by_day.
-Nao alterar a logica dessas funcoes sem novo backtest auditado.
+D-090 (2026-04-23): estendido de I+MR para 4 cartas apos auditoria Gemini confirmar
+que PETR3 violava Nelson na carta R desde 07/04 sem ser bloqueada (D-088 deficiente).
+Regras implementadas sao classicas Nelson/WE sem parametros livres adicionais.
 """
 from __future__ import annotations
 
@@ -19,6 +21,7 @@ import numpy as np
 import pandas as pd
 
 D4_IMR_N2: float = 3.2665  # fator D4 para MR chart com n=2
+D4_N4: float = 2.282  # fator D4 para R chart com n=4 (04_build_canonical.py linha 37)
 
 
 def _safe_float_spc(v: Any, default: float = float("nan")) -> float:
@@ -42,10 +45,11 @@ def _derive_center_and_sigma(row: pd.Series) -> tuple[float, float, float]:
 
 
 def _build_runs_flags(df: pd.DataFrame) -> pd.DataFrame:
-    """Computa flags de runs/tendencia B+C numa serie de um unico ticker.
+    """Computa flags de runs/tendencia B+C nas 4 cartas SPC de um unico ticker.
 
-    df deve estar ordenado por 'date' e conter as colunas SPC do canonical.
-    Adiciona coluna 'blocked_bc' (bool) e flags intermediarias com prefixo '_'.
+    Aplica Nelson/WE em I (bilateral), MR (unilateral superior), Xbar (bilateral)
+    e R (unilateral superior). df deve estar ordenado por 'date' e conter colunas
+    SPC do canonical. Adiciona 'blocked_bc' e flags '_runs_*' com prefixo '_'.
     Retorna conservadoramente blocked_bc=True se dados insuficientes.
     """
     df = df.sort_values("date").copy()
@@ -91,27 +95,79 @@ def _build_runs_flags(df: pd.DataFrame) -> pd.DataFrame:
     n3_mr = (diff_mr > 0).rolling(5, min_periods=5).sum() == 5
     runs_disp = w4_mr | n3_mr
 
+    _empty = pd.Series(float("nan"), index=df.index, dtype=float)
     i_ucl_s = pd.to_numeric(df["i_ucl"], errors="coerce")
     i_lcl_s = pd.to_numeric(df["i_lcl"], errors="coerce")
     mr_ucl_s = pd.to_numeric(df["mr_ucl"], errors="coerce")
-    _empty = pd.Series(float("nan"), index=df.index, dtype=float)
-    r_value = pd.to_numeric(df.get("r_value", _empty), errors="coerce")
-    r_ucl_s = pd.to_numeric(df.get("r_ucl", _empty), errors="coerce")
     xb_val = pd.to_numeric(df.get("xbar_value", _empty), errors="coerce")
-    xb_ucl = pd.to_numeric(df.get("xbar_ucl", _empty), errors="coerce")
-    xb_lcl = pd.to_numeric(df.get("xbar_lcl", _empty), errors="coerce")
+    xb_ucl_s = pd.to_numeric(df.get("xbar_ucl", _empty), errors="coerce")
+    xb_lcl_s = pd.to_numeric(df.get("xbar_lcl", _empty), errors="coerce")
+    rv = pd.to_numeric(df.get("r_value", _empty), errors="coerce")
+    r_ucl_s = pd.to_numeric(df.get("r_ucl", _empty), errors="coerce")
+
+    # Xbar chart — bilateral W4/W3/W2/N3 (mesmo conjunto da carta I)
+    xb_cl = (xb_ucl_s + xb_lcl_s) / 2.0
+    sigma_xb = (xb_ucl_s - xb_cl) / 3.0
+    xb_above_cl = (xb_val > xb_cl).astype(int)
+    xb_below_cl = (xb_val < xb_cl).astype(int)
+    xb_above_za = (xb_val > xb_cl + 2.0 * sigma_xb).astype(int)
+    xb_below_za = (xb_val < xb_cl - 2.0 * sigma_xb).astype(int)
+    xb_above_zb = (xb_val > xb_cl + sigma_xb).astype(int)
+    xb_below_zb = (xb_val < xb_cl - sigma_xb).astype(int)
+    xb_w4_up = xb_above_cl.rolling(8, min_periods=8).sum() == 8
+    xb_w4_dn = xb_below_cl.rolling(8, min_periods=8).sum() == 8
+    xb_w3_up = xb_above_zb.rolling(5, min_periods=5).sum() >= 4
+    xb_w3_dn = xb_below_zb.rolling(5, min_periods=5).sum() >= 4
+    xb_w2_up = xb_above_za.rolling(3, min_periods=3).sum() >= 2
+    xb_w2_dn = xb_below_za.rolling(3, min_periods=3).sum() >= 2
+    diff_xb = xb_val.diff()
+    xb_n3_up = (diff_xb > 0).rolling(5, min_periods=5).sum() == 5
+    xb_n3_dn = (diff_xb < 0).rolling(5, min_periods=5).sum() == 5
+    runs_xbar = (
+        xb_w4_up
+        | xb_w4_dn
+        | xb_w3_up
+        | xb_w3_dn
+        | xb_w2_up
+        | xb_w2_dn
+        | xb_n3_up
+        | xb_n3_dn
+    )
+
+    # R chart — unilateral superior (R e limitado por zero; Nelson unilateral e padrao para cartas R)
+    r_bar_s = r_ucl_s / D4_N4
+    sigma_r = (r_ucl_s - r_bar_s) / 3.0
+    r_above_cl = (rv > r_bar_s).astype(int)
+    r_above_za = (rv > r_bar_s + 2.0 * sigma_r).astype(int)
+    r_above_zb = (rv > r_bar_s + sigma_r).astype(int)
+    r_w4 = r_above_cl.rolling(8, min_periods=8).sum() == 8
+    r_w3 = r_above_zb.rolling(5, min_periods=5).sum() >= 4
+    r_w2 = r_above_za.rolling(3, min_periods=3).sum() >= 2
+    diff_rv = rv.diff()
+    r_n3 = (diff_rv > 0).rolling(5, min_periods=5).sum() == 5
+    runs_r = r_w4 | r_w3 | r_w2 | r_n3
 
     any_rule = (
-        (iv > i_ucl_s) | (iv < i_lcl_s)
+        (iv > i_ucl_s)
+        | (iv < i_lcl_s)
         | (mrv > mr_ucl_s)
-        | (r_value > r_ucl_s)
-        | (xb_val > xb_ucl) | (xb_val < xb_lcl)
+        | (rv > r_ucl_s)
+        | (xb_val > xb_ucl_s)
+        | (xb_val < xb_lcl_s)
     )
 
     df["_blocked_baseline"] = any_rule.fillna(False).astype(bool)
     df["_runs_value"] = runs_value.fillna(False).astype(bool)
     df["_runs_disp"] = runs_disp.fillna(False).astype(bool)
-    df["blocked_bc"] = df["_blocked_baseline"] | df["_runs_value"] | df["_runs_disp"]
+    df["_runs_xbar"] = runs_xbar.fillna(False).astype(bool)
+    df["_runs_r"] = runs_r.fillna(False).astype(bool)
+    df["blocked_bc"] = (
+        df["_blocked_baseline"]
+        | df["_runs_value"]
+        | df["_runs_disp"]
+        | df["_runs_xbar"]
+        | df["_runs_r"]
+    )
     return df
 
 

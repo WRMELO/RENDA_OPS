@@ -66,6 +66,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 50 | T-087-CAD7-CASH-UTILIZATION-BR | Diagnostico empirico do perfil de caixa e desgaste de liquidacao T+2 dentro do ciclo cad=7 | D-086 | backtest/t087_cad7_cash_utilization_br/run_t087.py, backtest/t087_cad7_cash_utilization_br/results/, backtest/t087_cad7_cash_utilization_br/REPORT.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 51 | T-088-SPC-ENRICHED-ABLATION-BR | Ablação de 3 braços para classificador SPC enriquecido com gate + release de quarentena e criterio pre-registrado | D-087 | backtest/t088_spc_enriched_ablation_br/run_t088.py, backtest/t088_spc_enriched_ablation_br/results/, backtest/t088_spc_enriched_ablation_br/decision_criterion_t088.json, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 52 | T-089-SPC-BC-MOTOR-BR | Implementar classificador SPC enriquecido B+C no motor BR: gate de entrada (09_decide.py) e release de quarentena (painel_diario.py); novo lib/spc.py | D-088 | lib/spc.py, pipeline/09_decide.py, pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
+| 53 | T-090-HF-SELAR-MOTOR-BR | Saneamento de blindagem: criar tag v1.10.0-motor selando T-089 auditado; atualizar GOVERNANCE.md §6.5 | D-089 | GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
 
 ### Marcos Estratégicos
 
@@ -121,6 +122,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 
 | ID | Descricao | Artefatos | Data | Ref |
 | --- | --- | --- | --- | --- |
+| T-091-HF-SPC-FULLCHARTS-BR | Estender SPC B+C para Nelson/WE nas 4 cartas (I, MR, Xbar, R) + blindar lib/spc.py | lib/spc.py, GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md | 2026-04-23 | D-090 |
 | T-013-HF | Corrigir default de quantidade em VENDA (usar prev_qtd) | pipeline/boletim_execucao.py, pipeline/report_daily.py | 2026-03-05 | D-007, D-012 |
 | T-024 | Catch-up automático de pregões perdidos no lançador autonomo | pipeline/servidor.py | 2026-03-11 | D-026 |
 | T-025 | Resiliência do step 05 contra instabilidade do FRED (retry/backoff + fallback D-2) | lib/adapters.py, pipeline/run_daily.py | 2026-03-12 | D-027 |

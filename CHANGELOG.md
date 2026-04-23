@@ -169,3 +169,5 @@
 ## 2026-04-23
 
 - feat: T-089-SPC-BC-MOTOR-BR — implementar classificador SPC enriquecido B+C no motor BR: gate de entrada (select_top_n em pipeline/09_decide.py) e release de quarentena (pipeline/painel_diario.py) passam a bloquear tickers com Regra 1 + W2/W3/W4/N3 em carta de valor + W4/N3 em carta de dispersao. Novo lib/spc.py concentra os helpers do classificador (fonte: run_t088.py). Venda defensiva diaria permanece com Regra 1 sem alteracao. Ref: D-088, D-087, T-088.
+- chore: T-090-HF-SELAR-MOTOR-BR — tag v1.10.0-motor criada selando commit c78bdee (T-089-SPC-BC-MOTOR-BR); GOVERNANCE.md §6.5 atualizado de v1.9.0-motor para v1.10.0-motor; D-089 registrado em DECISION_LOG.md. Ref: D-089, D-088, D-053.
+- fix(motor): T-091-HF-SPC-FULLCHARTS-BR — estender SPC B+C para Nelson/WE em todas as 4 cartas: bilateral W4/W3/W2/N3 em Xbar, unilateral superior W4/W3/W2/N3 em R. Adiciona D4_N4=2.282, flags _runs_xbar/_runs_r. Efeito propaga via lib/spc.py sem alterar painel_diario.py ou 09_decide.py. lib/spc.py adicionado a blindagem §6.5 e ao pre-commit hook. Tag v1.11.0-motor criada. Ref: D-090, D-088.
