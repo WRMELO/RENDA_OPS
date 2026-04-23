@@ -1,0 +1,124 @@
+{
+  "date": "2026-04-23",
+  "reference_decision": "2026-04-22",
+  "exec_day": "2026-04-23",
+  "market_day": "2026-04-22",
+  "trade_day": "2026-04-23",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "D1EL34",
+      "qtd": 141,
+      "preco": 1067.02
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "T2ER34",
+      "qtd": 1419,
+      "preco": 106.16
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 147349,
+      "note": "b7a75daa-eb21-46d5-9c07-7031e267908d"
+    },
+    {
+      "value": 153472,
+      "note": "261459e8-18cd-4fc2-8609-a330a3cd764f"
+    }
+  ],
+  "cash_free": 336.519999999844,
+  "cash_accounting": 117097.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BPAC5",
+      "data_compra": "2026-04-11",
+      "qtd": 8200,
+      "preco_compra": 20.12
+    },
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-23",
+      "qtd": 141,
+      "preco_compra": 1067.02
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-10",
+      "qtd": 187,
+      "preco_compra": 864.36
+    },
+    {
+      "ticker": "JHSF3",
+      "data_compra": "2026-04-21",
+      "qtd": 100,
+      "preco_compra": 14.1
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-11",
+      "qtd": 130,
+      "preco_compra": 814.26
+    },
+    {
+      "ticker": "MWET4",
+      "data_compra": "2026-04-16",
+      "qtd": 400,
+      "preco_compra": 20.0
+    },
+    {
+      "ticker": "T2ER34",
+      "data_compra": "2026-04-23",
+      "qtd": 1419,
+      "preco_compra": 106.16
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-21",
+      "qtd": 100,
+      "preco_compra": 10.23
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1900,
+      "preco_compra": 29.54
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-11",
+      "qtd": 3500,
+      "preco_compra": 30.43
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "D1EL34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 141,
+      "preco": 1067.02,
+      "source": "recommended"
+    },
+    {
+      "ticker": "T2ER34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1419,
+      "preco": 106.16,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 336.519999999844,
+  "caixa_liquidando": 117097.0
+}

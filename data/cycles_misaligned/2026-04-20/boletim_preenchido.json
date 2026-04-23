@@ -1,0 +1,131 @@
+{
+  "date": "2026-04-21",
+  "reference_decision": "2026-04-20",
+  "exec_day": "2026-04-21",
+  "market_day": "2026-04-20",
+  "trade_day": "2026-04-21",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "AURA33",
+      "qtd": 880,
+      "preco": 174.4
+    },
+    {
+      "type": "VENDA",
+      "ticker": "PRIO3",
+      "qtd": 1900,
+      "preco": 61.63
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "TPIS3",
+      "qtd": 100,
+      "preco": 10.23
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "JHSF3",
+      "qtd": 100,
+      "preco": 14.1
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 606.3799999998591,
+  "cash_accounting": 417918.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BPAC5",
+      "data_compra": "2026-04-11",
+      "qtd": 8200,
+      "preco_compra": 20.12
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-10",
+      "qtd": 187,
+      "preco_compra": 864.36
+    },
+    {
+      "ticker": "JHSF3",
+      "data_compra": "2026-04-21",
+      "qtd": 100,
+      "preco_compra": 14.1
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-11",
+      "qtd": 130,
+      "preco_compra": 814.26
+    },
+    {
+      "ticker": "MWET4",
+      "data_compra": "2026-04-16",
+      "qtd": 400,
+      "preco_compra": 20.0
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-21",
+      "qtd": 100,
+      "preco_compra": 10.23
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1900,
+      "preco_compra": 29.54
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-11",
+      "qtd": 3500,
+      "preco_compra": 30.43
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "AURA33",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 880,
+      "preco": 174.4,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PRIO3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 1900,
+      "preco": 61.63,
+      "source": "recommended"
+    },
+    {
+      "ticker": "TPIS3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 100,
+      "preco": 10.23,
+      "source": "recommended"
+    },
+    {
+      "ticker": "JHSF3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 100,
+      "preco": 14.1,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 606.3799999998591,
+  "caixa_liquidando": 417918.0
+}

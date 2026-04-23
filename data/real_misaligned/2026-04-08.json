@@ -1,0 +1,124 @@
+{
+  "date": "2026-04-09",
+  "reference_decision": "2026-04-08",
+  "exec_day": "2026-04-09",
+  "market_day": "2026-04-08",
+  "trade_day": "2026-04-09",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "PETR4",
+      "qtd": 1670,
+      "preco": 46.61
+    },
+    {
+      "type": "VENDA",
+      "ticker": "PETR3",
+      "qtd": 1730,
+      "preco": 51.19
+    },
+    {
+      "type": "VENDA",
+      "ticker": "BGIP3",
+      "qtd": 2811,
+      "preco": 57.97
+    },
+    {
+      "type": "VENDA",
+      "ticker": "CBAV3",
+      "qtd": 16380,
+      "preco": 10.62
+    },
+    {
+      "type": "VENDA",
+      "ticker": "D1OW34",
+      "qtd": 3236,
+      "preco": 49.94
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 303.88999999990483,
+  "cash_accounting": 664912.5099999999,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "A1PA34",
+      "data_compra": "2026-04-07",
+      "qtd": 520,
+      "preco_compra": 221.54
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-04-07",
+      "qtd": 11750,
+      "preco_compra": 9.77
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-07",
+      "qtd": 1700,
+      "preco_compra": 67.3
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1950,
+      "preco_compra": 29.54
+    }
+  ],
+  "defensive_quarantine": [
+    "PETR3",
+    "PETR4"
+  ],
+  "positions": [
+    {
+      "ticker": "PETR4",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 1670,
+      "preco": 46.61,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 1730,
+      "preco": 51.19,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BGIP3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 2811,
+      "preco": 57.97,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CBAV3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 16380,
+      "preco": 10.62,
+      "source": "recommended"
+    },
+    {
+      "ticker": "D1OW34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 3236,
+      "preco": 49.94,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 303.88999999990483,
+  "caixa_liquidando": 664912.5099999999
+}

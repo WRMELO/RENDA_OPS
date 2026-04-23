@@ -20,7 +20,7 @@
     "top_n": 10,
     "rebalance_cadence": 7,
     "rebalance_phase_offset": 0,
-    "rebalance_anchor_date": "2026-04-09",
+    "rebalance_anchor_date": "2026-04-06",
     "mdd_limit": null
   },
   "holdout_period": {

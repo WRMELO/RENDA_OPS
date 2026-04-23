@@ -1,0 +1,106 @@
+{
+  "date": "2026-04-17",
+  "reference_decision": "2026-04-16",
+  "exec_day": "2026-04-17",
+  "market_day": "2026-04-16",
+  "trade_day": "2026-04-17",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "PETR3",
+      "qtd": 2900,
+      "preco": 53.66
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 158200,
+      "note": "b9a8e661-1e1e-4e7c-87f1-37fa491c7045"
+    }
+  ],
+  "cash_free": 3039.379999999859,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-04-11",
+      "qtd": 880,
+      "preco_compra": 169.39
+    },
+    {
+      "ticker": "BPAC5",
+      "data_compra": "2026-04-11",
+      "qtd": 8200,
+      "preco_compra": 20.12
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-10",
+      "qtd": 187,
+      "preco_compra": 864.36
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-11",
+      "qtd": 130,
+      "preco_compra": 814.26
+    },
+    {
+      "ticker": "MWET4",
+      "data_compra": "2026-04-16",
+      "qtd": 400,
+      "preco_compra": 20.0
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-04-17",
+      "qtd": 2900,
+      "preco_compra": 53.66
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-07",
+      "qtd": 1700,
+      "preco_compra": 67.3
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-11",
+      "qtd": 200,
+      "preco_compra": 67.65
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1900,
+      "preco_compra": 29.54
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-11",
+      "qtd": 3500,
+      "preco_compra": 30.43
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "PETR3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2900,
+      "preco": 53.66,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 3039.379999999859,
+  "caixa_liquidando": 0.0
+}

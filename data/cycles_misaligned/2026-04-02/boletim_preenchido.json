@@ -1,0 +1,127 @@
+{
+  "date": "2026-04-03",
+  "reference_decision": "2026-04-02",
+  "exec_day": "2026-04-03",
+  "market_day": "2026-04-02",
+  "trade_day": "2026-04-03",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "PETR3",
+      "qtd": 1730,
+      "preco": 53.1
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PETR4",
+      "qtd": 1670,
+      "preco": 48.15
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "BGIP3",
+      "qtd": 2811,
+      "preco": 61.3
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "CBAV3",
+      "qtd": 16380,
+      "preco": 10.52
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "D1OW34",
+      "qtd": 3236,
+      "preco": 53.25
+    }
+  ],
+  "cash_movements": [
+    {
+      "type": "APORTE",
+      "value": 1148789.91,
+      "description": "APORTE INICIAL"
+    }
+  ],
+  "cash_transfers": [],
+  "cash_free": 459567.5099999999,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "BGIP3",
+      "data_compra": "2026-04-03",
+      "qtd": 2811,
+      "preco_compra": 61.3
+    },
+    {
+      "ticker": "CBAV3",
+      "data_compra": "2026-04-03",
+      "qtd": 16380,
+      "preco_compra": 10.52
+    },
+    {
+      "ticker": "D1OW34",
+      "data_compra": "2026-04-03",
+      "qtd": 3236,
+      "preco_compra": 53.25
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-04-03",
+      "qtd": 1730,
+      "preco_compra": 53.1
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-04-03",
+      "qtd": 1670,
+      "preco_compra": 48.15
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "PETR3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1730,
+      "preco": 53.1,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR4",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1670,
+      "preco": 48.15,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BGIP3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2811,
+      "preco": 61.3,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CBAV3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 16380,
+      "preco": 10.52,
+      "source": "recommended"
+    },
+    {
+      "ticker": "D1OW34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 3236,
+      "preco": 53.25,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 459567.5099999999,
+  "caixa_liquidando": 0.0
+}

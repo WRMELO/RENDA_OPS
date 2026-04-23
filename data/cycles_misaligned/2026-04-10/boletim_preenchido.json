@@ -1,0 +1,194 @@
+{
+  "date": "2026-04-11",
+  "reference_decision": "2026-04-10",
+  "exec_day": "2026-04-11",
+  "market_day": "2026-04-10",
+  "trade_day": "2026-04-11",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "BPAC5",
+      "qtd": 8250,
+      "preco": 20.12
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "BIED3",
+      "qtd": 6330,
+      "preco": 9.19
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "K1SG34",
+      "qtd": 130,
+      "preco": 814.26
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PRIO3",
+      "qtd": 260,
+      "preco": 67.65
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "AURA33",
+      "qtd": 880,
+      "preco": 169.39
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "UGPA3",
+      "qtd": 3500,
+      "preco": 30.43
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 162953.66999999998,
+      "note": "d22a68d0-0333-430d-8eb3-f1e77a41092b"
+    },
+    {
+      "value": 173955.59999999998,
+      "note": "6de84264-6b17-4fd2-8bb9-5b56eedd579c"
+    },
+    {
+      "value": 88558.7,
+      "note": "a3dd53bf-e6d2-4336-bd44-f2e223b72f99"
+    },
+    {
+      "value": 77838.7,
+      "note": "8adc720a-8edc-4657-93cd-94d548519a70"
+    },
+    {
+      "value": 101504,
+      "note": "91b8894d-2a03-42fb-bd17-4a72706760a0"
+    }
+  ],
+  "cash_free": 1911.379999999932,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-04-11",
+      "qtd": 880,
+      "preco_compra": 169.39
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-04-07",
+      "qtd": 11750,
+      "preco_compra": 9.77
+    },
+    {
+      "ticker": "BIED3",
+      "data_compra": "2026-04-11",
+      "qtd": 6330,
+      "preco_compra": 9.19
+    },
+    {
+      "ticker": "BPAC5",
+      "data_compra": "2026-04-11",
+      "qtd": 8250,
+      "preco_compra": 20.12
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-10",
+      "qtd": 187,
+      "preco_compra": 864.36
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-11",
+      "qtd": 130,
+      "preco_compra": 814.26
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-07",
+      "qtd": 1700,
+      "preco_compra": 67.3
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-11",
+      "qtd": 260,
+      "preco_compra": 67.65
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1950,
+      "preco_compra": 29.54
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-11",
+      "qtd": 3500,
+      "preco_compra": 30.43
+    }
+  ],
+  "defensive_quarantine": [
+    "A1PA34"
+  ],
+  "positions": [
+    {
+      "ticker": "BPAC5",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 8250,
+      "preco": 20.12,
+      "source": "recommended"
+    },
+    {
+      "ticker": "BIED3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 6330,
+      "preco": 9.19,
+      "source": "recommended"
+    },
+    {
+      "ticker": "K1SG34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 130,
+      "preco": 814.26,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PRIO3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 260,
+      "preco": 67.65,
+      "source": "recommended"
+    },
+    {
+      "ticker": "AURA33",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 880,
+      "preco": 169.39,
+      "source": "recommended"
+    },
+    {
+      "ticker": "UGPA3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 3500,
+      "preco": 30.43,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 1911.379999999932,
+  "caixa_liquidando": 0.0
+}

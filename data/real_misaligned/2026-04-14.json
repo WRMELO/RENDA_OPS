@@ -1,0 +1,97 @@
+{
+  "date": "2026-04-15",
+  "reference_decision": "2026-04-14",
+  "exec_day": "2026-04-15",
+  "market_day": "2026-04-14",
+  "trade_day": "2026-04-15",
+  "operations": [
+    {
+      "type": "VENDA_TECNICA",
+      "ticker": "BPAC5",
+      "qtd": 50,
+      "preco": 20.12,
+      "note": "ajuste_lote_D-012"
+    },
+    {
+      "type": "VENDA_TECNICA",
+      "ticker": "PRIO3",
+      "qtd": 60,
+      "preco": 67.65,
+      "note": "ajuste_lote_D-012"
+    },
+    {
+      "type": "VENDA_TECNICA",
+      "ticker": "UGPA3",
+      "qtd": 50,
+      "preco": 29.54,
+      "note": "ajuste_lote_D-012"
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 8453.379999999932,
+  "cash_accounting": 158200.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "AURA33",
+      "data_compra": "2026-04-11",
+      "qtd": 880,
+      "preco_compra": 169.39
+    },
+    {
+      "ticker": "BPAC5",
+      "data_compra": "2026-04-11",
+      "qtd": 8200,
+      "preco_compra": 20.12
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-10",
+      "qtd": 187,
+      "preco_compra": 864.36
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-08",
+      "qtd": 74,
+      "preco_compra": 773.68
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-11",
+      "qtd": 130,
+      "preco_compra": 814.26
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-07",
+      "qtd": 1700,
+      "preco_compra": 67.3
+    },
+    {
+      "ticker": "PRIO3",
+      "data_compra": "2026-04-11",
+      "qtd": 200,
+      "preco_compra": 67.65
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-08",
+      "qtd": 1900,
+      "preco_compra": 29.54
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-11",
+      "qtd": 3500,
+      "preco_compra": 30.43
+    }
+  ],
+  "defensive_quarantine": [
+    "A1PA34"
+  ],
+  "positions": [],
+  "cash_balance": 8453.379999999932,
+  "caixa_liquidando": 158200.0
+}

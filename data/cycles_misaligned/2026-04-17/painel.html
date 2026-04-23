@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Painel Diário — 17/04/2026</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+body { font-family: Segoe UI, Tahoma, sans-serif; background:#f5f7fb; color:#1f2937; margin:0; }
+.wrap { max-width: 1600px; margin: 0 auto; padding: 16px; }
+h1 { margin:0; font-size:24px; color:#0f172a; }
+.sub { color:#475569; margin-top:4px; margin-bottom:14px; }
+.block { background:white; border:1px solid #dbe2ea; border-radius:10px; padding:14px; margin-bottom:14px; }
+.twocol { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+.chart-grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px; }
+.chart-wrap { border:1px solid #dbe2ea; border-radius:8px; padding:8px; background:#fff; min-height:455px; }
+.motor-status-wrap { border:1px solid #0f172a; border-radius:10px; background:#0f172a; padding:12px 14px; margin-top:14px; }
+.motor-status-title { color:#f8fafc; font-size:16px; font-weight:700; margin-bottom:10px; }
+.motor-status-grid { display:grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap:10px 12px; }
+.motor-item { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:8px 10px; }
+.motor-label { color:#94a3b8; font-size:12px; margin-bottom:4px; }
+.motor-value { color:#e2e8f0; font-size:16px; font-weight:700; line-height:1.2; }
+.motor-value.ok { color:#22c55e; }
+.motor-value.bad { color:#ef4444; }
+.motor-value.warn { color:#f59e0b; }
+.chart-empty { color:#64748b; font-size:13px; padding:10px; }
+.info-grid { display:grid; grid-template-columns: 0.40fr 0.60fr; gap:14px; }
+table { width:100%; border-collapse: collapse; font-size:13px; table-layout:fixed; }
+th { background:#0f172a; color:white; padding:7px; text-align:left; }
+td { border-bottom:1px solid #e5e7eb; padding:6px 7px; }
+.total-row td { background:#f8fafc; border-top:2px solid #cbd5e1; }
+.total-row .total-title { white-space:nowrap; font-weight:700; }
+.section-title { font-size:18px; margin-bottom:10px; color:#0f172a; }
+.muted { color:#64748b; font-size:12px; }
+.btn { background:#0f4c81; color:white; border:none; border-radius:8px; padding:10px 14px; cursor:pointer; font-weight:600; }
+.btn-add { background:#334155; }
+input, select { width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; }
+.ops-head, .op-grid { display:grid; grid-template-columns: 120px 160px 120px 140px 140px 40px; gap:8px; align-items:center; }
+.ops-head { font-size:12px; font-weight:700; color:#334155; margin-bottom:6px; }
+.cash-grid { display:grid; grid-template-columns: 140px 120px 1fr 40px; gap:8px; margin-bottom:8px; align-items:center; }
+.save-msg { margin-left:8px; font-size:13px; }
+.save-msg.error { color:#b91c1c; font-weight:600; }
+.save-msg.ok { color:#166534; }
+.warnings { background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; border-radius:8px; padding:10px; margin:10px 0; }
+.split-alert { background:#fef2f2; border:2px solid #f87171; color:#991b1b; border-radius:10px; padding:14px; margin:10px 0; font-size:14px; }
+.split-alert strong { font-size:15px; }
+.split-alert ul { margin:6px 0 0 16px; padding:0; }
+.top10-table td, .top10-table th { font-size:12px; padding:5px 6px; }
+.cash-layout { display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px; }
+.cash-panel { border:1px solid #dbe2ea; border-radius:8px; padding:10px; background:#fafcff; }
+.cash-panel h4 { margin:0 0 10px 0; color:#0f172a; }
+.cash-row { display:flex; justify-content:space-between; gap:10px; padding:4px 0; border-bottom:1px dashed #e5e7eb; font-size:13px; }
+.cash-row:last-child { border-bottom:none; }
+.cash-row strong { color:#0f172a; }
+.cash-real { margin-top:10px; }
+.top-input { width:100%; padding:4px 6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; }
+@media (max-width: 1200px) {
+  .twocol, .chart-grid, .info-grid, .cash-layout { grid-template-columns: 1fr; }
+  .motor-status-grid { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+}
+@media print {
+  @page { size: A3 landscape; margin: 8mm; }
+  body { background:#fff; }
+  .wrap { max-width:none; padding:0; }
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Painel Diário — Mercado: 17/04/2026 | Execução: 20/04/2026</h1>
+    <div class="sub">Documento único: Relatório + Boletim | D-1 de mercado: 17/04/2026</div>
+
+    
+
+    <div class="block">
+      <div class="section-title">Sessão Relatório</div>
+      
+      
+    <div class="twocol">
+      <div>
+        <h3>Carteira Comprada</h3>
+        <table>
+          <colgroup><col style="width:14%"><col style="width:16%"><col style="width:12%"><col style="width:18%"><col style="width:22%"><col style="width:12%"></colgroup>
+          <tr><th>Ticker</th><th>Data da Compra</th><th>Qtd</th><th>Preço Compra</th><th>Valor Compra</th><th>Peso %</th></tr>
+          <tr><td>AURA33</td><td>11/04/2026</td><td style='text-align:right'>880</td><td style='text-align:right'>R$ 169,39</td><td style='text-align:right'>R$ 149.063,20</td><td style='text-align:right'>13,64%</td></tr><tr><td>BPAC5</td><td>11/04/2026</td><td style='text-align:right'>8.200</td><td style='text-align:right'>R$ 20,12</td><td style='text-align:right'>R$ 164.984,00</td><td style='text-align:right'>15,09%</td></tr><tr><td>G1LW34</td><td>10/04/2026</td><td style='text-align:right'>187</td><td style='text-align:right'>R$ 864,36</td><td style='text-align:right'>R$ 161.635,32</td><td style='text-align:right'>14,79%</td></tr><tr><td>K1SG34</td><td>08/04/2026</td><td style='text-align:right'>74</td><td style='text-align:right'>R$ 773,68</td><td style='text-align:right'>R$ 57.252,32</td><td style='text-align:right'>5,24%</td></tr><tr><td>K1SG34</td><td>11/04/2026</td><td style='text-align:right'>130</td><td style='text-align:right'>R$ 814,26</td><td style='text-align:right'>R$ 105.853,80</td><td style='text-align:right'>9,68%</td></tr><tr><td>MWET4</td><td>16/04/2026</td><td style='text-align:right'>400</td><td style='text-align:right'>R$ 20,00</td><td style='text-align:right'>R$ 8.000,00</td><td style='text-align:right'>0,73%</td></tr><tr><td>PETR3</td><td>17/04/2026</td><td style='text-align:right'>2.900</td><td style='text-align:right'>R$ 53,66</td><td style='text-align:right'>R$ 155.614,00</td><td style='text-align:right'>14,24%</td></tr><tr><td>PRIO3</td><td>07/04/2026</td><td style='text-align:right'>1.700</td><td style='text-align:right'>R$ 67,30</td><td style='text-align:right'>R$ 114.410,00</td><td style='text-align:right'>10,47%</td></tr><tr><td>PRIO3</td><td>11/04/2026</td><td style='text-align:right'>200</td><td style='text-align:right'>R$ 67,65</td><td style='text-align:right'>R$ 13.530,00</td><td style='text-align:right'>1,24%</td></tr><tr><td>UGPA3</td><td>08/04/2026</td><td style='text-align:right'>1.900</td><td style='text-align:right'>R$ 29,54</td><td style='text-align:right'>R$ 56.126,00</td><td style='text-align:right'>5,14%</td></tr><tr><td>UGPA3</td><td>11/04/2026</td><td style='text-align:right'>3.500</td><td style='text-align:right'>R$ 30,43</td><td style='text-align:right'>R$ 106.505,00</td><td style='text-align:right'>9,74%</td></tr>
+          <tr class='total-row'><td class='total-title' colspan='4'><strong>Total Geral</strong></td><td style='text-align:right'><strong>R$ 1.092.973,64</strong></td><td style='text-align:right'><strong>100,00%</strong></td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Carteira Atual (D-1)</h3>
+        <table>
+          <colgroup><col style="width:12%"><col style="width:14%"><col style="width:10%"><col style="width:14%"><col style="width:18%"><col style="width:10%"><col style="width:16%"></colgroup>
+          <tr><th>Ticker</th><th>Data Compra</th><th>Qtd</th><th>Preço D-1</th><th>Valor Atual</th><th>Peso %</th><th>Retorno Log %</th></tr>
+          <tr><td>AURA33</td><td>11/04/2026</td><td style='text-align:right'>880</td><td style='text-align:right'>R$ 181,80</td><td style='text-align:right'>R$ 159.984,00</td><td style='text-align:right'>14,68%</td><td style='text-align:right'>7,07%</td></tr><tr><td>BPAC5</td><td>11/04/2026</td><td style='text-align:right'>8.200</td><td style='text-align:right'>R$ 21,19</td><td style='text-align:right'>R$ 173.758,00</td><td style='text-align:right'>15,94%</td><td style='text-align:right'>5,18%</td></tr><tr><td>G1LW34</td><td>10/04/2026</td><td style='text-align:right'>187</td><td style='text-align:right'>R$ 817,55</td><td style='text-align:right'>R$ 152.881,85</td><td style='text-align:right'>14,03%</td><td style='text-align:right'>-5,57%</td></tr><tr><td>K1SG34</td><td>08/04/2026</td><td style='text-align:right'>74</td><td style='text-align:right'>R$ 833,32</td><td style='text-align:right'>R$ 61.665,68</td><td style='text-align:right'>5,66%</td><td style='text-align:right'>7,43%</td></tr><tr><td>K1SG34</td><td>11/04/2026</td><td style='text-align:right'>130</td><td style='text-align:right'>R$ 833,32</td><td style='text-align:right'>R$ 108.331,60</td><td style='text-align:right'>9,94%</td><td style='text-align:right'>2,31%</td></tr><tr><td>MWET4</td><td>16/04/2026</td><td style='text-align:right'>400</td><td style='text-align:right'>R$ 20,00</td><td style='text-align:right'>R$ 8.000,00</td><td style='text-align:right'>0,73%</td><td style='text-align:right'>0,00%</td></tr><tr><td>PETR3</td><td>17/04/2026</td><td style='text-align:right'>2.900</td><td style='text-align:right'>R$ 50,81</td><td style='text-align:right'>R$ 147.349,00</td><td style='text-align:right'>13,52%</td><td style='text-align:right'>-5,46%</td></tr><tr><td>PRIO3</td><td>07/04/2026</td><td style='text-align:right'>1.700</td><td style='text-align:right'>R$ 61,66</td><td style='text-align:right'>R$ 104.822,00</td><td style='text-align:right'>9,62%</td><td style='text-align:right'>-8,75%</td></tr><tr><td>PRIO3</td><td>11/04/2026</td><td style='text-align:right'>200</td><td style='text-align:right'>R$ 61,66</td><td style='text-align:right'>R$ 12.332,00</td><td style='text-align:right'>1,13%</td><td style='text-align:right'>-9,27%</td></tr><tr><td>UGPA3</td><td>08/04/2026</td><td style='text-align:right'>1.900</td><td style='text-align:right'>R$ 29,76</td><td style='text-align:right'>R$ 56.544,00</td><td style='text-align:right'>5,19%</td><td style='text-align:right'>0,74%</td></tr><tr><td>UGPA3</td><td>11/04/2026</td><td style='text-align:right'>3.500</td><td style='text-align:right'>R$ 29,76</td><td style='text-align:right'>R$ 104.160,00</td><td style='text-align:right'>9,56%</td><td style='text-align:right'>-2,23%</td></tr>
+          <tr class='total-row'><td class='total-title' colspan='4'><strong>Total Geral</strong></td><td style='text-align:right'><strong>R$ 1.089.828,13</strong></td><td style='text-align:right'><strong>100,00%</strong></td><td style='text-align:right'>-</td></tr>
+        </table>
+      </div>
+    </div>
+    
+      <div class="chart-grid">
+        <div class="chart-wrap"><div>                            <div id="2069609a-2ce9-486d-bb60-01ad29048c84" class="plotly-graph-div" style="height:430px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("2069609a-2ce9-486d-bb60-01ad29048c84")) {                    Plotly.newPlot(                        "2069609a-2ce9-486d-bb60-01ad29048c84",                        [{"hovertemplate":"PRIO3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"PRIO3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAGyzdjMRGSRA9mfPRsyEI0CSD\u002fYIKD8kQHD9x1R4wCRAaB5eKPjBJkAFHs8c1jYmQNtR7156xCVA\u002fymYFZNwJUA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"K1SG34: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"K1SG34","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYH\u002f5awjGFUBVN9cF1CkWQBiNKWvJvhVAS7JX3lEaLkDE8Ty2WWMuQKo7KgAINS5Adwt60D0cL0A="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"UGPA3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"UGPA3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlMrY4ra5E0CN6jvXiZAUQBcWFJOG3RRA51+J9ZuPLUAK5HJCQT0tQJb98O71Cy5A+ZgixNtoLUA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"G1LW34: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"G1LW34","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALXfkV4kAi1AspVgisRoLUD5ou6M2\u002fgsQIlJKvs1byxAncZ\u002fkmX6K0A="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"BPAC5: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"BPAC5","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF+OwROrYLkC2hLrZ4MkuQClwuE8Coy9Alv2spG3ML0A="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"CBAV3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"CBAV3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"bpSq4vX\u002fLUCMWD8fOgcuQC2AT4S5Ei5AQPWiK7MoL0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"BGIP3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"BGIP3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"61vcO9D\u002fLUBY8WNnVvstQFfP\u002fTel6S1A4QcsYzUwLUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"D1OW34: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"D1OW34","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"hf4nCu\u002f\u002fLUD8VR63rEItQFGjun9oMS1A8uHEcGfyLEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"AURA33: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"AURA33","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYhXplJRwK0DaJXoIU3UsQIOHsWtOsStAJokshCBHLUA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"BIED3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"BIED3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAPOlDfIi\u002fyNA5PqgLrmtI0Akone8CZoiQFy95rYTfCNA7kAPNc5dLEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"PETR3: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"PETR3","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"B\u002fS01Wr8H0A9KVpJDjkgQKTFi1O2SSBAwzOYAK+5H0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAqmH33y\u002f3KkA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"A1PA34: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"A1PA34","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAMRhU+oeESRAMiGyk4KiJEDrR+V3c3giQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"PETR4: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"PETR4","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"+h+knJL\u002fG0CieTNE9IkcQEztSXzWnxxAaIMjfo7iG0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"MWET4: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"width":1.0},"mode":"lines","name":"MWET4","stackgroup":"one","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAzhlSh7Ns5z8="},"type":"scatter","xaxis":"x","yaxis":"y"},{"connectgaps":true,"line":{"color":"#f59e0b","width":1.8},"marker":{"size":4},"mode":"lines+markers","name":"P(Caixa)","x":["2026-04-03T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAwKWUeT8AAADApZR5PwAAAOAx8no\u002fAAAA4KGlfj8AAACgVVx5PwAAAKBVXHk\u002fAAAA4Dtkdz8AAACg95ZzPwAAAOA7ZHc\u002fAAAAQB3Wcj8="},"type":"scatter","xaxis":"x2","yaxis":"y2"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"matches":"x2","showticklabels":false,"type":"date","tickformat":"%d\u002f%m"},"yaxis":{"anchor":"x","domain":[0.28559999999999997,0.9999999999999999],"range":[0,100]},"xaxis2":{"anchor":"y2","domain":[0.0,1.0],"type":"date","tickformat":"%d\u002f%m"},"yaxis2":{"anchor":"x2","domain":[0.0,0.22559999999999997],"range":[0,0.5]},"shapes":[{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":12.0,"y1":12.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":24.0,"y1":24.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":36.0,"y1":36.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":48.0,"y1":48.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":60.0,"y1":60.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":72.0,"y1":72.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":84.0,"y1":84.0,"yref":"y"},{"line":{"color":"rgba(100,116,139,0.45)","dash":"dot","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":96.0,"y1":96.0,"yref":"y"},{"line":{"color":"#dc2626","dash":"dash","width":1.5},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":15.0,"y1":15.0,"yref":"y"},{"line":{"color":"#dc2626","dash":"dot"},"type":"line","x0":0,"x1":1,"xref":"x2 domain","y0":0.22,"y1":0.22,"yref":"y2"}],"margin":{"l":30,"r":20,"t":24,"b":30},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"left","x":0},"font":{"size":11},"height":430,"separators":",."},                        {"responsive": true}                    )                };            </script>        </div></div>
+        <div class="chart-wrap"><div>                            <div id="e63802e0-083b-40ee-8f89-4de6254de9f0" class="plotly-graph-div" style="height:430px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e63802e0-083b-40ee-8f89-4de6254de9f0")) {                    Plotly.newPlot(                        "e63802e0-083b-40ee-8f89-4de6254de9f0",                        [{"marker":{"color":["#ef5350","#26a69a","#ef5350","#ef5350","#26a69a","#26a69a","#ef5350","#ef5350","#ef5350"]},"name":"Var. Di\u00e1ria %","opacity":0.45,"x":["2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-11T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"8NlI1J800r\u002fAIsOmrZLNP6LeZr2pBAbAMC4E16cK+b8oocK4Rw3rP5C5E3vZQ+Q\u002fADX552l7yL9IjKxIJSvtvwjNcSYzv+2\u002f"},"type":"bar","xaxis":"x","yaxis":"y2"},{"connectgaps":true,"line":{"color":"#1f77b4","width":2.5},"marker":{"size":6},"mode":"lines+markers","name":"Carteira Real","x":["2026-04-06T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-13T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"ElueZrLo7z8SW55msujvP3mPJdqR++8\u002f\u002fK0uozka7z+D3tW1m53uP4Pe1bWbne4\u002fi1CBPesR7z+azX+rtALvP97gvdVXuu4\u002fVnTI5zdx7j8="},"type":"scatter","xaxis":"x","yaxis":"y"},{"line":{"color":"#8b8b8b","dash":"dot","width":1.7},"marker":{"size":4},"mode":"lines+markers","name":"CDI","x":["2026-04-06T00:00:00","2026-04-07T00:00:00","2026-04-08T00:00:00","2026-04-09T00:00:00","2026-04-10T00:00:00","2026-04-13T00:00:00","2026-04-14T00:00:00","2026-04-15T00:00:00","2026-04-16T00:00:00","2026-04-17T00:00:00"],"y":{"dtype":"f8","bdata":"AAAAAAAA8D8luCYXQgLwPxo55H+EBPA\u002fuwZEOscG8D+FplFGCgnwP5WfGKRNC\u002fA\u002fq3qkU5EN8D8kwgBV1Q\u002fwPwACOagZEvA\u002f4MdYTV4U8D8="},"type":"scatter","xaxis":"x","yaxis":"y"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.94],"type":"date","tickformat":"%d\u002f%m"},"yaxis":{"anchor":"x","domain":[0.0,1.0]},"yaxis2":{"anchor":"x","overlaying":"y","side":"right"},"margin":{"l":30,"r":20,"t":24,"b":30},"legend":{"orientation":"h","yanchor":"bottom","y":1.03,"xanchor":"right","x":1},"height":430,"separators":",."},                        {"responsive": true}                    )                };            </script>        </div></div>
+      </div>
+      <div class='motor-status-wrap'><div class='motor-status-title'>Motor C060X — Status Operacional</div><div class='motor-status-grid'><div class='motor-item'><div class='motor-label'>Regime</div><div class='motor-value ok'>MERCADO</div></div><div class='motor-item'><div class='motor-label'>P(Caixa)</div><div class='motor-value '>0,0063</div></div><div class='motor-item'><div class='motor-label'>Threshold</div><div class='motor-value '>0,22</div></div><div class='motor-item'><div class='motor-label'>Pregões abaixo thr</div><div class='motor-value '>95</div></div><div class='motor-item'><div class='motor-label'>Cadência</div><div class='motor-value '>7 pregões</div></div><div class='motor-item'><div class='motor-label'>Hoje é rebalanceamento</div><div class='motor-value ok'>SIM</div></div><div class='motor-item'><div class='motor-label'>Próximo rebalanceamento</div><div class='motor-value warn'>20/04/2026</div></div><div class='motor-item'><div class='motor-label'>Âncora</div><div class='motor-value '>09/04/2026</div></div></div></div>
+    </div>
+
+    <div class="block">
+      <div class="section-title">Sessão Boletim — Informação</div>
+      <div class="info-grid">
+        <div>
+          <h3>Top-10 para compra (D-1)</h3>
+          <table class="top10-table">
+            <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th><th>Preço</th><th>Qtd</th><th>Valor</th></tr>
+            <tbody id="topBuyBody"></tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Card de Venda (sugestão técnica)</h3>
+          <table>
+            <tr><th>Ticker</th><th>% Venda</th><th>Fechamento D-1</th><th>Razão técnica</th></tr>
+            <tr><td>PETR3</td><td style='text-align:right'>100,00%</td><td style='text-align:right'>R$ 50,81</td><td>DEFESA CEP/SPC: score=6 (venda parcial por severidade).</td></tr><tr><td>PRIO3</td><td style='text-align:right'>100,00%</td><td style='text-align:right'>R$ 61,66</td><td>REBALANCEAMENTO C2 (K=15): fora do Top-10 e rank > 15.</td></tr><tr><td>UGPA3</td><td style='text-align:right'>100,00%</td><td style='text-align:right'>R$ 29,76</td><td>REBALANCEAMENTO C2 (K=15): fora do Top-10 e rank > 15.</td></tr>
+          </table>
+          <p class="muted" style="margin-top:8px;">Caixa contábil (não disponível): R$ 0,00</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="section-title">Sessão Boletim — Ação do Owner</div>
+      <p class="muted" style="margin-bottom:10px;">Informe as operações do dia, movimentações extraordinárias e transferências Contábil -> Livre.</p>
+
+      <h3>Operações do dia</h3>
+      <div class="ops-head">
+        <div>Tipo</div>
+        <div>Ticker</div>
+        <div>Quantidade</div>
+        <div>Preço</div>
+        <div>Valor</div>
+        <div></div>
+      </div>
+      <div id="opsRows"></div>
+      <button class="btn btn-add" onclick="addOp()">+ Adicionar operação</button>
+
+      <h3 style="margin-top:14px;">Movimentações extraordinárias de caixa</h3>
+      <div id="cashRows"></div>
+      <button class="btn btn-add" onclick="addCash()">+ Adicionar movimento</button>
+
+      <h3 style="margin-top:14px;">Transferências Contábil -> Livre</h3>
+      <p class="muted" style="font-size:13px;">Vendas realizadas em dias anteriores cujo valor ainda não foi transferido para Caixa Livre. Marque para transferir hoje.</p>
+      <div id="pendingSalesTable">
+        <table style="font-size:13px;width:100%;">
+          <tr style="background:#f1f5f9;"><th style="width:5%;"></th><th>Data Venda</th><th>Ticker</th><th style="text-align:right">Qtd</th><th style="text-align:right">Preço</th><th style="text-align:right">Valor Venda</th><th style="text-align:right">Pendente</th></tr>
+          <tbody id="pendingSalesBody"></tbody>
+        </table>
+      </div>
+      <div id="transferRows" style="margin-top:8px;"></div>
+      <button class="btn btn-add" onclick="addTransfer()">+ Adicionar transferência manual</button>
+
+      <div class="section-title" style="margin-top:14px;">Sessão Caixa</div>
+      <div class="cash-layout">
+        <div class="cash-panel">
+          <h4>Balanço Simplificado (D)</h4>
+          <div class="cash-row"><span>Carteira de Ações (valor D-1)</span><strong id="bal_carteira">-</strong></div>
+          <div class="cash-row"><span>Caixa Livre</span><strong id="bal_caixa_livre">-</strong></div>
+          <div class="cash-row"><span>Caixa Contábil</span><strong id="bal_caixa_contabil">-</strong></div>
+          <div class="cash-row"><span><strong>Total do Ativo</strong></span><strong id="bal_total_ativo">-</strong></div>
+          <div class="cash-row"><span>Aportes acumulados</span><strong id="bal_aporte_acc">-</strong></div>
+          <div class="cash-row"><span>Retiradas acumuladas</span><strong id="bal_retirada_acc">-</strong></div>
+          <div class="cash-row"><span><strong>Capital Líquido Aportado</strong></span><strong id="bal_patrimonio_inicial">-</strong></div>
+          <div class="cash-row"><span><strong>Resultado acumulado</strong></span><strong id="bal_resultado_acc">-</strong></div>
+          <div class="cash-row"><span><strong>Rentabilidade acumulada</strong></span><strong id="bal_rent_acc">-</strong></div>
+        </div>
+        <div class="cash-panel">
+          <h4>DFC Simplificado (D)</h4>
+          <div class="cash-row"><span>Caixa Livre anterior (D-1)</span><strong id="dfc_free_open">-</strong></div>
+          <div class="cash-row"><span>(+) Transferências Contábil -> Livre</span><strong id="dfc_transfer">-</strong></div>
+          <div class="cash-row"><span>(+) Aportes</span><strong id="dfc_aporte">-</strong></div>
+          <div class="cash-row"><span>(-) Retiradas</span><strong id="dfc_retirada">-</strong></div>
+          <div class="cash-row"><span>(-) Compras do dia</span><strong id="dfc_buy">-</strong></div>
+          <div class="cash-row"><span><strong>Saldo Final Caixa Livre (D)</strong></span><strong id="dfc_free_close">-</strong></div>
+          <div class="cash-row"><span>Caixa Contábil anterior (D-1)</span><strong id="dfc_acc_open">-</strong></div>
+          <div class="cash-row"><span>(+) Vendas do dia</span><strong id="dfc_sell">-</strong></div>
+          <div class="cash-row"><span>(-) Transferências -> Livre</span><strong id="dfc_acc_transfer">-</strong></div>
+          <div class="cash-row"><span><strong>Saldo Final Caixa Contábil (D)</strong></span><strong id="dfc_acc_close">-</strong></div>
+          <div class="cash-real">
+            <label for="cash_real_input" class="muted">Caixa Líquido Real (informado pelo Owner)</label>
+            <input id="cash_real_input" type="number" step="0.01" min="0" placeholder="Ex.: 741035.65" />
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <button id="btnSave" class="btn" onclick="savePanel()">Salvar Boletim (JSON)</button>
+        <span id="saveMsg" class="save-msg"></span>
+      </div>
+    </div>
+  </div>
+
+<script>
+const EXEC_DATE = "2026-04-20";
+const MARKET_DAY = "2026-04-17";
+const TRADE_DAY = "2026-04-20";
+const DECISION_DATE = "2026-04-17";
+const PREV_FREE = 3039.379999999859;
+const PREV_ACC = 0.0;
+const CARTEIRA_D1 = 1089828.1300000001;
+const APORTE_ACC = 1148789.91;
+const RETIRADA_ACC = 0.0;
+const TOP_BUY_ROWS = [{"ticker": "TPIS3", "m3": 4.8068, "close_d1": 10.83}, {"ticker": "BPAC5", "m3": 4.734, "close_d1": 21.19}, {"ticker": "MWET4", "m3": 4.1785, "close_d1": 20.0}, {"ticker": "K1SG34", "m3": 3.9703, "close_d1": 833.32}, {"ticker": "JHSF3", "m3": 3.9057, "close_d1": 13.82}, {"ticker": "PETR3", "m3": 3.5966, "close_d1": 50.81}, {"ticker": "PETR4", "m3": 3.4019, "close_d1": 46.22}, {"ticker": "SBSP3", "m3": 3.3121, "close_d1": 168.68}, {"ticker": "ODPV3", "m3": 3.0999, "close_d1": 15.78}, {"ticker": "MTSA4", "m3": 3.0872, "close_d1": 62.12}];
+const ACTION_ROWS = [{"type": "VENDA", "ticker": "PETR3", "qtd": 2900, "preco": 50.81}, {"type": "VENDA", "ticker": "PRIO3", "qtd": 1900, "preco": 61.66}, {"type": "VENDA", "ticker": "UGPA3", "qtd": 5400, "preco": 29.76}];
+const PREFILL_CASH_ROWS = [];
+const SNAPSHOT_D1 = [{"ticker": "AURA33", "data_compra": "2026-04-11", "qtd": 880, "preco_compra": 169.39}, {"ticker": "BPAC5", "data_compra": "2026-04-11", "qtd": 8200, "preco_compra": 20.12}, {"ticker": "G1LW34", "data_compra": "2026-04-10", "qtd": 187, "preco_compra": 864.36}, {"ticker": "K1SG34", "data_compra": "2026-04-08", "qtd": 74, "preco_compra": 773.68}, {"ticker": "K1SG34", "data_compra": "2026-04-11", "qtd": 130, "preco_compra": 814.26}, {"ticker": "MWET4", "data_compra": "2026-04-16", "qtd": 400, "preco_compra": 20.0}, {"ticker": "PETR3", "data_compra": "2026-04-17", "qtd": 2900, "preco_compra": 53.66}, {"ticker": "PRIO3", "data_compra": "2026-04-07", "qtd": 1700, "preco_compra": 67.3}, {"ticker": "PRIO3", "data_compra": "2026-04-11", "qtd": 200, "preco_compra": 67.65}, {"ticker": "UGPA3", "data_compra": "2026-04-08", "qtd": 1900, "preco_compra": 29.54}, {"ticker": "UGPA3", "data_compra": "2026-04-11", "qtd": 3500, "preco_compra": 30.43}];
+const PENDING_SALES = [{"sell_id": "b7a75daa-eb21-46d5-9c07-7031e267908d", "sale_date": "2026-04-20", "ticker": "PETR3", "qtd": 2900, "preco": 50.81, "valor_venda": 147349.0, "settle_date": "2026-04-24", "ja_transferido": 0.0, "pendente": 147349.0, "ref": "b7a75daa-eb21-46d5-9c07-7031e267908d"}];
+const CORPORATE_ACTIONS = [];
+const DEFENSIVE_QUARANTINE_NEXT = ["PETR3"];
+const VALID_TICKERS = ["A1CR34", "A1DI34", "A1DM34", "A1EP34", "A1ES34", "A1GI34", "A1GN34", "A1JG34", "A1KA34", "A1LB34", "A1LG34", "A1MD34", "A1ME34", "A1MP34", "A1MT34", "A1NE34", "A1ON34", "A1PA34", "A1PD34", "A1PH34", "A1RE34", "A1TT34", "A1UT34", "A1VB34", "A1VY34", "A1WK34", "A2XO34", "AADA39", "AALR3", "AAPL34", "ABBV34", "ABCB4", "ABEV3", "ABGD39", "ABTT34", "ACNB34", "ACWX39", "ADBE34", "ADMF3", "ADPR34", "AERI3", "AETH39", "AFLT3", "AGRO3", "AGXY3", "AHEB3", "AHEB5", "AHEB6", "AIGB34", "AIRB34", "ALLD3", "ALOS3", "ALPA3", "ALPA4", "ALPK3", "ALUP11", "ALUP3", "ALUP4", "AMAR3", "AMBP3", "AMER3", "AMGN34", "AMOB3", "AMZO34", "ANIM3", "APTI4", "APTV34", "ARGT39", "ARML3", "ARNC34", "ARND3", "ASAI3", "ATED3", "ATTB34", "AUAU3", "AURA33", "AURE3", "AVGO34", "AVLL3", "AXIA3", "AXIA5", "AXIA6", "AXPB34", "AXRP39", "AZEV3", "AZEV4", "AZOI34", "AZTE3", "AZUL53", "AZZA3", "B1AX34", "B1BT34", "B1DX34", "B1KR34", "B1LL34", "B1RF34", "B1SX34", "B3SA3", "BAAX39", "BACW39", "BAER39", "BAGG39", "BAGY39", "BAIQ39", "BALM3", "BALM4", "BASK39", "BAUH3", "BAUH4", "BAZA3", "BBAS3", "BBDC3", "BBDC4", "BBSE3", "BBUG39", "BBYY34", "BCHI39", "BCHQ39", "BCIR39", "BCLO39", "BCNY39", "BCOM39", "BCPX39", "BCRB39", "BCTE39", "BCWV39", "BDLL4", "BDRI39", "BDVD39", "BDVY39", "BECH39", "BEEF3", "BEEM39", "BEES3", "BEES4", "BEFA39", "BEFG39", "BEFV39", "BEGE39", "BEGU39", "BEIS39", "BEMV39", "BEPP39", "BEPU39", "BEUF39", "BEUW39", "BEWA39", "BEWC39", "BEWD39", "BEWG39", "BEWH39", "BEWI39", "BEWJ39", "BEWL39", "BEWN39", "BEWO39", "BEWP39", "BEWQ39", "BEWS39", "BEWT39", "BEWU39", "BEWW39", "BEWY39", "BEWZ39", "BEZA39", "BEZU39", "BFAV39", "BFCG39", "BFLO39", "BFNX39", "BFXI39", "BGAR39", "BGIP3", "BGIP4", "BGOV39", "BGOZ39", "BGRT39", "BGWH39", "BHDV39", "BHEF39", "BHER39", "BHIA3", "BHYC39", "BHYG39", "BIAG39", "BIAI39", "BIAK39", "BIAU39", "BIBB39", "BICL39", "BIDN39", "BIED3", "BIEF39", "BIEI39", "BIEM39", "BIEO39", "BIET39", "BIEU39", "BIEV39", "BIEZ39", "BIGF39", "BIGL39", "BIGS39", "BIHA39", "BIHE39", "BIHF39", "BIHI39", "BIIB34", "BIJH39", "BIJR39", "BIJS39", "BIJT39", "BILF39", "BIOM3", "BIPC39", "BITB39", "BITO39", "BIUS39", "BIVB39", "BIVE39", "BIVW39", "BIWD39", "BIWF39", "BIWM39", "BIXC39", "BIXG39", "BIXJ39", "BIXN39", "BIXU39", "BIYC39", "BIYE39", "BIYF39", "BIYG39", "BIYJ39", "BIYK39", "BIYM39", "BIYT39", "BIYW39", "BIYZ39", "BKCH39", "BKNG34", "BKSA39", "BKWB39", "BKXI39", "BKYY39", "BLAK34", "BLAU3", "BLBT39", "BLPA39", "BLPX39", "BLQD39", "BMBB39", "BMEB3", "BMEB4", "BMGB4", "BMIL39", "BMIN3", "BMIN4", "BMKS3", "BMOB3", "BMTU39", "BMYB34", "BNBR3", "BNDA39", "BOAC34", "BOBR3", "BOBR4", "BOEF39", "BOEI34", "BONY34", "BOTZ39", "BOXP34", "BPAC11", "BPAC3", "BPAC5", "BPAR3", "BPIC39", "BPVE39", "BQUA39", "BQYL39", "BRAP3", "BRAP4", "BRAV3", "BRBI11", "BREZ39", "BRKM3", "BRKM5", "BRKM6", "BRSR3", "BRSR5", "BRSR6", "BRST3", "BSDV39", "BSHV39", "BSHY39", "BSIL39", "BSIZ39", "BSLI3", "BSLI4", "BSLV39", "BSOC39", "BSOX39", "BSRE39", "BSUS39", "BTFL39", "BTHD39", "BTIP39", "BTLH39", "BTLT39", "BUAE39", "BURA39", "BURT39", "BUSF39", "BUSM39", "BUSR39", "BUTL39", "BVEG39", "BVLU39", "BXTC39", "C1AG34", "C1AH34", "C1BL34", "C1BO34", "C1BR34", "C1CI34", "C1CL34", "C1DN34", "C1DW34", "C1FI34", "C1GP34", "C1HR34", "C1IC34", "C1MG34", "C1MI34", "C1NC34", "C1NP34", "C1OG34", "C1OO34", "C1PB34", "C1PR34", "C1RR34", "C1TA34", "C1TV34", "C2OI34", "C2PT34", "C2RW34", "C2ZR34", "CALI3", "CAMB3", "CAML3", "CAON34", "CASH3", "CASN3", "CASN4", "CATP34", "CBAV3", "CBEE3", "CBTC39", "CEAB3", "CEBR3", "CEBR5", "CEBR6", "CEDO3", "CEDO4", "CEEB3", "CEEB5", "CEED3", "CEED4", "CEGR3", "CGAS3", "CGAS5", "CGRA3", "CGRA4", "CHCM34", "CHDC34", "CHME34", "CHVX34", "CINF34", "CLSC3", "CLSC4", "CLXC34", "CMCS34", "CMIG3", "CMIG4", "CMIN3", "COCA34", "COCE3", "COCE5", "COGN3", "COLG34", "COPH34", "COWC34", "CPFE3", "CPLE3", "CRPG3", "CRPG5", "CRPG6", "CSAN3", "CSCO34", "CSED3", "CSMG3", "CSNA3", "CSUD3", "CSXC34", "CTAX3", "CTGP34", "CTKA3", "CTKA4", "CTNM4", "CTSA3", "CTSA4", "CTSH34", "CURY3", "CVCB3", "CVSH34", "CXSE3", "CYRE3", "CYRE4", "D1DG34", "D1EL34", "D1EX34", "D1HI34", "D1LR34", "D1OM34", "D1OW34", "D1RI34", "D1VN34", "D2AS34", "D2PZ34", "DASA3", "DDNB34", "DEAI34", "DEEC34", "DESK3", "DEXP3", "DEXP4", "DGCO34", "DHER34", "DIRR3", "DISB34", "DLTR34", "DMVF3", "DOHL3", "DOHL4", "DOLL39", "DOTZ3", "DTCR39", "DTCY3", "DUKB34", "DVAI34", "DXCO3", "E1CL34", "E1DI34", "E1IX34", "E1LV34", "E1MN34", "E1MR34", "E1OG34", "E1QR34", "E1SE34", "E1SS34", "E1TN34", "E1VR34", "E1WL34", "E1XC34", "E1XR34", "E2NP34", "E2PA34", "EAIN34", "EALT3", "EALT4", "EBAY34", "ECOR3", "EFXB31", "EGIE3", "EIDO39", "EKTR3", "EKTR4", "ELCI34", "EMAE3", "EMAE4", "EMBJ3", "ENEV3", "ENGI11", "ENGI3", "ENGI4", "ENJU3", "ENMT3", "ENMT4", "EPAR3", "EPHE39", "EPOL39", "EQIX34", "EQPA3", "EQPA5", "EQPA6", "EQTL3", "ESPA3", "ESTR3", "ESTR4", "ETER3", "ETHA39", "EUCA3", "EUCA4", "EVEB31", "EVEN3", "EVTC31", "EWJV39", "EXGR34", "EXXO34", "EZTC3", "F1AN34", "F1EC34", "F1FI34", "F1NI34", "F1RA34", "F1TN34", "F2IC34", "FASL34", "FCXO34", "FDMO34", "FDXB34", "FESA3", "FESA4", "FFTD34", "FHER3", "FICT3", "FIEI3", "FIGE3", "FIQE3", "FLRY3", "FOXC34", "FRAS3", "FRIO3", "FSLR34", "G1AR34", "G1LL34", "G1LW34", "G1MI34", "G1PC34", "G1PI34", "G1RM34", "G1TR39", "G1WW34", "G2DD34", "G2DI33", "GDBR34", "GDXB39", "GEOO34", "GEPA3", "GEPA4", "GFSA3", "GGBR3", "GGBR4", "GGPS3", "GILD34", "GMAT3", "GMCO34", "GOAU3", "GOAU4", "GOGL34", "GOGL35", "GOLL54", "GPAR3", "GRND3", "GROP31", "GSGI34", "GSHP3", "GUAR3", "H1AS34", "H1CA34", "H1IG34", "H1II34", "H1LT34", "H1PE34", "H1RL34", "H1ST34", "H1UM34", "HAGA3", "HAGA4", "HALI34", "HAPV3", "HBOR3", "HBRE3", "HBSA3", "HBTS5", "HETA3", "HETA4", "HOME34", "HONB34", "HOOT3", "HOOT4", "HSHY34", "HYPE3", "I1CE34", "I1DX34", "I1EX34", "I1NC34", "I1PC34", "I1QV34", "I1RM34", "I1RP34", "I1SR34", "I1VZ34", "I2NV34", "IBIT39", "IBMB34", "IFCM3", "IGTI11", "IGTI3", "IGTI4", "INBR32", "INEP3", "INEP4", "INTB3", "INTU34", "IRBR3", "ISAE3", "ISAE4", "ITLC34", "ITSA3", "ITSA4", "ITUB3", "ITUB4", "J1BH34", "J1CI34", "J1KH34", "J2BL34", "JALL3", "JBSS32", "JFEN3", "JHSF3", "JNJB34", "JPMC34", "JSLG3", "K1EY34", "K1LA34", "K1RC34", "K1SG34", "KEPL3", "KHCB34", "KLBN11", "KLBN3", "KLBN4", "KMBB34", "KMIC34", "L1DO34", "L1EN34", "L1HX34", "L1KQ34", "L1RC34", "L1UL34", "L1VS34", "L1WH34", "L1YB34", "L1YV34", "LAND3", "LAVV3", "LEVE3", "LIGT3", "LILY34", "LJQQ3", "LMTB34", "LOGG3", "LOGN3", "LOWC34", "LPSB3", "LREN3", "LUPA3", "LUXM4", "LWSA3", "M1AA34", "M1CB34", "M1CH34", "M1CK34", "M1GM34", "M1HK34", "M1KC34", "M1KT34", "M1LM34", "M1NS34", "M1PC34", "M1RN34", "M1SC34", "M1SI34", "M1TA34", "M1TB34", "M1TC34", "M1TT34", "M2PR34", "MAPT4", "MATD3", "MBRF3", "MCDC34", "MCOR34", "MDIA3", "MDLZ34", "MDNE3", "MDTC34", "MEAL3", "MELK3", "MERC4", "METB34", "MGEL4", "MGLU3", "MILS3", "MLAS3", "MMAQ3", "MMAQ4", "MMMC34", "MNDL3", "MNPR3", "MOOO34", "MOSC34", "MOTV3", "MOVI3", "MRCK34", "MRVE3", "MSBR34", "MSCD34", "MSFT34", "MSPA3", "MSPA4", "MTRE3", "MTSA3", "MTSA4", "MULT3", "MUTC34", "MWET3", "MWET4", "MYPK3", "N1CL34", "N1DA34", "N1EM34", "N1OW34", "N1RG34", "N1TA34", "N1UE34", "N1VR34", "N1WS34", "N1WS35", "N1XP34", "NATU3", "NEMO3", "NEOE3", "NEXP3", "NEXT34", "NFLX34", "NGRD3", "NIKE34", "NOCG34", "NORD3", "NUTR3", "NVDC34", "O1DF34", "O1KE34", "O1MC34", "O1TI34", "O2NS34", "OBTC3", "ODER4", "ODPV3", "OFSA3", "OIBR3", "OIBR4", "ONCO3", "OPCT3", "ORCL34", "ORLY34", "ORVR3", "OSXB3", "OXYP34", "P1AC34", "P1AY34", "P1DT34", "P1GR34", "P1HC34", "P1HM34", "P1KG34", "P1LD34", "P1PG34", "P1SA34", "P1SX34", "P1YC34", "P2AN34", "P2LT34", "P2OD34", "P2TC34", "PATI3", "PCAR3", "PDGR3", "PDTC3", "PEAB3", "PEAB4", "PEPB34", "PETR3", "PETR4", "PFIZ34", "PFRM3", "PGCO34", "PGMN3", "PHMO34", "PINE3", "PINE4", "PLAS3", "PLPL3", "PMAM3", "PNCS34", "PNVL3", "POMO3", "POMO4", "POSI3", "PPLA11", "PRIO3", "PRNR3", "PSSA3", "PTBL3", "PTNT3", "PTNT4", "PYPL34", "Q1UA34", "Q1UE34", "QCOM34", "QUAL3", "R1CL34", "R1EG34", "R1FC34", "R1IN34", "R1JF34", "R1LC34", "R1MD34", "R1OK34", "R1OL34", "R1OP34", "R1SG34", "R1VT34", "RADL3", "RAIL3", "RAIZ4", "RANI3", "RAPT3", "RAPT4", "RCSL3", "RCSL4", "RDOR3", "RECV3", "REDE3", "REGN34", "RENT3", "RENT4", "RIOS3", "RNEW3", "RNEW4", "ROMI3", "ROST34", "RPAD3", "RPAD5", "RPAD6", "RSID3", "RSUL3", "RSUL4", "RVEE3", "RYTT34", "S1BA34", "S1HW34", "S1JM34", "S1NA34", "S1NP34", "S1OU34", "S1RE34", "S1SL34", "S1TE34", "S1TT34", "S1TX34", "S1WK34", "S1YF34", "S1YK34", "S1YM34", "S1YY34", "SANB11", "SANB3", "SANB4", "SAPR11", "SAPR3", "SAPR4", "SBFG3", "SBSP3", "SBUB34", "SCAR3", "SCHW34", "SEER3", "SEQL3", "SHOW3", "SHUL3", "SHUL4", "SIMH3", "SIMN34", "SIVR39", "SLBG34", "SLCE3", "SMFT3", "SMIN39", "SMTO3", "SNSY5", "SNSY6", "SOJA3", "SOLN39", "SOND3", "SOND5", "SOND6", "SPGI34", "SSFO34", "STZB34", "SUZB3", "SYNE3", "T1CH34", "T1DG34", "T1EL34", "T1MU34", "T1OW34", "T1RO34", "T1SO34", "T1TW34", "T2ER34", "T2RM34", "T2TD34", "T2YL34", "TAEE11", "TAEE3", "TAEE4", "TASA3", "TASA4", "TBIL39", "TCSA3", "TECN3", "TELB3", "TELB4", "TEND3", "TEXA34", "TFCO4", "TGMA3", "TGTB34", "TIMS3", "TJXC34", "TKNO3", "TKNO4", "TMOS34", "TOKY3", "TOPB39", "TOTS3", "TPIS3", "TPRY34", "TRAD3", "TRIS3", "TRVC34", "TSLA34", "TSNF34", "TTEN3", "TUPY3", "TURK39", "TXRX3", "TXRX4", "U1AL34", "U1BE34", "U1DR34", "U1HS34", "U1LT34", "U1RI34", "UCAS3", "UGPA3", "UNHH34", "UNIP3", "UNIP5", "UNIP6", "UPAC34", "UPSS34", "USBC34", "USIG39", "USIM3", "USIM5", "USIM6", "V1MC34", "V1RS34", "V1TA34", "VALE3", "VAMO3", "VBBR3", "VERZ34", "VISA34", "VITT3", "VIVA3", "VIVR3", "VIVT3", "VLID3", "VLOE34", "VRSN34", "VRTX34", "VSTE3", "VTRU3", "VULC3", "VVEO3", "W1BD34", "W1DA34", "W1DC34", "W1EL34", "W1MB34", "W1MC34", "W1RB34", "W1YC34", "W2ST34", "WALM34", "WATC34", "WDCN3", "WEGE3", "WEST3", "WFCO34", "WHRL3", "WHRL4", "WIZC3", "WLMM3", "WLMM4", "X1EL34", "X1YL34", "XPBR31", "YDUQ3", "YUMR34", "Z1BR34", "Z1TS34"];
+const VALID_TICKERS_SET = new Set(VALID_TICKERS);
+
+let opIdx = 0;
+let cashIdx = 0;
+let trIdx = 0;
+
+function moneyBR(v) {
+  return 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function pctBR(v) {
+  return Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+function renderPendingSales() {
+  const tbody = document.getElementById('pendingSalesBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (PENDING_SALES.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="color:#64748b;padding:8px;">Nenhuma venda pendente de transferência.</td></tr>';
+    return;
+  }
+  PENDING_SALES.forEach((s, i) => {
+    const tr = document.createElement('tr');
+    const dateParts = s.sale_date.split('-');
+    const dateBR = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+    tr.innerHTML = `
+      <td style="text-align:center"><input type="checkbox" id="ps_chk_${i}" onchange="recalc()" /></td>
+      <td>${dateBR}</td>
+      <td>${s.ticker}</td>
+      <td style="text-align:right">${Number(s.qtd).toLocaleString('pt-BR')}</td>
+      <td style="text-align:right">${moneyBR(s.preco)}</td>
+      <td style="text-align:right">${moneyBR(s.valor_venda)}</td>
+      <td style="text-align:right">${moneyBR(s.pendente)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderTopBuys() {
+  const body = document.getElementById('topBuyBody');
+  if (!body) return;
+  body.innerHTML = '';
+  if (!TOP_BUY_ROWS || TOP_BUY_ROWS.length === 0) {
+    body.innerHTML = "<tr><td colspan='6'>Top-10 indisponível (sem decisão).</td></tr>";
+    return;
+  }
+  TOP_BUY_ROWS.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.ticker}</td>
+      <td style="text-align:right">${Number(r.m3 || 0).toFixed(4)}</td>
+      <td style="text-align:right">${moneyBR(r.close_d1 || 0)}</td>
+      <td><input id="top_px_${i}" class="top-input" type="number" min="0" step="0.01" value="${Number(r.close_d1 || 0)}" oninput="recalc()" /></td>
+      <td><input id="top_qtd_${i}" class="top-input" type="number" min="0" step="1" value="0" oninput="recalc()" /></td>
+      <td id="top_val_${i}" style="text-align:right">R$ 0,00</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function addOp(pref = null) {
+  const box = document.getElementById('opsRows');
+  const i = opIdx++;
+  const typ = pref?.type || 'COMPRA';
+  const tk = pref?.ticker || '';
+  const qtd = pref?.qtd || 0;
+  const px = pref?.preco || 0;
+  const row = document.createElement('div');
+  row.className = 'op-grid';
+  row.id = `op_row_${i}`;
+  row.innerHTML = `
+    <select id="op_type_${i}" onchange="recalc()">
+      <option value="COMPRA" ${typ==='COMPRA'?'selected':''}>COMPRA</option>
+      <option value="VENDA" ${typ==='VENDA'?'selected':''}>VENDA</option>
+    </select>
+    <input id="op_tk_${i}" value="${tk}" placeholder="Ticker" />
+    <input id="op_qtd_${i}" type="number" min="0" value="${qtd}" onchange="recalc()" />
+    <input id="op_px_${i}" type="number" min="0" step="0.01" value="${px}" onchange="recalc()" />
+    <input id="op_val_${i}" type="text" value="R$ 0,00" readonly />
+    <button onclick="removeRow('op_row_${i}');recalc()">x</button>
+  `;
+  box.appendChild(row);
+  recalc();
+}
+
+function addCash(pref = null) {
+  const box = document.getElementById('cashRows');
+  const i = cashIdx++;
+  const typ = pref?.type || 'APORTE';
+  const val = pref?.value || 0;
+  const desc = pref?.description || '';
+  const source = pref?.source || '';
+  const proventoEventDate = pref?.provento_event_date || '';
+  const proventoTicker = pref?.provento_ticker || '';
+  const row = document.createElement('div');
+  row.className = 'cash-grid';
+  row.id = `cash_row_${i}`;
+  row.dataset.source = source;
+  row.dataset.proventoEventDate = proventoEventDate;
+  row.dataset.proventoTicker = proventoTicker;
+  row.innerHTML = `
+    <select id="cash_type_${i}" onchange="recalc()">
+      <option value="APORTE" ${typ==='APORTE'?'selected':''}>APORTE</option>
+      <option value="DIVIDENDO" ${typ==='DIVIDENDO'?'selected':''}>DIVIDENDO</option>
+      <option value="JCP" ${typ==='JCP'?'selected':''}>JCP</option>
+      <option value="BONIFICACAO" ${typ==='BONIFICACAO'?'selected':''}>BONIFICACAO</option>
+      <option value="BONUS" ${typ==='BONUS'?'selected':''}>BONUS</option>
+      <option value="SUBSCRICAO" ${typ==='SUBSCRICAO'?'selected':''}>SUBSCRICAO</option>
+      <option value="RETIRADA" ${typ==='RETIRADA'?'selected':''}>RETIRADA</option>
+    </select>
+    <input id="cash_val_${i}" type="number" min="0" step="0.01" value="${val}" onchange="recalc()" />
+    <input id="cash_desc_${i}" value="${desc}" placeholder="Descrição" />
+    <button onclick="removeRow('cash_row_${i}');recalc()">x</button>
+  `;
+  box.appendChild(row);
+  recalc();
+}
+
+function addTransfer(pref = null) {
+  const box = document.getElementById('transferRows');
+  const i = trIdx++;
+  const val = pref?.value || 0;
+  const note = pref?.note || '';
+  const row = document.createElement('div');
+  row.className = 'cash-grid';
+  row.id = `tr_row_${i}`;
+  row.innerHTML = `
+    <input value="TRANSFERÊNCIA" disabled />
+    <input id="tr_val_${i}" type="number" min="0" step="0.01" value="${val}" onchange="recalc()" />
+    <input id="tr_note_${i}" value="${note}" placeholder="Referência da liquidação" />
+    <button onclick="removeRow('tr_row_${i}');recalc()">x</button>
+  `;
+  box.appendChild(row);
+  recalc();
+}
+
+function removeRow(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function collectOps() {
+  const out = [];
+  for (let i = 0; i < opIdx; i++) {
+    if (!document.getElementById(`op_row_${i}`)) continue;
+    const type = document.getElementById(`op_type_${i}`).value;
+    const ticker = (document.getElementById(`op_tk_${i}`).value || '').trim().toUpperCase();
+    const qtd = parseInt(document.getElementById(`op_qtd_${i}`).value || '0');
+    const preco = parseFloat(document.getElementById(`op_px_${i}`).value || '0');
+    if (!ticker || qtd <= 0 || preco <= 0) continue;
+    out.push({ type, ticker, qtd, preco });
+  }
+  return out;
+}
+
+function collectTopBuyOps() {
+  const out = [];
+  for (let i = 0; i < TOP_BUY_ROWS.length; i++) {
+    const base = TOP_BUY_ROWS[i];
+    const qtdEl = document.getElementById(`top_qtd_${i}`);
+    const pxEl = document.getElementById(`top_px_${i}`);
+    if (!qtdEl || !pxEl) continue;
+    const qtd = parseInt(qtdEl.value || '0');
+    const precoRaw = pxEl.value || '';
+    const preco = precoRaw === '' ? Number(base.close_d1 || 0) : parseFloat(precoRaw);
+    if (!base.ticker || !Number.isFinite(qtd) || qtd <= 0) continue;
+    out.push({ type: 'COMPRA', ticker: base.ticker, qtd, preco });
+  }
+  return out;
+}
+
+function invalidTickers(ops) {
+  const out = [];
+  for (const op of (ops || [])) {
+    const ticker = String(op?.ticker || '').trim().toUpperCase();
+    if (!ticker) continue;
+    if (!VALID_TICKERS_SET.has(ticker)) out.push(ticker);
+  }
+  return [...new Set(out)].sort();
+}
+
+function collectCashMovs() {
+  const out = [];
+  for (let i = 0; i < cashIdx; i++) {
+    const row = document.getElementById(`cash_row_${i}`);
+    if (!row) continue;
+    const type = document.getElementById(`cash_type_${i}`).value;
+    const value = parseFloat(document.getElementById(`cash_val_${i}`).value || '0');
+    const description = (document.getElementById(`cash_desc_${i}`).value || '').trim();
+    if (value <= 0) continue;
+    const item = { type, value, description };
+    const source = (row.dataset.source || '').trim();
+    const proventoEventDate = (row.dataset.proventoEventDate || '').trim();
+    const proventoTicker = (row.dataset.proventoTicker || '').trim().toUpperCase();
+    if (source) item.source = source;
+    if (proventoEventDate) item.provento_event_date = proventoEventDate;
+    if (proventoTicker) item.provento_ticker = proventoTicker;
+    out.push(item);
+  }
+  return out;
+}
+
+function collectTransfers() {
+  const out = [];
+  PENDING_SALES.forEach((s, i) => {
+    const chk = document.getElementById(`ps_chk_${i}`);
+    if (chk && chk.checked) {
+      out.push({ value: s.pendente, note: s.ref });
+    }
+  });
+  for (let i = 0; i < trIdx; i++) {
+    if (!document.getElementById(`tr_row_${i}`)) continue;
+    const value = parseFloat(document.getElementById(`tr_val_${i}`).value || '0');
+    const note = (document.getElementById(`tr_note_${i}`).value || '').trim();
+    if (value <= 0) continue;
+    out.push({ value, note });
+  }
+  return out;
+}
+
+function recalc() {
+  const opsManual = collectOps();
+  const opsTop = collectTopBuyOps();
+  const ops = [...opsManual, ...opsTop];
+  for (let i = 0; i < opIdx; i++) {
+    if (!document.getElementById(`op_row_${i}`)) continue;
+    const qtd = parseInt(document.getElementById(`op_qtd_${i}`).value || '0');
+    const preco = parseFloat(document.getElementById(`op_px_${i}`).value || '0');
+    const el = document.getElementById(`op_val_${i}`);
+    if (el) el.value = moneyBR(qtd * preco);
+  }
+  for (let i = 0; i < TOP_BUY_ROWS.length; i++) {
+    const qtd = parseInt((document.getElementById(`top_qtd_${i}`)?.value || '0'));
+    const pxRaw = document.getElementById(`top_px_${i}`)?.value || '';
+    const px = pxRaw === '' ? Number(TOP_BUY_ROWS[i].close_d1 || 0) : parseFloat(pxRaw);
+    const valEl = document.getElementById(`top_val_${i}`);
+    if (valEl) valEl.textContent = moneyBR((Number.isFinite(qtd) ? qtd : 0) * (Number.isFinite(px) ? px : 0));
+  }
+
+  const cashMovs = collectCashMovs();
+  const transfers = collectTransfers();
+  const buy = ops
+    .filter(x => x.type === 'COMPRA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const sell = ops
+    .filter(x => x.type === 'VENDA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const aporte = cashMovs.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
+  const retirada = cashMovs.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
+  const transfer = transfers.reduce((a,b) => a + b.value, 0);
+
+  const free = PREV_FREE + transfer + aporte - retirada - buy;
+  const acc = PREV_ACC + sell - transfer;
+
+  const carteiraD = CARTEIRA_D1 + buy - sell;
+  const totalAtivo = carteiraD + free + acc;
+  const basePatrimonio = (APORTE_ACC + aporte) - (RETIRADA_ACC + retirada);
+  const resultadoAcc = totalAtivo - basePatrimonio;
+  const rentAcc = basePatrimonio > 0 ? (resultadoAcc / basePatrimonio) * 100.0 : 0.0;
+
+  document.getElementById('dfc_free_open').textContent = moneyBR(PREV_FREE);
+  document.getElementById('dfc_transfer').textContent = moneyBR(transfer);
+  document.getElementById('dfc_aporte').textContent = moneyBR(aporte);
+  document.getElementById('dfc_retirada').textContent = moneyBR(retirada);
+  document.getElementById('dfc_buy').textContent = moneyBR(buy);
+  document.getElementById('dfc_free_close').textContent = moneyBR(free);
+  document.getElementById('dfc_acc_open').textContent = moneyBR(PREV_ACC);
+  document.getElementById('dfc_sell').textContent = moneyBR(sell);
+  document.getElementById('dfc_acc_transfer').textContent = moneyBR(transfer);
+  document.getElementById('dfc_acc_close').textContent = moneyBR(acc);
+
+  document.getElementById('bal_carteira').textContent = moneyBR(carteiraD);
+  document.getElementById('bal_caixa_livre').textContent = moneyBR(free);
+  document.getElementById('bal_caixa_contabil').textContent = moneyBR(acc);
+  document.getElementById('bal_total_ativo').textContent = moneyBR(totalAtivo);
+  document.getElementById('bal_aporte_acc').textContent = moneyBR(APORTE_ACC + aporte);
+  document.getElementById('bal_retirada_acc').textContent = moneyBR(RETIRADA_ACC + retirada);
+  document.getElementById('bal_patrimonio_inicial').textContent = moneyBR(basePatrimonio);
+  document.getElementById('bal_resultado_acc').textContent = moneyBR(resultadoAcc);
+  document.getElementById('bal_rent_acc').textContent = pctBR(rentAcc);
+
+  const btn = document.getElementById('btnSave');
+  const msg = document.getElementById('saveMsg');
+  if (free < -0.00001) {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+    msg.className = 'save-msg error';
+    msg.textContent = 'Compra inválida: Caixa Livre final ficaria negativo.';
+  } else {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    if (msg.classList.contains('error')) {
+      msg.className = 'save-msg';
+      msg.textContent = '';
+    }
+  }
+}
+
+function buildSnapshotAfterOps(ops) {
+  const lots = JSON.parse(JSON.stringify(SNAPSHOT_D1 || []));
+  const byTicker = {};
+  lots.forEach(l => {
+    const t = l.ticker;
+    if (!byTicker[t]) byTicker[t] = [];
+    byTicker[t].push({ ...l });
+  });
+  Object.values(byTicker).forEach(arr => arr.sort((a,b) => (a.data_compra || '').localeCompare(b.data_compra || '')));
+
+  for (const op of ops) {
+    const t = op.ticker;
+    if (op.type === 'COMPRA') {
+      if (!byTicker[t]) byTicker[t] = [];
+      byTicker[t].push({
+        ticker: t,
+        data_compra: EXEC_DATE,
+        qtd: op.qtd,
+        preco_compra: op.preco
+      });
+      byTicker[t].sort((a,b) => (a.data_compra || '').localeCompare(b.data_compra || ''));
+    } else if (op.type === 'VENDA') {
+      let remain = op.qtd;
+      const arr = byTicker[t] || [];
+      for (const lot of arr) {
+        if (remain <= 0) break;
+        const c = Math.min(remain, lot.qtd || 0);
+        lot.qtd = (lot.qtd || 0) - c;
+        remain -= c;
+      }
+      byTicker[t] = arr.filter(l => (l.qtd || 0) > 0);
+    }
+  }
+
+  const out = [];
+  Object.keys(byTicker).sort().forEach(t => {
+    byTicker[t].forEach(l => {
+      if ((l.qtd || 0) > 0) out.push(l);
+    });
+  });
+  return out;
+}
+
+function savePanel() {
+  const opsManual = collectOps();
+  const opsTop = collectTopBuyOps();
+  const invalidManualTickers = invalidTickers(opsManual);
+  if (invalidManualTickers.length > 0) {
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'Ticker(s) inválido(s): ' + invalidManualTickers.join(', ') + '. Verifique a digitação.';
+    return;
+  }
+  const invalidTopPrice = opsTop.some(op => !Number.isFinite(op.preco) || op.preco <= 0);
+  if (invalidTopPrice) {
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'Compra inválida no Top-10: para Qtd > 0, informe Preço > 0.';
+    return;
+  }
+  const ops = [...opsManual, ...opsTop];
+  const cashMovements = collectCashMovs();
+  const cashTransfers = collectTransfers();
+  const buy = ops
+    .filter(x => x.type === 'COMPRA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const sell = ops
+    .filter(x => x.type === 'VENDA')
+    .reduce((a, b) => a + (Number.isFinite(b.preco) ? b.qtd * b.preco : 0), 0);
+  const aporte = cashMovements.filter(x => ['APORTE','DIVIDENDO','JCP','BONIFICACAO','BONUS','SUBSCRICAO'].includes(x.type)).reduce((a,b) => a + b.value, 0);
+  const retirada = cashMovements.filter(x => x.type === 'RETIRADA').reduce((a,b) => a + b.value, 0);
+  const transfer = cashTransfers.reduce((a,b) => a + b.value, 0);
+  const cash_free = PREV_FREE + transfer + aporte - retirada - buy;
+  const cash_accounting = PREV_ACC + sell - transfer;
+  const caixaLiquidoRealRaw = (document.getElementById('cash_real_input').value || '').trim();
+  const caixaLiquidoReal = caixaLiquidoRealRaw === '' ? null : parseFloat(caixaLiquidoRealRaw);
+
+  if (cash_free < -0.00001) {
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'Compra inválida: Caixa Livre final ficaria negativo.';
+    return;
+  }
+
+  const positions_legacy = [];
+  for (const op of ops) {
+    const executed = op.type === 'COMPRA' ? 'COMPREI' : 'VENDI';
+    positions_legacy.push({
+      ticker: op.ticker,
+      recommended: op.type,
+      executed: executed,
+      qtd: op.qtd,
+      preco: op.preco,
+      source: "recommended"
+    });
+  }
+
+  const payload = {
+    date: EXEC_DATE,
+    reference_decision: DECISION_DATE,
+    exec_day: EXEC_DATE,
+    market_day: MARKET_DAY,
+    trade_day: TRADE_DAY,
+    operations: ops,
+    cash_movements: cashMovements,
+    cash_transfers: cashTransfers,
+    corporate_actions: CORPORATE_ACTIONS.length > 0 ? CORPORATE_ACTIONS : undefined,
+    cash_free: cash_free,
+    cash_accounting: cash_accounting,
+    caixa_liquido_real: caixaLiquidoReal,
+    positions_snapshot: buildSnapshotAfterOps(ops),
+    defensive_quarantine: DEFENSIVE_QUARANTINE_NEXT,
+    positions: positions_legacy,
+    cash_balance: cash_free,
+    caixa_liquidando: cash_accounting
+  };
+
+  fetch('/salvar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload, null, 2)
+  }).then(r => r.json()).then(data => {
+    const msg = document.getElementById('saveMsg');
+    if (data.ok) {
+      msg.textContent = 'Salvo: ' + (data.paths || []).join(' | ');
+      msg.className = 'save-msg ok';
+    } else {
+      msg.textContent = 'Erro: ' + (data.error || 'falha ao salvar');
+      msg.className = 'save-msg error';
+    }
+  }).catch(err => {
+    const msg = document.getElementById('saveMsg');
+    msg.textContent = 'Erro de conexão: ' + err;
+    msg.className = 'save-msg error';
+  });
+}
+
+renderPendingSales();
+renderTopBuys();
+for (const a of ACTION_ROWS) {
+  addOp(a);
+}
+for (const c of PREFILL_CASH_ROWS) {
+  addCash(c);
+}
+recalc();
+
+if (window.location.protocol === 'file:') {
+  const msg = document.getElementById('saveMsg');
+  msg.className = 'save-msg error';
+  msg.textContent = 'Painel aberto via arquivo. Para salvar, rode com --serve (ex: python pipeline/painel_diario.py --date 2026-04-20 --serve).';
+  document.getElementById('btnSave').disabled = true;
+  document.getElementById('btnSave').style.opacity = '0.6';
+}
+</script>
+</body></html>
