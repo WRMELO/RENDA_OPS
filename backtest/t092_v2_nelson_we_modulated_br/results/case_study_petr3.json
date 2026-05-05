@@ -1,0 +1,25 @@
+{
+  "ticker": "PETR3",
+  "buy_date": "2026-04-06",
+  "real_sell_date": "2026-04-20",
+  "first_signal_by_arm": {
+    "V0_BASELINE": "2026-04-09",
+    "M1a_COOLDOWN5": "2026-04-08",
+    "M1b_COOLDOWN10": "2026-04-08",
+    "M2_PARTIAL": "2026-04-09",
+    "M3_COMBO": "2026-04-09"
+  },
+  "logret_buy_to_signal_by_arm": {
+    "V0_BASELINE": -0.01917351969617361,
+    "M1a_COOLDOWN5": -0.04805500344787619,
+    "M1b_COOLDOWN10": -0.04805500344787619,
+    "M2_PARTIAL": -0.01917351969617361,
+    "M3_COMBO": -0.01917351969617361
+  },
+  "logret_buy_to_real_sell": -0.037368027159484875,
+  "fixed_limits_reference": {
+    "entry_day": "2026-04-06",
+    "i_ucl": 0.06550625717167154,
+    "i_lcl": -0.04882981724013934
+  }
+}

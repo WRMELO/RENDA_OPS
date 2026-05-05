@@ -1,0 +1,9 @@
+T-092-V2 concluido.
+rows_train_summary=35
+rows_holdout_summary=35
+final_verdict=INCONCLUSIVO
+arm=V0_BASELINE cvar5_mean=-0.029408 sharpe_mean=0.171941 churn_mean=0.785542 sell_trigger_rate_mean=0.254831 reentry_within_cooldown_rate_mean=0.455049 whipsaw_count_mean=33.571429
+arm=M1a_COOLDOWN5 cvar5_mean=-0.023209 sharpe_mean=-0.275088 churn_mean=1.000863 sell_trigger_rate_mean=0.810904 reentry_within_cooldown_rate_mean=0.634318 whipsaw_count_mean=45.285714
+arm=M1b_COOLDOWN10 cvar5_mean=-0.026111 sharpe_mean=-0.345320 churn_mean=0.816425 sell_trigger_rate_mean=0.644237 reentry_within_cooldown_rate_mean=0.044884 whipsaw_count_mean=0.000000
+arm=M2_PARTIAL cvar5_mean=-0.025999 sharpe_mean=0.044305 churn_mean=1.945652 sell_trigger_rate_mean=1.660283 reentry_within_cooldown_rate_mean=0.701982 whipsaw_count_mean=308.857143
+arm=M3_COMBO cvar5_mean=-0.029821 sharpe_mean=-0.092708 churn_mean=1.441856 sell_trigger_rate_mean=1.196687 reentry_within_cooldown_rate_mean=0.060326 whipsaw_count_mean=0.000000

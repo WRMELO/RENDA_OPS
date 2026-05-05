@@ -1,0 +1,46 @@
+{
+  "task_id": "T-092-V2-NELSON-WE-MODULATED-BR",
+  "arms": [
+    "V0_BASELINE",
+    "M1a_COOLDOWN5",
+    "M1b_COOLDOWN10",
+    "M2_PARTIAL",
+    "M3_COMBO"
+  ],
+  "arm_definitions": {
+    "V0_BASELINE": "Motor atual sem alteracao (controle).",
+    "M1a_COOLDOWN5": "blocked_bc dispara venda 100% e ticker entra em cooldown de re-entrada por 5 pregoes apos venda defensiva.",
+    "M1b_COOLDOWN10": "blocked_bc dispara venda 100% e ticker entra em cooldown de re-entrada por 10 pregoes apos venda defensiva.",
+    "M2_PARTIAL": "blocked_bc_fixed dispara venda 50% no primeiro disparo ativo; segundo disparo consecutivo (sem reset) vende 100% do saldo; reset quando blocked_bc_fixed=false por ao menos 1 pregao.",
+    "M3_COMBO": "blocked_bc_fixed dispara venda 50% + cooldown de re-entrada de 10 pregoes; segundo disparo consecutivo vende 100% do saldo + cooldown de 10 pregoes."
+  },
+  "metrics": {
+    "sharpe_cost_adj": "Sharpe da curva diaria com custos de transacao aplicados",
+    "cvar5": "CVaR 5% dos retornos log diarios",
+    "cvar10": "CVaR 10% dos retornos log diarios",
+    "churn_rate": "Taxa de rotatividade diaria (eventos de venda / dias)",
+    "sell_trigger_rate": "Taxa de dias com disparo de venda defensiva",
+    "reentry_within_cooldown_rate": "Fracao de recompras que ocorreram dentro de 10 pregoes apos venda defensiva (diagnostico de whipsaw)",
+    "whipsaw_count": "Numero total de ciclos venda-defensiva -> recompra dentro de 5 pregoes"
+  },
+  "phase_sweep": {
+    "n_phases": 7,
+    "anchor": "2026-04-06",
+    "cadence": 7,
+    "method": "Pregoes B3 reais derivados do canonical"
+  },
+  "split_definition": {
+    "train_end": "2022-12-30",
+    "holdout_start": "2023-01-02"
+  },
+  "verdict_thresholds": {
+    "arm_better_tail": "mean(cvar5_arm_holdout) > mean(cvar5_V0_holdout)",
+    "arm_better_sharpe": "mean(sharpe_arm_holdout) > mean(sharpe_V0_holdout)"
+  },
+  "verdict_per_arm": {
+    "IMPLEMENTAR": "better_tail AND better_sharpe",
+    "ARQUIVAR": "NOT better_tail AND NOT better_sharpe",
+    "INCONCLUSIVO": "qualquer outro caso"
+  },
+  "final_verdict_logic": "Dentre os arms com IMPLEMENTAR, escolher o que maximiza (cvar5_mean + sharpe_mean) no holdout; se nenhum IMPLEMENTAR e todos ARQUIVAR: ARQUIVAR; caso contrario: INCONCLUSIVO."
+}
