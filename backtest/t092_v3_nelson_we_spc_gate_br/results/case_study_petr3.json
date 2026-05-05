@@ -1,0 +1,14 @@
+{
+  "ticker": "PETR3",
+  "buy_date": "2026-04-06",
+  "real_sell_date": "2026-04-20",
+  "first_signal_by_arm": {
+    "V0_BASELINE": "2026-04-09",
+    "M4_SPC_GATE": "2026-04-07"
+  },
+  "logret_buy_to_signal_by_arm": {
+    "V0_BASELINE": -0.01917351969617361,
+    "M4_SPC_GATE": 0.006310340167849207
+  },
+  "logret_buy_to_real_sell": -0.037368027159484875
+}

@@ -1,0 +1,41 @@
+{
+  "task_id": "T-092-V3-NELSON-WE-SPC-GATE-BR",
+  "arms": [
+    "V0_BASELINE",
+    "M4_SPC_GATE"
+  ],
+  "arm_definitions": {
+    "V0_BASELINE": "Motor atual sem alteracao (controle identico a T-092/V2).",
+    "M4_SPC_GATE": "Venda defensiva 100% quando blocked_bc_moving=True em d_prev e bloqueio de recompra na camada de rebalance enquanto blocked_bc_moving=True em d_prev (sem cooldown numerico; o gate e o estado do SPC)."
+  },
+  "metrics": {
+    "sharpe_cost_adj": "Sharpe da curva diaria com custos de transacao aplicados",
+    "cvar5": "CVaR 5% dos retornos log diarios",
+    "cvar10": "CVaR 10% dos retornos log diarios",
+    "churn_rate": "Taxa de rotatividade diaria (eventos de venda / dias)",
+    "sell_trigger_rate": "Taxa de dias com disparo de venda defensiva",
+    "spc_gate_blocked_rebuys_count": "Numero de tentativas de recompra bloqueadas pelo gate SPC por fase",
+    "spc_gate_blocked_days_p50": "Percentil 50 da duracao (pregoes consecutivos) de bloqueio SPC apos venda defensiva",
+    "spc_gate_blocked_days_p95": "Percentil 95 da duracao (pregoes consecutivos) de bloqueio SPC apos venda defensiva"
+  },
+  "phase_sweep": {
+    "n_phases": 7,
+    "anchor": "2026-04-06",
+    "cadence": 7,
+    "method": "Pregoes B3 reais derivados do canonical"
+  },
+  "split_definition": {
+    "train_end": "2022-12-30",
+    "holdout_start": "2023-01-02"
+  },
+  "verdict_thresholds": {
+    "arm_better_tail": "mean(cvar5_M4_holdout) > mean(cvar5_V0_holdout)",
+    "arm_better_sharpe": "mean(sharpe_M4_holdout) > mean(sharpe_V0_holdout)"
+  },
+  "verdict_per_arm": {
+    "IMPLEMENTAR": "better_tail AND better_sharpe",
+    "ARQUIVAR": "NOT better_tail AND NOT better_sharpe",
+    "INCONCLUSIVO": "qualquer outro caso"
+  },
+  "final_verdict_logic": "Se M4_SPC_GATE IMPLEMENTAR: IMPLEMENTAR_M4. Se M4_SPC_GATE ARQUIVAR: ARQUIVAR. Caso contrario: INCONCLUSIVO."
+}

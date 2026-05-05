@@ -1,0 +1,6 @@
+T-092-V3 concluido.
+rows_train_summary=14
+rows_holdout_summary=14
+final_verdict=ARQUIVAR
+arm=V0_BASELINE cvar5_mean=-0.029408 sharpe_mean=0.171941 churn_mean=0.785542 sell_trigger_rate_mean=0.254831 spc_gate_blocked_rebuys_count_mean=0.000000 spc_gate_blocked_days_p50_mean=4.000000 spc_gate_blocked_days_p95_mean=16.521429
+arm=M4_SPC_GATE cvar5_mean=-0.031432 sharpe_mean=-0.358486 churn_mean=0.654244 sell_trigger_rate_mean=0.471532 spc_gate_blocked_rebuys_count_mean=418.571429 spc_gate_blocked_days_p50_mean=3.000000 spc_gate_blocked_days_p95_mean=16.078571
