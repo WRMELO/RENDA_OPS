@@ -2,6 +2,6 @@ T-092 concluido.
 rows_train_summary=21
 rows_holdout_summary=21
 final_verdict=INCONCLUSIVO
-arm=V0_BASELINE cvar5_mean=-0.029408 sharpe_mean=0.171941 churn_mean=0.785542 sell_trigger_rate_mean=0.254831
-arm=V1_NW_MOVING cvar5_mean=-0.021467 sharpe_mean=-0.224420 churn_mean=1.133368 sell_trigger_rate_mean=0.934438
-arm=V2_NW_ENTRY_FIXED cvar5_mean=-0.025425 sharpe_mean=-0.022261 churn_mean=1.102139 sell_trigger_rate_mean=0.891477
+arm=V0_BASELINE cvar5_mean=-0.029354 sharpe_mean=0.179474 churn_mean=0.787785 sell_trigger_rate_mean=0.257074
+arm=V1_NW_MOVING cvar5_mean=-0.021513 sharpe_mean=-0.242841 churn_mean=1.134748 sell_trigger_rate_mean=0.936335
+arm=V2_NW_ENTRY_FIXED cvar5_mean=-0.025352 sharpe_mean=-0.028809 churn_mean=1.103692 sell_trigger_rate_mean=0.893375
