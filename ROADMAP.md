@@ -70,6 +70,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 54 | T-REPLAY-HISTORICO-BR | Replay walk-forward 02/04-22/04 como nova realidade oficial da Fabrica BR (13 boletins com interacao do Owner, sem vazamento temporal) | D-091, D-093 | pipeline/replay_historico.py, data/ssot/ledger_br.jsonl, data/real/*.json, data/cycles/*, config/winner.json, DECISION_LOG.md, ROADMAP.md | PENDING |
 | 55 | T-EXECUTOR-STRICT-TOOLS-HARDENING | Endurecer skill executor com bloco MODO ESTRITO DE FERRAMENTAS (allowlist, denylist e reforco do guardrail ferramental) | D-094 | /home/wilson/.cursor/skills/executor/SKILL.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md, /home/wilson/SALA_DE_CONTROLE/DECISION_LOG.md | DONE |
 | 56 | T-PAINEL-APORTE-LEDGER-BR | Corrigir acumulados patrimoniais do painel BR para usar ledger SSOT (aporte/retirada acumulados e denominador da Base 1) com fallback legado | D-095 | pipeline/painel_diario.py, DECISION_LOG.md, GOVERNANCE.md, CHANGELOG.md, ROADMAP.md | DONE |
+| 57 | T-092-NELSON-WE-DEFENSIVE-SELLS-BR | Backtest de 3 bracos para venda defensiva diaria com Nelson/WE completo e comparacao de limites moveis vs fixos na compra | D-098 | backtest/t092_nelson_we_defensive_sells_br/run_t092.py, backtest/t092_nelson_we_defensive_sells_br/decision_criterion_t092.json, backtest/t092_nelson_we_defensive_sells_br/results/*, DECISION_LOG.md, ROADMAP.md | PENDING |
 
 ### Marcos Estratégicos
 

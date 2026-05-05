@@ -1,0 +1,43 @@
+{
+  "task_id": "T-092-NELSON-WE-DEFENSIVE-SELLS-BR",
+  "arms": [
+    "V0_BASELINE",
+    "V1_NW_MOVING",
+    "V2_NW_ENTRY_FIXED"
+  ],
+  "arm_definitions": {
+    "V0_BASELINE": "Logica atual de _build_defensive_candidates: score z_prev+persist+evidence>=4 AND z_prev<0",
+    "V1_NW_MOVING": "Nelson/WE completo (blocked_bc) com limites moveis rolling-60 do canonical",
+    "V2_NW_ENTRY_FIXED": "Nelson/WE completo (blocked_bc) com limites SPC congelados na exec_date do BUY mais antigo ativo por ticker; candidatos permanecem moveis"
+  },
+  "metrics": {
+    "sharpe_cost_adj": "Sharpe da curva diaria com custos de transacao aplicados",
+    "cvar5": "CVaR 5% dos retornos log diarios",
+    "cvar10": "CVaR 10% dos retornos log diarios",
+    "churn_rate": "Taxa de rotatividade diaria (eventos de venda / dias)",
+    "sell_trigger_rate": "Taxa de dias com disparo de venda defensiva",
+    "case_study_first_signal_date": "Primeira data de sinal por arm para MTSA4 e PETR3"
+  },
+  "phase_sweep": {
+    "n_phases": 7,
+    "anchor": "2026-04-06",
+    "cadence": 7,
+    "method": "Pregoes B3 reais derivados do canonical"
+  },
+  "split_definition": {
+    "train_end": "2022-12-30",
+    "holdout_start": "2023-01-02"
+  },
+  "verdict_thresholds": {
+    "v1_better_tail": "mean(cvar5_v1_holdout) > mean(cvar5_v0_holdout)",
+    "v1_better_sharpe": "mean(sharpe_v1_holdout) > mean(sharpe_v0_holdout)",
+    "v2_better_tail": "mean(cvar5_v2_holdout) > mean(cvar5_v0_holdout)",
+    "v2_better_sharpe": "mean(sharpe_v2_holdout) > mean(sharpe_v0_holdout)"
+  },
+  "verdict_per_arm": {
+    "IMPLEMENTAR": "better_tail AND better_sharpe",
+    "ARQUIVAR": "NOT better_tail AND NOT better_sharpe",
+    "INCONCLUSIVO": "qualquer outro caso"
+  },
+  "final_verdict_logic": "Se V2 IMPLEMENTAR: IMPLEMENTAR_V2. Senao, se V1 IMPLEMENTAR: IMPLEMENTAR_V1. Se nenhum IMPLEMENTAR e ambos ARQUIVAR: ARQUIVAR. Caso contrario: INCONCLUSIVO."
+}

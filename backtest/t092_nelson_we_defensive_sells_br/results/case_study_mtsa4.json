@@ -1,0 +1,21 @@
+{
+  "ticker": "MTSA4",
+  "buy_date": "2026-04-06",
+  "real_sell_date": null,
+  "first_signal_by_arm": {
+    "V0_BASELINE": null,
+    "V1_NW_MOVING": "2026-04-14",
+    "V2_NW_ENTRY_FIXED": "2026-04-14"
+  },
+  "logret_buy_to_signal_by_arm": {
+    "V0_BASELINE": null,
+    "V1_NW_MOVING": -0.028325186048091946,
+    "V2_NW_ENTRY_FIXED": -0.028325186048091946
+  },
+  "logret_buy_to_real_sell": null,
+  "fixed_limits_reference": {
+    "entry_day": "2026-04-06",
+    "i_ucl": 0.04979221736078502,
+    "i_lcl": -0.04095013284301103
+  }
+}
