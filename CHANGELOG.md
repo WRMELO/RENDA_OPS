@@ -187,3 +187,7 @@
 ## 2026-05-06
 
 - docs: T-ANALISTA-BR-FAIXAS-AQUECIMENTO-V1 - calibra faixas LEVE/MEDIO/GRAVE no Passo 4c da skill `analista-br` com limiares p50=-5,59% e p10=-18,52% do HOLDOUT BR; cria D-102 (RENDA_OPS), D-019 (SALA) e R-036 (interfabricas). Artefatos: DECISION_LOG.md, /home/wilson/SALA_DE_CONTROLE/DECISION_LOG.md, /home/wilson/SALA_DE_CONTROLE/REGRAS_OPERACIONAIS.md, /home/wilson/.cursor/skills/analista-br/SKILL.md. Decision: PENDING-DECISION-LOG.
+
+## 2026-05-13
+
+- research: T-094-SPC-BAND-SKIM-STUDY-BR - estudos read-only no HOLDOUT BR (3.842 lots) sem alteracao de motor: Study 1 (sensibilidade da banda SPC rolling vs congelada na ignicao) com verdict `MANTER_ROLLING`; Study 2 (escumagem por persistencia `blocked_bc` em N={1,3,5,10} e direcoes ANY/SUPERIOR/INFERIOR) com verdict global `INCONCLUSIVO`. Artefatos: `backtest/t094_spc_band_skim_study_br/run_t094.py`, `backtest/t094_spc_band_skim_study_br/decision_criterion_t094.json`, `backtest/t094_spc_band_skim_study_br/results/study1_lots.csv`, `backtest/t094_spc_band_skim_study_br/results/study1_summary.json`, `backtest/t094_spc_band_skim_study_br/results/study2_lots.csv`, `backtest/t094_spc_band_skim_study_br/results/study2_summary.json`, `backtest/t094_spc_band_skim_study_br/REPORT.md`, `DECISION_LOG.md` (D-103, D-104), `ROADMAP.md`.

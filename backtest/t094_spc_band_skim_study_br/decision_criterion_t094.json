@@ -1,0 +1,67 @@
+{
+  "task_id": "T-094-SPC-BAND-SKIM-STUDY-BR",
+  "split_definition": {
+    "holdout_start": "2023-01-02",
+    "holdout_end": "max(canonical.date)"
+  },
+  "input_universe": {
+    "source": "backtest/t092_v3_nelson_we_spc_gate_br/results/events_V0_BASELINE_phase*.csv",
+    "filter": "split == HOLDOUT",
+    "phases": 7,
+    "pairing_rule": "cada rebalance_buy pareado ao primeiro evento de saida subsequente (defensive_sell ou rebalance_sell) no mesmo ticker e fase"
+  },
+  "study_1": {
+    "name": "sensibilidade_banda_spc",
+    "objective": "comparar blocked_bc com limites rolling versus limites congelados na ignicao",
+    "arms": [
+      "ROLLING_K60",
+      "FROZEN_AT_BUY"
+    ],
+    "metrics": {
+      "n_lots_total": "numero total de lots analisados",
+      "n_frozen_earlier": "lots onde FROZEN dispara antes de ROLLING",
+      "rate_frozen_earlier": "n_frozen_earlier / n_lots_total",
+      "median_pnl_frozen_subset": "mediana do logret no ponto de saida FROZEN para subset FROZEN_EARLIER",
+      "median_pnl_actual_subset": "mediana do logret realizado no mesmo subset",
+      "delta_frozen_vs_actual": "median_pnl_frozen_subset - median_pnl_actual_subset"
+    },
+    "verdict_logic": {
+      "ANTECIPAR_BANDA_FIXA": "rate_frozen_earlier > 0.40 AND delta_frozen_vs_actual > 0.0",
+      "MANTER_ROLLING": "rate_frozen_earlier <= 0.40 OR delta_frozen_vs_actual <= 0.0",
+      "INCONCLUSIVO": "qualquer outro caso"
+    }
+  },
+  "study_2": {
+    "name": "skim_por_persistencia_blocked_bc",
+    "objective": "medir escumagem por saida em blocked_bc persistente, separando direcao superior/inferior",
+    "n_values": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "directions": [
+      "ANY",
+      "SUPERIOR",
+      "INFERIOR"
+    ],
+    "direction_rule": "SUPERIOR se i_value(d_prev) > center_line(d_prev), senao INFERIOR",
+    "window_rule": "dispara na primeira data d em que consec_blocked_bc >= N e a maioria dos N dias bloqueados e da direcao alvo (ANY ignora direcao)",
+    "metrics": {
+      "n_triggered": "lots com saida definida para (N,direction)",
+      "median_logret_captured": "mediana de logret no ponto de saida do gatilho",
+      "median_logret_actual": "mediana de logret realizado dos mesmos lots",
+      "delta_pnl": "median_logret_captured - median_logret_actual",
+      "rate_captured_better": "fracao com logret_captured > logret_actual"
+    },
+    "verdict_logic_per_combo": {
+      "ESCUMAR_FUNCIONA": "n_triggered >= 100 AND rate_captured_better > 0.55 AND delta_pnl > 0.01",
+      "INCONCLUSIVO": "qualquer outro caso"
+    },
+    "global_verdict_logic": {
+      "ESCUMAR_FUNCIONA(N=X,direction=Y)": "existe pelo menos um combo com verdict ESCUMAR_FUNCIONA; escolher o combo com maior delta_pnl",
+      "NAO_HA_GANHO": "nenhum combo ESCUMAR_FUNCIONA e delta_pnl <= 0 em todos os combos",
+      "INCONCLUSIVO": "nenhum combo ESCUMAR_FUNCIONA e existe ao menos um combo com delta_pnl > 0"
+    }
+  }
+}

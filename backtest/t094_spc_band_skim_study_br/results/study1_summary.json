@@ -1,0 +1,23 @@
+{
+  "task_id": "T-094-SPC-BAND-SKIM-STUDY-BR",
+  "study": "study_1_sensibilidade_banda_spc",
+  "n_lots_total": 3842,
+  "n_frozen_earlier": 90,
+  "rate_frozen_earlier": 0.02342529932326913,
+  "median_pnl_frozen_subset": -0.002779139239666834,
+  "median_pnl_actual_subset": -0.014450419144816883,
+  "delta_frozen_vs_actual": 0.011671279905150048,
+  "divergence_counts": {
+    "SAME": 2656,
+    "NO_SIGNAL_EITHER": 894,
+    "ROLLING_EARLIER": 112,
+    "FROZEN_EARLIER": 90,
+    "ONLY_FROZEN": 56,
+    "ONLY_ROLLING": 34
+  },
+  "thresholds": {
+    "rate_frozen_earlier_gt": 0.4,
+    "delta_frozen_vs_actual_gt": 0.0
+  },
+  "verdict": "MANTER_ROLLING"
+}

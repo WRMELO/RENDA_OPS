@@ -1,0 +1,143 @@
+{
+  "task_id": "T-094-SPC-BAND-SKIM-STUDY-BR",
+  "study": "study_2_skim_persistencia_blocked_bc",
+  "n_values": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "directions": [
+    "ANY",
+    "SUPERIOR",
+    "INFERIOR"
+  ],
+  "thresholds": {
+    "n_triggered_gte": 100,
+    "rate_captured_better_gt": 0.55,
+    "delta_pnl_gt": 0.01
+  },
+  "combo_results": [
+    {
+      "N": 1,
+      "direction": "ANY",
+      "n_triggered": 2892,
+      "median_logret_captured": 0.0,
+      "median_logret_actual": -0.0103786935875326,
+      "delta_pnl": 0.0103786935875326,
+      "rate_captured_better": 0.43706777316735823,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 1,
+      "direction": "SUPERIOR",
+      "n_triggered": 1872,
+      "median_logret_captured": 0.011680823495220519,
+      "median_logret_actual": -2.813552182845879e-05,
+      "delta_pnl": 0.011708959017048978,
+      "rate_captured_better": 0.5037393162393162,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 1,
+      "direction": "INFERIOR",
+      "n_triggered": 2789,
+      "median_logret_captured": -0.002558868316049773,
+      "median_logret_actual": -0.011922644956906146,
+      "delta_pnl": 0.009363776640856372,
+      "rate_captured_better": 0.4022947292936536,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 3,
+      "direction": "ANY",
+      "n_triggered": 1596,
+      "median_logret_captured": 0.0016566499264582752,
+      "median_logret_actual": -0.004184658580350518,
+      "delta_pnl": 0.005841308506808793,
+      "rate_captured_better": 0.46616541353383456,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 3,
+      "direction": "SUPERIOR",
+      "n_triggered": 819,
+      "median_logret_captured": 0.025639735936402345,
+      "median_logret_actual": 0.014014695929130044,
+      "delta_pnl": 0.0116250400072723,
+      "rate_captured_better": 0.4822954822954823,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 3,
+      "direction": "INFERIOR",
+      "n_triggered": 1381,
+      "median_logret_captured": 0.0,
+      "median_logret_actual": -0.00907040331267506,
+      "delta_pnl": 0.00907040331267506,
+      "rate_captured_better": 0.4525706010137581,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 5,
+      "direction": "ANY",
+      "n_triggered": 927,
+      "median_logret_captured": 0.00287109011464192,
+      "median_logret_actual": -0.002244669853823862,
+      "delta_pnl": 0.005115759968465782,
+      "rate_captured_better": 0.46062567421790723,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 5,
+      "direction": "SUPERIOR",
+      "n_triggered": 356,
+      "median_logret_captured": 0.054256780443702246,
+      "median_logret_actual": 0.04474172863464426,
+      "delta_pnl": 0.009515051809057984,
+      "rate_captured_better": 0.5056179775280899,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 5,
+      "direction": "INFERIOR",
+      "n_triggered": 757,
+      "median_logret_captured": -0.00743497848751809,
+      "median_logret_actual": -0.015071071048825924,
+      "delta_pnl": 0.007636092561307834,
+      "rate_captured_better": 0.43064729194187584,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 10,
+      "direction": "ANY",
+      "n_triggered": 215,
+      "median_logret_captured": 0.00874131440157358,
+      "median_logret_actual": 0.0,
+      "delta_pnl": 0.00874131440157358,
+      "rate_captured_better": 0.4046511627906977,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 10,
+      "direction": "SUPERIOR",
+      "n_triggered": 42,
+      "median_logret_captured": 0.2197345228249838,
+      "median_logret_actual": 0.2059546648847373,
+      "delta_pnl": 0.013779857940246498,
+      "rate_captured_better": 0.47619047619047616,
+      "verdict": "INCONCLUSIVO"
+    },
+    {
+      "N": 10,
+      "direction": "INFERIOR",
+      "n_triggered": 190,
+      "median_logret_captured": 0.0,
+      "median_logret_actual": -0.021259930340195153,
+      "delta_pnl": 0.021259930340195153,
+      "rate_captured_better": 0.4052631578947368,
+      "verdict": "INCONCLUSIVO"
+    }
+  ],
+  "global_verdict": "INCONCLUSIVO"
+}
