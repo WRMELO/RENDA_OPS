@@ -196,5 +196,6 @@
 
 ## 2026-05-14
 
+- research: T-107-V3-LIQUIDITY-FINALISTS-BR - comparacao direta das duas finalistas do gate de liquidez com CVaR, Sharpe por subperiodo e checagem de eliminacao dos ativos iliquidos atuais. Artefatos: `backtest/t107_liquidity_gate_br/decision_criterion_t107_v3.json`, `backtest/t107_liquidity_gate_br/run_t107_v3_finalists.py`, `backtest/t107_liquidity_gate_br/results/finalists_summary_v3.json`, `backtest/t107_liquidity_gate_br/results/finalists_detail_v3.csv`. Ref: D-109.
 - fix: T-107-LIQUIDITY-GATE-STUDY-BR-FIX - corrige o criterio de liquidez para medir apenas dias investidos, adiciona `pct_invested_days_holdout` e reexecuta o estudo com baseline validada. Artefatos: `backtest/t107_liquidity_gate_br/run_t107.py`, `backtest/t107_liquidity_gate_br/decision_criterion_t107.json`, `backtest/t107_liquidity_gate_br/results/*`. Ref: D-107.
 - research: T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR - estudo de sensibilidade dos guardrails do gate de liquidez em grade 4x3 com regra de adjacencia anti-E13; `global_verdict=APROVAR_GATE_LIQUIDEZ`. Artefatos: `backtest/t107_liquidity_gate_br/decision_criterion_t107_v2.json`, `backtest/t107_liquidity_gate_br/run_t107_v2_sensitivity.py`, `backtest/t107_liquidity_gate_br/results/sensitivity_summary_v2.json`, `backtest/t107_liquidity_gate_br/results/sensitivity_detail_v2.csv`. Ref: D-108.

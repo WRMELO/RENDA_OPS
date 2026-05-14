@@ -1,0 +1,77 @@
+{
+  "task_id": "T-107-V3-LIQUIDITY-FINALISTS-BR",
+  "decision_ref": "D-109",
+  "generated_at_utc": "2026-05-14T11:04:44.641829+00:00",
+  "global_verdict": "ESCOLHER_50K_PCT80",
+  "recommended_variant": "V_ADTV50000_PCT80",
+  "finalists_comparison": [
+    {
+      "label": "V_ADTV50000_PCT80",
+      "adtv_threshold_brl": 50000.0,
+      "pct_traded_threshold": 0.8,
+      "sharpe_excess_holdout": 0.5793,
+      "cagr_holdout_pct": 21.714,
+      "mdd_holdout_pct": -11.787,
+      "cvar5_holdout": -0.023551565872596315,
+      "cvar10_holdout": -0.01411241808804621,
+      "sharpe_subperiod_early": -0.9520897122273702,
+      "sharpe_subperiod_mid": 0.3000562680875183,
+      "sharpe_subperiod_late": 1.0212942132546574,
+      "sharpe_subperiod_min": -0.9520897122273702,
+      "n_tickers_median_when_invested_holdout": 9.0,
+      "pct_invested_days_holdout": 0.2275449101796407,
+      "buffer_k": 15
+    },
+    {
+      "label": "V_ADTV100000_PCT80",
+      "adtv_threshold_brl": 100000.0,
+      "pct_traded_threshold": 0.8,
+      "sharpe_excess_holdout": 0.8853,
+      "cagr_holdout_pct": 27.504,
+      "mdd_holdout_pct": -11.035,
+      "cvar5_holdout": -0.02267234663815935,
+      "cvar10_holdout": -0.013745104943678796,
+      "sharpe_subperiod_early": -0.9520897122273702,
+      "sharpe_subperiod_mid": 0.731231264055591,
+      "sharpe_subperiod_late": 1.3606000817535435,
+      "sharpe_subperiod_min": -0.9520897122273702,
+      "n_tickers_median_when_invested_holdout": 8.0,
+      "pct_invested_days_holdout": 0.22634730538922157,
+      "buffer_k": 15
+    }
+  ],
+  "illiquid_check": {
+    "V_ADTV50000_PCT80": {
+      "as_of_date": "2026-05-13",
+      "adtv_threshold_brl": 50000.0,
+      "pct_traded_threshold": 0.8,
+      "tickers": {
+        "RPAD3": true,
+        "CALI3": true,
+        "INEP4": true,
+        "RPAD6": true
+      },
+      "n_eliminated": 4
+    },
+    "V_ADTV100000_PCT80": {
+      "as_of_date": "2026-05-13",
+      "adtv_threshold_brl": 100000.0,
+      "pct_traded_threshold": 0.8,
+      "tickers": {
+        "RPAD3": true,
+        "CALI3": true,
+        "INEP4": true,
+        "RPAD6": true
+      },
+      "n_eliminated": 4
+    }
+  },
+  "baseline_reference": {
+    "label": "V0_BASELINE",
+    "sharpe_excess_holdout": 0.4005,
+    "cagr_holdout_pct": 19.053,
+    "mdd_holdout_pct": -26.99,
+    "n_tickers_median_when_invested_holdout": 9.0,
+    "pct_invested_days_holdout": 0.3161676646706587
+  }
+}

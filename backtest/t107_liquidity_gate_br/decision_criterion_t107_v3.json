@@ -1,0 +1,38 @@
+{
+  "task_id": "T-107-V3-LIQUIDITY-FINALISTS-BR",
+  "decision_ref": "D-109",
+  "parent_studies": [
+    "T-107-LIQUIDITY-GATE-STUDY-BR",
+    "T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR"
+  ],
+  "finalists": [
+    {
+      "label": "V_ADTV50000_PCT80",
+      "adtv_threshold_brl": 50000.0,
+      "pct_traded_threshold": 0.8
+    },
+    {
+      "label": "V_ADTV100000_PCT80",
+      "adtv_threshold_brl": 100000.0,
+      "pct_traded_threshold": 0.8
+    }
+  ],
+  "metrics_v3": [
+    "cvar5_holdout",
+    "cvar10_holdout",
+    "sharpe_subperiod_early",
+    "sharpe_subperiod_mid",
+    "sharpe_subperiod_late",
+    "sharpe_subperiod_min",
+    "illiquid_tickers_eliminated"
+  ],
+  "dominance_thresholds": {
+    "sharpe_advantage_significant": 0.1,
+    "cvar5_tolerance_pp": 0.005
+  },
+  "verdict_logic": {
+    "ESCOLHER_100K_PCT80": "V_ADTV100000_PCT80 tem sharpe_excess_holdout >= V_ADTV50000_PCT80 + 0.10 AND cvar5_holdout >= V_ADTV50000_PCT80.cvar5_holdout - 0.005 AND sharpe_subperiod_min > 0.0.",
+    "ESCOLHER_50K_PCT80": "V_ADTV50000_PCT80 tem sharpe_subperiod_min >= V_ADTV100000_PCT80.sharpe_subperiod_min AND nao atende ESCOLHER_100K_PCT80. Interpretar como: 50k/80 oferece maior consistencia por subperiodo e preferencia de 9 burners medianos prevalece.",
+    "INCONCLUSIVO_FINALISTAS": "Qualquer cenario que nao se enquadre nos criterios acima. Reportar os dois finalistas com todas as metricas para decisao manual do Owner."
+  }
+}

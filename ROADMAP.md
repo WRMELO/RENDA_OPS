@@ -79,6 +79,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 63 | T-096-SKILLS-SPC-CANVAS-60D | Atualizar analista-br e analista-usa para gerar canvas obrigatorio de 60 pregoes para holdings bloqueados/instaveis | D-106 | /home/wilson/.cursor/skills/analista-br/SKILL.md, /home/wilson/.cursor/skills/analista-usa/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
 | 64 | T-107-LIQUIDITY-GATE-STUDY-BR-FIX | Corrigir o criterio de liquidez para medir apenas dias investidos e reexecutar o estudo com guardrail `pct_invested_days_holdout` | D-107 | backtest/t107_liquidity_gate_br/run_t107.py, backtest/t107_liquidity_gate_br/decision_criterion_t107.json, backtest/t107_liquidity_gate_br/results/*, CHANGELOG.md, ROADMAP.md | DONE |
 | 65 | T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR | Estudo de sensibilidade dos guardrails do gate de liquidez com grade 4x3 e regra de adjacencia anti-E13 | D-108 | backtest/t107_liquidity_gate_br/decision_criterion_t107_v2.json, backtest/t107_liquidity_gate_br/run_t107_v2_sensitivity.py, backtest/t107_liquidity_gate_br/results/*, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
+| 66 | T-107-V3-LIQUIDITY-FINALISTS-BR | Comparacao direta das duas finalistas do gate de liquidez com CVaR, subperiodos e checagem dos ativos iliquidos atuais | D-109 | backtest/t107_liquidity_gate_br/decision_criterion_t107_v3.json, backtest/t107_liquidity_gate_br/run_t107_v3_finalists.py, backtest/t107_liquidity_gate_br/results/*, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
 
 ### Marcos Estratégicos
 
