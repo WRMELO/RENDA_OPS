@@ -13,7 +13,7 @@
 **Mercado**: B3 (ações BR + BDRs)
 **Moeda**: BRL
 **Período de desenvolvimento**: 2025-03-05 a 2026-03-19
-**Status**: Operacional, motor blindado (v1.1.0-motor)
+**Status**: Operacional, motor blindado (v1.13.0-motor)
 
 ### Métricas do winner (C2 K=15, HOLDOUT 2023–2026)
 
@@ -47,8 +47,9 @@
 | Calibração de Cadência | Backtests de cadência (cad=1/5/10), refinamento granular (cad=7/8/15/20), sensibilidade de fase (46 variantes, φ=0..N-1) e implementação cad=7 no motor blindado com gate is_rebalance_day | T-060, T-060-CAD2, T-060-PHASE, T-MOTOR-CAD7 | D-068, D-069, D-070, D-071 | 1 dia |
 | Evolução de resiliência e painel (2026-03-19 a 2026-04-03) | Reset Day Zero, lote D+2/D+1 no painel, desacoplamento temporal (exec/market/trade_day), SSOT ledger BR Fase 1 e 2, calendar B3 infraestrutura | T-031, T-032, T-033, T-034, T-035, T-036, T-037, T-048, T-049, T-050, T-052 | D-035, D-036, D-037, D-038, D-039, D-040, D-041, D-042, D-043, D-044, D-045, D-046, D-047, D-048, D-050, D-052, D-053, D-054 | 15+ dias |
 | Operação Fábrica BR (2026-04-07 a 2026-04-15) | Filtro calendário B3 nos blindados, concentração revertida 15/20%, analista-br reformulado, lote padrão BR, redesenho gráfico do painel, saneamento documental | T-055-BR, T-057, T-058, T-059, T-060, T-ANALISTAS-PASSO9-LOTE-V1, T-LEDGER-BR-LOT-TRIM-V1, T-PAINEL-GRAFICOS, T-GOV-DOC-BR | D-054 a D-078 | 8 dias |
+| Evolução de robustez e liquidez (2026-04-20 a 2026-05-14) | Rebalance weakness (T-082/T-083), SPC enriquecido no motor (T-088 a T-091), linha Nelson/WE (T-092 a T-092-V3), estudos de liquidez e implementacao no motor (T-107, T-107-V2, T-107-V3, T-108) | T-082, T-083, T-088, T-089, T-090, T-091, T-092, T-092-V2, T-092-V3, T-094, T-107, T-107-V2, T-107-V3, T-108 | D-082 a D-110 | 24 dias |
 
-**Total (atualizado em D-076)**: 78 decisões, 55+ tasks, 4 auditorias forenses independentes + auditoria dupla T-MOTOR-CAD7 (Gemini + Kimi)
+**Total (atualizado em D-111)**: 111 decisões, 68+ tasks, 4 auditorias forenses independentes + auditoria dupla em motor blindado (Gemini + Kimi).
 
 ---
 
@@ -154,7 +155,7 @@ Owner <---> CTO <---> Architect ---> Executor ---> Auditor ---> Curator
 - **Auditor rotina**: Sonnet (pós-execução)
 - **Auditor forense profundo**: Gemini 3.1 Pro (lógica) + Kimi K2.5 (numérico)
 - **Barreira sanitária**: auditor forense não participa do desenvolvimento para evitar viés
-- **Blindagem pós-auditoria**: tag git + pre-commit hook para arquivos protegidos (atual: `v1.1.0-motor`)
+- **Blindagem pós-auditoria**: tag git + pre-commit hook para arquivos protegidos (atual: `v1.13.0-motor`)
 
 ### 4.5 Proveniência
 
@@ -225,6 +226,7 @@ Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.
 | L-19 | **Phase sweep como teste de robustez barato para parâmetros temporais** — varrer φ=0..N-1 antes de adotar qualquer cadência ou parâmetro periódico | T-060-PHASE: 46 variantes, custo negligível, evitou adoção prematura de cad=10 (D-070) |
 | L-20 | **Correção de papel em tempo real não quebra a cadeia** — Owner identificou e corrigiu bleed entre Interlocutor Técnico e CTO Técnico; a governança se autocorrigiu sem acumular dívida | Discussão 'formalizar vs orientar' no arco T-060-PHASE; cadeia retomada corretamente |
 | L-30 | **Estudos read-only sobre artefatos auditaveis de tasks anteriores** — antes de propor novo backtest de motor, verificar se artefatos auditaveis de tasks anteriores podem ser consumidos como universo de leitura. Pattern compativel com GOVERNANCE §6.5 (motor blindado) e §6.6 (gate de paridade metodologica): permite resposta rapida e mantem zero risco de regressao. | T-094 reaproveitou events_V0_BASELINE_phase*.csv de T-092-V3 (3.842 lots HOLDOUT, 7 fases) sem nova simulacao de portfolio; custo ~2,5 min vs dias de novo backtest end-to-end (D-103, D-104, D-101). |
+| L-31 | **Iteracao V->V2->V3 para desambiguar INCONCLUSIVO em estudos read-only** — quando um estudo retorna INCONCLUSIVO por ambiguidade de guardrail, o caminho padrao e desdobrar em estudo sucessor de baixo custo reutilizando artefatos auditados anteriores, em vez de arquivar prematuramente. | T-107 (INCONCLUSIVO) -> T-107-V2 (sensibilidade de guardrails) -> T-107-V3 (CVaR + subperiodos) -> T-108 (instalacao no motor). Ref: D-107, D-108, D-109, D-110. |
 
 ### 6.2 Técnico
 
@@ -249,6 +251,7 @@ Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.
 | L-27 | **Sete experimentos convergentes com criterio pre-registrado e phase sweep fecham uma linha de pesquisa** — T-092/T-092-V2/T-092-V3 demonstraram que Nelson/WE como gatilho automatico de venda defensiva diaria nao e viavel no portfolio BR Top-10 cad=7: CVaR melhora em variantes iniciais mas Sharpe e destruido em todas. blocked_bc como gate de reentrada bloqueia regressao a media de ativos em recuperacao (causa mecanica: 44,5% das recompras bloqueadas). Lição de processo: parar a pesquisa apos 7 experimentos convergentes e transferir a protecao para a camada operacional (skill analista-br). | T-092 (D-098), T-092-V2 (D-099), T-092-V3 (D-100), D-101 |
 | L-28 | **Equivalencia empirica banda SPC rolling vs banda congelada na ignicao no winner BR** — no universo Top-10 com cad=7 e ML-trigger, banda rolling K=60 e banda congelada na ignicao do lote produzem mesmo dia de disparo em 69% dos lotes do HOLDOUT BR e nao disparam em nenhum dos dois cenarios em outros 23%. A vantagem da banda congelada (canone Phase I de SPC industrial) materializa-se em apenas 3,8% dos lotes — ganho esperado por lote essencialmente nulo. Nao migrar motor para banda fixa na ignicao sem repensar antes o dominio de aplicacao (ex.: posicao buy-and-hold sem rebalanceamento periodico). | T-094 Study 1: `backtest/t094_spc_band_skim_study_br/results/study1_summary.json` — n_lots=3842, rate_frozen_earlier=0,0234, delta_frozen_vs_actual=+0,0117, verdict=MANTER_ROLLING. Ref: D-103. |
 | L-29 | **Persistencia `blocked_bc` tem delta positivo mas baixa consistencia como gate** — saida por persistencia `blocked_bc=True` em N={1,3,5,10} pregoes consecutivos produz delta_pnl mediano positivo em todas as 12 combinacoes testadas (N × {ANY, SUPERIOR, INFERIOR}), mas a taxa de superacao `rate_captured_better` nunca ultrapassa 0,5056 — essencialmente coin flip. A direcao SUPERIOR (bloqueio pelo auge) tem consistencia sistematicamente maior que INFERIOR, mas insuficiente para gate automatico. Em decisao de gate automatico sobre lots de ML-trigger, exigir simultaneamente `delta_pnl > 0` E `rate_captured_better > 0,55`. Delta positivo sem consistencia e cauda longa, nao sinal acionavel. | T-094 Study 2: `backtest/t094_spc_band_skim_study_br/results/study2_summary.json` — global_verdict=INCONCLUSIVO. Maior rate=0,5056 em N=5 SUPERIOR. Ref: D-104. |
+| L-34 | **Padrao `lib/<feature>.py` + chamada em etapa de pipeline para evolucao segura do motor** — nova logica de motor deve entrar em modulo isolado em `lib/` e ser conectada por ponto de chamada controlado, reduzindo risco de regressao e facilitando blindagem/auditoria. | Padrao confirmado em duas ocorrencias: `lib/spc.py` (T-089/T-090) e `lib/liquidity.py` + `pipeline/06_compute_scores.py` (T-108). Ref: D-088, D-089, D-090, D-110. |
 
 ---
 
