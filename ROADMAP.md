@@ -78,6 +78,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 62 | T-095-CORPUS-LL-T094-BR | Registrar L-28, L-29, L-30 e E-17 do arco T-094 no docs/CORPUS_FABRICA_BR.md e atualizar referencia cruzada em 7.3; nenhum codigo de produto tocado | D-105 | docs/CORPUS_FABRICA_BR.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
 | 63 | T-096-SKILLS-SPC-CANVAS-60D | Atualizar analista-br e analista-usa para gerar canvas obrigatorio de 60 pregoes para holdings bloqueados/instaveis | D-106 | /home/wilson/.cursor/skills/analista-br/SKILL.md, /home/wilson/.cursor/skills/analista-usa/SKILL.md, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
 | 64 | T-107-LIQUIDITY-GATE-STUDY-BR-FIX | Corrigir o criterio de liquidez para medir apenas dias investidos e reexecutar o estudo com guardrail `pct_invested_days_holdout` | D-107 | backtest/t107_liquidity_gate_br/run_t107.py, backtest/t107_liquidity_gate_br/decision_criterion_t107.json, backtest/t107_liquidity_gate_br/results/*, CHANGELOG.md, ROADMAP.md | DONE |
+| 65 | T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR | Estudo de sensibilidade dos guardrails do gate de liquidez com grade 4x3 e regra de adjacencia anti-E13 | D-108 | backtest/t107_liquidity_gate_br/decision_criterion_t107_v2.json, backtest/t107_liquidity_gate_br/run_t107_v2_sensitivity.py, backtest/t107_liquidity_gate_br/results/*, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
 
 ### Marcos Estratégicos
 

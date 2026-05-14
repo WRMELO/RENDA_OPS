@@ -1,0 +1,13 @@
+pct_invested_factor,n_tickers_min,n_approved,best_approved,isolated,verdict_contribution
+0.7,7,10,V_ADTV100000_PCT80,False,ROBUST_APPROVAL
+0.7,8,10,V_ADTV100000_PCT80,False,ROBUST_APPROVAL
+0.7,9,2,V_ADTV50000_PCT80,False,ROBUST_APPROVAL
+0.8,7,0,,False,NO_APPROVAL
+0.8,8,0,,False,NO_APPROVAL
+0.8,9,0,,False,NO_APPROVAL
+0.85,7,0,,False,NO_APPROVAL
+0.85,8,0,,False,NO_APPROVAL
+0.85,9,0,,False,NO_APPROVAL
+0.95,7,0,,False,NO_APPROVAL
+0.95,8,0,,False,NO_APPROVAL
+0.95,9,0,,False,NO_APPROVAL

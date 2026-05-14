@@ -1,0 +1,156 @@
+{
+  "task_id": "T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR",
+  "decision_ref": "D-108",
+  "generated_at_utc": "2026-05-14T10:49:48.415487+00:00",
+  "source_summary": "backtest/t107_liquidity_gate_br/results/liquidity_study_summary.json",
+  "global_verdict": "APROVAR_GATE_LIQUIDEZ",
+  "recommended_guardrails": {
+    "pct_invested_factor": 0.7,
+    "n_tickers_min": 9
+  },
+  "recommended_variant": "V_ADTV50000_PCT80",
+  "isolated_approvals": [],
+  "baseline_reference": {
+    "label": "V0_BASELINE",
+    "sharpe_excess_holdout": 0.4005,
+    "mdd_holdout_pct": -26.99,
+    "turnover_holdout_proxy": 0.511377245508982,
+    "n_tickers_median_when_invested_holdout": 9.0,
+    "pct_invested_days_holdout": 0.3161676646706587
+  },
+  "cell_results": [
+    {
+      "pct_invested_factor": 0.7,
+      "n_tickers_min": 7,
+      "approved_variants": [
+        "V_ADTV50000_PCT70",
+        "V_ADTV50000_PCT80",
+        "V_ADTV100000_PCT70",
+        "V_ADTV100000_PCT80",
+        "V_ADTV100000_PCT90",
+        "V_ADTV250000_PCT70",
+        "V_ADTV250000_PCT80",
+        "V_ADTV250000_PCT90",
+        "V_ADTV500000_PCT70",
+        "V_ADTV500000_PCT80"
+      ],
+      "best_approved": "V_ADTV100000_PCT80",
+      "n_approved": 10,
+      "isolated": false,
+      "verdict_contribution": "ROBUST_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.7,
+      "n_tickers_min": 8,
+      "approved_variants": [
+        "V_ADTV50000_PCT70",
+        "V_ADTV50000_PCT80",
+        "V_ADTV100000_PCT70",
+        "V_ADTV100000_PCT80",
+        "V_ADTV100000_PCT90",
+        "V_ADTV250000_PCT70",
+        "V_ADTV250000_PCT80",
+        "V_ADTV250000_PCT90",
+        "V_ADTV500000_PCT70",
+        "V_ADTV500000_PCT80"
+      ],
+      "best_approved": "V_ADTV100000_PCT80",
+      "n_approved": 10,
+      "isolated": false,
+      "verdict_contribution": "ROBUST_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.7,
+      "n_tickers_min": 9,
+      "approved_variants": [
+        "V_ADTV50000_PCT70",
+        "V_ADTV50000_PCT80"
+      ],
+      "best_approved": "V_ADTV50000_PCT80",
+      "n_approved": 2,
+      "isolated": false,
+      "verdict_contribution": "ROBUST_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.8,
+      "n_tickers_min": 7,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.8,
+      "n_tickers_min": 8,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.8,
+      "n_tickers_min": 9,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.85,
+      "n_tickers_min": 7,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.85,
+      "n_tickers_min": 8,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.85,
+      "n_tickers_min": 9,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.95,
+      "n_tickers_min": 7,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.95,
+      "n_tickers_min": 8,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    },
+    {
+      "pct_invested_factor": 0.95,
+      "n_tickers_min": 9,
+      "approved_variants": [],
+      "best_approved": "",
+      "n_approved": 0,
+      "isolated": false,
+      "verdict_contribution": "NO_APPROVAL"
+    }
+  ]
+}

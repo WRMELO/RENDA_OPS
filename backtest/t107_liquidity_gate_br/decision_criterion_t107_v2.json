@@ -1,0 +1,36 @@
+{
+  "task_id": "T-107-V2-LIQUIDITY-GUARDRAIL-SENSITIVITY-BR",
+  "decision_ref": "D-108",
+  "parent_study": "T-107-LIQUIDITY-GATE-STUDY-BR",
+  "scope": "Estudo de sensibilidade dos guardrails do criterio de aprovacao do gate de liquidez. Nao reexecuta simulacao C2 K15; consome liquidity_study_summary.json ja auditado.",
+  "input_artifact": "backtest/t107_liquidity_gate_br/results/liquidity_study_summary.json",
+  "sensitivity_grid": {
+    "pct_invested_factors": [
+      0.7,
+      0.8,
+      0.85,
+      0.95
+    ],
+    "n_tickers_min_values": [
+      7,
+      8,
+      9
+    ]
+  },
+  "fixed_gates": {
+    "sharpe_tolerance": -0.02,
+    "mdd_tolerance_pp": -2.0,
+    "turnover_factor": 1.25,
+    "universe_reduction_min_pct": 15.0
+  },
+  "adjacency_rule": "Uma celula da grade so pode gerar veredito APROVAR_GATE_LIQUIDEZ se pelo menos uma celula vizinha (pct_invested_factor adjacente OU n_tickers_min adjacente) tambem aprova ao menos uma variante. Celula isolada gera INCONCLUSIVO_POR_REGIME (prevencao de E-13).",
+  "verdict_logic": {
+    "APROVAR_GATE_LIQUIDEZ": "Existe celula (pct_invested_factor, n_tickers_min) com adjacencia aprovada e ao menos uma variante nao-baseline que passa todos os gates fixos e guardrails da celula. Reportar a celula mais restritiva que ainda aprova, a variante aprovada e o par de guardrails.",
+    "MANTER_SEM_GATE": "Nenhuma celula da grade aprova qualquer variante, incluindo as celulas mais permissivas (pct_invested_factor=0.70 e n_tickers_min=7).",
+    "INCONCLUSIVO_POR_REGIME": "Existe aprovacao em alguma celula, mas sem adjacencia. Resultado isolado, nao robusto (E-13)."
+  },
+  "deliverables": {
+    "summary_json": "backtest/t107_liquidity_gate_br/results/sensitivity_summary_v2.json",
+    "detail_csv": "backtest/t107_liquidity_gate_br/results/sensitivity_detail_v2.csv"
+  }
+}
