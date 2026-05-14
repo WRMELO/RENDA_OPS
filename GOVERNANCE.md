@@ -102,7 +102,7 @@ Correcoes urgentes durante a simulacao:
 
 ### 6.5 Blindagem do Motor Operacional (D-025)
 
-**Arquivos protegidos** (auditados e selados em `v1.12.0-motor`):
+**Arquivos protegidos** (auditados e selados em `v1.13.0-motor`):
 
 | Arquivo | Funcao | Auditorias |
 |---------|--------|------------|
@@ -110,13 +110,15 @@ Correcoes urgentes durante a simulacao:
 | `pipeline/02_ingest_prices_br.py` | Ingestao BRAPI + dividendos/JCP | Sonnet, Gemini |
 | `pipeline/04_build_canonical.py` | Canonical com dividend_rate/dividend_label | Sonnet, Gemini |
 | `lib/spc.py` | Classificador SPC B+C enriquecido: gate de entrada e release de quarentena (D-088/D-090) | Gemini, Kimi (T-091) |
+| `lib/liquidity.py` | Gate de liquidez pre-select_top_n: ADTV60d >= R$50k e pct_traded_60d >= 0.80 (D-110, T-108) | Gemini, Kimi (T-108) |
+| `pipeline/06_compute_scores.py` | Computa scores M3 e aplica filtro de liquidez via lib/liquidity.py antes de retornar scores_by_day (D-110, T-108) | Gemini, Kimi (T-108) |
 
 **Regras de protecao**:
 
 1. Alteracoes nestes arquivos exigem ciclo completo: `Architect → Executor → Auditor duplo (Gemini + Kimi) → Curator`, com autorizacao explicita do Owner.
 2. Um **pre-commit hook** no git bloqueia commits que alterem esses arquivos. Para sobrepor, usar: `MOTOR_OVERRIDE=1 git commit -m "descricao"`.
-3. A tag `v1.12.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.12.0-motor`.
-4. Novas versoes do motor devem gerar nova tag (`v1.12.0-motor`, etc.) apos novo ciclo completo de auditoria.
+3. A tag `v1.13.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.13.0-motor`.
+4. Novas versoes do motor devem gerar nova tag (`v1.13.0-motor`, etc.) apos novo ciclo completo de auditoria.
 
 ### 6.6 Gate de Paridade Metodologica (D-034)
 

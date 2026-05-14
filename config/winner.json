@@ -21,7 +21,14 @@
     "rebalance_cadence": 7,
     "rebalance_phase_offset": 0,
     "rebalance_anchor_date": "2026-04-06",
-    "mdd_limit": null
+    "mdd_limit": null,
+    "liquidity_gate": {
+      "adtv_threshold_brl": 50000,
+      "pct_traded_threshold": 0.8,
+      "window": 60,
+      "min_periods": 20,
+      "enabled": true
+    }
   },
   "holdout_period": {
     "start": "2023-01-02",

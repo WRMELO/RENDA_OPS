@@ -40,6 +40,8 @@ def _load_us_direct_tickers() -> set[str]:
 
 def run() -> dict:
     from lib.engine import compute_m3_scores
+    from lib.io import read_json
+    from lib.liquidity import apply_liquidity_filter, compute_liquidity_tables
 
     canonical = pd.read_parquet(IN_CANONICAL)
     canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
@@ -87,11 +89,45 @@ def run() -> dict:
     n_stale = int(len(stale_rolling_last_day))
 
     scores_by_day = compute_m3_scores(px_wide)
+
+    liquidity_stats: dict[str, int | bool | str | list[str] | None] = {
+        "enabled": False,
+        "n_tickers_filtered_last_day": 0,
+    }
+    try:
+        winner_cfg = read_json(ROOT / "config" / "winner.json")
+        gate_cfg = winner_cfg.get("winner_config_snapshot", {}).get("liquidity_gate", {})
+        if bool(gate_cfg.get("enabled", False)):
+            adtv_threshold = float(gate_cfg.get("adtv_threshold_brl", 0.0))
+            pct_threshold = float(gate_cfg.get("pct_traded_threshold", 0.0))
+            liq_window = int(gate_cfg.get("window", 60))
+            liq_min_periods = int(gate_cfg.get("min_periods", 20))
+
+            adtv_60, pct_60 = compute_liquidity_tables(
+                raw_path=ROOT / "data" / "ssot" / "market_data_raw.parquet",
+                window=liq_window,
+                min_periods=liq_min_periods,
+            )
+            scores_by_day, liquidity_stats = apply_liquidity_filter(
+                scores_by_day=scores_by_day,
+                adtv_60=adtv_60,
+                pct_60=pct_60,
+                adtv_threshold=adtv_threshold,
+                pct_threshold=pct_threshold,
+            )
+            liquidity_stats["enabled"] = True
+    except Exception as exc:
+        print(f"[06] WARNING: liquidity filter SKIPPED due to error: {exc}")
+
+    if not scores_by_day:
+        raise RuntimeError("No scores_by_day available after liquidity filter")
+
     latest_date = max(scores_by_day.keys())
     latest_scores = scores_by_day[latest_date]
+    n_liquidity_filtered = int(liquidity_stats.get("n_tickers_filtered_last_day", 0))
     print(
         f"[06] M3 scores: {len(scores_by_day)} days, latest={latest_date.date()}, "
-        f"tickers={len(latest_scores)} (excluded {len(us_direct)} US_DIRECT, {n_stale} stale)"
+        f"tickers={len(latest_scores)} (excluded {len(us_direct)} US_DIRECT, {n_stale} stale, {n_liquidity_filtered} liquidity)"
     )
     return {"scores_by_day": scores_by_day, "px_wide": px_wide, "blacklist": blacklist, "us_direct_excluded": us_direct}
 
