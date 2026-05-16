@@ -83,7 +83,7 @@ def test_unmatched_settlement_reduces_accounting(tmp_path):
     assert ledger.pending_settlements(date(2026, 1, 4)) == []
 
 
-def test_pending_settlements_includes_future_settle_date(tmp_path):
+def test_pending_settlements_excludes_future_settle_date(tmp_path):
     ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
 
     _append(
@@ -101,12 +101,87 @@ def test_pending_settlements_includes_future_settle_date(tmp_path):
     )
 
     rows = ledger.pending_settlements(date(2026, 1, 4))
+    assert rows == []
+
+
+def test_sells_in_settlement_captures_future_settle(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+
+    _append(
+        LedgerEvent(
+            id="S_FUT",
+            type=EventType.SELL,
+            exec_date=date(2026, 1, 3),
+            created_at=datetime.now(tz=UTC),
+            ticker="ABC3",
+            qtd=5,
+            price=20.0,
+            amount=100.0,
+            settle_date=date(2026, 1, 10),
+        )
+    )
+
+    rows = ledger.sells_in_settlement(date(2026, 1, 4))
     assert len(rows) == 1
     row = rows[0]
     assert row["sell_id"] == "S_FUT"
     assert row["sale_date"] == "2026-01-03"
     assert row["settle_date"] == "2026-01-10"
     assert abs(float(row["pendente"]) - 100.0) < 1e-9
+
+
+def test_reconciliation_pending_plus_in_settlement_equals_accounting(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+
+    _append(
+        LedgerEvent(
+            id="S_PAST",
+            type=EventType.SELL,
+            exec_date=date(2026, 1, 3),
+            created_at=datetime.now(tz=UTC),
+            ticker="AAA3",
+            qtd=4,
+            price=20.0,
+            amount=80.0,
+            settle_date=date(2026, 1, 4),
+        )
+    )
+    _append(
+        LedgerEvent(
+            id="S_FUT",
+            type=EventType.SELL,
+            exec_date=date(2026, 1, 3),
+            created_at=datetime.now(tz=UTC),
+            ticker="BBB3",
+            qtd=6,
+            price=20.0,
+            amount=120.0,
+            settle_date=date(2026, 1, 10),
+        )
+    )
+    _append(
+        LedgerEvent(
+            id="T_PAST",
+            type=EventType.SETTLEMENT,
+            exec_date=date(2026, 1, 4),
+            created_at=datetime.now(tz=UTC),
+            amount=80.0,
+            ref_id="S_PAST",
+            reason="S_PAST",
+            settle_date=date(2026, 1, 4),
+        )
+    )
+
+    as_of = date(2026, 1, 5)
+    pending_ready = ledger.pending_settlements(as_of)
+    in_settlement = ledger.sells_in_settlement(as_of)
+    cash = ledger.compute_cash(as_of)
+
+    assert pending_ready == []
+    assert len(in_settlement) == 1
+    assert in_settlement[0]["sell_id"] == "S_FUT"
+    recon_total = sum(float(row["pendente"]) for row in pending_ready) + sum(float(row["pendente"]) for row in in_settlement)
+    assert abs(recon_total - float(cash["cash_accounting"])) < 1e-9
 
 
 def test_duplicate_event_not_appended(tmp_path):

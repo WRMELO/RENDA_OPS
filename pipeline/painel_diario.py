@@ -39,6 +39,7 @@ try:
     from pipeline.ledger_br import EventType as _LedgerEventType
     from pipeline.ledger_br import export_snapshot as _export_snapshot_ledger
     from pipeline.ledger_br import pending_settlements as _pending_settlements_ledger
+    from pipeline.ledger_br import sells_in_settlement as _sells_in_settlement_ledger
     from pipeline.ledger_br import read_all_events as _read_all_events_ledger
 except Exception:
     _compute_cash_ledger = None
@@ -46,6 +47,7 @@ except Exception:
     _LedgerEventType = None
     _export_snapshot_ledger = None
     _pending_settlements_ledger = None
+    _sells_in_settlement_ledger = None
     _read_all_events_ledger = None
 
 FACTORY_START_CFG = ROOT / "config" / "factory_start.json"
@@ -565,6 +567,15 @@ def _pending_sales_ledger(exec_day: date) -> list[dict[str, Any]]:
         return _pending_settlements_ledger(exec_day)
     except Exception:
         return _pending_sales_for_transfer(exec_day)
+
+
+def _sells_in_settlement_for_display(exec_day: date) -> list[dict[str, Any]]:
+    if _sells_in_settlement_ledger is None:
+        return []
+    try:
+        return _sells_in_settlement_ledger(exec_day)
+    except Exception:
+        return []
 
 
 def _calc_cash_balances(
@@ -1881,6 +1892,7 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
         "retirada_acumulada": retirada_acc,
         "carteira_valor_d1": total_current,
         "pending_sales": _pending_sales_ledger(exec_day),
+        "sells_in_settlement": _sells_in_settlement_for_display(exec_day),
         "prev_defensive_quarantine": list((d1_payload or {}).get("defensive_quarantine", [])),
         "corporate_actions": corporate_actions,
     }
@@ -2129,6 +2141,19 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
       <div id="transferRows" style="margin-top:8px;"></div>
       <button class="btn btn-add" onclick="addTransfer()">+ Adicionar transferência manual</button>
 
+      <h3 style="margin-top:14px;">Vendas em Liquidacao (informativo)</h3>
+      <p class="muted" style="font-size:13px;">Vendas executadas aguardando liquidacao. Não são transferíveis ainda e compõem o Caixa Contábil.</p>
+      <div id="inSettlementTable">
+        <table style="font-size:13px;width:100%;">
+          <tr style="background:#fef9c3;"><th>Data Venda</th><th>Ticker</th><th style="text-align:right">Qtd</th><th style="text-align:right">Preco</th><th style="text-align:right">Valor Venda</th><th style="text-align:right">Liquida em</th></tr>
+          <tbody id="inSettlementBody"></tbody>
+        </table>
+      </div>
+      <div class="cash-row" style="margin-top:6px;font-size:13px;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;background:#f8fafc;">
+        <span>Pronto p/ transferir + Em liquidacao</span>
+        <span><strong id="reconcile_acc">-</strong><span id="reconcile_ok" style="font-size:11px;margin-left:8px;"></span></span>
+      </div>
+
       <div class="section-title" style="margin-top:14px;">Sessão Caixa</div>
       <div class="cash-layout">
         <div class="cash-panel">
@@ -2184,6 +2209,7 @@ const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
 const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
+const IN_SETTLEMENT = {json.dumps(ctx["sells_in_settlement"], ensure_ascii=False)};
 const CORPORATE_ACTIONS = {json.dumps(corporate_actions, ensure_ascii=False)};
 const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
 const VALID_TICKERS = {json.dumps(sorted(load_valid_tickers()), ensure_ascii=False)};
@@ -2224,6 +2250,54 @@ function renderPendingSales() {{
     `;
     tbody.appendChild(tr);
   }});
+}}
+
+function renderInSettlement() {{
+  const tbody = document.getElementById('inSettlementBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  if (!IN_SETTLEMENT || IN_SETTLEMENT.length === 0) {{
+    tbody.innerHTML = '<tr><td colspan="6" style="color:#64748b;padding:8px;">Nenhuma venda em liquidacao.</td></tr>';
+  }} else {{
+    IN_SETTLEMENT.forEach((s) => {{
+      const tr = document.createElement('tr');
+      const dp = (s.sale_date || '').split('-');
+      const dateBR = dp.length === 3 ? (dp[2] + '/' + dp[1] + '/' + dp[0]) : (s.sale_date || '');
+      const sp = (s.settle_date || '').split('-');
+      const settleBR = sp.length === 3 ? (sp[2] + '/' + sp[1] + '/' + sp[0]) : (s.settle_date || '');
+      tr.innerHTML = `
+        <td>${{dateBR}}</td>
+        <td>${{s.ticker || ''}}</td>
+        <td style="text-align:right">${{Number(s.qtd || 0).toLocaleString('pt-BR')}}</td>
+        <td style="text-align:right">${{moneyBR(s.preco || 0)}}</td>
+        <td style="text-align:right">${{moneyBR(s.valor_venda || 0)}}</td>
+        <td style="text-align:right">${{settleBR}}</td>
+      `;
+      tbody.appendChild(tr);
+    }});
+  }}
+
+  const readyTotal = (PENDING_SALES || []).reduce((a, b) => a + (b.pendente || 0), 0);
+  const inSettTotal = (IN_SETTLEMENT || []).reduce((a, b) => a + (b.pendente || 0), 0);
+  const reconTotal = readyTotal + inSettTotal;
+
+  const accEl = document.getElementById('reconcile_acc');
+  if (accEl) {{
+    accEl.textContent = moneyBR(reconTotal);
+  }}
+
+  const diff = Math.abs(reconTotal - PREV_ACC);
+  const okEl = document.getElementById('reconcile_ok');
+  if (okEl) {{
+    if (diff < 0.02) {{
+      okEl.textContent = 'OK (reconcilia)';
+      okEl.style.color = '#166534';
+    }} else {{
+      okEl.textContent = `ATENCAO: diff ${{moneyBR(diff)}}`;
+      okEl.style.color = '#b91c1c';
+    }}
+  }}
 }}
 
 function renderTopBuys() {{
@@ -2626,6 +2700,7 @@ function savePanel() {{
 }}
 
 renderPendingSales();
+renderInSettlement();
 renderTopBuys();
 for (const a of ACTION_ROWS) {{
   addOp(a);
