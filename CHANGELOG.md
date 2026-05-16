@@ -205,3 +205,4 @@
 ## 2026-05-16
 
 - fix(motor) [MOTOR-OVERRIDE]: T-PAINEL-SETTLEMENT-VIEW-BR — secao informativa de vendas em liquidacao no painel BR com correcao semantica de `pending_settlements()` (exclui `settle_date` futuro), nova funcao `sells_in_settlement()` no ledger e reconciliacao explicita do Caixa Contabil no boletim. Ref: D-112, USA D-082, R-006, R-032.
+- chore: T-PAINEL-SETTLEMENT-VIEW-BR-HF-SELAR-TAG — tag v1.14.0-motor criada selando commit T-PAINEL-SETTLEMENT-VIEW-BR; GOVERNANCE.md §6.5 atualizado de v1.13.0-motor para v1.14.0-motor; D-113 registrado no DECISION_LOG.md. Ref: D-113, D-089, R-032.
