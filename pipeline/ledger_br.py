@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import uuid
 from dataclasses import dataclass
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
@@ -146,23 +146,15 @@ def lot_size_br(ticker: str | None) -> int:
 
 
 def _next_trading_day_br(from_day: date) -> date:
-    days = _trading_days()
-    if days:
-        for d in days:
-            if d > from_day:
-                return d
-    from lib.trading_calendar import is_session
-    candidate = from_day + timedelta(days=1)
-    while not is_session(candidate, exchange="BVMF"):
-        candidate += timedelta(days=1)
-    return candidate
+    from lib.trading_calendar import next_session
+    return next_session(from_day, exchange="BVMF")
 
 
 def _resolve_trade_day(exec_day: date) -> date:
-    days = set(_trading_days())
-    if exec_day in days:
+    from lib.trading_calendar import is_session, next_session
+    if is_session(exec_day, exchange="BVMF"):
         return exec_day
-    return _next_trading_day_br(exec_day)
+    return next_session(exec_day, exchange="BVMF")
 
 
 def _settle_date_br(exec_day: date, ticker: str | None) -> date:

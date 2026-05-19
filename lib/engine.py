@@ -1,6 +1,8 @@
 """Core engine: M3 scoring, dual-mode, hysteresis."""
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -72,3 +74,40 @@ def select_top_n(scores_day: pd.DataFrame, top_n: int, blacklist: set[str] | Non
     if blacklist:
         df = df[~df.index.isin(blacklist)]
     return df.sort_values("score_m3", ascending=False).head(top_n).index.tolist()
+
+
+def compute_filtered_m3_scores(
+    px_wide: pd.DataFrame,
+    raw_path: Path | str | None = None,
+    adtv_threshold: float = 0.0,
+    pct_threshold: float = 0.0,
+    liq_window: int = 60,
+    liq_min_periods: int = 20,
+    enabled: bool = False,
+) -> tuple[dict[pd.Timestamp, pd.DataFrame], int]:
+    """Wrapper sobre compute_m3_scores que aplica o gate de liquidez D-110 quando habilitado.
+
+    Retorna (scores_by_day_filtrados, n_tickers_filtrados_ultimo_dia).
+    Callers do motor produtivo (06_compute_scores.py, painel_diario.py C2 K=15)
+    DEVEM usar esta funcao — nunca compute_m3_scores diretamente.
+    Backtests e pipeline/07_build_features.py usam compute_m3_scores.
+    """
+    scores_by_day = compute_m3_scores(px_wide)
+    if not enabled or raw_path is None:
+        return scores_by_day, 0
+    from lib.liquidity import apply_liquidity_filter, compute_liquidity_tables  # noqa: PLC0415
+
+    _path = Path(raw_path) if not isinstance(raw_path, Path) else raw_path
+    adtv_60, pct_60 = compute_liquidity_tables(
+        raw_path=_path,
+        window=liq_window,
+        min_periods=liq_min_periods,
+    )
+    filtered, stats = apply_liquidity_filter(
+        scores_by_day=scores_by_day,
+        adtv_60=adtv_60,
+        pct_60=pct_60,
+        adtv_threshold=adtv_threshold,
+        pct_threshold=pct_threshold,
+    )
+    return filtered, int(stats.get("n_tickers_filtered_last_day", 0))

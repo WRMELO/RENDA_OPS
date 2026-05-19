@@ -549,6 +549,12 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                     )
                     return
 
+                from lib.trading_calendar import is_session as _is_session_tc, next_session as _next_session_tc
+                if not _is_session_tc(save_day, exchange="BVMF"):
+                    normalized_day = _next_session_tc(save_day, exchange="BVMF")
+                    LOGGER.warning("exec_date %s nao e pregao B3. Normalizado para %s.", save_day, normalized_day)
+                    save_day = normalized_day
+
                 for op in ops:
                     typ = str(op.get("type", "")).upper().strip()
                     tk = str(op.get("ticker", "")).upper().strip()
@@ -612,11 +618,11 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
 
                 cash = compute_cash(save_day)
                 derived_payload = {
-                    "date": payload.get("date", save_day.isoformat()),
+                    "date": save_day.isoformat(),
                     "reference_decision": payload.get("reference_decision", market_day.isoformat()),
-                    "exec_day": payload.get("exec_day", save_day.isoformat()),
+                    "exec_day": save_day.isoformat(),
                     "market_day": payload.get("market_day", market_day.isoformat()),
-                    "trade_day": payload.get("trade_day", save_day.isoformat()),
+                    "trade_day": save_day.isoformat(),
                     "operations": ops,
                     "cash_movements": cash_movements,
                     "cash_transfers": cash_transfers,

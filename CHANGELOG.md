@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-05-19
+
+- feat: T-LIQUIDITY-FILTER-WRAP-MOTOR-BR | lib/engine.py: compute_filtered_m3_scores unifica gate D-110 para callers produtivos; 06_compute_scores.py e painel_diario.py C2 K=15 refatorados para usar wrapper; lib/engine.py adicionado a blindagem §6.5; testes de regressao em tests/test_compute_filtered_scores.py; tag v1.15.0-motor (D-115)
+
 ## 2025-03-05
 
 - chore: initial commit — estrutura do repo operacional BR (C060X)
@@ -206,3 +210,8 @@
 
 - fix(motor) [MOTOR-OVERRIDE]: T-PAINEL-SETTLEMENT-VIEW-BR — secao informativa de vendas em liquidacao no painel BR com correcao semantica de `pending_settlements()` (exclui `settle_date` futuro), nova funcao `sells_in_settlement()` no ledger e reconciliacao explicita do Caixa Contabil no boletim. Ref: D-112, USA D-082, R-006, R-032.
 - chore: T-PAINEL-SETTLEMENT-VIEW-BR-HF-SELAR-TAG — tag v1.14.0-motor criada selando commit T-PAINEL-SETTLEMENT-VIEW-BR; GOVERNANCE.md §6.5 atualizado de v1.13.0-motor para v1.14.0-motor; D-113 registrado no DECISION_LOG.md. Ref: D-113, D-089, R-032.
+
+## 2026-05-18
+
+- fix: T-LEDGER-SETTLE-FIX-BR-V1 — saneamento append-only no `ledger_br.jsonl` com 3 `CORRECTION` + 3 `SELL` reissue para corrigir `exec_date/settle_date` de RPAD3/RPAD6/USIM5 (RPAD3 e RPAD6: settle 2026-05-19; USIM5: exec 2026-05-18 e settle 2026-05-20), e hardening de calendario em `pipeline/ledger_br.py` para resolver pregao/liquidacao via `lib.trading_calendar` (BVMF) sem dependencia de cobertura do `canonical_br.parquet`; `pipeline/servidor.py` passa a normalizar `save_day` nao-pregao para o proximo pregao. Inclui testes `test_sell_sexta_settle_t2_correto` e `test_exec_sabado_resolve_prox_pregao`. Ref: D-114, R-006, D-079, D-054.
+- fix: T-LEDGER-SETTLE-FIX-BR-V1-HF — `pipeline/servidor.py` grava `date`, `exec_day` e `trade_day` sempre com `save_day` normalizado no `derived_payload`, evitando persistencia de datas nao-pregao vindas do payload cliente; saneamento observacional em `data/real/2026-05-15.json` e `data/cycles/2026-05-15/boletim_preenchido.json` para `2026-05-18`; novo teste `test_derived_payload_usa_save_day_normalizado`. Ref: D-114, R-011.

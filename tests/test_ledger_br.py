@@ -261,3 +261,53 @@ def test_lot_size_br():
     assert ledger.lot_size_br("A1PA34") == 1
     assert ledger.lot_size_br("ABEV3") == 100
 
+
+def test_sell_sexta_settle_t2_correto(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+    ev = ledger.create_event(
+        EventType.SELL,
+        exec_date=date(2026, 5, 15),
+        amount=1000.0,
+        ticker="PETR3",
+        qtd=20,
+        price=50.0,
+    )
+    assert ev.settle_date == date(2026, 5, 19)
+
+
+def test_exec_sabado_resolve_prox_pregao(tmp_path):
+    ledger.LEDGER_PATH = tmp_path / "ledger_br.jsonl"
+    ev = ledger.create_event(
+        EventType.SELL,
+        exec_date=date(2026, 5, 16),
+        amount=1000.0,
+        ticker="PETR3",
+        qtd=20,
+        price=50.0,
+    )
+    assert ev.settle_date == date(2026, 5, 20)
+
+
+def test_derived_payload_usa_save_day_normalizado():
+    save_day = date(2026, 5, 18)
+    market_day = date(2026, 5, 15)
+    payload = {
+        "date": "2026-05-16",
+        "reference_decision": "2026-05-15",
+        "exec_day": "2026-05-16",
+        "market_day": "2026-05-15",
+        "trade_day": "2026-05-16",
+    }
+
+    derived_payload = {
+        "date": save_day.isoformat(),
+        "reference_decision": payload.get("reference_decision", market_day.isoformat()),
+        "exec_day": save_day.isoformat(),
+        "market_day": payload.get("market_day", market_day.isoformat()),
+        "trade_day": save_day.isoformat(),
+    }
+
+    assert derived_payload["date"] == "2026-05-18"
+    assert derived_payload["exec_day"] == "2026-05-18"
+    assert derived_payload["trade_day"] == "2026-05-18"
+

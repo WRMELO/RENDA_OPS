@@ -30,7 +30,7 @@ from pipeline.ptbr import (
     fmt_pct_br as _fmt_pct,
     validate_html_ptbr,
 )
-from lib.engine import compute_m3_scores, select_top_n
+from lib.engine import compute_filtered_m3_scores, select_top_n
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked
 from lib.trading_calendar import next_session as _next_session
 try:
@@ -918,7 +918,29 @@ def _build_sell_suggestions(
     if canonical.empty:
         return suggestions, quarantine
     px_rank_wide = canonical.pivot_table(index="date", columns="ticker", values="close_operational", aggfunc="first").sort_index().ffill()
-    scores_by_day = compute_m3_scores(px_rank_wide)
+    # Gate D-110: ler config do winner.json para paridade semantica com step 06 (D-115).
+    _liq_enabled, _liq_raw_path, _liq_adtv, _liq_pct, _liq_win, _liq_mp = False, None, 0.0, 0.0, 60, 20
+    try:
+        _wcfg = _read_json(ROOT / "config" / "winner.json")
+        _gate = _wcfg.get("winner_config_snapshot", {}).get("liquidity_gate", {})
+        if bool(_gate.get("enabled", False)):
+            _liq_enabled = True
+            _liq_adtv = float(_gate.get("adtv_threshold_brl", 0.0))
+            _liq_pct = float(_gate.get("pct_traded_threshold", 0.0))
+            _liq_win = int(_gate.get("window", 60))
+            _liq_mp = int(_gate.get("min_periods", 20))
+            _liq_raw_path = ROOT / "data" / "ssot" / "market_data_raw.parquet"
+    except Exception:
+        pass
+    scores_by_day, _ = compute_filtered_m3_scores(
+        px_rank_wide,
+        raw_path=_liq_raw_path,
+        adtv_threshold=_liq_adtv,
+        pct_threshold=_liq_pct,
+        liq_window=_liq_win,
+        liq_min_periods=_liq_mp,
+        enabled=_liq_enabled,
+    )
     prev_scores = scores_by_day.get(pd.Timestamp(as_of_day))
     if prev_scores is None or prev_scores.empty:
         return suggestions, quarantine

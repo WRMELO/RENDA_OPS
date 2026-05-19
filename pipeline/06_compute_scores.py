@@ -39,9 +39,8 @@ def _load_us_direct_tickers() -> set[str]:
 
 
 def run() -> dict:
-    from lib.engine import compute_m3_scores
+    from lib.engine import compute_filtered_m3_scores, compute_m3_scores
     from lib.io import read_json
-    from lib.liquidity import apply_liquidity_filter, compute_liquidity_tables
 
     canonical = pd.read_parquet(IN_CANONICAL)
     canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
@@ -88,7 +87,7 @@ def run() -> dict:
 
     n_stale = int(len(stale_rolling_last_day))
 
-    scores_by_day = compute_m3_scores(px_wide)
+    scores_by_day = compute_m3_scores(px_wide)  # fallback se gate falhar
 
     liquidity_stats: dict[str, int | bool | str | list[str] | None] = {
         "enabled": False,
@@ -102,20 +101,17 @@ def run() -> dict:
             pct_threshold = float(gate_cfg.get("pct_traded_threshold", 0.0))
             liq_window = int(gate_cfg.get("window", 60))
             liq_min_periods = int(gate_cfg.get("min_periods", 20))
-
-            adtv_60, pct_60 = compute_liquidity_tables(
+            scores_by_day, n_filtered = compute_filtered_m3_scores(
+                px_wide,
                 raw_path=ROOT / "data" / "ssot" / "market_data_raw.parquet",
-                window=liq_window,
-                min_periods=liq_min_periods,
-            )
-            scores_by_day, liquidity_stats = apply_liquidity_filter(
-                scores_by_day=scores_by_day,
-                adtv_60=adtv_60,
-                pct_60=pct_60,
                 adtv_threshold=adtv_threshold,
                 pct_threshold=pct_threshold,
+                liq_window=liq_window,
+                liq_min_periods=liq_min_periods,
+                enabled=True,
             )
             liquidity_stats["enabled"] = True
+            liquidity_stats["n_tickers_filtered_last_day"] = n_filtered
     except Exception as exc:
         print(f"[06] WARNING: liquidity filter SKIPPED due to error: {exc}")
 

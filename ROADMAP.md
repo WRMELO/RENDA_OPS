@@ -82,6 +82,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 66 | T-107-V3-LIQUIDITY-FINALISTS-BR | Comparacao direta das duas finalistas do gate de liquidez com CVaR, subperiodos e checagem dos ativos iliquidos atuais | D-109 | backtest/t107_liquidity_gate_br/decision_criterion_t107_v3.json, backtest/t107_liquidity_gate_br/run_t107_v3_finalists.py, backtest/t107_liquidity_gate_br/results/*, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | DONE |
 | 67 | T-108-LIQUIDITY-GATE-MOTOR-BR | Implementar gate de liquidez V_ADTV50000_PCT80 no motor BR (lib/liquidity.py + 06_compute_scores.py) | D-110 | lib/liquidity.py, pipeline/06_compute_scores.py, config/winner.json, DECISION_LOG.md, GOVERNANCE.md, CHANGELOG.md, ROADMAP.md | DONE |
 | 68 | T-109-CORPUS-LL-T107-T108-BR | Registrar L-31 e L-34 no corpus BR e sanar fatos minimos de blindagem/cronologia | D-111 | DECISION_LOG.md, docs/CORPUS_FABRICA_BR.md, CHANGELOG.md, ROADMAP.md | DONE |
+| 69 | T-LIQUIDITY-FILTER-WRAP-MOTOR-BR | Wrapper compute_filtered_m3_scores em lib/engine.py para propagar gate D-110 ao painel C2 K=15; lib/engine.py adicionado a blindagem §6.5; tag v1.15.0-motor | D-115 | lib/engine.py, pipeline/06_compute_scores.py, pipeline/painel_diario.py, tests/test_compute_filtered_scores.py, GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | PENDING |
 
 ### Marcos Estratégicos
 
