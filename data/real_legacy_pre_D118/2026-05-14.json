@@ -1,0 +1,99 @@
+{
+  "date": "2026-05-15",
+  "reference_decision": "2026-05-14",
+  "exec_day": "2026-05-15",
+  "market_day": "2026-05-14",
+  "trade_day": "2026-05-15",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "RPAD3",
+      "qtd": 16600,
+      "preco": 7.5
+    },
+    {
+      "type": "VENDA",
+      "ticker": "RPAD6",
+      "qtd": 400,
+      "preco": 6.5
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 2306.019999999873,
+  "cash_accounting": 127100.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "CALI3",
+      "data_compra": "2026-05-13",
+      "qtd": 3900,
+      "preco_compra": 25.0
+    },
+    {
+      "ticker": "INEP4",
+      "data_compra": "2026-05-12",
+      "qtd": 57900,
+      "preco_compra": 2.15
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "OFSA3",
+      "data_compra": "2026-05-12",
+      "qtd": 3700,
+      "preco_compra": 33.5
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    },
+    {
+      "ticker": "USIM5",
+      "data_compra": "2026-05-14",
+      "qtd": 12400,
+      "preco_compra": 9.16
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-05-14",
+      "qtd": 45,
+      "preco_compra": 2483.8
+    }
+  ],
+  "defensive_quarantine": [
+    "D1EL34"
+  ],
+  "positions": [
+    {
+      "ticker": "RPAD3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 16600,
+      "preco": 7.5,
+      "source": "recommended"
+    },
+    {
+      "ticker": "RPAD6",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 400,
+      "preco": 6.5,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 2306.019999999873,
+  "caixa_liquidando": 127100.0
+}

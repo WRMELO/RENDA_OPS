@@ -1,0 +1,73 @@
+{
+  "date": "2026-05-05",
+  "reference_decision": "2026-05-04",
+  "exec_day": "2026-05-05",
+  "market_day": "2026-05-04",
+  "trade_day": "2026-05-05",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "MTSA4",
+      "qtd": 2300,
+      "preco": 59.25
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 1116.3599999998987,
+  "cash_accounting": 136275.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-24",
+      "qtd": 110,
+      "preco_compra": 1059.0
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-05-01",
+      "qtd": 2800,
+      "preco_compra": 54.73
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    },
+    {
+      "ticker": "WEST3",
+      "data_compra": "2026-04-30",
+      "qtd": 16700,
+      "preco_compra": 7.88
+    }
+  ],
+  "defensive_quarantine": [
+    "T2ER34"
+  ],
+  "positions": [
+    {
+      "ticker": "MTSA4",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 2300,
+      "preco": 59.25,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 1116.3599999998987,
+  "caixa_liquidando": 136275.0
+}

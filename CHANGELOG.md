@@ -2,6 +2,7 @@
 
 ## 2026-05-20
 
+- feat: T-RENDA-RESET-DRY-RUN-D118-V1 — Reset de calibracao dry run BR: ledger real (80 linhas) arquivado como ledger_br_real_pre_D118.jsonl; contrafactual D-117 promovido a SSOT; boletins reais 02/04..19/05 arquivados em real_legacy_pre_D118/; data/real/2026-05-19.json regenerado com estado terminal contrafactual (7 posicoes, cash_free=R$ 39,42). Decision: D-118.
 - feat: T-RENDA-REPLAY-CONTRAFACTUAL-V1 - Replay contrafactual automatizado BR 2026-04-02..2026-05-19 em replay_v2/ sem tocar SSOT. Motor pos-D-115 + vetos D-033 deterministicos. Decision: D-117.
 - docs: T-RENDA-ESPELHAR-D033-V1 — Espelhamento de SALA D-033 na trinca do RENDA_OPS como D-116: hardening skill analista-br (vetos FORA_TOP_N/CLASSE/LIQUIDEZ, proposta unica, canvas restrito a B+C e deriva negativa). Decision: D-116.
 - verify: T-RENDA-VERIFICACAO-D115-V1 — verificacao pos-fix D-115: compute_filtered_m3_scores bloqueia corretamente tickers iliquidos (GROP31/INEP4) no caminho produtivo; pytest 3/3 PASS; veredito PASS. Artefatos: `verificacao_d115/run_verificacao.py`, `verificacao_d115/resultados_verificacao_d115.json`, `verificacao_d115/pytest_output.txt`, `verificacao_d115/run_log.txt`. Decision: D-115.

@@ -1,0 +1,104 @@
+{
+  "date": "2026-05-13",
+  "reference_decision": "2026-05-12",
+  "exec_day": "2026-05-13",
+  "market_day": "2026-05-12",
+  "trade_day": "2026-05-13",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "G1LW34",
+      "qtd": 231,
+      "preco": 975.12
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "CALI3",
+      "qtd": 3900,
+      "preco": 25
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 99024.84,
+      "note": "3a24d674-8b1c-4c1d-8f83-fdadba627212"
+    }
+  ],
+  "cash_free": 2408.299999999901,
+  "cash_accounting": 225252.72,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "CALI3",
+      "data_compra": "2026-05-13",
+      "qtd": 3900,
+      "preco_compra": 25.0
+    },
+    {
+      "ticker": "INEP4",
+      "data_compra": "2026-05-12",
+      "qtd": 57900,
+      "preco_compra": 2.15
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "OFSA3",
+      "data_compra": "2026-05-12",
+      "qtd": 3700,
+      "preco_compra": 33.5
+    },
+    {
+      "ticker": "RPAD3",
+      "data_compra": "2026-05-12",
+      "qtd": 16600,
+      "preco_compra": 7.5
+    },
+    {
+      "ticker": "RPAD6",
+      "data_compra": "2026-05-08",
+      "qtd": 400,
+      "preco_compra": 6.5
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    }
+  ],
+  "defensive_quarantine": [
+    "D1EL34"
+  ],
+  "positions": [
+    {
+      "ticker": "G1LW34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 231,
+      "preco": 975.12,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CALI3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 3900,
+      "preco": 25,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 2408.299999999901,
+  "caixa_liquidando": 225252.72
+}

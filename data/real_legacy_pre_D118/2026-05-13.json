@@ -1,0 +1,116 @@
+{
+  "date": "2026-05-14",
+  "reference_decision": "2026-05-13",
+  "exec_day": "2026-05-14",
+  "market_day": "2026-05-13",
+  "trade_day": "2026-05-14",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "W1DC34",
+      "qtd": 45,
+      "preco": 2483.8
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "USIM5",
+      "qtd": 12400,
+      "preco": 9.16
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 225252.72,
+      "note": "020ce819-6f51-421e-a769-170e4677ba7d"
+    }
+  ],
+  "cash_free": 2306.019999999873,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "CALI3",
+      "data_compra": "2026-05-13",
+      "qtd": 3900,
+      "preco_compra": 25.0
+    },
+    {
+      "ticker": "INEP4",
+      "data_compra": "2026-05-12",
+      "qtd": 57900,
+      "preco_compra": 2.15
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "OFSA3",
+      "data_compra": "2026-05-12",
+      "qtd": 3700,
+      "preco_compra": 33.5
+    },
+    {
+      "ticker": "RPAD3",
+      "data_compra": "2026-05-12",
+      "qtd": 16600,
+      "preco_compra": 7.5
+    },
+    {
+      "ticker": "RPAD6",
+      "data_compra": "2026-05-08",
+      "qtd": 400,
+      "preco_compra": 6.5
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    },
+    {
+      "ticker": "USIM5",
+      "data_compra": "2026-05-14",
+      "qtd": 12400,
+      "preco_compra": 9.16
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-05-14",
+      "qtd": 45,
+      "preco_compra": 2483.8
+    }
+  ],
+  "defensive_quarantine": [
+    "D1EL34"
+  ],
+  "positions": [
+    {
+      "ticker": "W1DC34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 45,
+      "preco": 2483.8,
+      "source": "recommended"
+    },
+    {
+      "ticker": "USIM5",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 12400,
+      "preco": 9.16,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 2306.019999999873,
+  "caixa_liquidando": 0.0
+}

@@ -1,0 +1,103 @@
+{
+  "date": "2026-04-24",
+  "reference_decision": "2026-04-23",
+  "exec_day": "2026-04-24",
+  "market_day": "2026-04-23",
+  "trade_day": "2026-04-24",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "D1EL34",
+      "qtd": 110,
+      "preco": 1059
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "JHSF3",
+      "qtd": 8600,
+      "preco": 13.63
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 106701,
+      "note": "ebe31081-2007-4a10-a370-f355f6333240"
+    },
+    {
+      "value": 106306,
+      "note": "101c1537-b650-4182-a087-3dcfdc9fb87b"
+    }
+  ],
+  "cash_free": 791.0099999998638,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-24",
+      "qtd": 110,
+      "preco_compra": 1059.0
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "JHSF3",
+      "data_compra": "2026-04-24",
+      "qtd": 8600,
+      "preco_compra": 13.63
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "MTSA4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 64.82
+    },
+    {
+      "ticker": "T2ER34",
+      "data_compra": "2026-04-17",
+      "qtd": 1817,
+      "preco_compra": 104.0
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-06",
+      "qtd": 5200,
+      "preco_compra": 29.22
+    }
+  ],
+  "defensive_quarantine": [
+    "PETR3",
+    "PETR4"
+  ],
+  "positions": [
+    {
+      "ticker": "D1EL34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 110,
+      "preco": 1059,
+      "source": "recommended"
+    },
+    {
+      "ticker": "JHSF3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 8600,
+      "preco": 13.63,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 791.0099999998638,
+  "caixa_liquidando": 0.0
+}

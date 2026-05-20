@@ -1,0 +1,181 @@
+{
+  "date": "2026-04-06",
+  "reference_decision": "2026-04-02",
+  "exec_day": "2026-04-06",
+  "market_day": "2026-04-02",
+  "trade_day": "2026-04-06",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "PETR3",
+      "qtd": 2100,
+      "preco": 53.1
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PETR4",
+      "qtd": 2300,
+      "preco": 48.15
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "JBSS32",
+      "qtd": 1682,
+      "preco": 91.01
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "UGPA3",
+      "qtd": 5200,
+      "preco": 29.22
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "MTSA4",
+      "qtd": 2300,
+      "preco": 64.82
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "CSMG3",
+      "qtd": 2600,
+      "preco": 57.95
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "GROP31",
+      "qtd": 8100,
+      "preco": 18.78
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "OXYP34",
+      "qtd": 2842,
+      "preco": 53.87
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 16539.549999999872,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "CSMG3",
+      "data_compra": "2026-04-06",
+      "qtd": 2600,
+      "preco_compra": 57.95
+    },
+    {
+      "ticker": "GROP31",
+      "data_compra": "2026-04-06",
+      "qtd": 8100,
+      "preco_compra": 18.78
+    },
+    {
+      "ticker": "JBSS32",
+      "data_compra": "2026-04-06",
+      "qtd": 1682,
+      "preco_compra": 91.01
+    },
+    {
+      "ticker": "MTSA4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 64.82
+    },
+    {
+      "ticker": "OXYP34",
+      "data_compra": "2026-04-06",
+      "qtd": 2842,
+      "preco_compra": 53.87
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-04-06",
+      "qtd": 2100,
+      "preco_compra": 53.1
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 48.15
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-06",
+      "qtd": 5200,
+      "preco_compra": 29.22
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "PETR3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2100,
+      "preco": 53.1,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR4",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2300,
+      "preco": 48.15,
+      "source": "recommended"
+    },
+    {
+      "ticker": "JBSS32",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1682,
+      "preco": 91.01,
+      "source": "recommended"
+    },
+    {
+      "ticker": "UGPA3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 5200,
+      "preco": 29.22,
+      "source": "recommended"
+    },
+    {
+      "ticker": "MTSA4",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2300,
+      "preco": 64.82,
+      "source": "recommended"
+    },
+    {
+      "ticker": "CSMG3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2600,
+      "preco": 57.95,
+      "source": "recommended"
+    },
+    {
+      "ticker": "GROP31",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 8100,
+      "preco": 18.78,
+      "source": "recommended"
+    },
+    {
+      "ticker": "OXYP34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2842,
+      "preco": 53.87,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 16539.549999999872,
+  "caixa_liquidando": 0.0
+}

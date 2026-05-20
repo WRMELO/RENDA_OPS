@@ -1,0 +1,110 @@
+{
+  "date": "2026-04-30",
+  "reference_decision": "2026-04-29",
+  "exec_day": "2026-04-30",
+  "market_day": "2026-04-29",
+  "trade_day": "2026-04-30",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "T2ER34",
+      "qtd": 1817,
+      "preco": 84.55
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "TPIS3",
+      "qtd": 13300,
+      "preco": 9.9
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "WEST3",
+      "qtd": 16700,
+      "preco": 7.88
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 111628,
+      "note": "64197f98-d1f5-4c44-9f1c-c0e97c78ac44"
+    },
+    {
+      "value": 151580,
+      "note": "50096741-2344-42cb-8f19-9c68015b12cb"
+    }
+  ],
+  "cash_free": 733.0099999998929,
+  "cash_accounting": 153627.35,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-24",
+      "qtd": 110,
+      "preco_compra": 1059.0
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "MTSA4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 64.82
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    },
+    {
+      "ticker": "WEST3",
+      "data_compra": "2026-04-30",
+      "qtd": 16700,
+      "preco_compra": 7.88
+    }
+  ],
+  "defensive_quarantine": [
+    "T2ER34"
+  ],
+  "positions": [
+    {
+      "ticker": "T2ER34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 1817,
+      "preco": 84.55,
+      "source": "recommended"
+    },
+    {
+      "ticker": "TPIS3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 13300,
+      "preco": 9.9,
+      "source": "recommended"
+    },
+    {
+      "ticker": "WEST3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 16700,
+      "preco": 7.88,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 733.0099999998929,
+  "caixa_liquidando": 153627.35
+}

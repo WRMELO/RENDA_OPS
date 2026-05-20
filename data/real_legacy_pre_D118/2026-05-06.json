@@ -1,0 +1,104 @@
+{
+  "date": "2026-05-07",
+  "reference_decision": "2026-05-06",
+  "exec_day": "2026-05-07",
+  "market_day": "2026-05-06",
+  "trade_day": "2026-05-07",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "S1TX34",
+      "qtd": 17,
+      "preco": 3880.26
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "FIQE3",
+      "qtd": 9700,
+      "preco": 7.03
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 136275,
+      "note": "0bb88295-2b95-46d4-a22e-c5fd479858aa"
+    }
+  ],
+  "cash_free": 3235.939999999886,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-24",
+      "qtd": 110,
+      "preco_compra": 1059.0
+    },
+    {
+      "ticker": "FIQE3",
+      "data_compra": "2026-05-07",
+      "qtd": 9700,
+      "preco_compra": 7.03
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-05-01",
+      "qtd": 2800,
+      "preco_compra": 54.73
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    },
+    {
+      "ticker": "WEST3",
+      "data_compra": "2026-04-30",
+      "qtd": 16700,
+      "preco_compra": 7.88
+    }
+  ],
+  "defensive_quarantine": [
+    "T2ER34"
+  ],
+  "positions": [
+    {
+      "ticker": "S1TX34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 17,
+      "preco": 3880.26,
+      "source": "recommended"
+    },
+    {
+      "ticker": "FIQE3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 9700,
+      "preco": 7.03,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 3235.939999999886,
+  "caixa_liquidando": 0.0
+}

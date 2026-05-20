@@ -1,0 +1,102 @@
+{
+  "date": "2026-05-20",
+  "reference_decision": "2026-05-19",
+  "exec_day": "2026-05-20",
+  "market_day": "2026-05-19",
+  "trade_day": "2026-05-20",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "TPIS3",
+      "qtd": 15600,
+      "preco": 9.85
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "PETR3",
+      "qtd": 2900,
+      "preco": 51.67
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 113087.99999999999,
+      "note": "e5dade39-8d88-4eff-9230-cae1f9a24985"
+    },
+    {
+      "value": 194812,
+      "note": "a90b5723-cd32-41ff-90e5-fb59156b0cb7"
+    }
+  ],
+  "cash_free": 4527.919999999867,
+  "cash_accounting": 343382.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "A1MD34",
+      "data_compra": "2026-05-19",
+      "qtd": 246,
+      "preco_compra": 262.65
+    },
+    {
+      "ticker": "ITLC34",
+      "data_compra": "2026-05-19",
+      "qtd": 720,
+      "preco_compra": 89.81
+    },
+    {
+      "ticker": "OFSA3",
+      "data_compra": "2026-05-12",
+      "qtd": 3700,
+      "preco_compra": 33.5
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-05-20",
+      "qtd": 2900,
+      "preco_compra": 51.67
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-05-20",
+      "qtd": 15600,
+      "preco_compra": 9.85
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-05-14",
+      "qtd": 45,
+      "preco_compra": 2483.8
+    }
+  ],
+  "defensive_quarantine": [
+    "USIM5"
+  ],
+  "positions": [
+    {
+      "ticker": "TPIS3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 15600,
+      "preco": 9.85,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR3",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 2900,
+      "preco": 51.67,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 4527.919999999867,
+  "caixa_liquidando": 343382.0
+}

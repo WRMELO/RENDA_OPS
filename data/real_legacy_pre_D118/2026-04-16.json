@@ -1,0 +1,122 @@
+{
+  "date": "2026-04-17",
+  "reference_decision": "2026-04-16",
+  "exec_day": "2026-04-17",
+  "market_day": "2026-04-16",
+  "trade_day": "2026-04-17",
+  "operations": [
+    {
+      "type": "COMPRA",
+      "ticker": "T2ER34",
+      "qtd": 1817,
+      "preco": 104
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "K1SG34",
+      "qtd": 226,
+      "preco": 816.72
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "G1LW34",
+      "qtd": 231,
+      "preco": 817
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 150046,
+      "note": "a8e626cd-7453-40b4-8602-de33ed082304"
+    },
+    {
+      "value": 130329,
+      "note": "be00a6e2-f955-481b-aefc-c4b136449cd8"
+    },
+    {
+      "value": 151884.6,
+      "note": "411ecdd5-b75a-4b0f-ab9f-2eb03632fd75"
+    },
+    {
+      "value": 134966.58000000002,
+      "note": "a78a6fa4-4d40-47e3-b8de-ba7caaacfc2a"
+    }
+  ],
+  "cash_free": 21492.009999999864,
+  "cash_accounting": 0.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "MTSA4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 64.82
+    },
+    {
+      "ticker": "PETR3",
+      "data_compra": "2026-04-06",
+      "qtd": 2100,
+      "preco_compra": 53.1
+    },
+    {
+      "ticker": "PETR4",
+      "data_compra": "2026-04-06",
+      "qtd": 2300,
+      "preco_compra": 48.15
+    },
+    {
+      "ticker": "T2ER34",
+      "data_compra": "2026-04-17",
+      "qtd": 1817,
+      "preco_compra": 104.0
+    },
+    {
+      "ticker": "UGPA3",
+      "data_compra": "2026-04-06",
+      "qtd": 5200,
+      "preco_compra": 29.22
+    }
+  ],
+  "defensive_quarantine": [],
+  "positions": [
+    {
+      "ticker": "T2ER34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 1817,
+      "preco": 104,
+      "source": "recommended"
+    },
+    {
+      "ticker": "K1SG34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 226,
+      "preco": 816.72,
+      "source": "recommended"
+    },
+    {
+      "ticker": "G1LW34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 231,
+      "preco": 817,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 21492.009999999864,
+  "caixa_liquidando": 0.0
+}

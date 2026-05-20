@@ -1,0 +1,130 @@
+{
+  "date": "2026-05-08",
+  "reference_decision": "2026-05-07",
+  "exec_day": "2026-05-08",
+  "market_day": "2026-05-07",
+  "trade_day": "2026-05-08",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "D1EL34",
+      "qtd": 28,
+      "preco": 1129.84
+    },
+    {
+      "type": "VENDA",
+      "ticker": "FIQE3",
+      "qtd": 9700,
+      "preco": 6.76
+    },
+    {
+      "type": "VENDA",
+      "ticker": "PETR3",
+      "qtd": 2800,
+      "preco": 50.55
+    },
+    {
+      "type": "VENDA",
+      "ticker": "WEST3",
+      "qtd": 16700,
+      "preco": 8.05
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "RPAD6",
+      "qtd": 400,
+      "preco": 6.5
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [],
+  "cash_free": 635.9399999998859,
+  "cash_accounting": 373182.52,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "D1EL34",
+      "data_compra": "2026-04-24",
+      "qtd": 82,
+      "preco_compra": 1059.0
+    },
+    {
+      "ticker": "G1LW34",
+      "data_compra": "2026-04-17",
+      "qtd": 231,
+      "preco_compra": 817.0
+    },
+    {
+      "ticker": "K1SG34",
+      "data_compra": "2026-04-17",
+      "qtd": 226,
+      "preco_compra": 816.72
+    },
+    {
+      "ticker": "RPAD6",
+      "data_compra": "2026-05-08",
+      "qtd": 400,
+      "preco_compra": 6.5
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "TPIS3",
+      "data_compra": "2026-04-30",
+      "qtd": 13300,
+      "preco_compra": 9.9
+    }
+  ],
+  "defensive_quarantine": [
+    "D1EL34",
+    "T2ER34"
+  ],
+  "positions": [
+    {
+      "ticker": "D1EL34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 28,
+      "preco": 1129.84,
+      "source": "recommended"
+    },
+    {
+      "ticker": "FIQE3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 9700,
+      "preco": 6.76,
+      "source": "recommended"
+    },
+    {
+      "ticker": "PETR3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 2800,
+      "preco": 50.55,
+      "source": "recommended"
+    },
+    {
+      "ticker": "WEST3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 16700,
+      "preco": 8.05,
+      "source": "recommended"
+    },
+    {
+      "ticker": "RPAD6",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 400,
+      "preco": 6.5,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 635.9399999998859,
+  "caixa_liquidando": 373182.52
+}

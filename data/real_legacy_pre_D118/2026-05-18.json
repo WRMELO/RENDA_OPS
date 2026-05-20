@@ -1,0 +1,147 @@
+{
+  "date": "2026-05-19",
+  "reference_decision": "2026-05-18",
+  "exec_day": "2026-05-19",
+  "market_day": "2026-05-18",
+  "trade_day": "2026-05-19",
+  "operations": [
+    {
+      "type": "VENDA",
+      "ticker": "CALI3",
+      "qtd": 3900,
+      "preco": 25
+    },
+    {
+      "type": "VENDA",
+      "ticker": "INEP4",
+      "qtd": 57900,
+      "preco": 2.03
+    },
+    {
+      "type": "VENDA",
+      "ticker": "K1SG34",
+      "qtd": 226,
+      "preco": 862
+    },
+    {
+      "type": "VENDA",
+      "ticker": "TPIS3",
+      "qtd": 13300,
+      "preco": 9.65
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "ITLC34",
+      "qtd": 720,
+      "preco": 89.81
+    },
+    {
+      "type": "COMPRA",
+      "ticker": "A1MD34",
+      "qtd": 246,
+      "preco": 262.65
+    }
+  ],
+  "cash_movements": [],
+  "cash_transfers": [
+    {
+      "value": 124500,
+      "note": "bfc81e08-2887-4989-b2e8-7b44472fa0a3"
+    },
+    {
+      "value": 2600,
+      "note": "1fb47ad3-b4c2-44d4-8403-8ddffb0fd837"
+    }
+  ],
+  "cash_free": 130.9199999998673,
+  "cash_accounting": 651282.0,
+  "caixa_liquido_real": null,
+  "positions_snapshot": [
+    {
+      "ticker": "A1MD34",
+      "data_compra": "2026-05-19",
+      "qtd": 246,
+      "preco_compra": 262.65
+    },
+    {
+      "ticker": "ITLC34",
+      "data_compra": "2026-05-19",
+      "qtd": 720,
+      "preco_compra": 89.81
+    },
+    {
+      "ticker": "OFSA3",
+      "data_compra": "2026-05-12",
+      "qtd": 3700,
+      "preco_compra": 33.5
+    },
+    {
+      "ticker": "S1TX34",
+      "data_compra": "2026-05-07",
+      "qtd": 17,
+      "preco_compra": 3880.26
+    },
+    {
+      "ticker": "W1DC34",
+      "data_compra": "2026-05-14",
+      "qtd": 45,
+      "preco_compra": 2483.8
+    }
+  ],
+  "defensive_quarantine": [
+    "D1EL34",
+    "USIM5"
+  ],
+  "positions": [
+    {
+      "ticker": "CALI3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 3900,
+      "preco": 25,
+      "source": "recommended"
+    },
+    {
+      "ticker": "INEP4",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 57900,
+      "preco": 2.03,
+      "source": "recommended"
+    },
+    {
+      "ticker": "K1SG34",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 226,
+      "preco": 862,
+      "source": "recommended"
+    },
+    {
+      "ticker": "TPIS3",
+      "recommended": "VENDA",
+      "executed": "VENDI",
+      "qtd": 13300,
+      "preco": 9.65,
+      "source": "recommended"
+    },
+    {
+      "ticker": "ITLC34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 720,
+      "preco": 89.81,
+      "source": "recommended"
+    },
+    {
+      "ticker": "A1MD34",
+      "recommended": "COMPRA",
+      "executed": "COMPREI",
+      "qtd": 246,
+      "preco": 262.65,
+      "source": "recommended"
+    }
+  ],
+  "cash_balance": 130.9199999998673,
+  "caixa_liquidando": 651282.0
+}
