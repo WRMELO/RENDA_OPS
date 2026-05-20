@@ -1,0 +1,524 @@
+{
+  "task_id": "T-RENDA-REPLAY-CONTRAFACTUAL-V1",
+  "decision_ref": "D-117",
+  "generated_at": "2026-05-20T17:54:16.478476+00:00",
+  "periodo": {
+    "start_market": "2026-04-02",
+    "end_market": "2026-05-19"
+  },
+  "n_pregoes": 31,
+  "aporte_inicial": 1148789.91,
+  "equity_final_contrafactual": 1139876.58,
+  "equity_final_real_base1": 1066008.26,
+  "pnl_contrafactual_brl": -8913.33,
+  "pnl_real_brl": -82781.65,
+  "delta_pnl_brl": 73868.32,
+  "delta_pnl_pp": 6.4301,
+  "posicoes_finais_contrafactual": [
+    {
+      "ticker": "A1MD34",
+      "qtd": 883
+    },
+    {
+      "ticker": "D1EL34",
+      "qtd": 102
+    },
+    {
+      "ticker": "INEP3",
+      "qtd": 300
+    },
+    {
+      "ticker": "ITLC34",
+      "qtd": 2602
+    },
+    {
+      "ticker": "OFSA3",
+      "qtd": 6900
+    },
+    {
+      "ticker": "S1TX34",
+      "qtd": 73
+    },
+    {
+      "ticker": "W1DC34",
+      "qtd": 26
+    }
+  ],
+  "posicoes_finais_reais": [
+    {
+      "ticker": "A1MD34",
+      "qtd": 246
+    },
+    {
+      "ticker": "ITLC34",
+      "qtd": 720
+    },
+    {
+      "ticker": "OFSA3",
+      "qtd": 3700
+    },
+    {
+      "ticker": "PETR3",
+      "qtd": 2900
+    },
+    {
+      "ticker": "S1TX34",
+      "qtd": 17
+    },
+    {
+      "ticker": "TPIS3",
+      "qtd": 15600
+    },
+    {
+      "ticker": "W1DC34",
+      "qtd": 45
+    }
+  ],
+  "ignicoes_contrafatual_fora_top_n": 0,
+  "curva_equity_diaria": [
+    {
+      "date": "2026-04-02",
+      "equity": 1148789.91,
+      "cash_free": 1148789.91,
+      "cash_accounting": 0.0,
+      "portfolio_value": 0.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-06",
+      "equity": 1148761.36,
+      "cash_free": 6915.68,
+      "cash_accounting": 0.0,
+      "portfolio_value": 1141845.68,
+      "action": "MERCADO",
+      "is_rebalance_day": true
+    },
+    {
+      "date": "2026-04-07",
+      "equity": 1150814.72,
+      "cash_free": 6915.68,
+      "cash_accounting": 0.0,
+      "portfolio_value": 1143899.04,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-08",
+      "equity": 1149147.04,
+      "cash_free": 6915.68,
+      "cash_accounting": 0.0,
+      "portfolio_value": 1142231.36,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-09",
+      "equity": 1121445.14,
+      "cash_free": 6915.68,
+      "cash_accounting": 220111.5,
+      "portfolio_value": 894417.96,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-10",
+      "equity": 1120307.82,
+      "cash_free": 6915.68,
+      "cash_accounting": 220111.5,
+      "portfolio_value": 893280.64,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-13",
+      "equity": 1124332.22,
+      "cash_free": 227027.18,
+      "cash_accounting": 0.0,
+      "portfolio_value": 897305.04,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-14",
+      "equity": 1128281.82,
+      "cash_free": 227027.18,
+      "cash_accounting": 0.0,
+      "portfolio_value": 901254.64,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-15",
+      "equity": 1124679.48,
+      "cash_free": 227027.18,
+      "cash_accounting": 202492.3,
+      "portfolio_value": 695160.0,
+      "action": "MERCADO",
+      "is_rebalance_day": true
+    },
+    {
+      "date": "2026-04-16",
+      "equity": 1116935.79,
+      "cash_free": 429519.48,
+      "cash_accounting": 227534.31,
+      "portfolio_value": 459882.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-17",
+      "equity": 1114517.79,
+      "cash_free": 429519.48,
+      "cash_accounting": 227534.31,
+      "portfolio_value": 457464.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-20",
+      "equity": 1106601.79,
+      "cash_free": 657053.79,
+      "cash_accounting": 0.0,
+      "portfolio_value": 449548.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-22",
+      "equity": 1107459.79,
+      "cash_free": 657053.79,
+      "cash_accounting": 0.0,
+      "portfolio_value": 450406.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-23",
+      "equity": 1100531.79,
+      "cash_free": 657053.79,
+      "cash_accounting": 0.0,
+      "portfolio_value": 443478.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-24",
+      "equity": 1099750.79,
+      "cash_free": 657053.79,
+      "cash_accounting": 0.0,
+      "portfolio_value": 442697.0,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-27",
+      "equity": 1102220.76,
+      "cash_free": 2730.67,
+      "cash_accounting": 226818.33,
+      "portfolio_value": 872671.76,
+      "action": "MERCADO",
+      "is_rebalance_day": true
+    },
+    {
+      "date": "2026-04-28",
+      "equity": 1091680.31,
+      "cash_free": 2730.67,
+      "cash_accounting": 226818.33,
+      "portfolio_value": 862131.31,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-29",
+      "equity": 1074272.06,
+      "cash_free": 229549.0,
+      "cash_accounting": 0.0,
+      "portfolio_value": 844723.06,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-04-30",
+      "equity": 1093774.51,
+      "cash_free": 229549.0,
+      "cash_accounting": 0.0,
+      "portfolio_value": 864225.51,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-04",
+      "equity": 1095179.8,
+      "cash_free": 229549.0,
+      "cash_accounting": 0.0,
+      "portfolio_value": 865630.8,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-05",
+      "equity": 1108536.04,
+      "cash_free": 229549.0,
+      "cash_accounting": 0.0,
+      "portfolio_value": 878987.04,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-06",
+      "equity": 1125350.23,
+      "cash_free": 229549.0,
+      "cash_accounting": 0.0,
+      "portfolio_value": 895801.23,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-07",
+      "equity": 1165699.41,
+      "cash_free": 532.28,
+      "cash_accounting": 412866.68,
+      "portfolio_value": 752300.46,
+      "action": "MERCADO",
+      "is_rebalance_day": true
+    },
+    {
+      "date": "2026-05-08",
+      "equity": 1148707.85,
+      "cash_free": 532.28,
+      "cash_accounting": 412866.68,
+      "portfolio_value": 735308.9,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-11",
+      "equity": 1182751.53,
+      "cash_free": 413398.95,
+      "cash_accounting": 0.0,
+      "portfolio_value": 769352.58,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-12",
+      "equity": 1187643.17,
+      "cash_free": 413398.95,
+      "cash_accounting": 123174.16,
+      "portfolio_value": 651070.05,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-13",
+      "equity": 1175149.31,
+      "cash_free": 536573.12,
+      "cash_accounting": 0.0,
+      "portfolio_value": 638576.19,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-14",
+      "equity": 1192133.31,
+      "cash_free": 536573.12,
+      "cash_accounting": 0.0,
+      "portfolio_value": 655560.19,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-15",
+      "equity": 1188720.84,
+      "cash_free": 536573.12,
+      "cash_accounting": 0.0,
+      "portfolio_value": 652147.72,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    },
+    {
+      "date": "2026-05-18",
+      "equity": 1181467.2,
+      "cash_free": 39.42,
+      "cash_accounting": 0.0,
+      "portfolio_value": 1181427.78,
+      "action": "MERCADO",
+      "is_rebalance_day": true
+    },
+    {
+      "date": "2026-05-19",
+      "equity": 1139876.58,
+      "cash_free": 39.42,
+      "cash_accounting": 0.0,
+      "portfolio_value": 1139837.16,
+      "action": "MERCADO",
+      "is_rebalance_day": false
+    }
+  ],
+  "projecao_cone_holdout": {
+    "status": "OK",
+    "final_base100_contrafactual": 99.2266,
+    "cone_faixa_final": "P10-P25",
+    "quantil_mais_proximo_final": "p10",
+    "cone_valores_finais": {
+      "p5": 97.2893,
+      "p10": 99.1407,
+      "p25": 101.2682,
+      "p50": 101.5331,
+      "p75": 104.1095,
+      "p90": 109.9098,
+      "p95": 114.4131
+    },
+    "serie_base100": [
+      {
+        "label": "t0",
+        "value": 100.0
+      },
+      {
+        "label": "2026-04-06",
+        "value": 100.0
+      },
+      {
+        "label": "2026-04-07",
+        "value": 100.1787
+      },
+      {
+        "label": "2026-04-08",
+        "value": 100.0336
+      },
+      {
+        "label": "2026-04-09",
+        "value": 97.6221
+      },
+      {
+        "label": "2026-04-10",
+        "value": 97.5231
+      },
+      {
+        "label": "2026-04-13",
+        "value": 97.8734
+      },
+      {
+        "label": "2026-04-14",
+        "value": 98.2173
+      },
+      {
+        "label": "2026-04-15",
+        "value": 97.9037
+      },
+      {
+        "label": "2026-04-16",
+        "value": 97.2296
+      },
+      {
+        "label": "2026-04-17",
+        "value": 97.0191
+      },
+      {
+        "label": "2026-04-20",
+        "value": 96.33
+      },
+      {
+        "label": "2026-04-22",
+        "value": 96.4047
+      },
+      {
+        "label": "2026-04-23",
+        "value": 95.8016
+      },
+      {
+        "label": "2026-04-24",
+        "value": 95.7336
+      },
+      {
+        "label": "2026-04-25",
+        "value": null
+      },
+      {
+        "label": "2026-04-28",
+        "value": 95.0311
+      },
+      {
+        "label": "2026-04-30",
+        "value": 95.2134
+      },
+      {
+        "label": "2026-05-01",
+        "value": null
+      },
+      {
+        "label": "2026-05-05",
+        "value": 96.4984
+      },
+      {
+        "label": "2026-05-06",
+        "value": 97.9621
+      },
+      {
+        "label": "2026-05-07",
+        "value": 101.4745
+      },
+      {
+        "label": "2026-05-08",
+        "value": 99.9953
+      },
+      {
+        "label": "2026-05-09",
+        "value": null
+      },
+      {
+        "label": "2026-05-12",
+        "value": 103.3847
+      },
+      {
+        "label": "2026-05-13",
+        "value": 102.2971
+      },
+      {
+        "label": "2026-05-14",
+        "value": 103.7755
+      },
+      {
+        "label": "2026-05-15",
+        "value": 103.4785
+      },
+      {
+        "label": "2026-05-18",
+        "value": 102.8471
+      },
+      {
+        "label": "2026-05-19",
+        "value": 99.2266
+      }
+    ]
+  },
+  "veredito": "PASS",
+  "inputs": {
+    "winner_snapshot": {
+      "thr": 0.22,
+      "h_in": 3,
+      "h_out": 2,
+      "top_n": 10,
+      "rebalance_cadence": 7,
+      "rebalance_phase_offset": 0,
+      "rebalance_anchor_date": "2026-04-06",
+      "mdd_limit": null,
+      "liquidity_gate": {
+        "adtv_threshold_brl": 50000,
+        "pct_traded_threshold": 0.8,
+        "window": 60,
+        "min_periods": 20,
+        "enabled": true
+      }
+    },
+    "fee_bps": 2.5e-05,
+    "liquidity_gate": {
+      "enabled": true,
+      "adtv_threshold_brl": 50000.0,
+      "pct_traded_threshold": 0.8,
+      "window": 60,
+      "min_periods": 20
+    }
+  }
+}

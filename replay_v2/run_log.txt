@@ -1,0 +1,3 @@
+[OK] replay finalizado: /home/wilson/RENDA_OPS/replay_v2/resultados_replay.json
+[OK] eventos ledger contrafactual: 28 -> /home/wilson/RENDA_OPS/replay_v2/ledger_contrafactual.jsonl
+[OK] ignicoes fora top_n: 0
