@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-05-20
+
+- verify: T-RENDA-VERIFICACAO-D115-V1 — verificacao pos-fix D-115: compute_filtered_m3_scores bloqueia corretamente tickers iliquidos (GROP31/INEP4) no caminho produtivo; pytest 3/3 PASS; veredito PASS. Artefatos: `verificacao_d115/run_verificacao.py`, `verificacao_d115/resultados_verificacao_d115.json`, `verificacao_d115/pytest_output.txt`, `verificacao_d115/run_log.txt`. Decision: D-115.
+
 ## 2026-05-19
 
 - feat: T-LIQUIDITY-FILTER-WRAP-MOTOR-BR | lib/engine.py: compute_filtered_m3_scores unifica gate D-110 para callers produtivos; 06_compute_scores.py e painel_diario.py C2 K=15 refatorados para usar wrapper; lib/engine.py adicionado a blindagem §6.5; testes de regressao em tests/test_compute_filtered_scores.py; tag v1.15.0-motor (D-115)
