@@ -2,6 +2,7 @@
 
 ## 2026-05-20
 
+- docs: T-RENDA-ESPELHAR-D033-V1 — Espelhamento de SALA D-033 na trinca do RENDA_OPS como D-116: hardening skill analista-br (vetos FORA_TOP_N/CLASSE/LIQUIDEZ, proposta unica, canvas restrito a B+C e deriva negativa). Decision: D-116.
 - verify: T-RENDA-VERIFICACAO-D115-V1 — verificacao pos-fix D-115: compute_filtered_m3_scores bloqueia corretamente tickers iliquidos (GROP31/INEP4) no caminho produtivo; pytest 3/3 PASS; veredito PASS. Artefatos: `verificacao_d115/run_verificacao.py`, `verificacao_d115/resultados_verificacao_d115.json`, `verificacao_d115/pytest_output.txt`, `verificacao_d115/run_log.txt`. Decision: D-115.
 
 ## 2026-05-19
