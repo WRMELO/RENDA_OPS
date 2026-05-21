@@ -1,5 +1,10 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-05-21
+
+- docs(gov): T-SDC-VENV-RUNTIME-ARCHITECT-HARDENING-V1 — Espelho SALA D-038: hotfix venv SALA_DE_CONTROLE, R-039 interfabricas, endurecimento skill architect com venv_health no GATE CHECK. Ref: SALA D-038, RENDA D-119.
+- docs(gov): T-SDC-INTERLOCUTOR-DIRECT-MODE-V1 — Espelho SALA D-039: modo direto na skill interlocutor-tecnico. Ref: SALA D-039, RENDA D-120.
+
 ## 2026-05-20
 
 - feat: T-RENDA-RESET-DRY-RUN-D118-V1 — Reset de calibracao dry run BR: ledger real (80 linhas) arquivado como ledger_br_real_pre_D118.jsonl; contrafactual D-117 promovido a SSOT; boletins reais 02/04..19/05 arquivados em real_legacy_pre_D118/; data/real/2026-05-19.json regenerado com estado terminal contrafactual (7 posicoes, cash_free=R$ 39,42). Decision: D-118.
