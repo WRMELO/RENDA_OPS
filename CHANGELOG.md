@@ -1,5 +1,10 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-05
+
+- research: T-120-DEFENSIVE-PER-TICKER-PARITY-BR — backtest de 3 arms (`V0_BASELINE`, `A1_PARIDADE_US`, `A2_ANY_RULE`) para isolar o gate de regime defensivo de carteira e medir convergencia metodologica BR/US sem tocar motor blindado. Artefatos: `backtest/t120_defensive_per_ticker_br/run_t120.py`, `backtest/t120_defensive_per_ticker_br/decision_criterion_t120.json`, `backtest/t120_defensive_per_ticker_br/results/*`. Decision: D-122.
+- fix: T-120-FIX-GATE6-DYNAMIC-V0-REF — corrigir Gate 6 da T-120: referencia congelada `phase_sweep_stats_t092_v3.json` substituida por rerun dinamico do V0 via infraestrutura T-092-V3 no mesmo `canonical_br.parquet` corrente; tolerancia abs <= 1e-4; causa-raiz L-09 (SSOT vivo vs artefato congelado). Decision: D-123.
+
 ## 2026-05-21
 
 - docs(gov): T-SDC-VENV-RUNTIME-ARCHITECT-HARDENING-V1 — Espelho SALA D-038: hotfix venv SALA_DE_CONTROLE, R-039 interfabricas, endurecimento skill architect com venv_health no GATE CHECK. Ref: SALA D-038, RENDA D-119.

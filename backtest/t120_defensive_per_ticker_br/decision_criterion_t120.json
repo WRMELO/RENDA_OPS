@@ -1,0 +1,47 @@
+{
+  "task_id": "T-120-DEFENSIVE-PER-TICKER-PARITY-BR",
+  "arms": [
+    "V0_BASELINE",
+    "A1_PARIDADE_US",
+    "A2_ANY_RULE"
+  ],
+  "arm_definitions": {
+    "V0_BASELINE": "Controle V0 do T-092 (z-score rolling 60d, trigger com z<0 e score>=4), sem gate de carteira.",
+    "A1_PARIDADE_US": "Venda defensiva por ticker com gate downside (i<i_lcl OR xbar<xbar_lcl), sem gate de carteira, com sell_pct graduado 25/50/100.",
+    "A2_ANY_RULE": "Venda defensiva por ticker em qualquer Regra 1 das 4 cartas (I, MR, Xbar, R), sem gate de carteira e sem filtro de lado."
+  },
+  "metrics": {
+    "sharpe_cost_adj": "Sharpe da curva diaria com custos de transacao aplicados",
+    "cvar5": "CVaR 5% dos retornos log diarios",
+    "cvar10": "CVaR 10% dos retornos log diarios",
+    "mdd": "Max drawdown da curva de equity",
+    "churn_rate": "Taxa de rotatividade diaria (eventos de venda / dias)",
+    "sell_trigger_rate": "Taxa de dias com disparo de venda defensiva",
+    "n_defensive_sells": "Numero total de eventos de venda defensiva no split",
+    "cost_total": "Custo total acumulado de friccao no split"
+  },
+  "phase_sweep": {
+    "n_phases": 7,
+    "anchor": "2026-04-06",
+    "cadence": 7,
+    "method": "Pregoes B3 reais derivados do canonical"
+  },
+  "split_definition": {
+    "train_end": "2022-12-30",
+    "holdout_start": "2023-01-02"
+  },
+  "verdict_thresholds": {
+    "arm_better_tail": "mean(cvar5_arm_holdout) > mean(cvar5_V0_holdout)",
+    "arm_better_sharpe": "mean(sharpe_arm_holdout) > mean(sharpe_V0_holdout)"
+  },
+  "verdict_per_arm": {
+    "IMPLEMENTAR": "better_tail AND better_sharpe",
+    "ARQUIVAR": "NOT better_tail AND NOT better_sharpe",
+    "INCONCLUSIVO": "qualquer outro caso"
+  },
+  "gate6_v0_coherence_check": {
+    "method": "dynamic_rerun",
+    "description": "V0 do T-120 comparado contra V0 do T-092-V3 reexecutado no mesmo canonical_br.parquet corrente. Referencia estatica phase_sweep_stats_t092_v3.json obsoleta apos 2026-05-05 por evolucao do SSOT vivo (L-09). Ref: D-123.",
+    "tolerance": "abs(sharpe_t120_v0 - sharpe_t092v3_v0_rerun) <= 1e-4 por fase"
+  }
+}
