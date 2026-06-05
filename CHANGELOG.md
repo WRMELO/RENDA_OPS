@@ -4,6 +4,7 @@
 
 - research: T-120-DEFENSIVE-PER-TICKER-PARITY-BR — backtest de 3 arms (`V0_BASELINE`, `A1_PARIDADE_US`, `A2_ANY_RULE`) para isolar o gate de regime defensivo de carteira e medir convergencia metodologica BR/US sem tocar motor blindado. Artefatos: `backtest/t120_defensive_per_ticker_br/run_t120.py`, `backtest/t120_defensive_per_ticker_br/decision_criterion_t120.json`, `backtest/t120_defensive_per_ticker_br/results/*`. Decision: D-122.
 - fix: T-120-FIX-GATE6-DYNAMIC-V0-REF — corrigir Gate 6 da T-120: referencia congelada `phase_sweep_stats_t092_v3.json` substituida por rerun dinamico do V0 via infraestrutura T-092-V3 no mesmo `canonical_br.parquet` corrente; tolerancia abs <= 1e-4; causa-raiz L-09 (SSOT vivo vs artefato congelado). Decision: D-123.
+- research: T-121-DEFENSIVE-REAL-BASELINE-BR — backtest confirmatorio de `A1_PARIDADE_US` e `A2_ANY_RULE` contra `BASELINE_MOTOR_REAL` (com gate D-021) para validar se A2=IMPLEMENTAR de T-120 se sustenta contra o motor de producao real. Decision: D-124.
 
 ## 2026-05-21
 

@@ -1,0 +1,41 @@
+{
+  "task_id": "T-121-DEFENSIVE-REAL-BASELINE-BR",
+  "arms": [
+    "BASELINE_MOTOR_REAL",
+    "A1_PARIDADE_US",
+    "A2_ANY_RULE"
+  ],
+  "arm_definitions": {
+    "BASELINE_MOTOR_REAL": "Motor de producao atual: gate de regime defensivo de carteira via slope do i_value medio (D-021) + _build_defensive_candidates com score z-bandas (D-021). Sem gate B+C de entrada neste braco, que isola a camada de venda defensiva (comparavel com A1/A2).",
+    "A1_PARIDADE_US": "Regra 1 downside por ticker (i<i_lcl OR xbar<xbar_lcl), sem gate de carteira, sell_pct graduado 25/50/100. Reaproveitado de T-120.",
+    "A2_ANY_RULE": "Qualquer Regra 1 nas 4 cartas, sem gate de carteira, sell_pct=100%. Reaproveitado de T-120."
+  },
+  "metrics": [
+    "sharpe_cost_adj",
+    "cvar5",
+    "cvar10",
+    "mdd",
+    "churn_rate",
+    "sell_trigger_rate",
+    "n_defensive_sells",
+    "cost_total"
+  ],
+  "phase_sweep": {
+    "n_phases": 7,
+    "anchor": "2026-04-06",
+    "cadence": 7
+  },
+  "split_definition": {
+    "train_end": "2022-12-30",
+    "holdout_start": "2023-01-02"
+  },
+  "verdict_thresholds": {
+    "arm_better_tail": "mean(cvar5_arm_holdout) > mean(cvar5_BASELINE_holdout)",
+    "arm_better_sharpe": "mean(sharpe_arm_holdout) > mean(sharpe_BASELINE_holdout)"
+  },
+  "verdict_per_arm": {
+    "IMPLEMENTAR": "better_tail AND better_sharpe",
+    "ARQUIVAR": "NOT better_tail AND NOT better_sharpe",
+    "INCONCLUSIVO": "qualquer outro caso"
+  }
+}
