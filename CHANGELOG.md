@@ -3,6 +3,7 @@
 ## 2026-06-08
 
 - research: T-122-DEFENSIVE-A2-E2E-BR — validacao end-to-end de `A2_ANY_RULE` com gate B+C de entrada ativo (`lib/spc.py`, D-088/D-090) em ambos os arms; gate obrigatorio de selagem antes de abrir PDCA de implementacao em `pipeline/painel_diario.py`. Decision: D-125.
+- feat(motor) [MOTOR-OVERRIDE]: T-123-IMPLEMENT-A2-DEFENSIVE-BR — Camada 1 defensiva de `_build_sell_suggestions` substituida por `A2_ANY_RULE`: venda per-ticker em qualquer Regra 1 nas 4 cartas (I/MR/Xbar/R), `sell_pct=100%`, sem gate de regime de carteira (remove D-021). Camada 2 B+C (D-088/D-090) inalterada. Tag v1.16.0-motor. Ref: D-126, D-125, T-122.
 
 ## 2026-06-05
 

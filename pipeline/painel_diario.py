@@ -864,51 +864,56 @@ def _build_sell_suggestions(
             )
         return suggestions, quarantine
 
-    # Camada 1 — venda defensiva permanente (antes do rebalanceamento).
-    defensive_state = _regime_defensivo_from_holdings(canonical=canonical, holdings=holdings_qty, as_of_day=as_of_day)
+    # Camada 1 — A2_ANY_RULE (D-126/T-122): venda defensiva per-ticker em qualquer
+    # Regra 1 nas 4 cartas (I, MR, Xbar, R), sell_pct=100%, sem gate de regime de
+    # carteira. Substituiu o gate D-021 (_regime_defensivo_from_holdings). Ref: D-125.
     defensive_tickers: set[str] = set()
-    candidates = (
-        _build_defensive_candidates(canonical=canonical, holdings_qty=holdings_qty, as_of_day=as_of_day)
-        if defensive_state
-        else []
-    )
-    cand_set = {str(c["ticker"]) for c in candidates}
+    _held_a2 = sorted([t for t, q in holdings_qty.items() if q > 0])
+    cand_set: set[str] = set()
+    if _held_a2 and not canonical.empty:
+        _sub_a2 = canonical[
+            (canonical["ticker"].isin(_held_a2)) & (canonical["date"] <= pd.Timestamp(as_of_day))
+        ].copy()
+        for _tk_a2 in _held_a2:
+            _s_a2 = _sub_a2[_sub_a2["ticker"] == _tk_a2].sort_values("date")
+            if _s_a2.empty:
+                continue
+            _last = _s_a2.iloc[-1]
+            _any_rule = bool(
+                (_safe_float(_last.get("i_value"), float("nan")) > _safe_float(_last.get("i_ucl"), float("nan")))
+                or (_safe_float(_last.get("i_value"), float("nan")) < _safe_float(_last.get("i_lcl"), float("nan")))
+                or (_safe_float(_last.get("mr_value"), float("nan")) > _safe_float(_last.get("mr_ucl"), float("nan")))
+                or (_safe_float(_last.get("r_value"), float("nan")) > _safe_float(_last.get("r_ucl"), float("nan")))
+                or (_safe_float(_last.get("xbar_value"), float("nan")) > _safe_float(_last.get("xbar_ucl"), float("nan")))
+                or (_safe_float(_last.get("xbar_value"), float("nan")) < _safe_float(_last.get("xbar_lcl"), float("nan")))
+            )
+            if _any_rule:
+                cand_set.add(_tk_a2)
 
-    # Release de quarentena: sempre reavaliar diariamente (com ou sem regime defensivo).
+    # Release de quarentena: sempre reavaliar diariamente (com ou sem disparo A2).
     for tk in list(quarantine):
         s = canonical[(canonical["ticker"] == tk) & (canonical["date"] <= pd.Timestamp(as_of_day))].sort_values("date")
         if s.empty:
             continue
         # Criterio B+C (T-088/D-088): liberar apenas se classificador nao bloquear.
-        # Equivale ao release de quarentena testado como gate_scope em T-088.
         if (not _is_spc_bc_blocked(s)) and (tk not in cand_set):
             quarantine.remove(tk)
 
-    if defensive_state:
-        for c in candidates:
-            tk = str(c["ticker"])
-            qtd = int(holdings_qty.get(tk, 0))
-            if qtd <= 0:
-                continue
-            score = int(c["score"])
-            if score >= 6:
-                pct = 100.0
-            elif score == 5:
-                pct = 50.0
-            else:
-                pct = 25.0
-            sell_qtd = max(1, int(round(qtd * (pct / 100.0))))
-            suggestions.append(
-                {
-                    "ticker": tk,
-                    "sell_pct": pct,
-                    "qtd": min(qtd, sell_qtd),
-                    "close_d1": _safe_float(prices_d1.get(tk, 0.0), 0.0),
-                    "reason": f"DEFESA CEP/SPC: score={score} (venda parcial por severidade).",
-                }
-            )
-            quarantine.add(tk)
-            defensive_tickers.add(tk)
+    for tk in sorted(cand_set):
+        qtd = int(holdings_qty.get(tk, 0))
+        if qtd <= 0:
+            continue
+        suggestions.append(
+            {
+                "ticker": tk,
+                "sell_pct": 100.0,
+                "qtd": qtd,
+                "close_d1": _safe_float(prices_d1.get(tk, 0.0), 0.0),
+                "reason": "DEFESA A2: Regra 1 em carta de controle (I/MR/Xbar/R). T-122/D-126.",
+            }
+        )
+        quarantine.add(tk)
+        defensive_tickers.add(tk)
 
     is_rebalance_day_flag = bool((decision or {}).get("is_rebalance_day", True))
     if not is_rebalance_day_flag:
