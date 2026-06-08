@@ -87,6 +87,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 71 | T-121-DEFENSIVE-REAL-BASELINE-BR | Confirmar A1/A2 contra BASELINE_MOTOR_REAL (com gate D-021) para decisao de implementacao | D-124 | backtest/t121_defensive_real_baseline_br/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
 | 72 | T-122-DEFENSIVE-A2-E2E-BR | Validacao end-to-end de A2 com gate B+C ativo em ambos os arms — gate obrigatorio de selagem antes de implementar A2 em painel_diario.py | D-125 | backtest/t122_defensive_a2_e2e_br/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 73 | T-123-IMPLEMENT-A2-DEFENSIVE-BR | Implementar A2_ANY_RULE no motor BR: substituir gate D-021 por venda per-ticker any_rule, sell_pct=100%, preservando Camada 2 B+C | D-126 | pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md, GOVERNANCE.md | DONE |
+| 74 | T-127-MACRO-FRED-FALLBACK-TRADING-DAYS-BR | Corrigir fallback D-027 do Step 05: substituir tolerancia por dias corridos por contagem de pregoes | D-127 | pipeline/run_daily.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 
 ### Marcos Estratégicos
 

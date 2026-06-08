@@ -150,12 +150,17 @@ def _macro_features_date_max() -> date | None:
         return None
 
 
-def _macro_features_cover_date(run_date: date, tolerance_days: int = 2) -> bool:
+def _macro_features_cover_date(run_date: date, tolerance_sessions: int = 5) -> bool:
+    from lib.trading_calendar import sessions_in_range as _sessions_in_range
+
     date_max = _macro_features_date_max()
     if date_max is None:
         return False
-    # Accept up to D-2 (D-027): if FRED is unstable, reuse nearby macro coverage.
-    return bool(date_max >= run_date - timedelta(days=tolerance_days))
+    if date_max >= run_date:
+        return True
+    # Accept up to N trading sessions (D-127/D-027): covers weekend and single-holiday gaps.
+    gap = len(_sessions_in_range(date_max + timedelta(days=1), run_date))
+    return bool(gap <= tolerance_sessions)
 
 
 def _pad_macro_features_to_date(run_date: date) -> bool:
@@ -320,7 +325,7 @@ def run(
                     _load_step("05_build_macro_expanded").run(end_date=run_date)
                 except Exception as step5_exc:
                     logger.warning(f"Step 05 build failed via FRED: {step5_exc}")
-                    if _macro_features_cover_date(run_date, tolerance_days=2):
+                    if _macro_features_cover_date(run_date, tolerance_sessions=5):
                         padded = _pad_macro_features_to_date(run_date)
                         if padded:
                             logger.warning(
@@ -335,10 +340,13 @@ def run(
                     else:
                         raise
         else:
-            if _macro_features_cover_date(run_date, tolerance_days=2):
+            if _macro_features_cover_date(run_date, tolerance_sessions=5):
                 date_max = _macro_features_date_max()
                 if date_max is not None and date_max < run_date:
-                    _step(5, "Step 05: Reuse existing macro features (coverage OK, tolerance D-2 applied — D-027).")
+                    _step(
+                        5,
+                        "Step 05: Reuse existing macro features (coverage OK, tolerance=5 trading sessions — D-027/D-127).",
+                    )
                 else:
                     _step(5, "Step 05: Reuse existing macro features (coverage OK).")
             else:

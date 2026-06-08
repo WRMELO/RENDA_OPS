@@ -4,6 +4,7 @@
 
 - research: T-122-DEFENSIVE-A2-E2E-BR — validacao end-to-end de `A2_ANY_RULE` com gate B+C de entrada ativo (`lib/spc.py`, D-088/D-090) em ambos os arms; gate obrigatorio de selagem antes de abrir PDCA de implementacao em `pipeline/painel_diario.py`. Decision: D-125.
 - feat(motor) [MOTOR-OVERRIDE]: T-123-IMPLEMENT-A2-DEFENSIVE-BR — Camada 1 defensiva de `_build_sell_suggestions` substituida por `A2_ANY_RULE`: venda per-ticker em qualquer Regra 1 nas 4 cartas (I/MR/Xbar/R), `sell_pct=100%`, sem gate de regime de carteira (remove D-021). Camada 2 B+C (D-088/D-090) inalterada. Tag v1.16.0-motor. Ref: D-126, D-125, T-122.
+- fix: T-127-MACRO-FRED-FALLBACK-TRADING-DAYS-BR — corrige fallback D-027 do Step 05: `_macro_features_cover_date` substitui `timedelta(days=2)` por `sessions_in_range` (tolerancia=5 pregoes), cobrindo gaps de fim de semana e feriados. Ref: D-127, D-027, L-23, R-021.
 
 ## 2026-06-05
 
