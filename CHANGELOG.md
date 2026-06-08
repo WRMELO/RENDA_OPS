@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-08
+
+- research: T-122-DEFENSIVE-A2-E2E-BR — validacao end-to-end de `A2_ANY_RULE` com gate B+C de entrada ativo (`lib/spc.py`, D-088/D-090) em ambos os arms; gate obrigatorio de selagem antes de abrir PDCA de implementacao em `pipeline/painel_diario.py`. Decision: D-125.
+
 ## 2026-06-05
 
 - research: T-120-DEFENSIVE-PER-TICKER-PARITY-BR — backtest de 3 arms (`V0_BASELINE`, `A1_PARIDADE_US`, `A2_ANY_RULE`) para isolar o gate de regime defensivo de carteira e medir convergencia metodologica BR/US sem tocar motor blindado. Artefatos: `backtest/t120_defensive_per_ticker_br/run_t120.py`, `backtest/t120_defensive_per_ticker_br/decision_criterion_t120.json`, `backtest/t120_defensive_per_ticker_br/results/*`. Decision: D-122.

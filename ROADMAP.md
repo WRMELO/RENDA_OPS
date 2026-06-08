@@ -85,6 +85,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 69 | T-LIQUIDITY-FILTER-WRAP-MOTOR-BR | Wrapper compute_filtered_m3_scores em lib/engine.py para propagar gate D-110 ao painel C2 K=15; lib/engine.py adicionado a blindagem §6.5; tag v1.15.0-motor | D-115 | lib/engine.py, pipeline/06_compute_scores.py, pipeline/painel_diario.py, tests/test_compute_filtered_scores.py, GOVERNANCE.md, DECISION_LOG.md, CHANGELOG.md, ROADMAP.md | PENDING |
 | 70 | T-120-DEFENSIVE-PER-TICKER-PARITY-BR | Backtest de 3 bracos (V0_BASELINE, A1_PARIDADE_US, A2_ANY_RULE) para isolar o efeito do gate de regime de carteira na venda defensiva BR | D-122 | backtest/t120_defensive_per_ticker_br/run_t120.py, backtest/t120_defensive_per_ticker_br/decision_criterion_t120.json, backtest/t120_defensive_per_ticker_br/results/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 71 | T-121-DEFENSIVE-REAL-BASELINE-BR | Confirmar A1/A2 contra BASELINE_MOTOR_REAL (com gate D-021) para decisao de implementacao | D-124 | backtest/t121_defensive_real_baseline_br/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
+| 72 | T-122-DEFENSIVE-A2-E2E-BR | Validacao end-to-end de A2 com gate B+C ativo em ambos os arms — gate obrigatorio de selagem antes de implementar A2 em painel_diario.py | D-125 | backtest/t122_defensive_a2_e2e_br/*, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | PENDING |
 
 ### Marcos Estratégicos
 
