@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-09
+
+- fix(motor): T-SDC-CHART-BASE1-MARKETDAY-AXIS-V1 — eixo temporal do grafico Base 1 passa a ser indexado por `market_day/ref_day` (R-022), preservando acumulacao patrimonial via ledger e calculo Base 1. Decision: D-128 / SALA D-055. Tag prevista: v1.17.0-motor.
+
 ## 2026-06-08
 
 - research: T-122-DEFENSIVE-A2-E2E-BR — validacao end-to-end de `A2_ANY_RULE` com gate B+C de entrada ativo (`lib/spc.py`, D-088/D-090) em ambos os arms; gate obrigatorio de selagem antes de abrir PDCA de implementacao em `pipeline/painel_diario.py`. Decision: D-125.

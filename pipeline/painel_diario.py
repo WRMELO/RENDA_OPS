@@ -1144,7 +1144,7 @@ def _build_real_base1_series(as_of_day: date) -> pd.DataFrame:
             total_mkt += qtd * px
 
         total_ativo = total_mkt + _safe_float(rec["cash_free"], 0.0) + _safe_float(rec["cash_acc"], 0.0)
-        plot_day = rec["exec_day"] if rec["exec_day"] <= as_of_day else as_of_day
+        plot_day = rec["ref_day"]
         rows.append(
             {
                 "date": pd.Timestamp(plot_day),
