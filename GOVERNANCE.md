@@ -102,7 +102,7 @@ Correcoes urgentes durante a simulacao:
 
 ### 6.5 Blindagem do Motor Operacional (D-025)
 
-**Arquivos protegidos** (auditados e selados em `v1.17.0-motor`):
+**Arquivos protegidos** (auditados e selados em `v1.18.0-motor`):
 
 | Arquivo | Funcao | Auditorias |
 |---------|--------|------------|
@@ -118,8 +118,8 @@ Correcoes urgentes durante a simulacao:
 
 1. Alteracoes nestes arquivos exigem ciclo completo: `Architect → Executor → Auditor duplo (Gemini + Kimi) → Curator`, com autorizacao explicita do Owner.
 2. Um **pre-commit hook** no git bloqueia commits que alterem esses arquivos. Para sobrepor, usar: `MOTOR_OVERRIDE=1 git commit -m "descricao"`.
-3. A tag `v1.17.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.17.0-motor`.
-4. Novas versoes do motor devem gerar nova tag (`v1.18.0-motor`, etc.) apos novo ciclo completo de auditoria.
+3. A tag `v1.18.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.18.0-motor`.
+4. Novas versoes do motor devem gerar nova tag (`v1.19.0-motor`, etc.) apos novo ciclo completo de auditoria.
 
 ### 6.6 Gate de Paridade Metodologica (D-034)
 

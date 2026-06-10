@@ -263,27 +263,27 @@ def load_decision_for_day(exec_day: date) -> dict[str, Any] | None:
 
 
 def get_d_minus_1(exec_day: date) -> date:
-    macro_path = ROOT / "data" / "ssot" / "macro.parquet"
-    if not macro_path.exists():
+    calendar_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if not calendar_path.exists():
         return exec_day
-    macro = pd.read_parquet(macro_path, columns=["date"])
-    if macro.empty:
+    calendar = pd.read_parquet(calendar_path, columns=["date"])
+    if calendar.empty:
         return exec_day
-    macro["date"] = pd.to_datetime(macro["date"], errors="coerce")
-    dates = sorted(set(macro["date"].dt.date.dropna().tolist()))
+    calendar["date"] = pd.to_datetime(calendar["date"], errors="coerce")
+    dates = sorted(set(calendar["date"].dt.date.dropna().tolist()))
     eligible = [d for d in dates if d < exec_day]
     return max(eligible) if eligible else exec_day
 
 
 def _load_trading_days_br() -> list[date]:
-    macro_path = ROOT / "data" / "ssot" / "macro.parquet"
-    if not macro_path.exists():
+    calendar_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+    if not calendar_path.exists():
         return []
-    macro = pd.read_parquet(macro_path, columns=["date"])
-    if macro.empty:
+    calendar = pd.read_parquet(calendar_path, columns=["date"])
+    if calendar.empty:
         return []
-    macro["date"] = pd.to_datetime(macro["date"], errors="coerce")
-    return sorted(set(macro["date"].dt.date.dropna().tolist()))
+    calendar["date"] = pd.to_datetime(calendar["date"], errors="coerce")
+    return sorted(set(calendar["date"].dt.date.dropna().tolist()))
 
 
 def get_trade_day(exec_day: date) -> date:

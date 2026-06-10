@@ -1,5 +1,10 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-10
+
+- fix(motor): T-SDC-MARKETDAY-CANONICAL-SOURCE-BR-V1 — `market_day` do painel BR passa a ser derivado de `canonical_br.parquet`, a mesma fonte dos precos, eliminando divergencia de cabecalho quando `macro.parquet` atrasa. Decision: D-129 / SALA D-056. Tag prevista: v1.18.0-motor.
+- feat: T-SDC-FRED-API-ROBUSTNESS-STAGNATION-ALARM-V1 — FRED passa a usar API oficial com `FRED_API_KEY` como fonte primaria no Step 05 macro expandido, mantendo CSV publico como fallback secundario e emitindo WARNING/notify-send para series stale acima de 3 pregoes. Decision: D-130 / SALA D-056.
+
 ## 2026-06-09
 
 - fix(motor): T-SDC-CHART-BASE1-MARKETDAY-AXIS-V1 — eixo temporal do grafico Base 1 passa a ser indexado por `market_day/ref_day` (R-022), preservando acumulacao patrimonial via ledger e calculo Base 1. Decision: D-128 / SALA D-055. Tag prevista: v1.17.0-motor.

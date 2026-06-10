@@ -6,11 +6,13 @@ for all macro expanded features used by the ML model (T105_V1).
 from __future__ import annotations
 
 import sys
+import subprocess
 from datetime import date
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -18,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 IN_MACRO = ROOT / "data" / "ssot" / "macro.parquet"
 IN_FX = ROOT / "data" / "ssot" / "fx_ptax.parquet"
 OUT_FEATURES = ROOT / "data" / "features" / "macro_features.parquet"
+FRED_STAGNATION_ALERT_SESSIONS = 3
 
 
 def _pct_change(s: pd.Series, periods: int = 1) -> pd.Series:
@@ -28,9 +31,42 @@ def _rolling_std(s: pd.Series, window: int, min_periods: int) -> pd.Series:
     return pd.to_numeric(s, errors="coerce").rolling(window=window, min_periods=min_periods).std()
 
 
+def _macro_stagnation_warnings(
+    series: dict[str, pd.DataFrame],
+    calendar: pd.DataFrame,
+    aliases: list[str],
+    tolerance_sessions: int = FRED_STAGNATION_ALERT_SESSIONS,
+) -> list[str]:
+    calendar_days = sorted(pd.to_datetime(calendar["date"], errors="coerce").dropna().dt.normalize().unique().tolist())
+    if not calendar_days:
+        return []
+    max_day = pd.Timestamp(calendar_days[-1]).normalize()
+    warnings: list[str] = []
+    for alias in aliases:
+        raw = series.get(alias, pd.DataFrame()).copy()
+        if raw.empty or "date" not in raw.columns:
+            warnings.append(f"FRED macro stale: {alias} sem observacoes validas.")
+            continue
+        raw["date"] = pd.to_datetime(raw["date"], errors="coerce").dt.normalize()
+        obs = raw.dropna(subset=["date"])
+        obs = obs[obs["date"] <= max_day]
+        if obs.empty:
+            warnings.append(f"FRED macro stale: {alias} sem observacoes ate {max_day.date()}.")
+            continue
+        last_obs = pd.Timestamp(obs["date"].max()).normalize()
+        missing_sessions = sum(1 for d in calendar_days if last_obs < pd.Timestamp(d).normalize() <= max_day)
+        if missing_sessions > tolerance_sessions:
+            warnings.append(
+                f"FRED macro stale: {alias} ultima observacao {last_obs.date()} "
+                f"({missing_sessions} pregoes atras; limite={tolerance_sessions})."
+            )
+    return warnings
+
+
 def run(end_date: date | None = None) -> Path:
     from lib.adapters import FredAdapter
 
+    load_dotenv(ROOT / ".env")
     if not IN_MACRO.exists():
         raise RuntimeError(f"Missing macro SSOT: {IN_MACRO}")
     if not IN_FX.exists():
@@ -56,6 +92,14 @@ def run(end_date: date | None = None) -> Path:
 
     fred = FredAdapter()
     series = fred.fetch_all()
+    stagnation_warnings = _macro_stagnation_warnings(
+        series,
+        calendar,
+        ["vix_close", "usd_index_broad", "ust_10y_yield", "ust_2y_yield", "fed_funds_rate"],
+    )
+    for warning in stagnation_warnings:
+        print(f"[WARN] {warning}")
+        subprocess.run(["notify-send", "RENDA_OPS", warning], check=False)
     vix = series["vix_close"]
     dxy = series["usd_index_broad"].rename(columns={"usd_index_broad": "dxy_close"})
     ust10 = series["ust_10y_yield"]

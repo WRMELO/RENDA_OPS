@@ -202,9 +202,10 @@ class YahooAdapter:
 
 
 class FredAdapter:
-    """FRED public CSV series adapter."""
+    """FRED adapter with official API primary path and public CSV fallback."""
 
-    BASE_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
+    API_URL = "https://api.stlouisfed.org/fred/series/observations"
+    CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
 
     SERIES = {
         "VIXCLS": "vix_close",
@@ -217,9 +218,51 @@ class FredAdapter:
     def __init__(self, timeout_seconds: float = 30.0, max_retries: int = 5) -> None:
         self.timeout = timeout_seconds
         self.max_retries = max_retries
+        self.api_key = os.getenv("FRED_API_KEY")
 
     def fetch_series(self, series_id: str, alias: str) -> pd.DataFrame:
-        url = f"{self.BASE_URL}{series_id}"
+        last_exc: Exception | None = None
+        if self.api_key:
+            try:
+                return self._fetch_series_api(series_id, alias)
+            except Exception as exc:  # noqa: BLE001
+                last_exc = exc
+                print(f"[FRED] API oficial falhou para {series_id}; tentando CSV publico: {exc!r}")
+        return self._fetch_series_csv(series_id, alias, last_exc=last_exc)
+
+    def _fetch_series_api(self, series_id: str, alias: str) -> pd.DataFrame:
+        params = {
+            "series_id": series_id,
+            "api_key": self.api_key,
+            "file_type": "json",
+            "observation_start": "2018-01-01",
+        }
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                resp = requests.get(self.API_URL, params=params, timeout=self.timeout)
+                resp.raise_for_status()
+                payload: dict[str, Any] = resp.json()
+                observations = payload.get("observations") or []
+                df = pd.DataFrame(observations)
+                if df.empty:
+                    return pd.DataFrame(columns=["date", alias])
+                out = df.rename(columns={"value": alias})
+                out["date"] = pd.to_datetime(out["date"], errors="coerce")
+                out[alias] = pd.to_numeric(out[alias].replace(".", pd.NA), errors="coerce")
+                return out[["date", alias]].dropna().sort_values("date").reset_index(drop=True)
+            except Exception:
+                if attempt == self.max_retries:
+                    raise
+                wait_s = min(2 ** attempt, 60)
+                print(
+                    f"[FRED] API attempt {attempt}/{self.max_retries} failed for {series_id}; "
+                    f"retrying in {wait_s}s..."
+                )
+                time.sleep(float(wait_s))
+        return pd.DataFrame(columns=["date", alias])
+
+    def _fetch_series_csv(self, series_id: str, alias: str, last_exc: Exception | None = None) -> pd.DataFrame:
+        url = f"{self.CSV_URL}{series_id}"
         for attempt in range(1, self.max_retries + 1):
             try:
                 resp = requests.get(url, timeout=self.timeout)
@@ -232,12 +275,13 @@ class FredAdapter:
                 out["date"] = pd.to_datetime(out["date"], errors="coerce")
                 out[alias] = pd.to_numeric(out[alias], errors="coerce")
                 return out[["date", alias]].dropna(subset=["date"]).sort_values("date").reset_index(drop=True)
-            except Exception:
+            except Exception as exc:
+                last_exc = exc
                 if attempt == self.max_retries:
-                    raise
+                    raise RuntimeError(f"FRED fetch failed for {series_id}") from last_exc
                 wait_s = min(2 ** attempt, 60)
                 print(
-                    f"[FRED] Attempt {attempt}/{self.max_retries} failed for {series_id}; "
+                    f"[FRED] CSV attempt {attempt}/{self.max_retries} failed for {series_id}; "
                     f"retrying in {wait_s}s..."
                 )
                 time.sleep(float(wait_s))
