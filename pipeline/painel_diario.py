@@ -262,6 +262,28 @@ def load_decision_for_day(exec_day: date) -> dict[str, Any] | None:
     return _read_json(candidates[0][1])
 
 
+def load_frozen_master_for_day(exec_day: date) -> dict[str, Any] | None:
+    """Return the portfolio dict from the most recent rebalance day <= exec_day."""
+    daily_dir = ROOT / "data" / "daily"
+    if not daily_dir.exists():
+        return None
+    candidates: list[tuple[date, dict[str, Any]]] = []
+    for p in daily_dir.glob("*.json"):
+        try:
+            d = date.fromisoformat(p.stem)
+            if d > exec_day:
+                continue
+            payload = _read_json(p)
+            if payload.get("is_rebalance_day"):
+                candidates.append((d, payload))
+        except Exception:
+            continue
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return candidates[0][1]
+
+
 def get_d_minus_1(exec_day: date) -> date:
     calendar_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
     if not calendar_path.exists():
@@ -1932,9 +1954,21 @@ def build_painel(exec_day: date) -> Path:
     decision = load_decision_for_day(exec_day)
     decision_date = d1.isoformat()
     trade_day = get_trade_day(exec_day)
-    top10 = decision.get("portfolio", []) if decision else []
-    top_tickers = [x.get("ticker", "") for x in top10]
-    prices_top = get_latest_prices(top_tickers, as_of_day=d1)
+    # Frozen master for buy section (last rebalance <= exec_day; R-010/D-059)
+    master_decision = load_frozen_master_for_day(exec_day)
+    top10_frozen = master_decision.get("portfolio", []) if master_decision else []
+    master_date_str = master_decision.get("date", "") if master_decision else ""
+    try:
+        master_date_br = _fmt_date_br(date.fromisoformat(master_date_str)) if master_date_str else "?"
+    except Exception:
+        master_date_br = master_date_str or "?"
+    # Informative ranking R-010 (may differ from frozen master between rebalances)
+    top10_info = decision.get("portfolio", []) if decision else []
+    _all_top_tickers = list(
+        {str(x.get("ticker", "")).upper().strip() for x in top10_frozen}
+        | {str(x.get("ticker", "")).upper().strip() for x in top10_info}
+    )
+    prices_top = get_latest_prices(_all_top_tickers, as_of_day=d1)
 
     canonical = pd.DataFrame()
     canon_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
@@ -1967,7 +2001,7 @@ def build_painel(exec_day: date) -> Path:
     )
 
     top_buy_rows: list[dict[str, Any]] = []
-    for p in top10:
+    for p in top10_frozen:
         t = str(p.get("ticker", "")).upper().strip()
         if not t:
             continue
@@ -1978,6 +2012,62 @@ def build_painel(exec_day: date) -> Path:
                 "close_d1": _safe_float(prices_top.get(t, 0.0), 0.0),
             }
         )
+    # Informative ranking rows (R-010 — not for purchase)
+    top_info_rows: list[dict[str, Any]] = []
+    for p in top10_info:
+        t = str(p.get("ticker", "")).upper().strip()
+        if not t:
+            continue
+        top_info_rows.append(
+            {
+                "ticker": t,
+                "m3": _safe_float(p.get("score_m3"), 0.0),
+                "close_d1": _safe_float(prices_top.get(t, 0.0), 0.0),
+            }
+        )
+    # Pre-render informative rows as static HTML (server-side)
+    info_rows_html = "".join(
+        f"<tr><td>{r['ticker']}</td>"
+        f"<td style='text-align:right'>{float(r.get('m3', 0.0)):.4f}</td>"
+        f"<td style='text-align:right'>{_fmt_money(float(r.get('close_d1', 0.0)))}</td></tr>"
+        for r in top_info_rows
+    ) or "<tr><td colspan='3' style='color:#64748b;'>—</td></tr>"
+    # SPC gate: Regra 1 (3-sigma) — vectorized, all canonical D-1 tickers
+    spc_rule1_blocked: set[str] = set()
+    spc_bc_blocked: set[str] = set()
+    if not canonical.empty:
+        _d1_ts = pd.Timestamp(d1)
+        _can_d1 = canonical[canonical["date"] == _d1_ts].copy()
+        if not _can_d1.empty:
+            _rule1_mask = pd.Series(False, index=_can_d1.index)
+            _spc_checks = [
+                ("i_value", "i_ucl", ">"),
+                ("i_value", "i_lcl", "<"),
+                ("mr_value", "mr_ucl", ">"),
+                ("xbar_value", "xbar_ucl", ">"),
+                ("xbar_value", "xbar_lcl", "<"),
+                ("r_value", "r_ucl", ">"),
+            ]
+            for _vc, _lc, _op in _spc_checks:
+                if _vc in _can_d1.columns and _lc in _can_d1.columns:
+                    _v = pd.to_numeric(_can_d1[_vc], errors="coerce")
+                    _l = pd.to_numeric(_can_d1[_lc], errors="coerce")
+                    if _op == ">":
+                        _rule1_mask |= (_v > _l).fillna(False)
+                    else:
+                        _rule1_mask |= (_v < _l).fillna(False)
+            spc_rule1_blocked = set(_can_d1.loc[_rule1_mask, "ticker"].tolist())
+        # B+C gate: bounded to master buy list + current holdings
+        _bc_scope = (
+            {str(p.get("ticker", "")).upper().strip() for p in top10_frozen}
+            | set(ctx["holdings_qty"].keys())
+            | spc_rule1_blocked
+        )
+        for _bc_t in sorted(_bc_scope):
+            _s_bc = canonical[canonical["ticker"] == _bc_t].sort_values("date")
+            _s_bc = _s_bc[_s_bc["date"] <= pd.Timestamp(d1)]
+            if _is_spc_bc_blocked(_s_bc):
+                spc_bc_blocked.add(_bc_t)
 
     action_rows = []
     # primeiro sugestoes de venda
@@ -2120,11 +2210,18 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
       <div class="section-title">Sessão Boletim — Informação</div>
       <div class="info-grid">
         <div>
-          <h3>Top-10 para compra (D-1)</h3>
+          <h3>Top-10 para compra — Master rebalanceado em {master_date_br}</h3>
           <table class="top10-table">
             <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th><th>Preço</th><th>Qtd</th><th>Valor</th></tr>
             <tbody id="topBuyBody"></tbody>
           </table>
+          <details style="margin-top:8px;">
+            <summary style="font-size:12px;color:#64748b;cursor:pointer;">&#9660; Ranking informativo (R-010) — não é base de compra</summary>
+            <table class="top10-table" style="margin-top:6px;opacity:0.75;">
+              <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th></tr>
+              {info_rows_html}
+            </table>
+          </details>
         </div>
         <div>
           <h3>Card de Venda (sugestão técnica)</h3>
@@ -2233,6 +2330,10 @@ const APORTE_ACC = {ctx["aporte_acumulado"]};
 const RETIRADA_ACC = {ctx["retirada_acumulada"]};
 const TOP_BUY_ROWS = {json.dumps(top_buy_rows, ensure_ascii=False)};
 const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
+const TOP_INFO_ROWS = {json.dumps(top_info_rows, ensure_ascii=False)};
+const RULE1_BLOCKED_TICKERS = new Set({json.dumps(sorted(spc_rule1_blocked), ensure_ascii=False)});
+const BC_BLOCKED_TICKERS = new Set({json.dumps(sorted(spc_bc_blocked), ensure_ascii=False)});
+let spcBcConfirmed = false;
 const PREFILL_CASH_ROWS = {json.dumps(proventos_prefill, ensure_ascii=False)};
 const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
@@ -2649,6 +2750,26 @@ function savePanel() {{
     msg.textContent = 'Compra inválida no Top-10: para Qtd > 0, informe Preço > 0.';
     return;
   }}
+  // GATE SPC — Regra 1 hard block (R-001)
+  const _allBuyOps = [...opsManual.filter(o => o.type === 'COMPRA'), ...opsTop];
+  const _rule1Viol = _allBuyOps.filter(o => RULE1_BLOCKED_TICKERS.has(o.ticker));
+  if (_rule1Viol.length > 0) {{
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'VETO SPC R-001: ' + _rule1Viol.map(o => o.ticker).join(', ') + ' está INSTÁVEL (Regra 1 ativa em D-1). Compra bloqueada.';
+    spcBcConfirmed = false;
+    return;
+  }}
+  // GATE SPC — B+C alerta com confirmação obrigatória (R-027/D-101 — não é venda automática)
+  const _bcViol = _allBuyOps.filter(o => BC_BLOCKED_TICKERS.has(o.ticker));
+  if (_bcViol.length > 0 && !spcBcConfirmed) {{
+    const msg = document.getElementById('saveMsg');
+    msg.className = 'save-msg error';
+    msg.textContent = 'ALERTA B+C: ' + _bcViol.map(o => o.ticker).join(', ') + ' com blocked_bc=True em D-1. Clique em Salvar novamente para confirmar conscientemente.';
+    spcBcConfirmed = true;
+    return;
+  }}
+  spcBcConfirmed = false;
   const ops = [...opsManual, ...opsTop];
   const cashMovements = collectCashMovs();
   const cashTransfers = collectTransfers();
