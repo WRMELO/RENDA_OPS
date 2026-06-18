@@ -51,7 +51,15 @@ def run(
 
     is_rebalance_day = True
     if rebalance_cadence > 1 and rebalance_anchor_date_str:
-        trading_dates = [pd.Timestamp(ts).normalize() for ts in sorted(pred["date"].dropna().dt.normalize().unique())]
+        canonical_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+        trading_dates: list[pd.Timestamp] = []
+        if canonical_path.exists():
+            canonical_dates = pd.read_parquet(canonical_path, columns=["date"])
+            canonical_dates["date"] = pd.to_datetime(canonical_dates["date"], errors="coerce")
+            trading_dates = [
+                pd.Timestamp(ts).normalize()
+                for ts in sorted(canonical_dates["date"].dropna().dt.normalize().unique())
+            ]
         trading_idx = {ts: idx for idx, ts in enumerate(trading_dates)}
         target_norm = pd.Timestamp(target_ts).normalize()
         try:

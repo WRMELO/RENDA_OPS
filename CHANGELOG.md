@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-18
+
+- fix(motor): FIX-REBALANCE-CALENDAR-BR — calendário de rebalanceamento do BR passa a derivar de `canonical_br.parquet` em `pipeline/09_decide.py`, com alerta explícito de divergência SSOT x JSON no painel. Artefatos: `pipeline/09_decide.py`, `pipeline/painel_diario.py`, `DECISION_LOG.md`. Decision: D-131. Tag prevista: v1.20.0-motor.
+
 ## 2026-06-10
 
 - fix(motor): T-SDC-MARKETDAY-CANONICAL-SOURCE-BR-V1 — `market_day` do painel BR passa a ser derivado de `canonical_br.parquet`, a mesma fonte dos precos, eliminando divergencia de cabecalho quando `macro.parquet` atrasa. Decision: D-129 / SALA D-056. Tag prevista: v1.18.0-motor.

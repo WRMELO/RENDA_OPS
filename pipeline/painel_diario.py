@@ -1498,6 +1498,39 @@ def _calc_next_rebalance_day(anchor_date_str: str, cadence: int, as_of_day: date
     return None
 
 
+def _calc_is_rebalance_day(anchor_date_str: str, cadence: int, as_of_day: date, phase_offset: int = 0) -> bool | None:
+    cadence = max(int(cadence), 1)
+    trading_days = sorted(set(_load_trading_days_br()))
+    if not trading_days:
+        return None
+    if cadence == 1:
+        return True
+
+    try:
+        anchor = date.fromisoformat(str(anchor_date_str))
+    except Exception:
+        return None
+
+    idx_map = {d: i for i, d in enumerate(trading_days)}
+    if anchor not in idx_map:
+        next_anchor = [d for d in trading_days if d >= anchor]
+        if not next_anchor:
+            return None
+        anchor = min(next_anchor)
+
+    as_of_candidates = [d for d in trading_days if d <= as_of_day]
+    if not as_of_candidates:
+        return None
+    as_of_ref = max(as_of_candidates)
+
+    anchor_idx = idx_map[anchor]
+    as_of_idx = idx_map[as_of_ref]
+    delta = as_of_idx - anchor_idx
+    if delta < 0:
+        return False
+    return (delta % cadence) == (phase_offset % cadence)
+
+
 def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], as_of_day: date) -> tuple[str, str]:
     _ = ctx  # Contexto mantido por compatibilidade da assinatura planejada.
     cfg = (decision or {}).get("config", {})
@@ -1629,11 +1662,17 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
     consecutive_label = "Pregões abaixo thr" if action == "MERCADO" else "Pregões acima thr"
     consecutive_value = consecutive_below if action == "MERCADO" else consecutive_above
     next_rebalance = _calc_next_rebalance_day(anchor_str, cadence, as_of_day, phase_offset=phase_offset) if anchor_str else None
+    ssot_rebalance_day = _calc_is_rebalance_day(anchor_str, cadence, as_of_day, phase_offset=phase_offset) if anchor_str else None
 
     p_caixa_txt = "N/D" if math.isnan(p_caixa) else f"{p_caixa:.4f}".replace(".", ",")
     thr_txt = f"{thr:.2f}".replace(".", ",")
     anchor_txt = _fmt_date_br(anchor_str) if anchor_str else "N/D"
     next_rebalance_txt = _fmt_date_br(next_rebalance) if next_rebalance else ("DIÁRIO" if cadence == 1 else "N/D")
+    rebalance_value = "SIM" if is_rebalance_day else "NÃO"
+    rebalance_class = "ok" if is_rebalance_day else "bad"
+    if ssot_rebalance_day is not None and bool(ssot_rebalance_day) != bool(is_rebalance_day):
+        rebalance_value = f"{rebalance_value} [INCONSISTENCIA: SSOT != JSON]"
+        rebalance_class = "warn"
 
     motor_items = [
         ("Regime", action, "ok" if action == "MERCADO" else ("bad" if action == "CAIXA" else "")),
@@ -1641,7 +1680,7 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
         ("Threshold", thr_txt, ""),
         (consecutive_label, str(consecutive_value), ""),
         ("Cadência", f"{cadence} pregões", ""),
-        ("Hoje é rebalanceamento", "SIM" if is_rebalance_day else "NÃO", "ok" if is_rebalance_day else "bad"),
+        ("Hoje é rebalanceamento", rebalance_value, rebalance_class),
         ("Próximo rebalanceamento", next_rebalance_txt, "warn" if next_rebalance else ""),
         ("Âncora", anchor_txt, ""),
     ]
