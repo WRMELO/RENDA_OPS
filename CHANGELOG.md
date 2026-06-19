@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-19
+
+- docs(skill): T-ANALISTA-BR-CASCADE-SKILL-V1 — espelha a correção da skill `analista-br` para alocação em cascata multi-ignição e esclarece proposta única como plano único, não movimentação única. Artefatos: `DECISION_LOG.md`, `../SALA_DE_CONTROLE/DECISION_LOG.md`, `../SALA_DE_CONTROLE/CHANGELOG.md`. Decision: D-132 / SALA D-065.
+
 ## 2026-06-18
 
 - fix(motor): FIX-REBALANCE-CALENDAR-BR — calendário de rebalanceamento do BR passa a derivar de `canonical_br.parquet` em `pipeline/09_decide.py`, com alerta explícito de divergência SSOT x JSON no painel. Artefatos: `pipeline/09_decide.py`, `pipeline/painel_diario.py`, `DECISION_LOG.md`. Decision: D-131. Tag prevista: v1.20.0-motor.
