@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-24
+
+- fix(motor): T-SPC-MACRO-FIX-BASE1-HARDENING-BR-V1 — restaura o CDI faltante de 2026-06-15, endurece o canonical com gate de integridade SPC e corrige o Base 1 para nao forward-fillar alem do ultimo boletim salvo; skill `analista-br` ganha gate `SPC_INDISPONIVEL`. Artefatos: `data/ssot/macro.parquet`, `pipeline/04_build_canonical.py`, `pipeline/painel_diario.py`, `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`. Decision: D-133 / SALA D-066. Tag prevista: v1.21.0-motor.
+
 ## 2026-06-19
 
 - docs(skill): T-ANALISTA-BR-CASCADE-SKILL-V1 — espelha a correção da skill `analista-br` para alocação em cascata multi-ignição e esclarece proposta única como plano único, não movimentação única. Artefatos: `DECISION_LOG.md`, `../SALA_DE_CONTROLE/DECISION_LOG.md`, `../SALA_DE_CONTROLE/CHANGELOG.md`. Decision: D-132 / SALA D-065.
