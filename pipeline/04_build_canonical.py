@@ -191,6 +191,19 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     data = data.merge(macro, on="date", how="left")
     data = data.sort_values(["ticker", "date"]).reset_index(drop=True)
 
+    # Defensive forward-fill for cdi_log_daily: if macro.parquet is missing a
+    # session row, carry forward the last known CDI instead of propagating NaN
+    # through i_value -> SPC bands for the whole universe.
+    _cdi_date_series = (
+        macro.drop_duplicates("date")
+        .sort_values("date")
+        .set_index("date")["cdi_log_daily"]
+        .reindex(pd.DatetimeIndex(sorted(data["date"].unique())))
+        .ffill()
+        .bfill()
+    )
+    data["cdi_log_daily"] = data["date"].map(_cdi_date_series)
+
     data["X_real"] = data["log_ret_nominal"] - data["cdi_log_daily"]
     data["i_value"] = data["X_real"]
     data["mr_value"] = (data["i_value"] - data.groupby("ticker")["i_value"].shift(1)).abs()
@@ -210,6 +223,29 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     data["xbar_ucl"] = data["center_line"] + A2_N4 * data["r_bar"]
     data["xbar_lcl"] = data["center_line"] - A2_N4 * data["r_bar"]
     data["r_ucl"] = D4_N4 * data["r_bar"]
+
+    # Integrity gate: fail loudly when SPC band coverage collapses in recent
+    # dates, which signals macro/CDI data corruption.
+    _SPC_MIN_COVERAGE_PCT = 80.0
+    _recent_dates_spc = sorted(data["date"].unique())[-5:]
+    for _rd in _recent_dates_spc:
+        _day = data[data["date"] == _rd]
+        _n = len(_day)
+        if _n == 0:
+            continue
+        _nan_cnt = int(_day["i_ucl"].isna().sum())
+        _cov_pct = 100.0 * (_n - _nan_cnt) / _n
+        if _cov_pct < _SPC_MIN_COVERAGE_PCT:
+            raise RuntimeError(
+                f"[04] SPC integrity gate FAIL: {_rd.date()} has only {_cov_pct:.1f}% "
+                f"SPC band coverage ({_nan_cnt}/{_n} tickers with NaN i_ucl). "
+                "Check macro.parquet for missing cdi_log_daily rows."
+            )
+        if _cov_pct < 95.0:
+            print(
+                f"[04] SPC integrity WARN: {_rd.date()} coverage={_cov_pct:.1f}% "
+                f"({_nan_cnt}/{_n} tickers with NaN i_ucl)."
+            )
 
     if IN_FUNDAMENTALS.exists():
         fundamentals = pd.read_parquet(IN_FUNDAMENTALS, columns=["ticker", "sector"]).copy()

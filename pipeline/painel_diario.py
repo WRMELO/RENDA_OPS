@@ -1759,7 +1759,12 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
 
     carteira_line = axis_df.merge(proj[["date", "base1"]], on="date", how="left")
     if "base1" in carteira_line.columns:
+        _last_saved_ts = pd.Timestamp(proj["date"].max()) if not proj.empty else None
         carteira_line["base1"] = pd.to_numeric(carteira_line["base1"], errors="coerce").ffill().bfill()
+        # Avoid plotting stale forward-filled values for days without saved
+        # boletim; the live balance may diverge from the last saved snapshot.
+        if _last_saved_ts is not None:
+            carteira_line.loc[carteira_line["date"] > _last_saved_ts, "base1"] = float("nan")
     cdi_line = axis_df.merge(macro_proj[["date", "cdi_base1"]], on="date", how="left") if not macro_proj.empty else axis_df.assign(cdi_base1=float("nan"))
     if "cdi_base1" in cdi_line.columns:
         cdi_line["cdi_base1"] = pd.to_numeric(cdi_line["cdi_base1"], errors="coerce").ffill().bfill()
