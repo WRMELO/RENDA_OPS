@@ -2,6 +2,7 @@
 
 ## 2026-06-25
 
+- docs(skill): T-ANALISTA-BR-BC-GATE-RECONCILIATION-V1 — sela o gate de reconciliacao B+C na skill `analista-br`, classifica candidatos e reforcos com `blocked_bc=True` como `ALERTA_BC` e espelha a semantica do painel BR. Artefatos: `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`, `REGRAS_OPERACIONAIS.md`. Decision: D-075 / SALA D-075. Curadoria apos PASS do Auditor.
 - fix(motor): T-BASE1-LIVE-POINT-BR-V1 — adiciona marcador provisório `Vivo (não salvo)` ao gráfico Base 1, calculado pela mesma base do Balanço Simplificado, para restaurar a invariante D-066 antes do salvamento do boletim. Artefatos: `pipeline/painel_diario.py`, `DECISION_LOG.md`. Decision: D-134 / SALA D-074. Tag prevista: v1.22.0-motor.
 
 ## 2026-06-24
