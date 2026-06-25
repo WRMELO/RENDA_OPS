@@ -1698,7 +1698,7 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
     return fig.to_html(full_html=False, include_plotlyjs=False), motor_status_html
 
 
-def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
+def _build_chart_base1(curve: pd.DataFrame, as_of_day: date, live_point: dict[str, Any] | None = None) -> str:
     _ = curve  # Mantido por compatibilidade da assinatura atual.
     proj = _build_real_base1_series(as_of_day=as_of_day)
     if proj.empty:
@@ -1765,6 +1765,14 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         # boletim; the live balance may diverge from the last saved snapshot.
         if _last_saved_ts is not None:
             carteira_line.loc[carteira_line["date"] > _last_saved_ts, "base1"] = float("nan")
+    # Ponto vivo (D-074): se D-1 ainda nao tem boletim salvo e live_point foi fornecido,
+    # mostrar marcador provisorio identico ao Balanco Simplificado (invariante D-066).
+    as_of_ts = pd.Timestamp(as_of_day)
+    _show_live = (
+        live_point is not None
+        and not proj.empty
+        and not (proj["date"] == as_of_ts).any()
+    )
     cdi_line = axis_df.merge(macro_proj[["date", "cdi_base1"]], on="date", how="left") if not macro_proj.empty else axis_df.assign(cdi_base1=float("nan"))
     if "cdi_base1" in cdi_line.columns:
         cdi_line["cdi_base1"] = pd.to_numeric(cdi_line["cdi_base1"], errors="coerce").ffill().bfill()
@@ -1797,6 +1805,22 @@ def _build_chart_base1(curve: pd.DataFrame, as_of_day: date) -> str:
         ),
         secondary_y=False,
     )
+    if _show_live:
+        fig.add_trace(
+            go.Scatter(
+                x=[pd.Timestamp(as_of_day)],
+                y=[live_point["base1"]],
+                mode="markers",
+                name="Vivo (não salvo)",
+                marker=dict(
+                    symbol="diamond",
+                    color="#e67e22",
+                    size=11,
+                    line=dict(color="#c0392b", width=2),
+                ),
+            ),
+            secondary_y=False,
+        )
 
     if not cdi_line["cdi_base1"].dropna().empty:
         fig.add_trace(
@@ -2160,7 +2184,22 @@ def build_painel(exec_day: date) -> Path:
 
     curve = _load_curve_until(d1)
     chart_252_html, motor_status_html = _build_chart_esquerdo(decision=decision, ctx=ctx, as_of_day=d1)
-    chart_base1_html = _build_chart_base1(curve=curve, as_of_day=d1)
+    # Ponto vivo para grafico Base 1 — mesmos valores do Balanco Simplificado (invariante D-066/D-074)
+    _live_total = (
+        _safe_float(ctx.get("carteira_valor_d1", 0.0), 0.0)
+        + _safe_float(ctx.get("cash_free_prev", 0.0), 0.0)
+        + _safe_float(ctx.get("cash_accounting_prev", 0.0), 0.0)
+    )
+    _live_patrimonio = (
+        _safe_float(ctx.get("aporte_acumulado", 0.0), 0.0)
+        - _safe_float(ctx.get("retirada_acumulada", 0.0), 0.0)
+    )
+    _live_point: dict[str, Any] | None = (
+        {"date": pd.Timestamp(d1), "base1": _live_total / _live_patrimonio}
+        if _live_patrimonio > 0
+        else None
+    )
+    chart_base1_html = _build_chart_base1(curve=curve, as_of_day=d1, live_point=_live_point)
 
     cycle_dir = ROOT / "data" / "cycles" / d1.isoformat()
     cycle_dir.mkdir(parents=True, exist_ok=True)

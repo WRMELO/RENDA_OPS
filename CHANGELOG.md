@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-25
+
+- fix(motor): T-BASE1-LIVE-POINT-BR-V1 — adiciona marcador provisório `Vivo (não salvo)` ao gráfico Base 1, calculado pela mesma base do Balanço Simplificado, para restaurar a invariante D-066 antes do salvamento do boletim. Artefatos: `pipeline/painel_diario.py`, `DECISION_LOG.md`. Decision: D-134 / SALA D-074. Tag prevista: v1.22.0-motor.
+
 ## 2026-06-24
 
 - fix(motor): T-SPC-MACRO-FIX-BASE1-HARDENING-BR-V1 — restaura o CDI faltante de 2026-06-15, endurece o canonical com gate de integridade SPC e corrige o Base 1 para nao forward-fillar alem do ultimo boletim salvo; skill `analista-br` ganha gate `SPC_INDISPONIVEL`. Artefatos: `data/ssot/macro.parquet`, `pipeline/04_build_canonical.py`, `pipeline/painel_diario.py`, `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`. Decision: D-133 / SALA D-066. Tag prevista: v1.21.0-motor.
