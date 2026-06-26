@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-06-26
+
+- feat: T-SDC-ANALISTA-BR-CANONICAL-LAYER-V1 — cria `pipeline/analise_br.py` (camada canonica B3) e reescreve `analista-br` para eliminar duplicacao skill-motor com leitura de JSON unico (`data/ssot/contexto_analista_br.json`). Artefatos: `pipeline/analise_br.py`, `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`. Decision: D-135 / SALA D-076.
+
 ## 2026-06-25
 
 - docs(skill): T-ANALISTA-BR-BC-GATE-RECONCILIATION-V1 — sela o gate de reconciliacao B+C na skill `analista-br`, classifica candidatos e reforcos com `blocked_bc=True` como `ALERTA_BC` e espelha a semantica do painel BR. Artefatos: `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`, `REGRAS_OPERACIONAIS.md`. Decision: D-075 / SALA D-075. Curadoria apos PASS do Auditor.
