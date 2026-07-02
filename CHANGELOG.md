@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-02
+
+- feat(gov): T-BR-MIRROR-LEDGER-GOVERNANCE-V1 — espelha SALA D-036/D-037 (D-136) com auto-commit+push do ledger BR no `/salvar`, guarda append-only do `data/ssot/ledger_br.jsonl` no pre-commit e versionamento dos hooks em `tools/`. Artefatos: `pipeline/servidor.py`, `tools/pre_commit_motor_guard.sh`, `tools/install_git_hooks.sh`, `.git/hooks/pre-commit`, `GOVERNANCE.md`, `DECISION_LOG.md`. Decision: D-136 / SALA D-035-D-037.
+
 ## 2026-06-26
 
 - feat: T-SDC-ANALISTA-BR-CANONICAL-LAYER-V1 — cria `pipeline/analise_br.py` (camada canonica B3) e reescreve `analista-br` para eliminar duplicacao skill-motor com leitura de JSON unico (`data/ssot/contexto_analista_br.json`). Artefatos: `pipeline/analise_br.py`, `/home/wilson/.cursor/skills/analista-br/SKILL.md`, `DECISION_LOG.md`. Decision: D-135 / SALA D-076.

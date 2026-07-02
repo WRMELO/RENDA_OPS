@@ -121,6 +121,18 @@ Correcoes urgentes durante a simulacao:
 3. A tag `v1.18.0-motor` marca o snapshot auditado atual. Para restaurar: `git checkout v1.18.0-motor`.
 4. Novas versoes do motor devem gerar nova tag (`v1.19.0-motor`, etc.) apos novo ciclo completo de auditoria.
 
+### 6.5.1 Protecao do SSOT append-only (D-136)
+
+O arquivo `data/ssot/ledger_br.jsonl` e protegido por politica append-only: o pre-commit hook bloqueia qualquer commit que reduza o numero de linhas do arquivo em relacao ao HEAD.
+
+Esta protecao e distinta da blindagem de motor (`§6.5`): appends legitimos ocorrem automaticamente via `/salvar` (auto-commit+push, sem intervencao manual) e nao exigem ciclo completo. O que e proibido e rollback, truncamento ou qualquer operacao que apague registros existentes do ledger.
+
+Modificacoes estruturais no ledger (ex.: correcao de entrada incorreta ja commitada) exigem task formal aprovada pelo Owner via cadeia CTO -> Architect -> Executor -> Auditor, nunca `git restore`/`git checkout`/`git reset` direto sobre o arquivo.
+
+Os hooks de protecao (motor + ledger) sao versionados em `tools/pre_commit_motor_guard.sh` e instalados via `tools/install_git_hooks.sh`, pois `.git/hooks/` nao e rastreado pelo git.
+
+Ref: SALA D-035, D-036, D-037, R-025, R-018.
+
 ### 6.6 Gate de Paridade Metodologica (D-034)
 
 Quando orientacoes do CTO para o Architect envolverem **thresholds, gates ou parametros quantitativos**, deve haver checklist minimo de paridade metodologica:

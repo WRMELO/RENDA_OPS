@@ -639,6 +639,39 @@ def serve(host: str = "127.0.0.1", port: int = 8787, auto_open: bool = True, ove
                 content = json.dumps(derived_payload, ensure_ascii=False, indent=2)
                 dest_cycle.write_text(content, encoding="utf-8")
                 dest_real.write_text(content, encoding="utf-8")
+
+                # Auto-commit e auto-push do ledger SSOT apos salvar o boletim (D-136, R-030).
+                # Falha no commit/push NAO bloqueia o 200 OK: apenas loga e segue.
+                try:
+                    import subprocess
+
+                    ledger_rel = "data/ssot/ledger_br.jsonl"
+                    add_run = subprocess.run(
+                        ["git", "-C", str(ROOT), "add", "-f", ledger_rel],
+                        capture_output=True, text=True, timeout=15,
+                    )
+                    if add_run.returncode == 0:
+                        commit_msg = f"feat(ledger): auto-commit boletim {save_day.isoformat()}"
+                        commit_run = subprocess.run(
+                            ["git", "-C", str(ROOT), "commit", "-m", commit_msg],
+                            capture_output=True, text=True, timeout=15,
+                        )
+                        out_l = (commit_run.stdout or "").lower()
+                        err_l = (commit_run.stderr or "").lower()
+                        if commit_run.returncode == 0:
+                            push_run = subprocess.run(
+                                ["git", "-C", str(ROOT), "push"],
+                                capture_output=True, text=True, timeout=30,
+                            )
+                            if push_run.returncode != 0:
+                                LOGGER.warning("[ledger-autocommit] git push falhou: %s", (push_run.stderr or "").strip())
+                        elif "nothing to commit" not in out_l and "nothing to commit" not in err_l:
+                            LOGGER.warning("[ledger-autocommit] git commit falhou: %s", (commit_run.stderr or "").strip())
+                    else:
+                        LOGGER.warning("[ledger-autocommit] git add falhou: %s", (add_run.stderr or "").strip())
+                except Exception as exc:
+                    LOGGER.warning("[ledger-autocommit] excecao inesperada: %s", exc)
+
                 self._respond_json(
                     {
                         "ok": True,
