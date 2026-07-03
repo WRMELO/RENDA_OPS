@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-03
+
+- fix(motor): T-COTIZACAO-BASE1-US-BR-V1 — Base 1 passa a usar cotizacao plena no `pipeline/painel_diario.py`: aportes/retiradas externos alteram quantidade de cotas, proventos permanecem como retorno interno/caixa e a rentabilidade acumulada do painel passa a seguir o preco da cota. Decision: D-138 / SALA D-084. Tag prevista: `v1.23.0-motor`.
+
 ## 2026-07-02
 
 - feat(gov): T-BR-MIRROR-LEDGER-GOVERNANCE-V1 — espelha SALA D-036/D-037 (D-136) com auto-commit+push do ledger BR no `/salvar`, guarda append-only do `data/ssot/ledger_br.jsonl` no pre-commit e versionamento dos hooks em `tools/`. Artefatos: `pipeline/servidor.py`, `tools/pre_commit_motor_guard.sh`, `tools/install_git_hooks.sh`, `.git/hooks/pre-commit`, `GOVERNANCE.md`, `DECISION_LOG.md`. Decision: D-136 / SALA D-035-D-037.
