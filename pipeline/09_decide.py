@@ -13,6 +13,65 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 
+def _build_operational_ranking(
+    scores: pd.DataFrame,
+    top10_tickers: list[str],
+    *,
+    buffer_k: int = 15,
+) -> list[dict]:
+    rank_map = {str(k).upper().strip(): float(v) for k, v in scores["m3_rank"].to_dict().items()}
+    score_map = {str(k).upper().strip(): float(v) for k, v in scores["score_m3"].to_dict().items()}
+    top10_set = set(top10_tickers)
+    out: list[dict] = []
+    for pos, ticker in enumerate(top10_tickers, 1):
+        tk = str(ticker).upper().strip()
+        out.append(
+            {
+                "rank": pos,
+                "m3_rank": int(rank_map.get(tk, pos)),
+                "ticker": tk,
+                "score_m3": round(score_map.get(tk, float("nan")), 4),
+                "bucket": "TOP10_COMPRA",
+                "protected_c2": True,
+            }
+        )
+    for tk, raw_rank in sorted(rank_map.items(), key=lambda item: (item[1], item[0])):
+        if raw_rank > buffer_k or tk in top10_set:
+            continue
+        out.append(
+            {
+                "rank": int(raw_rank),
+                "m3_rank": int(raw_rank),
+                "ticker": tk,
+                "score_m3": round(score_map.get(tk, float("nan")), 4),
+                "bucket": "BUFFER_11_15_SEGURO",
+                "protected_c2": True,
+            }
+        )
+    return out
+
+
+def _latest_rebalance_payload_before(target_ts: pd.Timestamp) -> dict | None:
+    daily_dir = ROOT / "data" / "daily"
+    if not daily_dir.exists():
+        return None
+    candidates: list[tuple[pd.Timestamp, dict]] = []
+    for path in sorted(daily_dir.glob("*.json")):
+        try:
+            day = pd.Timestamp(path.stem).normalize()
+            if day > target_ts.normalize():
+                continue
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if payload.get("is_rebalance_day"):
+            candidates.append((day, payload))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return candidates[0][1]
+
+
 def run(
     scores_by_day: dict[pd.Timestamp, pd.DataFrame],
     predictions: pd.DataFrame,
@@ -28,6 +87,7 @@ def run(
     h_in = int(cfg.get("h_in", 3))
     h_out = int(cfg.get("h_out", 2))
     top_n = int(cfg.get("top_n", 10))
+    buffer_k = 15
     rebalance_cadence = max(int(cfg.get("rebalance_cadence", 1)), 1)
     rebalance_phase_offset = int(cfg.get("rebalance_phase_offset", 0))
     rebalance_anchor_date_str = str(cfg.get("rebalance_anchor_date", "")).strip()
@@ -90,6 +150,7 @@ def run(
             consecutive_below += 1
 
     portfolio: list[dict] = []
+    operational_ranking: list[dict] = []
     action = "CAIXA"
     if current_state == 0:
         action = "MERCADO"
@@ -128,12 +189,40 @@ def run(
         except Exception:
             pass  # fallback conservador: manter blacklist original sem SPC B+C
 
-        if target_ts in scores_by_day:
+        scores_for_ranking: pd.DataFrame | None = None
+        if is_rebalance_day and target_ts in scores_by_day:
+            scores_for_ranking = scores_by_day[target_ts]
             selected = select_top_n(scores_by_day[target_ts], top_n=top_n, blacklist=blacklist)
             weight = 1.0 / top_n
             for rank, ticker in enumerate(selected, 1):
                 score = float(scores_by_day[target_ts].loc[ticker, "score_m3"])
                 portfolio.append({"rank": rank, "ticker": ticker, "score_m3": round(score, 4), "weight": round(weight, 4)})
+            operational_ranking = _build_operational_ranking(scores_for_ranking, selected, buffer_k=buffer_k)
+        elif not is_rebalance_day:
+            frozen = _latest_rebalance_payload_before(target_ts)
+            if frozen:
+                portfolio = list(frozen.get("portfolio", []) or [])
+                operational_ranking = list(frozen.get("operational_ranking", []) or [])
+                ranking_day = pd.Timestamp(str(frozen.get("date", target_ts.date()))).normalize()
+                if not operational_ranking and ranking_day in scores_by_day:
+                    frozen_top10 = [
+                        str(row.get("ticker", "")).upper().strip()
+                        for row in portfolio
+                        if str(row.get("ticker", "")).strip()
+                    ]
+                    operational_ranking = _build_operational_ranking(
+                        scores_by_day[ranking_day],
+                        frozen_top10,
+                        buffer_k=buffer_k,
+                    )
+            elif target_ts in scores_by_day:
+                scores_for_ranking = scores_by_day[target_ts]
+                selected = select_top_n(scores_for_ranking, top_n=top_n, blacklist=blacklist)
+                weight = 1.0 / top_n
+                for rank, ticker in enumerate(selected, 1):
+                    score = float(scores_for_ranking.loc[ticker, "score_m3"])
+                    portfolio.append({"rank": rank, "ticker": ticker, "score_m3": round(score, 4), "weight": round(weight, 4)})
+                operational_ranking = _build_operational_ranking(scores_for_ranking, selected, buffer_k=buffer_k)
 
     decision = {
         "date": str(target_ts.date()),
@@ -153,6 +242,10 @@ def run(
             "rebalance_anchor_date": rebalance_anchor_date_str,
         },
         "portfolio": portfolio,
+        "ranking_schema_version": 2,
+        "operational_top_n": top_n,
+        "operational_buffer_k": buffer_k,
+        "operational_ranking": operational_ranking,
     }
 
     out_path = ROOT / "data" / "daily" / f"{target_ts.date()}.json"

@@ -2,6 +2,7 @@
 
 ## 2026-07-03
 
+- feat(motor): T-SDC-RANKING-UNIFICATION-PHASE2-BRUS-V1 — unifica a fonte operacional do ranking BR em `pipeline/09_decide.py`, `pipeline/painel_diario.py` e `pipeline/analise_br.py`, persistindo `operational_ranking`/buffer C2 K=15 e removendo a venda C2 baseada em ranking vivo. Artefatos: `pipeline/09_decide.py`, `pipeline/painel_diario.py`, `pipeline/analise_br.py`, `data/ssot/contexto_analista_br.json`, `DECISION_LOG.md`, `REGRAS_OPERACIONAIS.md`. Decision: D-095. Tag prevista: `v1.24.0-motor`.
 - fix(motor): T-COTIZACAO-BASE1-US-BR-V1 — Base 1 passa a usar cotizacao plena no `pipeline/painel_diario.py`: aportes/retiradas externos alteram quantidade de cotas, proventos permanecem como retorno interno/caixa e a rentabilidade acumulada do painel passa a seguir o preco da cota. Decision: D-138 / SALA D-084. Tag prevista: `v1.23.0-motor`.
 
 ## 2026-07-02

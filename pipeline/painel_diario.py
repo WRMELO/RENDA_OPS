@@ -956,51 +956,32 @@ def _build_sell_suggestions(
         return suggestions, quarantine
 
     # Camada 2 — rebalanceamento C2 K=15 (buffer de histerese).
-    if canonical.empty:
+    # Fase 2/D-095: a venda C2 deve usar somente a lista operacional congelada
+    # persistida pelo step 09. Nao recomputar ranking vivo no painel.
+    operational_rows = decision.get("operational_ranking", []) or []
+    if not operational_rows:
+        operational_rows = decision.get("portfolio", []) or []
+    protected_c2 = {
+        str(row.get("ticker", "")).upper().strip()
+        for row in operational_rows
+        if str(row.get("ticker", "")).strip()
+        and bool(row.get("protected_c2", True))
+    }
+    if not protected_c2:
         return suggestions, quarantine
-    px_rank_wide = canonical.pivot_table(index="date", columns="ticker", values="close_operational", aggfunc="first").sort_index().ffill()
-    # Gate D-110: ler config do winner.json para paridade semantica com step 06 (D-115).
-    _liq_enabled, _liq_raw_path, _liq_adtv, _liq_pct, _liq_win, _liq_mp = False, None, 0.0, 0.0, 60, 20
-    try:
-        _wcfg = _read_json(ROOT / "config" / "winner.json")
-        _gate = _wcfg.get("winner_config_snapshot", {}).get("liquidity_gate", {})
-        if bool(_gate.get("enabled", False)):
-            _liq_enabled = True
-            _liq_adtv = float(_gate.get("adtv_threshold_brl", 0.0))
-            _liq_pct = float(_gate.get("pct_traded_threshold", 0.0))
-            _liq_win = int(_gate.get("window", 60))
-            _liq_mp = int(_gate.get("min_periods", 20))
-            _liq_raw_path = ROOT / "data" / "ssot" / "market_data_raw.parquet"
-    except Exception:
-        pass
-    scores_by_day, _ = compute_filtered_m3_scores(
-        px_rank_wide,
-        raw_path=_liq_raw_path,
-        adtv_threshold=_liq_adtv,
-        pct_threshold=_liq_pct,
-        liq_window=_liq_win,
-        liq_min_periods=_liq_mp,
-        enabled=_liq_enabled,
-    )
-    prev_scores = scores_by_day.get(pd.Timestamp(as_of_day))
-    if prev_scores is None or prev_scores.empty:
-        return suggestions, quarantine
-    target_top10 = set(select_top_n(prev_scores, top_n=10, blacklist=set()))
-    ranks = prev_scores["m3_rank"].to_dict()
     for t, qtd in sorted(holdings_qty.items()):
         if qtd <= 0:
             continue
         if t in defensive_tickers:
             continue
-        rank_t = _safe_float(ranks.get(t, float("inf")), float("inf"))
-        if (t not in target_top10) and (rank_t > 15):
+        if t not in protected_c2:
             suggestions.append(
                 {
                     "ticker": t,
                     "sell_pct": 100.0,
                     "qtd": qtd,
                     "close_d1": _safe_float(prices_d1.get(t, 0.0), 0.0),
-                    "reason": "REBALANCEAMENTO C2 (K=15): fora do Top-10 e rank > 15.",
+                    "reason": "REBALANCEAMENTO C2 (K=15): fora da lista operacional congelada 1-15.",
                 }
             )
     return suggestions, quarantine
@@ -2066,19 +2047,35 @@ def build_painel(exec_day: date) -> Path:
     decision = load_decision_for_day(exec_day)
     decision_date = d1.isoformat()
     trade_day = get_trade_day(exec_day)
-    # Frozen master for buy section (last rebalance <= exec_day; R-010/D-059)
+    # Frozen operational ranking (last rebalance <= exec_day; D-095/R-050)
     master_decision = load_frozen_master_for_day(exec_day)
-    top10_frozen = master_decision.get("portfolio", []) if master_decision else []
+    operational_rows = []
+    if decision:
+        operational_rows = decision.get("operational_ranking", []) or []
+    if not operational_rows and master_decision:
+        operational_rows = master_decision.get("operational_ranking", []) or []
+    if not operational_rows and master_decision:
+        operational_rows = master_decision.get("portfolio", []) or []
+    top10_frozen = [
+        row
+        for row in operational_rows
+        if str(row.get("bucket", "TOP10_COMPRA")).upper().strip() == "TOP10_COMPRA"
+    ]
+    if not top10_frozen:
+        top10_frozen = operational_rows[:10]
+    buffer_frozen = [
+        row
+        for row in operational_rows
+        if str(row.get("bucket", "")).upper().strip() == "BUFFER_11_15_SEGURO"
+    ]
     master_date_str = master_decision.get("date", "") if master_decision else ""
     try:
         master_date_br = _fmt_date_br(date.fromisoformat(master_date_str)) if master_date_str else "?"
     except Exception:
         master_date_br = master_date_str or "?"
-    # Informative ranking R-010 (may differ from frozen master between rebalances)
-    top10_info = decision.get("portfolio", []) if decision else []
     _all_top_tickers = list(
         {str(x.get("ticker", "")).upper().strip() for x in top10_frozen}
-        | {str(x.get("ticker", "")).upper().strip() for x in top10_info}
+        | {str(x.get("ticker", "")).upper().strip() for x in buffer_frozen}
     )
     prices_top = get_latest_prices(_all_top_tickers, as_of_day=d1)
 
@@ -2124,26 +2121,27 @@ def build_painel(exec_day: date) -> Path:
                 "close_d1": _safe_float(prices_top.get(t, 0.0), 0.0),
             }
         )
-    # Informative ranking rows (R-010 — not for purchase)
-    top_info_rows: list[dict[str, Any]] = []
-    for p in top10_info:
+    buffer_rows: list[dict[str, Any]] = []
+    for p in buffer_frozen:
         t = str(p.get("ticker", "")).upper().strip()
         if not t:
             continue
-        top_info_rows.append(
+        buffer_rows.append(
             {
                 "ticker": t,
                 "m3": _safe_float(p.get("score_m3"), 0.0),
+                "rank": int(_safe_float(p.get("m3_rank", p.get("rank", 0)), 0.0)),
                 "close_d1": _safe_float(prices_top.get(t, 0.0), 0.0),
             }
         )
-    # Pre-render informative rows as static HTML (server-side)
-    info_rows_html = "".join(
+    # Pre-render protected buffer rows as static HTML (server-side)
+    buffer_rows_html = "".join(
         f"<tr><td>{r['ticker']}</td>"
+        f"<td style='text-align:right'>{int(r.get('rank', 0))}</td>"
         f"<td style='text-align:right'>{float(r.get('m3', 0.0)):.4f}</td>"
         f"<td style='text-align:right'>{_fmt_money(float(r.get('close_d1', 0.0)))}</td></tr>"
-        for r in top_info_rows
-    ) or "<tr><td colspan='3' style='color:#64748b;'>—</td></tr>"
+        for r in buffer_rows
+    ) or "<tr><td colspan='4' style='color:#64748b;'>Sem posicoes 11-15 protegidas neste ciclo.</td></tr>"
     # SPC gate: Regra 1 (3-sigma) — vectorized, all canonical D-1 tickers
     spc_rule1_blocked: set[str] = set()
     spc_bc_blocked: set[str] = set()
@@ -2337,16 +2335,16 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
       <div class="section-title">Sessão Boletim — Informação</div>
       <div class="info-grid">
         <div>
-          <h3>Top-10 para compra — Master rebalanceado em {master_date_br}</h3>
+          <h3>Top-10 para compra — lista operacional rebalanceada em {master_date_br}</h3>
           <table class="top10-table">
             <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th><th>Preço</th><th>Qtd</th><th>Valor</th></tr>
             <tbody id="topBuyBody"></tbody>
           </table>
           <details style="margin-top:8px;">
-            <summary style="font-size:12px;color:#64748b;cursor:pointer;">&#9660; Ranking informativo (R-010) — não é base de compra</summary>
+            <summary style="font-size:12px;color:#64748b;cursor:pointer;">&#9660; Buffer seguro C2 K=15 — posições 11-15 protegidas contra venda técnica</summary>
             <table class="top10-table" style="margin-top:6px;opacity:0.75;">
-              <tr><th>Ticker</th><th>M3</th><th>Fechamento D-1</th></tr>
-              {info_rows_html}
+              <tr><th>Ticker</th><th>Rank C2</th><th>M3</th><th>Fechamento D-1</th></tr>
+              {buffer_rows_html}
             </table>
           </details>
         </div>
@@ -2458,7 +2456,7 @@ const RETIRADA_ACC = {ctx["retirada_acumulada"]};
 const COTA_PRICE_PREV = {json.dumps(ctx.get("cota_price_prev"))};
 const TOP_BUY_ROWS = {json.dumps(top_buy_rows, ensure_ascii=False)};
 const ACTION_ROWS = {json.dumps(action_rows, ensure_ascii=False)};
-const TOP_INFO_ROWS = {json.dumps(top_info_rows, ensure_ascii=False)};
+const TOP_BUFFER_ROWS = {json.dumps(buffer_rows, ensure_ascii=False)};
 const RULE1_BLOCKED_TICKERS = new Set({json.dumps(sorted(spc_rule1_blocked), ensure_ascii=False)});
 const BC_BLOCKED_TICKERS = new Set({json.dumps(sorted(spc_bc_blocked), ensure_ascii=False)});
 let spcBcConfirmed = false;

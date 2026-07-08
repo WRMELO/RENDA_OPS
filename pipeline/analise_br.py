@@ -310,10 +310,24 @@ def build_context(market_day: date) -> dict:
     else:
         cycles_remaining = None
 
-    # --- master ---
-    master_portfolio = master_doc.get("portfolio", [])
+    # --- lista operacional congelada ---
+    operational_ranking = daily_doc.get("operational_ranking", []) or master_doc.get("operational_ranking", []) or []
+    if not operational_ranking:
+        operational_ranking = master_doc.get("portfolio", [])
+    master_portfolio = [
+        row
+        for row in operational_ranking
+        if str(row.get("bucket", "TOP10_COMPRA")).upper().strip() == "TOP10_COMPRA"
+    ]
+    if not master_portfolio:
+        master_portfolio = operational_ranking[:top_n]
+    buffer_11_15 = [
+        row
+        for row in operational_ranking
+        if str(row.get("bucket", "")).upper().strip() == "BUFFER_11_15_SEGURO"
+    ]
     master_date_str = master_doc.get("date", "")
-    master_map = {str(x.get("ticker", "")).upper(): x for x in master_portfolio}
+    operational_map = {str(x.get("ticker", "")).upper(): x for x in operational_ranking}
 
     # --- holdings ---
     d_prev = market_day
@@ -350,7 +364,7 @@ def build_context(market_day: date) -> dict:
         spc_status = _spc_status_for_ticker(df_tk)
         bc_info = _bc_info_for_ticker(df_tk)
 
-        m_entry = master_map.get(tk, {})
+        m_entry = operational_map.get(tk, {})
         in_master = bool(m_entry)
         master_rank = int(m_entry.get("rank", m_entry.get("m3_rank", -1))) if m_entry else -1
         score_m3 = _safe_float(m_entry.get("score_m3"), float("nan")) if m_entry else None
@@ -477,6 +491,8 @@ def build_context(market_day: date) -> dict:
         "master": {
             "date": master_date_str,
             "portfolio": master_portfolio,
+            "buffer_11_15": buffer_11_15,
+            "operational_ranking": operational_ranking,
         },
         "holdings": holdings_out,
         "cash": {
