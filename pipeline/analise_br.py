@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from datetime import date
 from pathlib import Path
@@ -249,6 +250,73 @@ def _bc_info_for_ticker(df_ticker: pd.DataFrame) -> dict:
     return {"blocked_bc": blocked, "bc_consec_days": consec, "bc_flags": flags}
 
 
+# D-096 (SALA_DE_CONTROLE): limiar de pico nao marcado calibrado sobre o
+# universo BR congelado (percentil 99,5 de |log-retorno diario|, com
+# AZEV3/AZEV4 excluidos da calibracao). Constante congelada, nao
+# recalculada aqui -- qualquer recalibracao exige novo estudo formal.
+SPIKE_LOG_RETURN_THRESHOLD = 0.12675170563914384
+SPIKE_LOOKBACK_SESSIONS = 20  # maior horizonte estudado em D-096 (h=20)
+SPIKE_DRIFT_HORIZONS = (1, 3, 5, 10, 20)
+
+
+def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
+    """Detecta pico de alta explosiva nao marcado (D-096) nas ultimas
+    SPIKE_LOOKBACK_SESSIONS sessoes. Estritamente informativo -- nunca
+    veta nem automatiza decisao (R-020, R-048, R-052)."""
+    empty = {
+        "detected": False,
+        "spike_date": None,
+        "spike_ret_pct": None,
+        "sessions_since_spike": None,
+        "threshold_pct": round(SPIKE_LOG_RETURN_THRESHOLD * 100, 4),
+        "observed_drift_pct": {f"h{h}": None for h in SPIKE_DRIFT_HORIZONS},
+    }
+    if df_ticker is None or len(df_ticker) < 2:
+        return empty
+    df = df_ticker.reset_index(drop=True)
+    closes = df["close_operational"].tolist()
+    n = len(df)
+    window_start = max(1, n - SPIKE_LOOKBACK_SESSIONS)
+    spike_idx = None
+    for i in range(window_start, n):
+        c_prev = _safe_float(closes[i - 1], float("nan"))
+        c_now = _safe_float(closes[i], float("nan"))
+        if c_prev != c_prev or c_now != c_now or c_prev <= 0 or c_now <= 0:
+            continue
+        r_it = math.log(c_now / c_prev)
+        if r_it < SPIKE_LOG_RETURN_THRESHOLD:
+            continue
+        split_factor = _safe_float(df.iloc[i].get("split_factor"), 1.0)
+        dividend_rate = _safe_float(df.iloc[i].get("dividend_rate"), 0.0)
+        if split_factor != 1.0 or dividend_rate != 0.0:
+            continue
+        spike_idx = i  # mantem a ocorrencia MAIS RECENTE na janela
+    if spike_idx is None:
+        return empty
+    c_prev = _safe_float(closes[spike_idx - 1])
+    c_spike = _safe_float(closes[spike_idx])
+    ret_pct = math.log(c_spike / c_prev) * 100 if c_prev > 0 else None
+    drift = {}
+    for h in SPIKE_DRIFT_HORIZONS:
+        target = spike_idx + h
+        if target < n:
+            c_h = _safe_float(closes[target], float("nan"))
+            if c_h == c_h and c_spike == c_spike and c_spike > 0 and c_h > 0:
+                drift[f"h{h}"] = round(math.log(c_h / c_spike) * 100, 4)
+            else:
+                drift[f"h{h}"] = None
+        else:
+            drift[f"h{h}"] = None  # horizonte ainda nao decorrido -- nunca estimar
+    return {
+        "detected": True,
+        "spike_date": str(df.iloc[spike_idx]["date"].date()),
+        "spike_ret_pct": round(ret_pct, 4) if ret_pct is not None else None,
+        "sessions_since_spike": n - 1 - spike_idx,
+        "threshold_pct": round(SPIKE_LOG_RETURN_THRESHOLD * 100, 4),
+        "observed_drift_pct": drift,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Builder principal
 # ---------------------------------------------------------------------------
@@ -421,6 +489,7 @@ def build_context(market_day: date) -> dict:
 
         spc_st = _spc_status_for_ticker(df_tk)
         bc_info = _bc_info_for_ticker(df_tk)
+        spike_alert = _spike_alert_for_ticker(df_tk)
 
         # liquidez
         adtv = None
@@ -463,6 +532,7 @@ def build_context(market_day: date) -> dict:
                 "pct_traded_60d": round(pct_traded, 4)
                 if (pct_traded is not None and pct_traded == pct_traded)
                 else None,
+                "spike_alert": spike_alert,
                 "veto": veto,
                 "alerta": alerta,
             }
