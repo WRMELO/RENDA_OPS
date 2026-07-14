@@ -1,84 +1,236 @@
 {
-  "market_day": "2026-07-06",
-  "generated_at": "2026-07-07T11:02:18.464829+00:00",
+  "market_day": "2026-07-13",
+  "generated_at": "2026-07-14T11:11:06.405010+00:00",
   "forno": {
     "action": "MERCADO",
-    "y_proba_cash": 0.0073,
+    "y_proba_cash": 0.2184,
     "thr": 0.22,
     "h_in": 3,
     "h_out": 2,
     "top_n": 10,
     "consecutive_above_thr": 0,
-    "consecutive_below_thr": 146,
+    "consecutive_below_thr": 151,
     "rebalance_cadence": 7,
     "rebalance_anchor_date": "2026-04-06",
     "rebalance_phase_offset": 0,
     "is_rebalance_day": false,
-    "next_rebalance_date": "2026-07-07",
-    "cycles_to_next_rebalance": 1
+    "next_rebalance_date": "2026-07-16",
+    "cycles_to_next_rebalance": 3
   },
   "master": {
-    "date": "2026-06-26",
+    "date": "2026-07-07",
     "portfolio": [
       {
         "rank": 1,
-        "ticker": "ITLC34",
-        "score_m3": 5.2929,
-        "weight": 0.1
+        "m3_rank": 3,
+        "ticker": "AZEV4",
+        "score_m3": 4.8336,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 2,
-        "ticker": "D1EL34",
-        "score_m3": 3.7843,
-        "weight": 0.1
+        "m3_rank": 5,
+        "ticker": "A1MD34",
+        "score_m3": 4.6832,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 3,
+        "m3_rank": 7,
         "ticker": "ESPA3",
-        "score_m3": 3.556,
-        "weight": 0.1
+        "score_m3": 4.4224,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 4,
-        "ticker": "F1TN34",
-        "score_m3": 3.4449,
-        "weight": 0.1
+        "m3_rank": 10,
+        "ticker": "D1DG34",
+        "score_m3": 4.0749,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 5,
-        "ticker": "P2AN34",
-        "score_m3": 3.2342,
-        "weight": 0.1
+        "m3_rank": 11,
+        "ticker": "F1TN34",
+        "score_m3": 4.0431,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 6,
-        "ticker": "C2RW34",
-        "score_m3": 3.0035,
-        "weight": 0.1
+        "m3_rank": 16,
+        "ticker": "P2AN34",
+        "score_m3": 3.5403,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 7,
-        "ticker": "D1DG34",
-        "score_m3": 2.9586,
-        "weight": 0.1
+        "m3_rank": 19,
+        "ticker": "N1TA34",
+        "score_m3": 2.71,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 8,
-        "ticker": "L1RC34",
-        "score_m3": 2.7587,
-        "weight": 0.1
+        "m3_rank": 28,
+        "ticker": "AZEV3",
+        "score_m3": 2.3629,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 9,
-        "ticker": "UNHH34",
-        "score_m3": 2.7293,
-        "weight": 0.1
+        "m3_rank": 34,
+        "ticker": "BEWT39",
+        "score_m3": 2.151,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
       },
       {
         "rank": 10,
-        "ticker": "TPIS3",
-        "score_m3": 2.4602,
-        "weight": 0.1
+        "m3_rank": 35,
+        "ticker": "UNHH34",
+        "score_m3": 2.1447,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      }
+    ],
+    "buffer_11_15": [
+      {
+        "rank": 4,
+        "m3_rank": 4,
+        "ticker": "MUTC34",
+        "score_m3": 4.6975,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
+      },
+      {
+        "rank": 6,
+        "m3_rank": 6,
+        "ticker": "D1EL34",
+        "score_m3": 4.6117,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
+      },
+      {
+        "rank": 12,
+        "m3_rank": 12,
+        "ticker": "ITLC34",
+        "score_m3": 3.7868,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
+      }
+    ],
+    "operational_ranking": [
+      {
+        "rank": 1,
+        "m3_rank": 3,
+        "ticker": "AZEV4",
+        "score_m3": 4.8336,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 2,
+        "m3_rank": 5,
+        "ticker": "A1MD34",
+        "score_m3": 4.6832,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 3,
+        "m3_rank": 7,
+        "ticker": "ESPA3",
+        "score_m3": 4.4224,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 4,
+        "m3_rank": 10,
+        "ticker": "D1DG34",
+        "score_m3": 4.0749,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 5,
+        "m3_rank": 11,
+        "ticker": "F1TN34",
+        "score_m3": 4.0431,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 6,
+        "m3_rank": 16,
+        "ticker": "P2AN34",
+        "score_m3": 3.5403,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 7,
+        "m3_rank": 19,
+        "ticker": "N1TA34",
+        "score_m3": 2.71,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 8,
+        "m3_rank": 28,
+        "ticker": "AZEV3",
+        "score_m3": 2.3629,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 9,
+        "m3_rank": 34,
+        "ticker": "BEWT39",
+        "score_m3": 2.151,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 10,
+        "m3_rank": 35,
+        "ticker": "UNHH34",
+        "score_m3": 2.1447,
+        "bucket": "TOP10_COMPRA",
+        "protected_c2": true
+      },
+      {
+        "rank": 4,
+        "m3_rank": 4,
+        "ticker": "MUTC34",
+        "score_m3": 4.6975,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
+      },
+      {
+        "rank": 6,
+        "m3_rank": 6,
+        "ticker": "D1EL34",
+        "score_m3": 4.6117,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
+      },
+      {
+        "rank": 12,
+        "m3_rank": 12,
+        "ticker": "ITLC34",
+        "score_m3": 3.7868,
+        "bucket": "BUFFER_11_15_SEGURO",
+        "protected_c2": true
       }
     ]
   },
@@ -87,296 +239,257 @@
       "ticker": "A1MD34",
       "qty": 483,
       "avg_cost": 355.71,
-      "close_d1": 352.41,
-      "valor_mercado": 170214.03,
-      "heat_pct": -0.93,
+      "close_d1": 342.11,
+      "valor_mercado": 165239.13,
+      "heat_pct": -3.82,
       "peak_close": 376.47,
-      "drawdown_pct": -6.39,
-      "in_master": false,
-      "master_rank": -1,
-      "score_m3": null,
+      "drawdown_pct": -9.13,
+      "in_master": true,
+      "master_rank": 2,
+      "score_m3": 4.6832,
+      "spc_status": "ESTAVEL",
+      "blocked_bc": true,
+      "bc_consec_days": 2,
+      "bc_flags": [
+        "W2/W3/W4/N3-Xbar"
+      ],
+      "carga_termica_pct": 13.44,
+      "ciclos_aceso": 15,
+      "purchase_date": "2026-06-23"
+    },
+    {
+      "ticker": "BEWT39",
+      "qty": 8,
+      "avg_cost": 89.92,
+      "close_d1": 87.15,
+      "valor_mercado": 697.2,
+      "heat_pct": -3.08,
+      "peak_close": 90.62,
+      "drawdown_pct": -3.83,
+      "in_master": true,
+      "master_rank": 9,
+      "score_m3": 2.151,
       "spc_status": "ESTAVEL",
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 13.89,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-06-23"
+      "carga_termica_pct": 0.06,
+      "ciclos_aceso": 2,
+      "purchase_date": "2026-07-10"
     },
     {
       "ticker": "D1DG34",
       "qty": 155,
       "avg_cost": 137.0,
-      "close_d1": 131.31,
-      "valor_mercado": 20353.05,
-      "heat_pct": -4.15,
-      "peak_close": 131.31,
-      "drawdown_pct": 0.0,
+      "close_d1": 131.75,
+      "valor_mercado": 20421.25,
+      "heat_pct": -3.83,
+      "peak_close": 136.92,
+      "drawdown_pct": -3.78,
       "in_master": true,
-      "master_rank": 7,
-      "score_m3": 2.9586,
+      "master_rank": 4,
+      "score_m3": 4.0749,
       "spc_status": "ESTAVEL",
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
       "carga_termica_pct": 1.66,
-      "ciclos_aceso": 0,
+      "ciclos_aceso": 6,
       "purchase_date": "2026-07-06"
     },
     {
       "ticker": "D1EL34",
       "qty": 76,
       "avg_cost": 1075.36,
-      "close_d1": 2105.0,
-      "valor_mercado": 159980.0,
-      "heat_pct": 95.75,
+      "close_d1": 2193.26,
+      "valor_mercado": 166687.76,
+      "heat_pct": 103.96,
       "peak_close": 2351.0,
-      "drawdown_pct": -10.46,
+      "drawdown_pct": -6.71,
       "in_master": true,
-      "master_rank": 2,
-      "score_m3": 3.7843,
+      "master_rank": 6,
+      "score_m3": 4.6117,
       "spc_status": "ESTAVEL",
-      "blocked_bc": true,
-      "bc_consec_days": 1,
-      "bc_flags": [
-        "W2/W3/W4/N3-Xbar"
-      ],
-      "carga_termica_pct": 13.06,
-      "ciclos_aceso": 0,
+      "blocked_bc": false,
+      "bc_consec_days": 0,
+      "bc_flags": [],
+      "carga_termica_pct": 13.56,
+      "ciclos_aceso": 54,
       "purchase_date": "2026-04-27"
     },
     {
       "ticker": "ESPA3",
       "qty": 30900,
       "avg_cost": 6.36,
-      "close_d1": 7.46,
-      "valor_mercado": 230514.0,
-      "heat_pct": 17.3,
-      "peak_close": 7.48,
-      "drawdown_pct": -0.27,
+      "close_d1": 7.86,
+      "valor_mercado": 242874.0,
+      "heat_pct": 23.58,
+      "peak_close": 8.15,
+      "drawdown_pct": -3.56,
       "in_master": true,
       "master_rank": 3,
-      "score_m3": 3.556,
+      "score_m3": 4.4224,
       "spc_status": "ESTAVEL",
-      "blocked_bc": false,
-      "bc_consec_days": 0,
-      "bc_flags": [],
-      "carga_termica_pct": 18.81,
-      "ciclos_aceso": 0,
+      "blocked_bc": true,
+      "bc_consec_days": 2,
+      "bc_flags": [
+        "W2/W3/W4/N3-Xbar"
+      ],
+      "carga_termica_pct": 19.75,
+      "ciclos_aceso": 13,
       "purchase_date": "2026-06-25"
     },
     {
       "ticker": "F1TN34",
       "qty": 479,
       "avg_cost": 402.85,
-      "close_d1": 414.51,
-      "valor_mercado": 198550.29,
-      "heat_pct": 2.89,
-      "peak_close": 414.51,
-      "drawdown_pct": 0.0,
+      "close_d1": 412.91,
+      "valor_mercado": 197783.89,
+      "heat_pct": 2.5,
+      "peak_close": 418.35,
+      "drawdown_pct": -1.3,
       "in_master": true,
-      "master_rank": 4,
-      "score_m3": 3.4449,
+      "master_rank": 5,
+      "score_m3": 4.0431,
       "spc_status": "ESTAVEL",
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 16.2,
-      "ciclos_aceso": 0,
+      "carga_termica_pct": 16.09,
+      "ciclos_aceso": 10,
       "purchase_date": "2026-06-30"
     },
     {
-      "ticker": "ITLC34",
-      "qty": 52,
-      "avg_cost": 115.8,
-      "close_d1": 104.9,
-      "valor_mercado": 5454.8,
-      "heat_pct": -9.41,
-      "peak_close": 121.0,
-      "drawdown_pct": -13.31,
+      "ticker": "N1TA34",
+      "qty": 220,
+      "avg_cost": 839.71,
+      "close_d1": 836.92,
+      "valor_mercado": 184122.4,
+      "heat_pct": -0.33,
+      "peak_close": 866.96,
+      "drawdown_pct": -3.46,
       "in_master": true,
-      "master_rank": 1,
-      "score_m3": 5.2929,
+      "master_rank": 7,
+      "score_m3": 2.71,
       "spc_status": "ESTAVEL",
       "blocked_bc": true,
-      "bc_consec_days": 2,
+      "bc_consec_days": 1,
       "bc_flags": [
         "W2/W3/W4/N3-Xbar"
       ],
-      "carga_termica_pct": 0.45,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-06-22"
-    },
-    {
-      "ticker": "ITLC34",
-      "qty": 883,
-      "avg_cost": 121.0,
-      "close_d1": 104.9,
-      "valor_mercado": 92626.7,
-      "heat_pct": -13.31,
-      "peak_close": 119.6,
-      "drawdown_pct": -12.29,
-      "in_master": true,
-      "master_rank": 1,
-      "score_m3": 5.2929,
-      "spc_status": "ESTAVEL",
-      "blocked_bc": true,
-      "bc_consec_days": 2,
-      "bc_flags": [
-        "W2/W3/W4/N3-Xbar"
-      ],
-      "carga_termica_pct": 7.56,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-06-23"
-    },
-    {
-      "ticker": "ITLC34",
-      "qty": 630,
-      "avg_cost": 115.0,
-      "close_d1": 104.9,
-      "valor_mercado": 66087.0,
-      "heat_pct": -8.78,
-      "peak_close": 119.6,
-      "drawdown_pct": -12.29,
-      "in_master": true,
-      "master_rank": 1,
-      "score_m3": 5.2929,
-      "spc_status": "ESTAVEL",
-      "blocked_bc": true,
-      "bc_consec_days": 2,
-      "bc_flags": [
-        "W2/W3/W4/N3-Xbar"
-      ],
-      "carga_termica_pct": 5.39,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-06-25"
-    },
-    {
-      "ticker": "L1RC34",
-      "qty": 2,
-      "avg_cost": 47.0,
-      "close_d1": 42.38,
-      "valor_mercado": 84.76,
-      "heat_pct": -9.83,
-      "peak_close": 42.95,
-      "drawdown_pct": -1.33,
-      "in_master": true,
-      "master_rank": 8,
-      "score_m3": 2.7587,
-      "spc_status": "ESTAVEL",
-      "blocked_bc": false,
-      "bc_consec_days": 0,
-      "bc_flags": [],
-      "carga_termica_pct": 0.01,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-07-02"
-    },
-    {
-      "ticker": "MUTC34",
-      "qty": 90,
-      "avg_cost": 987.42,
-      "close_d1": 849.52,
-      "valor_mercado": 76456.8,
-      "heat_pct": -13.97,
-      "peak_close": 1040.0,
-      "drawdown_pct": -18.32,
-      "in_master": false,
-      "master_rank": -1,
-      "score_m3": null,
-      "spc_status": "ESTAVEL",
-      "blocked_bc": true,
-      "bc_consec_days": 3,
-      "bc_flags": [
-        "W2/W3/W4/N3-Xbar"
-      ],
-      "carga_termica_pct": 6.24,
-      "ciclos_aceso": 0,
-      "purchase_date": "2026-06-19"
+      "carga_termica_pct": 14.97,
+      "ciclos_aceso": 2,
+      "purchase_date": "2026-07-10"
     },
     {
       "ticker": "P2AN34",
       "qty": 6826,
       "avg_cost": 28.31,
-      "close_d1": 30.01,
-      "valor_mercado": 204848.26,
-      "heat_pct": 6.0,
+      "close_d1": 27.95,
+      "valor_mercado": 190786.7,
+      "heat_pct": -1.27,
       "peak_close": 30.5,
-      "drawdown_pct": -1.61,
+      "drawdown_pct": -8.36,
       "in_master": true,
-      "master_rank": 5,
-      "score_m3": 3.2342,
+      "master_rank": 6,
+      "score_m3": 3.5403,
       "spc_status": "ESTAVEL",
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 16.72,
-      "ciclos_aceso": 0,
+      "carga_termica_pct": 15.52,
+      "ciclos_aceso": 10,
       "purchase_date": "2026-06-30"
     },
     {
       "ticker": "UNHH34",
       "qty": 4,
       "avg_cost": 31.33,
-      "close_d1": 30.43,
-      "valor_mercado": 121.72,
-      "heat_pct": -2.87,
-      "peak_close": 30.43,
-      "drawdown_pct": 0.0,
+      "close_d1": 31.28,
+      "valor_mercado": 125.12,
+      "heat_pct": -0.16,
+      "peak_close": 31.49,
+      "drawdown_pct": -0.67,
       "in_master": true,
-      "master_rank": 9,
-      "score_m3": 2.7293,
+      "master_rank": 10,
+      "score_m3": 2.1447,
       "spc_status": "ESTAVEL",
-      "blocked_bc": false,
-      "bc_consec_days": 0,
-      "bc_flags": [],
+      "blocked_bc": true,
+      "bc_consec_days": 1,
+      "bc_flags": [
+        "W2/W3/W4/N3-Xbar"
+      ],
       "carga_termica_pct": 0.01,
-      "ciclos_aceso": 0,
+      "ciclos_aceso": 6,
       "purchase_date": "2026-07-06"
     }
   ],
   "cash": {
-    "cash_free": 11.32,
-    "cash_accounting": 0.0,
-    "total_ativo": 1225302.73,
-    "hhindex": 0.1387
+    "cash_free": 95.95,
+    "cash_accounting": 60742.0,
+    "total_ativo": 1229575.4,
+    "hhindex": 0.1481
   },
-  "quarentena": [
-    "C2RW34",
-    "S1TX34",
-    "W1DC34"
-  ],
+  "quarentena": [],
   "bc_blocked_set": [
-    "D1EL34",
-    "ITLC34",
-    "ITLC34",
-    "ITLC34",
-    "MUTC34"
+    "A1MD34",
+    "ESPA3",
+    "N1TA34",
+    "UNHH34"
   ],
   "rule1_blocked": [],
   "candidates": [
     {
-      "ticker": "C2RW34",
-      "master_rank": 6,
-      "score_m3": 3.0035,
-      "spc_status": "INSTAVEL",
+      "ticker": "AZEV4",
+      "master_rank": 1,
+      "score_m3": 4.8336,
+      "spc_status": "ESTAVEL",
       "blocked_bc": true,
-      "bc_consec_days": 3,
-      "adtv_60d": null,
-      "pct_traded_60d": null,
-      "veto": "VETADO_SPC",
-      "alerta": null
+      "bc_consec_days": 2,
+      "adtv_60d": 372872.5,
+      "pct_traded_60d": 1.0,
+      "spike_alert": {
+        "detected": true,
+        "spike_date": "2026-06-26",
+        "spike_ret_pct": 300.4782,
+        "sessions_since_spike": 11,
+        "threshold_pct": 12.6752,
+        "observed_drift_pct": {
+          "h1": -30.8927,
+          "h3": -18.2322,
+          "h5": -20.418,
+          "h10": -60.6887,
+          "h20": null
+        }
+      },
+      "veto": null,
+      "alerta": "ALERTA_BC"
     },
     {
-      "ticker": "TPIS3",
-      "master_rank": 10,
-      "score_m3": 2.4602,
+      "ticker": "AZEV3",
+      "master_rank": 8,
+      "score_m3": 2.3629,
       "spc_status": "ESTAVEL",
-      "blocked_bc": false,
-      "bc_consec_days": 0,
-      "adtv_60d": null,
-      "pct_traded_60d": null,
+      "blocked_bc": true,
+      "bc_consec_days": 4,
+      "adtv_60d": 164035.0,
+      "pct_traded_60d": 1.0,
+      "spike_alert": {
+        "detected": true,
+        "spike_date": "2026-07-13",
+        "spike_ret_pct": 14.7325,
+        "sessions_since_spike": 0,
+        "threshold_pct": 12.6752,
+        "observed_drift_pct": {
+          "h1": null,
+          "h3": null,
+          "h5": null,
+          "h10": null,
+          "h20": null
+        }
+      },
       "veto": null,
-      "alerta": "GATE_R034"
+      "alerta": "ALERTA_BC"
     }
   ]
 }

@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT))
 from lib.spc import _build_runs_flags as _spc_runs  # noqa: E402
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked  # noqa: E402
 from lib.trading_calendar import next_session as _next_session  # noqa: E402
+from lib.liquidity import compute_liquidity_tables  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -344,6 +345,36 @@ def build_context(market_day: date) -> dict:
     if not can.empty:
         can["date"] = pd.to_datetime(can["date"], errors="coerce").dt.normalize()
         can["ticker"] = can["ticker"].astype(str).str.upper().str.strip()
+    trading_days_all = sorted(set(can["date"].dt.date.dropna().tolist())) if not can.empty else []
+
+    raw_market_path = ROOT / "data" / "ssot" / "market_data_raw.parquet"
+    if raw_market_path.exists():
+        adtv_60_tbl, pct_60_tbl = compute_liquidity_tables(raw_market_path, window=60, min_periods=20)
+        adtv_60_tbl.index = pd.to_datetime(adtv_60_tbl.index, errors="coerce").normalize()
+        pct_60_tbl.index = pd.to_datetime(pct_60_tbl.index, errors="coerce").normalize()
+    else:
+        adtv_60_tbl = pd.DataFrame()
+        pct_60_tbl = pd.DataFrame()
+
+    def _liquidity_as_of(ticker: str, as_of_day: date) -> tuple[float | None, float | None]:
+        tk = str(ticker).upper().strip()
+        as_of_ts = pd.Timestamp(as_of_day)
+        adtv_val: float | None = None
+        pct_val: float | None = None
+
+        if not adtv_60_tbl.empty and tk in adtv_60_tbl.columns:
+            adtv_series = pd.to_numeric(adtv_60_tbl[tk], errors="coerce").dropna()
+            adtv_series = adtv_series[adtv_series.index <= as_of_ts]
+            if not adtv_series.empty:
+                adtv_val = float(adtv_series.iloc[-1])
+
+        if not pct_60_tbl.empty and tk in pct_60_tbl.columns:
+            pct_series = pd.to_numeric(pct_60_tbl[tk], errors="coerce").dropna()
+            pct_series = pct_series[pct_series.index <= as_of_ts]
+            if not pct_series.empty:
+                pct_val = float(pct_series.iloc[-1])
+
+        return adtv_val, pct_val
 
     # --- boletim e daily ---
     real_doc = _load_latest_real(market_day) or {}
@@ -457,7 +488,9 @@ def build_context(market_day: date) -> dict:
                 "bc_consec_days": bc_info["bc_consec_days"],
                 "bc_flags": bc_info["bc_flags"],
                 "carga_termica_pct": 0.0,
-                "ciclos_aceso": int(pos.get("ciclos_aceso", pos.get("cycles_held", pos.get("days_held", 0)))),
+                "ciclos_aceso": len([d for d in trading_days_all if ign_date is not None and ign_date <= d <= d_prev])
+                if ign_date is not None
+                else 0,
                 "purchase_date": ignition_date_str or "",
             }
         )
@@ -492,20 +525,12 @@ def build_context(market_day: date) -> dict:
         spike_alert = _spike_alert_for_ticker(df_tk)
 
         # liquidez
-        adtv = None
-        pct_traded = None
+        adtv, pct_traded = _liquidity_as_of(tk, d_prev)
         veto_liquidez = False
-        if not df_tk.empty:
-            last = df_tk.iloc[-1]
-            adtv_raw = last.get("adtv_60d", None)
-            pct_raw = last.get("pct_traded_60d", None)
-            if adtv_raw is not None:
-                adtv = _safe_float(adtv_raw, float("nan"))
-                pct_traded = _safe_float(pct_raw, float("nan")) if pct_raw is not None else float("nan")
-                if adtv == adtv and adtv < adtv_thr:
-                    veto_liquidez = True
-                if pct_traded == pct_traded and pct_traded < pct_thr:
-                    veto_liquidez = True
+        if adtv is not None and adtv < adtv_thr:
+            veto_liquidez = True
+        if pct_traded is not None and pct_traded < pct_thr:
+            veto_liquidez = True
 
         veto = None
         alerta = None
