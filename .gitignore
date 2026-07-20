@@ -4,7 +4,11 @@ __pycache__/
 *.pyc
 *.pyo
 data/daily/
+data/daily_backup*/
 data/**/*.parquet
+data/**/*.parquet.bak*
+**/*.parquet
+**/*.parquet.bak*
 logs/
 *.egg-info/
 dist/

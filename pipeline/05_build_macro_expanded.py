@@ -21,6 +21,11 @@ IN_MACRO = ROOT / "data" / "ssot" / "macro.parquet"
 IN_FX = ROOT / "data" / "ssot" / "fx_ptax.parquet"
 OUT_FEATURES = ROOT / "data" / "features" / "macro_features.parquet"
 FRED_STAGNATION_ALERT_SESSIONS = 3
+# DTWEXBGS (usd_index_broad) e publicada pelo Fed (release H.10) com defasagem
+# estrutural de ~1 semana, ficando cronicamente 4-5 pregoes atras mesmo quando a
+# fonte esta saudavel. Toleramos ate 6 pregoes so para essa serie, preservando a
+# deteccao de congelamento real (>6 pregoes = atraso anomalo). Ref: D-141 / D-130.
+FRED_STAGNATION_TOLERANCE_BY_ALIAS = {"usd_index_broad": 6}
 
 
 def _pct_change(s: pd.Series, periods: int = 1) -> pd.Series:
@@ -36,13 +41,16 @@ def _macro_stagnation_warnings(
     calendar: pd.DataFrame,
     aliases: list[str],
     tolerance_sessions: int = FRED_STAGNATION_ALERT_SESSIONS,
+    tolerance_by_alias: dict[str, int] | None = None,
 ) -> list[str]:
+    tolerance_by_alias = tolerance_by_alias or {}
     calendar_days = sorted(pd.to_datetime(calendar["date"], errors="coerce").dropna().dt.normalize().unique().tolist())
     if not calendar_days:
         return []
     max_day = pd.Timestamp(calendar_days[-1]).normalize()
     warnings: list[str] = []
     for alias in aliases:
+        alias_tolerance = int(tolerance_by_alias.get(alias, tolerance_sessions))
         raw = series.get(alias, pd.DataFrame()).copy()
         if raw.empty or "date" not in raw.columns:
             warnings.append(f"FRED macro stale: {alias} sem observacoes validas.")
@@ -55,10 +63,10 @@ def _macro_stagnation_warnings(
             continue
         last_obs = pd.Timestamp(obs["date"].max()).normalize()
         missing_sessions = sum(1 for d in calendar_days if last_obs < pd.Timestamp(d).normalize() <= max_day)
-        if missing_sessions > tolerance_sessions:
+        if missing_sessions > alias_tolerance:
             warnings.append(
                 f"FRED macro stale: {alias} ultima observacao {last_obs.date()} "
-                f"({missing_sessions} pregoes atras; limite={tolerance_sessions})."
+                f"({missing_sessions} pregoes atras; limite={alias_tolerance})."
             )
     return warnings
 
@@ -96,6 +104,7 @@ def run(end_date: date | None = None) -> Path:
         series,
         calendar,
         ["vix_close", "usd_index_broad", "ust_10y_yield", "ust_2y_yield", "fed_funds_rate"],
+        tolerance_by_alias=FRED_STAGNATION_TOLERANCE_BY_ALIAS,
     )
     for warning in stagnation_warnings:
         print(f"[WARN] {warning}")

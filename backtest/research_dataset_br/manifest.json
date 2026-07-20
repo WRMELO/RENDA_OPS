@@ -1,0 +1,130 @@
+{
+  "task_id": "T-SDC-CANONICAL-DAILY-HISTORY-BRUS-V1",
+  "dataset_id": "research_dataset_br_v1_full_history",
+  "dataset_version": "v1",
+  "factory": "BR",
+  "freeze_asof": "2026-07-03",
+  "created_at_utc": "2026-07-04T16:54:11.134417+00:00",
+  "git_commit": "2b0c705a3e2ca7871d93777c58a18ce1c7b92dcd",
+  "git_describe": "v1.8.0-motor-104-g2b0c705-dirty",
+  "source_files": {
+    "canonical": "/home/wilson/RENDA_OPS/data/ssot/canonical_br.parquet",
+    "macro": "/home/wilson/RENDA_OPS/data/ssot/macro.parquet",
+    "universe": "/home/wilson/RENDA_OPS/data/ssot/universe.parquet",
+    "bdr_universe": "/home/wilson/RENDA_OPS/data/ssot/bdr_universe.parquet",
+    "predictions": "/home/wilson/RENDA_OPS/data/features/predictions.parquet",
+    "blacklist": "/home/wilson/RENDA_OPS/config/blacklist.json"
+  },
+  "files": {
+    "canonical_br.parquet": {
+      "sha256": "e0113b298c81d76b34d8fb08e94d691578bc1a80d8abe2f7a9620de5b9dc6acc",
+      "size_bytes": 165140184
+    },
+    "macro.parquet": {
+      "sha256": "d25d5c43beeca20889e0b098da84b9ca5d3437197236268fd3633690a77f9ead",
+      "size_bytes": 90027
+    },
+    "universe.parquet": {
+      "sha256": "7e547b33e3e51773984315aeaa40da76815a06dcdcef55535491c3af622e7093",
+      "size_bytes": 9311
+    },
+    "bdr_universe.parquet": {
+      "sha256": "e965f99994cfb63df184be01c6a7b08a773b6b96b37c3b6f750e97fb597d4be2",
+      "size_bytes": 11393
+    },
+    "predictions.parquet": {
+      "sha256": "00c1cd8ac6835e0b961f7a53997a423d95d8f50ee43730025be6951e5c95bc31",
+      "size_bytes": 33130
+    },
+    "blacklist.json": {
+      "sha256": "f4750735c2e5fffd229728703e9bb87a674c3a9799832e0df8c8e0a49aa23cc8",
+      "size_bytes": 2271
+    }
+  },
+  "tables": {
+    "canonical": {
+      "n_rows": 1459896,
+      "columns": [
+        "ticker",
+        "date",
+        "close_operational",
+        "close_raw",
+        "X_real",
+        "i_value",
+        "i_ucl",
+        "i_lcl",
+        "mr_value",
+        "mr_ucl",
+        "xbar_value",
+        "xbar_ucl",
+        "xbar_lcl",
+        "r_value",
+        "r_ucl",
+        "sector",
+        "mr_bar",
+        "r_bar",
+        "center_line",
+        "splits",
+        "split_factor",
+        "dividend_rate",
+        "dividend_label"
+      ],
+      "date_min": "2018-01-02",
+      "date_max": "2026-07-03",
+      "n_tickers": 1061
+    },
+    "macro": {
+      "n_rows": 2112,
+      "columns": [
+        "date",
+        "ibov_close",
+        "ibov_log_ret",
+        "sp500_close",
+        "sp500_log_ret",
+        "cdi_log_daily"
+      ],
+      "date_min": "2018-01-02",
+      "date_max": "2026-07-03"
+    },
+    "universe": {
+      "n_rows": 1174,
+      "columns": [
+        "ticker"
+      ],
+      "n_tickers": 1174
+    },
+    "bdr_universe": {
+      "n_rows": 496,
+      "columns": [
+        "ticker",
+        "ticker_bdr",
+        "paridade_acao_bdr",
+        "parity_ratio",
+        "execution_venue",
+        "friction_one_way_rate"
+      ],
+      "n_tickers": 496
+    },
+    "predictions": {
+      "n_rows": 1988,
+      "columns": [
+        "date",
+        "split",
+        "y_cash",
+        "y_proba_cash",
+        "y_pred_cash"
+      ],
+      "date_min": "2018-07-02",
+      "date_max": "2026-07-03"
+    },
+    "blacklist": {
+      "type": "json",
+      "size_bytes": 2271
+    }
+  },
+  "notes": [
+    "Primeiro freeze de pesquisa BR para historico canonico diario dos winners.",
+    "O freeze copia os insumos vivos byte-a-byte para preservar reproducibilidade futura.",
+    "predictions.parquet comeca em 2018-07-02; antes disso nao ha estado de caixa ML para simular C060X/C2."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "mode": "INFORMATIVO_NAO_BLOQUEANTE",
+  "reason": "Curva legada foi gerada contra SSOT vivo anterior; divergencia nao bloqueia o historico canonico congelado (R-041).",
+  "n_days": 1927,
+  "date_min": "2018-07-02",
+  "date_max": "2026-04-08",
+  "corr_log_returns": 0.9835268563540499,
+  "mae_equity_base100": 8.981001278221092
+}

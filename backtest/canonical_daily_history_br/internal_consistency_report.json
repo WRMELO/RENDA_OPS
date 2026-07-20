@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "tolerance_relative": 1e-06,
+  "n_days": 1985,
+  "violations": 0,
+  "max_abs_diff": 3.4924596548080444e-10,
+  "max_rel_abs_diff": 8.763438564328945e-16
+}

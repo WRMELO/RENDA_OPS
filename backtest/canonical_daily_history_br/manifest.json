@@ -1,0 +1,109 @@
+{
+  "task_id": "T-SDC-CANONICAL-DAILY-HISTORY-BRUS-V1",
+  "history_id": "canonical_daily_history_br_v1",
+  "factory": "BR",
+  "winner_label": "BR Winner (C060X)",
+  "winner_config_snapshot": {
+    "thr": 0.22,
+    "h_in": 3,
+    "h_out": 2,
+    "top_n": 10,
+    "rebalance_cadence": 7,
+    "rebalance_phase_offset": 0,
+    "rebalance_anchor_date": "2026-04-06",
+    "mdd_limit": null,
+    "liquidity_gate": {
+      "adtv_threshold_brl": 50000,
+      "pct_traded_threshold": 0.8,
+      "window": 60,
+      "min_periods": 20,
+      "enabled": true
+    }
+  },
+  "created_at_utc": "2026-07-04T16:54:56.660408+00:00",
+  "git_commit": "2b0c705a3e2ca7871d93777c58a18ce1c7b92dcd",
+  "git_describe": "v1.8.0-motor-104-g2b0c705-dirty",
+  "freeze_inputs": {
+    "canonical_br.parquet": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/canonical_br.parquet",
+      "sha256": "e0113b298c81d76b34d8fb08e94d691578bc1a80d8abe2f7a9620de5b9dc6acc",
+      "size_bytes": 165140184
+    },
+    "macro.parquet": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/macro.parquet",
+      "sha256": "d25d5c43beeca20889e0b098da84b9ca5d3437197236268fd3633690a77f9ead",
+      "size_bytes": 90027
+    },
+    "universe.parquet": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/universe.parquet",
+      "sha256": "7e547b33e3e51773984315aeaa40da76815a06dcdcef55535491c3af622e7093",
+      "size_bytes": 9311
+    },
+    "bdr_universe.parquet": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/bdr_universe.parquet",
+      "sha256": "e965f99994cfb63df184be01c6a7b08a773b6b96b37c3b6f750e97fb597d4be2",
+      "size_bytes": 11393
+    },
+    "predictions.parquet": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/predictions.parquet",
+      "sha256": "00c1cd8ac6835e0b961f7a53997a423d95d8f50ee43730025be6951e5c95bc31",
+      "size_bytes": 33130
+    },
+    "blacklist.json": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/blacklist.json",
+      "sha256": "f4750735c2e5fffd229728703e9bb87a674c3a9799832e0df8c8e0a49aa23cc8",
+      "size_bytes": 2271
+    },
+    "manifest.json": {
+      "path": "/home/wilson/RENDA_OPS/backtest/research_dataset_br/manifest.json",
+      "sha256": "07297b3b2c61fe92fd14bb2a59ecb34cec1381c44b0a15c74690ab71120db333",
+      "size_bytes": 3586
+    }
+  },
+  "outputs": {
+    "curve.parquet": {
+      "sha256": "f199f8edd6e37c0f8f0422e2503232c374037df7ccfa6dedd8ca8987d67379f8",
+      "size_bytes": 103201
+    },
+    "positions.parquet": {
+      "sha256": "71e4687761bfeb5e84db2b1191b9e051f6039d004ec793b0319cf0c819f4a0ba",
+      "size_bytes": 182485
+    },
+    "events.parquet": {
+      "sha256": "9187c2c842b9288cb5ca5e5614c90ae67c20b59238c3251acbd30238697f92b2",
+      "size_bytes": 91062
+    }
+  },
+  "tables": {
+    "curve": {
+      "n_rows": 1985,
+      "date_min": "2018-07-02",
+      "date_max": "2026-07-03"
+    },
+    "positions": {
+      "n_rows": 9606,
+      "n_tickers": 322
+    },
+    "events": {
+      "n_rows": 2856
+    }
+  },
+  "internal_consistency": {
+    "status": "PASS",
+    "tolerance_relative": 1e-06,
+    "n_days": 1985,
+    "violations": 0,
+    "max_abs_diff": 3.4924596548080444e-10,
+    "max_rel_abs_diff": 8.763438564328945e-16
+  },
+  "divergence_vs_legacy": {
+    "status": "OK",
+    "mode": "INFORMATIVO_NAO_BLOQUEANTE",
+    "reason": "Curva legada foi gerada contra SSOT vivo anterior; divergencia nao bloqueia o historico canonico congelado (R-041).",
+    "n_days": 1927,
+    "date_min": "2018-07-02",
+    "date_max": "2026-04-08",
+    "corr_log_returns": 0.9835268563540499,
+    "mae_equity_base100": 8.981001278221092
+  }
+}
