@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 
 from lib.spc import _build_runs_flags as _spc_runs  # noqa: E402
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked  # noqa: E402
-from lib.trading_calendar import next_session as _next_session  # noqa: E402
+from lib.trading_calendar import next_session as _next_session, prev_session as _prev_session  # noqa: E402
 from lib.liquidity import compute_liquidity_tables  # noqa: E402
 
 
@@ -126,6 +126,15 @@ def _calc_is_rebalance_day(
     phase = phase_offset % cadence
     delta = as_of_idx - anchor_idx
     return delta >= 0 and (delta % cadence) == phase
+
+
+def _market_day_staleness(market_day: date) -> tuple[bool, date | None]:
+    """Nao e espelho exato do painel: aqui nao ha exec_day parametrico."""
+    try:
+        expected_market_day = _prev_session(date.today(), exchange="BVMF")
+    except Exception:
+        return False, None
+    return market_day < expected_market_day, expected_market_day
 
 
 def _load_frozen_master(exec_day: date) -> dict[str, Any] | None:
@@ -258,6 +267,28 @@ def _bc_info_for_ticker(df_ticker: pd.DataFrame) -> dict:
 SPIKE_LOG_RETURN_THRESHOLD = 0.12675170563914384
 SPIKE_LOOKBACK_SESSIONS = 20  # maior horizonte estudado em D-096 (h=20)
 SPIKE_DRIFT_HORIZONS = (1, 3, 5, 10, 20)
+CLASSIC_SPLIT_RATIOS = (2, 3, 4, 5, 8, 10, 15, 20, 25, 30, 40, 50)
+
+
+def _matches_classic_split_ratio(observed_ratio: float) -> int | None:
+    """Retorna razao classica mais proxima (se houver match robusto).
+
+    Match valido: erro relativo <= 35% em torno de uma razao classica.
+    Nao automatiza veto; apenas enriquece alerta consultivo com sinal de
+    suspeita de integridade de dado para eventos corporativos.
+    """
+    if observed_ratio != observed_ratio or observed_ratio <= 0:
+        return None
+    best_ratio = None
+    best_rel_err = float("inf")
+    for k in CLASSIC_SPLIT_RATIOS:
+        rel_err = abs(float(observed_ratio) - float(k)) / float(k)
+        if rel_err < best_rel_err:
+            best_rel_err = rel_err
+            best_ratio = int(k)
+    if best_ratio is None:
+        return None
+    return best_ratio if best_rel_err <= 0.35 else None
 
 
 def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
@@ -271,6 +302,8 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
         "sessions_since_spike": None,
         "threshold_pct": round(SPIKE_LOG_RETURN_THRESHOLD * 100, 4),
         "observed_drift_pct": {f"h{h}": None for h in SPIKE_DRIFT_HORIZONS},
+        "matched_classic_split_ratio": None,
+        "data_integrity_suspect": False,
     }
     if df_ticker is None or len(df_ticker) < 2:
         return empty
@@ -308,6 +341,8 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
                 drift[f"h{h}"] = None
         else:
             drift[f"h{h}"] = None  # horizonte ainda nao decorrido -- nunca estimar
+    observed_ratio = (c_spike / c_prev) if (c_prev == c_prev and c_spike == c_spike and c_prev > 0) else float("nan")
+    matched_k = _matches_classic_split_ratio(observed_ratio)
     return {
         "detected": True,
         "spike_date": str(df.iloc[spike_idx]["date"].date()),
@@ -315,6 +350,8 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
         "sessions_since_spike": n - 1 - spike_idx,
         "threshold_pct": round(SPIKE_LOG_RETURN_THRESHOLD * 100, 4),
         "observed_drift_pct": drift,
+        "matched_classic_split_ratio": matched_k,
+        "data_integrity_suspect": bool(matched_k is not None),
     }
 
 
@@ -394,9 +431,7 @@ def build_context(market_day: date) -> dict:
     # --- rebalance ---
     is_reb = _calc_is_rebalance_day(anchor, cadence, market_day, phase_offset)
     next_reb = _calc_next_rebalance_day(anchor, cadence, market_day, phase_offset)
-    if is_reb:
-        cycles_remaining = 0
-    elif next_reb:
+    if next_reb:
         # Contagem por sessoes de pregao (B3), inclusive o proximo rebalance.
         cursor = market_day
         hops = 0
@@ -405,9 +440,15 @@ def build_context(market_day: date) -> dict:
             cursor = _next_session(cursor, exchange="BVMF")
             hops += 1
             safety += 1
-        cycles_remaining = hops if cursor == next_reb else None
+        r034_window_cycles = hops if cursor == next_reb else None
     else:
-        cycles_remaining = None
+        r034_window_cycles = None
+
+    if is_reb:
+        # Mantem semantica de exibicao: 0 = "hoje e dia de rebalance".
+        cycles_remaining = 0
+    else:
+        cycles_remaining = r034_window_cycles
 
     # --- lista operacional congelada ---
     operational_ranking = daily_doc.get("operational_ranking", []) or master_doc.get("operational_ranking", []) or []
@@ -540,7 +581,7 @@ def build_context(market_day: date) -> dict:
             veto = "VETADO_LIQUIDEZ"
         elif spc_st == "INSTAVEL":
             veto = "VETADO_SPC"
-        elif cycles_remaining is not None and cycles_remaining <= 2:
+        elif r034_window_cycles is not None and r034_window_cycles <= 2:
             alerta = "GATE_R034"
         if bc_info["blocked_bc"] and veto is None:
             alerta = (alerta + "+ALERTA_BC") if alerta else "ALERTA_BC"
@@ -563,6 +604,7 @@ def build_context(market_day: date) -> dict:
             }
         )
     candidates_out.sort(key=lambda x: x["master_rank"])
+    market_day_is_stale, expected_market_day = _market_day_staleness(market_day)
 
     return {
         "market_day": str(market_day),
@@ -582,6 +624,9 @@ def build_context(market_day: date) -> dict:
             "is_rebalance_day": bool(is_reb) if is_reb is not None else None,
             "next_rebalance_date": str(next_reb) if next_reb else None,
             "cycles_to_next_rebalance": cycles_remaining,
+            "r034_window_cycles": r034_window_cycles,
+            "market_day_stale": bool(market_day_is_stale),
+            "market_day_expected": expected_market_day.isoformat() if expected_market_day else None,
         },
         "master": {
             "date": master_date_str,

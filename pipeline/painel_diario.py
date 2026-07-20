@@ -32,7 +32,7 @@ from pipeline.ptbr import (
 )
 from lib.engine import compute_filtered_m3_scores, select_top_n
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked
-from lib.trading_calendar import next_session as _next_session
+from lib.trading_calendar import next_session as _next_session, prev_session as _prev_session
 try:
     from pipeline.ledger_br import compute_cash as _compute_cash_ledger
     from pipeline.ledger_br import compute_positions as _compute_positions_ledger
@@ -295,6 +295,12 @@ def get_d_minus_1(exec_day: date) -> date:
     dates = sorted(set(calendar["date"].dt.date.dropna().tolist()))
     eligible = [d for d in dates if d < exec_day]
     return max(eligible) if eligible else exec_day
+
+
+def _market_day_staleness(exec_day: date, market_day: date) -> tuple[bool, date]:
+    """Compara o market_day ingerido com o pregão esperado no calendário B3."""
+    expected_market_day = _prev_session(exec_day, exchange="BVMF")
+    return market_day < expected_market_day, expected_market_day
 
 
 def _load_trading_days_br() -> list[date]:
@@ -1692,15 +1698,24 @@ def _build_chart_esquerdo(decision: dict[str, Any] | None, ctx: dict[str, Any], 
     if ssot_rebalance_day is not None and bool(ssot_rebalance_day) != bool(is_rebalance_day):
         rebalance_value = f"{rebalance_value} [INCONSISTENCIA: SSOT != JSON]"
         rebalance_class = "warn"
+    market_day_reference_value = _fmt_date_br(as_of_day)
+    market_day_reference_class = ""
+    if bool(ctx.get("market_day_stale", False)):
+        expected_market_day_br = str(ctx.get("market_day_expected_br", "?"))
+        market_day_reference_value = (
+            f"{market_day_reference_value} DEFASADO (esperado {expected_market_day_br})"
+        )
+        market_day_reference_class = "warn"
 
     motor_items = [
+        ("Pregão de referência (market_day)", market_day_reference_value, market_day_reference_class),
         ("Regime", action, "ok" if action == "MERCADO" else ("bad" if action == "CAIXA" else "")),
         ("P(Caixa)", p_caixa_txt, ""),
         ("Threshold", thr_txt, ""),
         (consecutive_label, str(consecutive_value), ""),
         ("Cadência", f"{cadence} pregões", ""),
-        ("Hoje é rebalanceamento", rebalance_value, rebalance_class),
-        ("Próximo rebalanceamento", next_rebalance_txt, "warn" if next_rebalance else ""),
+        ("Rebalanceamento (market_day)", rebalance_value, rebalance_class),
+        ("Próximo rebalanceamento (market_day)", next_rebalance_txt, "warn" if next_rebalance else ""),
         ("Âncora", anchor_txt, ""),
     ]
     motor_cells = "".join(
@@ -2012,9 +2027,14 @@ def _build_tables_and_cards(exec_day: date) -> tuple[str, dict[str, Any], list[s
     if not _base1_prev_series.empty:
         cota_price_prev = _safe_float(_base1_prev_series.iloc[-1]["base1"], 0.0) * 100.0
 
+    market_day_is_stale, expected_market_day = _market_day_staleness(exec_day, d1)
+
     report_ctx = {
         "d1": d1.isoformat(),
         "d1_br": _fmt_date_br(d1),
+        "market_day_stale": bool(market_day_is_stale),
+        "market_day_expected": expected_market_day.isoformat(),
+        "market_day_expected_br": _fmt_date_br(expected_market_day),
         "d1_real_day": d1_real_day.isoformat() if d1_real_day else "",
         "cash_free_prev": cash_free_actual,
         "cash_accounting_prev": cash_acc_actual,
@@ -2315,7 +2335,7 @@ input, select {{ width:100%; padding:6px; border:1px solid #cbd5e1; border-radiu
 </head>
 <body>
   <div class="wrap">
-    <h1>Painel Diário — Mercado: {_fmt_date_br(d1)} | Execução: {_fmt_date_br(exec_day)}</h1>
+    <h1>Painel Diário — Pregão de referência (market_day): {_fmt_date_br(d1)}</h1>
     <div class="sub">Documento único: Relatório + Boletim | D-1 de mercado: {ctx["d1_br"]}</div>
 
     {split_alert_html}
