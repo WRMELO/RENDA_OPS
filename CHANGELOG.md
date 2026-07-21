@@ -1,5 +1,12 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-21
+
+- fix(data-integrity): `T-SDC-STALE-CORPACT-REMEDIATION-BR-V1` — varredura viva de corporate actions (`scripts/diag_scan_stale_corporate_actions_br.py --out-suffix 20260721_prefix`) identificou 11 tickers com defasagem estrutural entre BRAPI e raw (incluindo AZTE3 e ESPA3). Reingestao focal multi-ticker aplicada em `data/ssot/market_data_raw.parquet` via `scripts/fix_stale_raw_prices_br_2026-07-21.py`, seguida de rebuild do canônico (`pipeline/04_build_canonical.py`). Validacao pos-fix (`--out-suffix 20260721_postfix`) zerou `flagged_tickers` (0) e preservou erros 404 como follow-up de cobertura BRAPI.
+- feat(diagnostico): novo contrafactual read-only do rebalance 16/07 (`scripts/diag_counterfactual_rebalance_20260716_br.py` -> `data/diagnostics/counterfactual_rebalance_20260716_br.json`) compara Top-10 antigo vs novo sem alterar `data/daily/*.json`, mantendo disciplina de imutabilidade operacional.
+- fix(analista-br): `pipeline/analise_br.py` (`_spike_alert_for_ticker`) passa a avaliar `matched_classic_split_ratio`/`data_integrity_suspect` em todas as ocorrencias de pico da janela de 20 pregoes, mantendo o pico mais recente para exibicao principal e adicionando `integrity_suspect_date` no payload consultivo.
+- docs(governanca): registra D-144 (RENDA_OPS) e espelho SALA D-127 com errata de R-054 para fechar a lacuna de mascaramento por pico mais recente. Nenhum arquivo blindado de motor foi alterado nesta task.
+
 ## 2026-07-20
 
 - fix(painel-br): T-SDC-PAINEL-MARKETDAY-BLINDAGEM-SEMANTICA-BR-V1 — remove ambiguidade de data civil na leitura operacional do Forno BR: o titulo do painel passa a exibir apenas `market_day`, o card de status passa a rotular explicitamente `Rebalanceamento (market_day)` e `Proximo rebalanceamento (market_day)`, e o item novo `Pregao de referencia (market_day)` sinaliza defasagem quando o SSOT estiver atrasado frente ao calendario B3 (`lib/trading_calendar.prev_session`). `exec_day` permanece metadado interno para compatibilidade de salvamento/ledger.

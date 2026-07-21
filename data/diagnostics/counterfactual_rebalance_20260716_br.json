@@ -1,0 +1,211 @@
+{
+  "task_id": "T-SDC-STALE-CORPACT-REMEDIATION-BR-V1",
+  "target_date": "2026-07-16",
+  "top_n": 10,
+  "old_canonical": "/home/wilson/RENDA_OPS/data/ssot/canonical_br.parquet.bak_pre_stalefix_20260721",
+  "new_canonical": "/home/wilson/RENDA_OPS/data/ssot/canonical_br.parquet",
+  "old_top10": [
+    "PPLA11",
+    "AVLL3",
+    "ESPA3",
+    "BGOZ39",
+    "H1UM34",
+    "P2AN34",
+    "NEMO3",
+    "D1DG34",
+    "DDNB34",
+    "F1TN34"
+  ],
+  "new_top10": [
+    "NEMO3",
+    "DDNB34",
+    "P2AN34",
+    "H1UM34",
+    "D1DG34",
+    "F1TN34",
+    "D1EL34",
+    "H1PE34",
+    "C1NC34",
+    "MUTC34"
+  ],
+  "integrity_flags": {
+    "AVLL3": {
+      "old_top10": true,
+      "new_top10": false,
+      "old_rank_top15": 2,
+      "new_rank_top15": null
+    },
+    "AZTE3": {
+      "old_top10": false,
+      "new_top10": false,
+      "old_rank_top15": null,
+      "new_rank_top15": null
+    },
+    "BGOZ39": {
+      "old_top10": true,
+      "new_top10": false,
+      "old_rank_top15": 4,
+      "new_rank_top15": null
+    },
+    "ESPA3": {
+      "old_top10": true,
+      "new_top10": false,
+      "old_rank_top15": 3,
+      "new_rank_top15": null
+    },
+    "PPLA11": {
+      "old_top10": true,
+      "new_top10": false,
+      "old_rank_top15": 1,
+      "new_rank_top15": null
+    },
+    "VIVR3": {
+      "old_top10": false,
+      "new_top10": false,
+      "old_rank_top15": 12,
+      "new_rank_top15": null
+    }
+  },
+  "top15_comparison": [
+    {
+      "old_rank": 1.0,
+      "ticker": "PPLA11",
+      "old_score_m3": 14.566051647717735,
+      "new_rank": null,
+      "new_score_m3": null
+    },
+    {
+      "old_rank": 2.0,
+      "ticker": "AVLL3",
+      "old_score_m3": 6.99607766306862,
+      "new_rank": null,
+      "new_score_m3": null
+    },
+    {
+      "old_rank": 3.0,
+      "ticker": "ESPA3",
+      "old_score_m3": 6.782784714529403,
+      "new_rank": null,
+      "new_score_m3": null
+    },
+    {
+      "old_rank": 4.0,
+      "ticker": "BGOZ39",
+      "old_score_m3": 5.679773000258731,
+      "new_rank": null,
+      "new_score_m3": null
+    },
+    {
+      "old_rank": 5.0,
+      "ticker": "H1UM34",
+      "old_score_m3": 5.198055661988597,
+      "new_rank": 4.0,
+      "new_score_m3": 7.020538448168626
+    },
+    {
+      "old_rank": 6.0,
+      "ticker": "P2AN34",
+      "old_score_m3": 5.013328811505006,
+      "new_rank": 3.0,
+      "new_score_m3": 7.139813762158126
+    },
+    {
+      "old_rank": 7.0,
+      "ticker": "NEMO3",
+      "old_score_m3": 4.831584179074157,
+      "new_rank": 1.0,
+      "new_score_m3": 7.88007381473191
+    },
+    {
+      "old_rank": 8.0,
+      "ticker": "D1DG34",
+      "old_score_m3": 4.73004465896962,
+      "new_rank": 5.0,
+      "new_score_m3": 6.75120792368221
+    },
+    {
+      "old_rank": 9.0,
+      "ticker": "DDNB34",
+      "old_score_m3": 4.726929194340009,
+      "new_rank": 2.0,
+      "new_score_m3": 7.754740391174996
+    },
+    {
+      "old_rank": 10.0,
+      "ticker": "F1TN34",
+      "old_score_m3": 4.651881830243142,
+      "new_rank": 6.0,
+      "new_score_m3": 6.399569192610774
+    },
+    {
+      "old_rank": 11.0,
+      "ticker": "D1EL34",
+      "old_score_m3": 4.254959058094961,
+      "new_rank": 7.0,
+      "new_score_m3": 6.159377279128062
+    },
+    {
+      "old_rank": 12.0,
+      "ticker": "VIVR3",
+      "old_score_m3": 4.002615122571772,
+      "new_rank": null,
+      "new_score_m3": null
+    },
+    {
+      "old_rank": 13.0,
+      "ticker": "C1NC34",
+      "old_score_m3": 3.9031124521701717,
+      "new_rank": 9.0,
+      "new_score_m3": 5.408516556791843
+    },
+    {
+      "old_rank": 14.0,
+      "ticker": "H1PE34",
+      "old_score_m3": 3.864715019292583,
+      "new_rank": 8.0,
+      "new_score_m3": 5.494583850234815
+    },
+    {
+      "old_rank": 15.0,
+      "ticker": "A1MD34",
+      "old_score_m3": 3.6557471862602045,
+      "new_rank": 11.0,
+      "new_score_m3": 5.267782391561206
+    },
+    {
+      "old_rank": null,
+      "ticker": "MUTC34",
+      "old_score_m3": null,
+      "new_rank": 10.0,
+      "new_score_m3": 5.350365495401359
+    },
+    {
+      "old_rank": null,
+      "ticker": "DVAI34",
+      "old_score_m3": null,
+      "new_rank": 12.0,
+      "new_score_m3": 4.771713976241011
+    },
+    {
+      "old_rank": null,
+      "ticker": "BBUG39",
+      "old_score_m3": null,
+      "new_rank": 13.0,
+      "new_score_m3": 4.6140507241889575
+    },
+    {
+      "old_rank": null,
+      "ticker": "N1TA34",
+      "old_score_m3": null,
+      "new_rank": 14.0,
+      "new_score_m3": 4.362518832209613
+    },
+    {
+      "old_rank": null,
+      "ticker": "S1TT34",
+      "old_score_m3": null,
+      "new_rank": 15.0,
+      "new_score_m3": 3.7973450709247056
+    }
+  ]
+}

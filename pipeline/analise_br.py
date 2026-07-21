@@ -304,6 +304,7 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
         "observed_drift_pct": {f"h{h}": None for h in SPIKE_DRIFT_HORIZONS},
         "matched_classic_split_ratio": None,
         "data_integrity_suspect": False,
+        "integrity_suspect_date": None,
     }
     if df_ticker is None or len(df_ticker) < 2:
         return empty
@@ -311,7 +312,7 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
     closes = df["close_operational"].tolist()
     n = len(df)
     window_start = max(1, n - SPIKE_LOOKBACK_SESSIONS)
-    spike_idx = None
+    spike_events: list[dict[str, int | None]] = []
     for i in range(window_start, n):
         c_prev = _safe_float(closes[i - 1], float("nan"))
         c_now = _safe_float(closes[i], float("nan"))
@@ -324,9 +325,13 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
         dividend_rate = _safe_float(df.iloc[i].get("dividend_rate"), 0.0)
         if split_factor != 1.0 or dividend_rate != 0.0:
             continue
-        spike_idx = i  # mantem a ocorrencia MAIS RECENTE na janela
-    if spike_idx is None:
+        observed_ratio_i = c_now / c_prev
+        matched_k_i = _matches_classic_split_ratio(observed_ratio_i)
+        spike_events.append({"idx": i, "matched_k": matched_k_i})
+    if not spike_events:
         return empty
+    # Mantem semantica de exibicao: o pico exibido continua sendo o mais recente.
+    spike_idx = int(spike_events[-1]["idx"])
     c_prev = _safe_float(closes[spike_idx - 1])
     c_spike = _safe_float(closes[spike_idx])
     ret_pct = math.log(c_spike / c_prev) * 100 if c_prev > 0 else None
@@ -341,8 +346,13 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
                 drift[f"h{h}"] = None
         else:
             drift[f"h{h}"] = None  # horizonte ainda nao decorrido -- nunca estimar
-    observed_ratio = (c_spike / c_prev) if (c_prev == c_prev and c_spike == c_spike and c_prev > 0) else float("nan")
-    matched_k = _matches_classic_split_ratio(observed_ratio)
+    integrity_event = next((ev for ev in spike_events if ev["matched_k"] is not None), None)
+    matched_k = int(integrity_event["matched_k"]) if integrity_event else None
+    integrity_suspect_date = (
+        str(df.iloc[int(integrity_event["idx"])]["date"].date())
+        if integrity_event is not None
+        else None
+    )
     return {
         "detected": True,
         "spike_date": str(df.iloc[spike_idx]["date"].date()),
@@ -352,6 +362,7 @@ def _spike_alert_for_ticker(df_ticker: pd.DataFrame) -> dict:
         "observed_drift_pct": drift,
         "matched_classic_split_ratio": matched_k,
         "data_integrity_suspect": bool(matched_k is not None),
+        "integrity_suspect_date": integrity_suspect_date,
     }
 
 

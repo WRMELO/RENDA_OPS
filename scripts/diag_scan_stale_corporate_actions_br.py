@@ -6,6 +6,7 @@ Flagra tickers com razao close_vivo/close_local consistentemente distante de 1.
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import sys
@@ -24,13 +25,19 @@ from lib.adapters import BrapiAdapter
 
 IN_CANONICAL = ROOT / "data" / "ssot" / "canonical_br.parquet"
 IN_RAW = ROOT / "data" / "ssot" / "market_data_raw.parquet"
-OUT_DIAG = ROOT / "data" / "diagnostics" / "stale_corporate_actions_scan_br_20260715.json"
 
 RATIO_TOLERANCE = 0.02
 CONSISTENCY_THRESHOLD = 0.90
 MAX_SAMPLE_POINTS = 30
 SLEEP_SECONDS = 0.05
 MIN_OVERLAP = 10
+
+
+def _resolve_output_path(out_suffix: str | None) -> Path:
+    suffix = (out_suffix or datetime.now(tz=UTC).strftime("%Y%m%d")).strip()
+    if not suffix:
+        suffix = datetime.now(tz=UTC).strftime("%Y%m%d")
+    return ROOT / "data" / "diagnostics" / f"stale_corporate_actions_scan_br_{suffix}.json"
 
 
 def _parse_unix_date(raw: object) -> pd.Timestamp | pd.NaT:
@@ -77,7 +84,7 @@ def _sample_rows(df: pd.DataFrame, max_points: int = MAX_SAMPLE_POINTS) -> pd.Da
     return df.iloc[idx].copy()
 
 
-def run() -> None:
+def run(out_suffix: str | None = None) -> Path:
     if not IN_CANONICAL.exists():
         raise RuntimeError(f"Canonical ausente: {IN_CANONICAL}")
     if not IN_RAW.exists():
@@ -150,8 +157,9 @@ def run() -> None:
             time.sleep(SLEEP_SECONDS)
 
     flagged = sorted(flagged, key=lambda x: abs(float(x["median_ratio"]) - 1.0), reverse=True)
+    out_diag = _resolve_output_path(out_suffix)
     payload = {
-        "task_id": "T-SDC-AZEV-SPLIT-INTEGRITY-FIX-BR-V1",
+        "task_id": "T-SDC-STALE-CORPACT-REMEDIATION-BR-V1",
         "as_of": datetime.now(tz=UTC).isoformat(),
         "settings": {
             "ratio_tolerance": RATIO_TOLERANCE,
@@ -169,11 +177,15 @@ def run() -> None:
         "errors": errors,
     }
 
-    OUT_DIAG.parent.mkdir(parents=True, exist_ok=True)
-    OUT_DIAG.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    out_diag.parent.mkdir(parents=True, exist_ok=True)
+    out_diag.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[SCAN] Concluido: scanned={scanned} flagged={len(flagged)} errors={len(errors)}")
-    print(f"[SCAN] Relatorio salvo em: {OUT_DIAG}")
+    print(f"[SCAN] Relatorio salvo em: {out_diag}")
+    return out_diag
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description="Varre stale corporate actions no universo BR.")
+    parser.add_argument("--out-suffix", default=None, help="Sufixo de saida (ex: 20260721_prefix)")
+    args = parser.parse_args()
+    run(out_suffix=args.out_suffix)

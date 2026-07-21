@@ -1,0 +1,251 @@
+{
+  "task_id": "T-SDC-STALE-CORPACT-REMEDIATION-BR-V1",
+  "as_of": "2026-07-21T14:42:25.671019+00:00",
+  "settings": {
+    "ratio_tolerance": 0.02,
+    "consistency_threshold": 0.9,
+    "max_sample_points": 30,
+    "min_overlap": 10,
+    "sleep_seconds": 0.05
+  },
+  "summary": {
+    "tickers_scanned": 1064,
+    "tickers_flagged": 0,
+    "errors": 58
+  },
+  "flagged_tickers": [],
+  "errors": [
+    {
+      "ticker": "A1OS34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/A1OS34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "A1SU34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/A1SU34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "A1TM34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/A1TM34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "A1VY34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/A1VY34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "AETH39",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/AETH39?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "AXRP39",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/AXRP39?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "B1DX34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/B1DX34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "B1LL34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/B1LL34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "BHYC39",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/BHYC39?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "BIUS39",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/BIUS39?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "BREZ39",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/BREZ39?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "C1FG34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/C1FG34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "C1OO34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/C1OO34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "C2PT34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/C2PT34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "D1RI34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/D1RI34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "E1MN34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/E1MN34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "E1MR34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/E1MR34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "E1SE34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/E1SE34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "F1AN34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/F1AN34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "G1LL34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/G1LL34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "G1PC34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/G1PC34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "G1PI34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/G1PI34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "G1RM34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/G1RM34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "H1AS34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/H1AS34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "H1II34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/H1II34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "HOOT3",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/HOOT3?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "I1EX34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/I1EX34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "I1TW34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/I1TW34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "J1KH34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/J1KH34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "K1IM34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/K1IM34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "K1RC34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/K1RC34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "L1DO34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/L1DO34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "L1EN34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/L1EN34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "L1KQ34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/L1KQ34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "M1CB34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/M1CB34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "M1SI34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/M1SI34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "N1WS34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/N1WS34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "NEOE3",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/NEOE3?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "ODPV3",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/ODPV3?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P1AC34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P1AC34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P1AY34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P1AY34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P1HM34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P1HM34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P1PL34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P1PL34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P1SX34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P1SX34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "P2TC34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/P2TC34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "R1EG34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/R1EG34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "R1FC34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/R1FC34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "R1MD34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/R1MD34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "S1JM34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/S1JM34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "S1TT34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/S1TT34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "S1WK34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/S1WK34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "S1YF34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/S1YF34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "T1SO34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/T1SO34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "T2YL34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/T2YL34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "TKNO3",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/TKNO3?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "TKNO4",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/TKNO4?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "W1AB34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/W1AB34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    },
+    {
+      "ticker": "Z1BH34",
+      "error": "404 Client Error: Not Found for url: https://brapi.dev/api/quote/Z1BH34?token=t6qXPUQN2ssKJVL2a6TsYm&range=2y&interval=1d&dividends=true"
+    }
+  ]
+}
