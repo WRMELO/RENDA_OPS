@@ -106,6 +106,7 @@ Correcoes urgentes durante a simulacao:
 - `pipeline/run_daily.py` chama este gate apos ingest/rebuild e interrompe com `RuntimeError` em qualquer FAIL, antes de gerar decisao/painel/boletim.
 - O veredito e persistido em `data/ssot/ssot_integrity_br.json` e embutido em `data/ssot/contexto_analista_br.json` (campo `ssot_integrity`) para consumo obrigatorio pela skill `analista-br`.
 - Este gate e politica permanente do pipeline BR. Qualquer alteracao de criterio/limiar exige nova task formal via cadeia completa.
+- **Nota 2026-07-24 (D-182/R-063)**: o gate passou a aceitar dois modos explicitos: modo diario/decisao (`allow_ahead=False`, igualdade estrita `canonical_date_max == expected_date_max`) e modo catch-up (`allow_ahead=True`, `canonical_date_max >= expected_date_max`), usado exclusivamente quando `run_daily.run(is_catchup=True)` processa pregao historico faltante. O Step 04 (rebuild do canonical) ganhou guarda que pula o rebuild quando o canonical ja cobre o pregao do catch-up, para nunca truncar dados mais novos (R-019).
 
 ### 6.5 Blindagem do Motor Operacional (D-025)
 

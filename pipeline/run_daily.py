@@ -225,6 +225,12 @@ def _ssot_date_max_br() -> date | None:
         return None
 
 
+def _catchup_rebuild_needed(run_date: date, existing_canonical_date_max: date | None) -> bool:
+    if existing_canonical_date_max is None:
+        return True
+    return run_date > existing_canonical_date_max
+
+
 def _expected_ssot_min_date(run_date: date) -> date:
     last = prev_session(run_date, exchange="BVMF")
     return prev_session(last, exchange="BVMF")
@@ -253,6 +259,7 @@ def run(
     ingest_only: bool = False,
     decision_only: bool = False,
     dry_run: bool = False,
+    is_catchup: bool = False,
     on_step: Callable[[int, int, str], None] | None = None,
 ) -> dict:
     from dotenv import load_dotenv
@@ -351,12 +358,32 @@ def run(
                     + "; ".join(decision_report.get("failed_checks", []))
                 )
 
-        _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
+        existing_date_max = _ssot_date_max_br()
+        should_rebuild = True
+        if is_catchup and not _catchup_rebuild_needed(run_date, existing_date_max):
+            should_rebuild = False
+            logger.info(
+                "Catch-up canonical rebuild skipped (run_date=%s <= canonical_date_max=%s) "
+                "to avoid truncating newer SSOT data (R-019).",
+                run_date.isoformat(),
+                existing_date_max.isoformat() if existing_date_max else "N/A",
+            )
+
+        if should_rebuild:
+            _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
 
         from lib.ssot_integrity import check_ssot_integrity_br
 
+        if is_catchup:
+            expected_for_gate = run_date
+            allow_ahead = True
+        else:
+            expected_for_gate = prev_session(run_date, exchange="BVMF")
+            allow_ahead = False
+
         integrity_report = check_ssot_integrity_br(
-            expected_date_max=prev_session(run_date, exchange="BVMF")
+            expected_date_max=expected_for_gate,
+            allow_ahead=allow_ahead,
         )
         logger.info(
             "SSOT integrity gate: status=%s failed_checks=%s",
@@ -495,6 +522,11 @@ def main():
     parser.add_argument("--decision-only", action="store_true", help="Run only decision/panel steps")
     parser.add_argument("--dry-run", action="store_true", help="Execute flow without writing outputs")
     parser.add_argument("--date", type=str, default=None, help="Target date (YYYY-MM-DD)")
+    parser.add_argument(
+        "--catchup",
+        action="store_true",
+        help="Processa pregão histórico sem truncar SSOT mais novo (D-182/R-063)",
+    )
     parser.add_argument("--retrain", action="store_true", help="Retrain XGBoost model before inference")
     parser.add_argument(
         "--reuse-macro-features",
@@ -514,6 +546,7 @@ def main():
         ingest_only=bool(args.ingest_only),
         decision_only=bool(args.decision_only),
         dry_run=bool(args.dry_run),
+        is_catchup=bool(args.catchup),
     )
 
 

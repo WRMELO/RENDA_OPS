@@ -33,8 +33,16 @@ def _persist(report: dict) -> None:
     )
 
 
-def check_ssot_integrity_br(expected_date_max: date, persist: bool = True) -> dict:
-    """Validate BR SSOT completeness/coherence against expected_date_max."""
+def check_ssot_integrity_br(
+    expected_date_max: date,
+    persist: bool = True,
+    allow_ahead: bool = False,
+) -> dict:
+    """Validate BR SSOT completeness/coherence against expected_date_max.
+
+    - allow_ahead=False (default): strict equality (daily/decision mode)
+    - allow_ahead=True: canonical date_max can be ahead (catch-up mode)
+    """
     checks: dict[str, dict] = {}
     failed: list[str] = []
 
@@ -56,14 +64,23 @@ def check_ssot_integrity_br(expected_date_max: date, persist: bool = True) -> di
     canonical_dates = sorted(canonical["date"].dropna().dt.date.unique())
     date_max = canonical_dates[-1] if canonical_dates else None
 
-    check1_pass = date_max == expected_date_max
+    check1_pass = (
+        date_max is not None and date_max >= expected_date_max
+        if allow_ahead
+        else date_max == expected_date_max
+    )
+    expected_mode = "at_least" if allow_ahead else "exact"
     checks["date_max_matches_expected"] = {
         "pass": check1_pass,
         "canonical_date_max": str(date_max) if date_max else None,
         "expected_date_max": str(expected_date_max),
+        "mode": expected_mode,
     }
     if not check1_pass:
-        failed.append(f"date_max_matches_expected: canonical={date_max} expected={expected_date_max}")
+        operator = ">=" if allow_ahead else "=="
+        failed.append(
+            f"date_max_matches_expected: canonical={date_max} expected{operator}{expected_date_max}"
+        )
 
     macro_date_max = None
     if MACRO_PATH.exists():

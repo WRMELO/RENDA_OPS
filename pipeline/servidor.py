@@ -349,7 +349,13 @@ def _start_daily_job(target_day: date) -> bool:
                 def _on_step_c(cur: int, tot: int, label: str, _base: int = base, _p: date = p) -> None:
                     _set_progress(_base + cur, total_steps, f"Catch-up {_p.isoformat()} — {label}")
 
-                run_daily.run(target_date=p, full=False, refresh_macro_features=False, on_step=_on_step_c)
+                run_daily.run(
+                    target_date=p,
+                    full=False,
+                    refresh_macro_features=False,
+                    is_catchup=True,
+                    on_step=_on_step_c,
+                )
                 if not _panel_path(p).exists():
                     painel_diario.build_painel(p)
                 written = _write_observational_boletim(p)

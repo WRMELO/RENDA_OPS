@@ -6,7 +6,8 @@
     "date_max_matches_expected": {
       "pass": true,
       "canonical_date_max": "2026-07-23",
-      "expected_date_max": "2026-07-23"
+      "expected_date_max": "2026-07-23",
+      "mode": "exact"
     },
     "macro_alignment": {
       "pass": true,
@@ -39,5 +40,5 @@
     }
   },
   "failed_checks": [],
-  "generated_at": "2026-07-24T10:46:08.484221+00:00"
+  "generated_at": "2026-07-24T14:29:52.966939+00:00"
 }
