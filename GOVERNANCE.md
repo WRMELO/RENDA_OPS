@@ -100,6 +100,13 @@ Correcoes urgentes durante a simulacao:
 - Cada etapa deve ser idempotente para o mesmo dia.
 - Logs em `logs/` (excluidos do git).
 
+### 6.4.1 Gate de integridade do SSOT (D-181/R-062)
+
+- `lib/ssot_integrity.py` implementa `check_ssot_integrity_br(expected_date_max, persist=True)`, validando alinhamento de datas entre fontes (canonical/macro/PTAX), cobertura de universo, continuidade interpregao e integridade SPC.
+- `pipeline/run_daily.py` chama este gate apos ingest/rebuild e interrompe com `RuntimeError` em qualquer FAIL, antes de gerar decisao/painel/boletim.
+- O veredito e persistido em `data/ssot/ssot_integrity_br.json` e embutido em `data/ssot/contexto_analista_br.json` (campo `ssot_integrity`) para consumo obrigatorio pela skill `analista-br`.
+- Este gate e politica permanente do pipeline BR. Qualquer alteracao de criterio/limiar exige nova task formal via cadeia completa.
+
 ### 6.5 Blindagem do Motor Operacional (D-025)
 
 **Arquivos protegidos** (auditados e selados em `v1.18.0-motor`):

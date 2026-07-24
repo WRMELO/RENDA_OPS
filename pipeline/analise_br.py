@@ -27,6 +27,7 @@ from lib.spc import _build_runs_flags as _spc_runs  # noqa: E402
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked  # noqa: E402
 from lib.trading_calendar import next_session as _next_session, prev_session as _prev_session  # noqa: E402
 from lib.liquidity import compute_liquidity_tables  # noqa: E402
+from lib.ssot_integrity import check_ssot_integrity_br  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -616,10 +617,12 @@ def build_context(market_day: date) -> dict:
         )
     candidates_out.sort(key=lambda x: x["master_rank"])
     market_day_is_stale, expected_market_day = _market_day_staleness(market_day)
+    ssot_integrity_report = check_ssot_integrity_br(expected_date_max=market_day, persist=False)
 
     return {
         "market_day": str(market_day),
         "generated_at": str(pd.Timestamp.now(tz="UTC").isoformat()),
+        "ssot_integrity": ssot_integrity_report,
         "forno": {
             "action": action,
             "y_proba_cash": round(y_proba, 4),

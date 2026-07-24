@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "expected_date_max": "2026-07-23",
+  "canonical_date_max": "2026-07-23",
+  "checks": {
+    "date_max_matches_expected": {
+      "pass": true,
+      "canonical_date_max": "2026-07-23",
+      "expected_date_max": "2026-07-23"
+    },
+    "macro_alignment": {
+      "pass": true,
+      "macro_date_max": "2026-07-23",
+      "canonical_date_max": "2026-07-23"
+    },
+    "ptax_alignment": {
+      "pass": true,
+      "ptax_date_max": "2026-07-23",
+      "canonical_date_max": "2026-07-23"
+    },
+    "universe_coverage": {
+      "pass": true,
+      "n_tickers_date_max": 945,
+      "median_recent_sessions": 974.5,
+      "coverage_pct": 97.0,
+      "min_required_pct": 90.0
+    },
+    "inter_session_continuity": {
+      "pass": true,
+      "date_max": "2026-07-23",
+      "prior_date_in_ssot": "2026-07-22",
+      "intersection_pct": 97.3,
+      "min_required_pct": 90.0
+    },
+    "spc_integrity": {
+      "pass": true,
+      "coverage_pct": 97.9,
+      "min_required_pct": 80.0
+    }
+  },
+  "failed_checks": [],
+  "generated_at": "2026-07-24T10:46:08.484221+00:00"
+}

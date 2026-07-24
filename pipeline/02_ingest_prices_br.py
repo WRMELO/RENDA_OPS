@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lib.trading_calendar import is_session
+from lib.trading_calendar import is_session, prev_session
 
 UNIVERSE_FILE = ROOT / "data" / "ssot" / "universe.parquet"
 BDR_UNIVERSE_FILE = ROOT / "data" / "ssot" / "bdr_universe.parquet"
@@ -164,6 +164,11 @@ def run(end_date: date | None = None) -> Path:
     from lib.adapters import BrapiAdapter
 
     end = end_date or date.today()
+    # D-161/R-062: never ingest beyond the last closed BVMF session.
+    # BRAPI can return pre-open rows stamped with today's civil date before
+    # the session has actually closed. Without this clamp those rows can be
+    # stored as if they were end-of-day data and fragment the SSOT.
+    end = min(end, prev_session(date.today(), exchange="BVMF"))
     op_tickers = _get_operational_tickers()
     last_dates = _get_last_date_per_ticker()
     adapter = BrapiAdapter(timeout_seconds=8.0)

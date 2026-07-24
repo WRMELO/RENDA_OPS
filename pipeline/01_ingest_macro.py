@@ -22,9 +22,11 @@ START_DATE = date(2018, 1, 1)
 def run(end_date: date | None = None) -> Path:
     load_dotenv(ROOT / ".env")
     from lib.adapters import BrapiAdapter, BcbAdapter, YahooAdapter
-    from lib.trading_calendar import sessions_in_range
+    from lib.trading_calendar import prev_session, sessions_in_range
 
     end = end_date or date.today()
+    # D-161/R-062: never ingest beyond the last closed BVMF session.
+    end = min(end, prev_session(date.today(), exchange="BVMF"))
 
     existing = pd.read_parquet(TARGET) if TARGET.exists() else pd.DataFrame()
     if not existing.empty:

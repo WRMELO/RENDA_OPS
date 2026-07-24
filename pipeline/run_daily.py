@@ -291,13 +291,22 @@ def run(
             _dt = _ssot_date_max_br()
             _exp = prev_session(run_date, exchange="BVMF")
             if _dt is not None and _dt >= _exp:
-                logger.info(
-                    "SSOT already fresh (date_max=%s >= expected=%s), skipping ingest.",
+                from lib.ssot_integrity import check_ssot_integrity_br
+
+                pre_report = check_ssot_integrity_br(expected_date_max=_exp, persist=False)
+                if pre_report["status"] == "PASS":
+                    logger.info(
+                        "SSOT already fresh and clean (date_max=%s >= expected=%s, integrity=PASS), skipping ingest.",
+                        _dt.isoformat(),
+                        _exp.isoformat(),
+                    )
+                    logger.info("=== Pipeline ingest-only concluído (skipped) ===")
+                    return {"mode": "INGEST_SKIPPED", "ssot_date_max": _dt.isoformat()}
+                logger.warning(
+                    "SSOT date_max=%s looks fresh but integrity gate failed (%s); forcing re-ingest.",
                     _dt.isoformat(),
-                    _exp.isoformat(),
+                    pre_report.get("failed_checks"),
                 )
-                logger.info("=== Pipeline ingest-only concluído (skipped) ===")
-                return {"mode": "INGEST_SKIPPED", "ssot_date_max": _dt.isoformat()}
 
         if run_ingest:
             _run_step(1, "Step 01: Ingest macro...", lambda: _load_step("01_ingest_macro").run(end_date=run_date))
@@ -306,15 +315,59 @@ def run(
             _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
             dt_max = _ssot_date_max_br()
             logger.info("SSOT canonical_br date_max=%s", dt_max.isoformat() if dt_max else "N/A")
+            from lib.ssot_integrity import check_ssot_integrity_br
+
+            post_ingest_report = check_ssot_integrity_br(
+                expected_date_max=prev_session(run_date, exchange="BVMF")
+            )
+            logger.info(
+                "SSOT integrity gate (post-ingest): status=%s failed_checks=%s",
+                post_ingest_report["status"],
+                post_ingest_report.get("failed_checks"),
+            )
+            if post_ingest_report["status"] != "PASS":
+                raise RuntimeError(
+                    "SSOT integrity gate FAIL after ingest (blocking pipeline - D-161/R-062): "
+                    + "; ".join(post_ingest_report.get("failed_checks", []))
+                )
             if ingest_only:
                 logger.info("=== Pipeline ingest-only concluído ===")
                 return {"mode": "INGEST_ONLY", "ssot_date_max": dt_max.isoformat() if dt_max else None}
 
         if decision_only:
-            _assert_ssot_fresh_br(run_date)
-            logger.info("SSOT freshness check PASS (canonical_br)")
+            from lib.ssot_integrity import check_ssot_integrity_br
+
+            decision_report = check_ssot_integrity_br(
+                expected_date_max=prev_session(run_date, exchange="BVMF")
+            )
+            logger.info(
+                "SSOT integrity gate (decision-only): status=%s failed_checks=%s",
+                decision_report["status"],
+                decision_report.get("failed_checks"),
+            )
+            if decision_report["status"] != "PASS":
+                raise RuntimeError(
+                    "SSOT integrity gate FAIL on decision-only run (blocking pipeline - D-161/R-062): "
+                    + "; ".join(decision_report.get("failed_checks", []))
+                )
 
         _run_step(4, "Step 04: Rebuild canonical BR...", lambda: _load_step("04_build_canonical").run(end_date=run_date))
+
+        from lib.ssot_integrity import check_ssot_integrity_br
+
+        integrity_report = check_ssot_integrity_br(
+            expected_date_max=prev_session(run_date, exchange="BVMF")
+        )
+        logger.info(
+            "SSOT integrity gate: status=%s failed_checks=%s",
+            integrity_report["status"],
+            integrity_report.get("failed_checks"),
+        )
+        if integrity_report["status"] != "PASS":
+            raise RuntimeError(
+                "SSOT integrity gate FAIL (blocking pipeline - D-161/R-062): "
+                + "; ".join(integrity_report.get("failed_checks", []))
+            )
 
         if refresh_macro_features:
             _step(5, "Step 05: Build macro expanded features...")
