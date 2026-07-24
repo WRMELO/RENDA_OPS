@@ -1,6 +1,6 @@
 {
   "market_day": "2026-07-23",
-  "generated_at": "2026-07-24T10:47:40.566497+00:00",
+  "generated_at": "2026-07-24T15:20:05.952017+00:00",
   "ssot_integrity": {
     "status": "PASS",
     "expected_date_max": "2026-07-23",
@@ -9,7 +9,8 @@
       "date_max_matches_expected": {
         "pass": true,
         "canonical_date_max": "2026-07-23",
-        "expected_date_max": "2026-07-23"
+        "expected_date_max": "2026-07-23",
+        "mode": "exact"
       },
       "macro_alignment": {
         "pass": true,
@@ -42,7 +43,7 @@
       }
     },
     "failed_checks": [],
-    "generated_at": "2026-07-24T10:47:40.566272+00:00"
+    "generated_at": "2026-07-24T15:20:05.951829+00:00"
   },
   "forno": {
     "action": "MERCADO",
@@ -285,11 +286,11 @@
       "ticker": "AAPL34",
       "qty": 2,
       "avg_cost": 84.4,
-      "close_d1": 82.08,
-      "valor_mercado": 164.16,
-      "heat_pct": -2.75,
+      "close_d1": 81.38,
+      "valor_mercado": 162.76,
+      "heat_pct": -3.58,
       "peak_close": 84.92,
-      "drawdown_pct": -3.34,
+      "drawdown_pct": -4.17,
       "in_master": true,
       "master_rank": 7,
       "score_m3": 2.0508,
@@ -302,14 +303,34 @@
       "purchase_date": "2026-07-17"
     },
     {
+      "ticker": "AAPL34",
+      "qty": 460,
+      "avg_cost": 82.08,
+      "close_d1": 81.38,
+      "valor_mercado": 37434.8,
+      "heat_pct": -0.85,
+      "peak_close": 81.38,
+      "drawdown_pct": 0.0,
+      "in_master": true,
+      "master_rank": 7,
+      "score_m3": 2.0508,
+      "spc_status": "ESTAVEL",
+      "blocked_bc": false,
+      "bc_consec_days": 0,
+      "bc_flags": [],
+      "carga_termica_pct": 3.02,
+      "ciclos_aceso": 0,
+      "purchase_date": "2026-07-24"
+    },
+    {
       "ticker": "D1DG34",
       "qty": 155,
       "avg_cost": 137.0,
-      "close_d1": 123.77,
-      "valor_mercado": 19184.35,
-      "heat_pct": -9.66,
+      "close_d1": 124.26,
+      "valor_mercado": 19260.3,
+      "heat_pct": -9.3,
       "peak_close": 136.92,
-      "drawdown_pct": -9.6,
+      "drawdown_pct": -9.25,
       "in_master": true,
       "master_rank": 8,
       "score_m3": 4.7343,
@@ -319,7 +340,7 @@
       "bc_flags": [
         "W2/W3/W4/N3-Xbar"
       ],
-      "carga_termica_pct": 1.54,
+      "carga_termica_pct": 1.56,
       "ciclos_aceso": 14,
       "purchase_date": "2026-07-06"
     },
@@ -339,7 +360,7 @@
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 13.7,
+      "carga_termica_pct": 13.76,
       "ciclos_aceso": 62,
       "purchase_date": "2026-04-27"
     },
@@ -347,11 +368,11 @@
       "ticker": "ESPA3",
       "qty": 22600,
       "avg_cost": 6.36,
-      "close_d1": 8.1,
-      "valor_mercado": 183060.0,
-      "heat_pct": 27.36,
+      "close_d1": 8.12,
+      "valor_mercado": 183512.0,
+      "heat_pct": 27.67,
       "peak_close": 8.49,
-      "drawdown_pct": -4.59,
+      "drawdown_pct": -4.36,
       "in_master": true,
       "master_rank": 1,
       "score_m3": 6.7943,
@@ -359,7 +380,7 @@
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 14.72,
+      "carga_termica_pct": 14.82,
       "ciclos_aceso": 21,
       "purchase_date": "2026-06-25"
     },
@@ -367,11 +388,11 @@
       "ticker": "F1TN34",
       "qty": 446,
       "avg_cost": 402.85,
-      "close_d1": 391.35,
-      "valor_mercado": 174542.1,
-      "heat_pct": -2.85,
+      "close_d1": 385.57,
+      "valor_mercado": 171964.22,
+      "heat_pct": -4.29,
       "peak_close": 422.67,
-      "drawdown_pct": -7.41,
+      "drawdown_pct": -8.78,
       "in_master": true,
       "master_rank": 10,
       "score_m3": 4.6556,
@@ -381,41 +402,19 @@
       "bc_flags": [
         "W2/W3/W4/N3-Xbar"
       ],
-      "carga_termica_pct": 14.04,
+      "carga_termica_pct": 13.89,
       "ciclos_aceso": 18,
       "purchase_date": "2026-06-30"
-    },
-    {
-      "ticker": "G1WW34",
-      "qty": 241,
-      "avg_cost": 178.57,
-      "close_d1": 172.65,
-      "valor_mercado": 41608.65,
-      "heat_pct": -3.32,
-      "peak_close": 172.65,
-      "drawdown_pct": 0.0,
-      "in_master": true,
-      "master_rank": 10,
-      "score_m3": 1.7466,
-      "spc_status": "INSTAVEL",
-      "blocked_bc": true,
-      "bc_consec_days": 1,
-      "bc_flags": [
-        "Regra1(3sigma)"
-      ],
-      "carga_termica_pct": 3.35,
-      "ciclos_aceso": 3,
-      "purchase_date": "2026-07-21"
     },
     {
       "ticker": "LILY34",
       "qty": 305,
       "avg_cost": 198.85,
-      "close_d1": 196.6,
-      "valor_mercado": 59963.0,
-      "heat_pct": -1.13,
-      "peak_close": 199.35,
-      "drawdown_pct": -1.38,
+      "close_d1": 200.69,
+      "valor_mercado": 61210.45,
+      "heat_pct": 0.93,
+      "peak_close": 200.69,
+      "drawdown_pct": 0.0,
       "in_master": true,
       "master_rank": 5,
       "score_m3": 2.1203,
@@ -425,7 +424,7 @@
       "bc_flags": [
         "W2/W3/W4/N3-Xbar"
       ],
-      "carga_termica_pct": 4.82,
+      "carga_termica_pct": 4.94,
       "ciclos_aceso": 5,
       "purchase_date": "2026-07-17"
     },
@@ -433,11 +432,11 @@
       "ticker": "N1TA34",
       "qty": 220,
       "avg_cost": 839.71,
-      "close_d1": 840.25,
-      "valor_mercado": 184855.0,
-      "heat_pct": 0.06,
+      "close_d1": 833.07,
+      "valor_mercado": 183275.4,
+      "heat_pct": -0.79,
       "peak_close": 878.66,
-      "drawdown_pct": -4.37,
+      "drawdown_pct": -5.19,
       "in_master": true,
       "master_rank": 4,
       "score_m3": 3.0591,
@@ -445,7 +444,7 @@
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 14.87,
+      "carga_termica_pct": 14.81,
       "ciclos_aceso": 10,
       "purchase_date": "2026-07-10"
     },
@@ -453,19 +452,21 @@
       "ticker": "P2AN34",
       "qty": 6006,
       "avg_cost": 28.31,
-      "close_d1": 28.01,
-      "valor_mercado": 168228.06,
-      "heat_pct": -1.06,
+      "close_d1": 27.51,
+      "valor_mercado": 165225.06,
+      "heat_pct": -2.83,
       "peak_close": 30.5,
-      "drawdown_pct": -8.16,
+      "drawdown_pct": -9.8,
       "in_master": true,
       "master_rank": 2,
       "score_m3": 5.0178,
       "spc_status": "ESTAVEL",
-      "blocked_bc": false,
-      "bc_consec_days": 0,
-      "bc_flags": [],
-      "carga_termica_pct": 13.53,
+      "blocked_bc": true,
+      "bc_consec_days": 1,
+      "bc_flags": [
+        "W2/W3/W4/N3-Xbar"
+      ],
+      "carga_termica_pct": 13.35,
       "ciclos_aceso": 18,
       "purchase_date": "2026-06-30"
     },
@@ -473,10 +474,10 @@
       "ticker": "S1TX34",
       "qty": 44,
       "avg_cost": 4077.17,
-      "close_d1": 4625.0,
-      "valor_mercado": 203500.0,
-      "heat_pct": 13.44,
-      "peak_close": 4625.0,
+      "close_d1": 4633.0,
+      "valor_mercado": 203852.0,
+      "heat_pct": 13.63,
+      "peak_close": 4633.0,
       "drawdown_pct": 0.0,
       "in_master": true,
       "master_rank": 8,
@@ -485,27 +486,27 @@
       "blocked_bc": false,
       "bc_consec_days": 0,
       "bc_flags": [],
-      "carga_termica_pct": 16.37,
+      "carga_termica_pct": 16.47,
       "ciclos_aceso": 3,
       "purchase_date": "2026-07-21"
     }
   ],
   "cash": {
-    "cash_free": 37773.53,
-    "cash_accounting": 0.0,
-    "total_ativo": 1243257.18,
-    "hhindex": 0.131
+    "cash_free": 16.73,
+    "cash_accounting": 41608.65,
+    "total_ativo": 1237900.7,
+    "hhindex": 0.1307
   },
-  "quarentena": [],
+  "quarentena": [
+    "G1WW34"
+  ],
   "bc_blocked_set": [
     "D1DG34",
     "F1TN34",
-    "G1WW34",
-    "LILY34"
+    "LILY34",
+    "P2AN34"
   ],
-  "rule1_blocked": [
-    "G1WW34"
-  ],
+  "rule1_blocked": [],
   "candidates": [
     {
       "ticker": "A1MT34",
@@ -564,6 +565,35 @@
       },
       "veto": null,
       "alerta": "GATE_R034"
+    },
+    {
+      "ticker": "G1WW34",
+      "master_rank": 10,
+      "score_m3": 1.7466,
+      "spc_status": "INSTAVEL",
+      "blocked_bc": true,
+      "bc_consec_days": 1,
+      "adtv_60d": 352374.96,
+      "pct_traded_60d": 1.0,
+      "spike_alert": {
+        "detected": false,
+        "spike_date": null,
+        "spike_ret_pct": null,
+        "sessions_since_spike": null,
+        "threshold_pct": 12.6752,
+        "observed_drift_pct": {
+          "h1": null,
+          "h3": null,
+          "h5": null,
+          "h10": null,
+          "h20": null
+        },
+        "matched_classic_split_ratio": null,
+        "data_integrity_suspect": false,
+        "integrity_suspect_date": null
+      },
+      "veto": "VETADO_SPC",
+      "alerta": null
     }
   ]
 }
