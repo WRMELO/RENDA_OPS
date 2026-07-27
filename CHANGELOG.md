@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-27
+
+- fix(ssot-br): `T-SDC-EODHD-ADDITIVE-FILL-UNBLOCK-BR-V1` — anula a frente Yahoo ineficaz no BR (reversão de `pipeline/02_ingest_prices_br.py` ao HEAD e remoção de `scripts/backfill_yahoo_reconcile_ssot_br_2026-07-27.py` + `tests/test_ingest_prices_br_yahoo_reconcile.py`, preservando os JSONs diagnósticos com hash idêntico), executa preenchimento aditivo EODHD em modo **somente cauda** via `scripts/preencher_ausencias_ssot_br_2026-07-27.py` (`rows_added=108`, `recoverable_tickers=94`), rebuilda `data/ssot/canonical_br.parquet` sem retroação em colunas SPC de pares preexistentes (0 diffs), restaura `data/ssot/ssot_integrity_br.json` para `PASS` (`n_tickers_date_max=940`, `coverage_pct=96.2`) e conclui `pipeline/run_daily.py --decision-only` com painel em `data/cycles/2026-07-24/painel.html`. Artefatos novos: `data/diagnostics/preenchimento_eodhd_ssot_br_2026-07-27.json` e backups `data/ssot/market_data_raw.parquet.bak_pre_eodhd_fill_20260727_*`, `data/ssot/canonical_br.parquet.bak_pre_eodhd_rebuild_20260727_*`. Decision: D-183 (ref cruzada: SALA D-170).
+
 ## 2026-07-21
 
 - fix(data-integrity): `T-SDC-STALE-CORPACT-REMEDIATION-BR-V1` — varredura viva de corporate actions (`scripts/diag_scan_stale_corporate_actions_br.py --out-suffix 20260721_prefix`) identificou 11 tickers com defasagem estrutural entre BRAPI e raw (incluindo AZTE3 e ESPA3). Reingestao focal multi-ticker aplicada em `data/ssot/market_data_raw.parquet` via `scripts/fix_stale_raw_prices_br_2026-07-21.py`, seguida de rebuild do canônico (`pipeline/04_build_canonical.py`). Validacao pos-fix (`--out-suffix 20260721_postfix`) zerou `flagged_tickers` (0) e preservou erros 404 como follow-up de cobertura BRAPI.
