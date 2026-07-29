@@ -291,6 +291,22 @@ def run(
             return None
         return fn()
 
+    def _warn_if_degraded(report: dict, phase: str) -> None:
+        if report.get("status") != "PASS_DEGRADED":
+            return
+        reasons = report.get("degraded_reasons") or []
+        quarantine = report.get("quarantine") or {}
+        checks = report.get("checks") or {}
+        open_cov = checks.get("open_positions_coverage") or {}
+        stale_positions = open_cov.get("stale_positions") or []
+        logger.warning(
+            "SSOT integrity gate DEGRADED (%s): reasons=%s n_missing=%s stale_positions=%s",
+            phase,
+            reasons,
+            quarantine.get("n_missing", 0),
+            stale_positions,
+        )
+
     try:
         run_ingest = bool(full or ingest_only)
 
@@ -332,11 +348,12 @@ def run(
                 post_ingest_report["status"],
                 post_ingest_report.get("failed_checks"),
             )
-            if post_ingest_report["status"] != "PASS":
+            if post_ingest_report["status"] == "FAIL":
                 raise RuntimeError(
                     "SSOT integrity gate FAIL after ingest (blocking pipeline - D-161/R-062): "
                     + "; ".join(post_ingest_report.get("failed_checks", []))
                 )
+            _warn_if_degraded(post_ingest_report, "post-ingest")
             if ingest_only:
                 logger.info("=== Pipeline ingest-only concluído ===")
                 return {"mode": "INGEST_ONLY", "ssot_date_max": dt_max.isoformat() if dt_max else None}
@@ -352,11 +369,12 @@ def run(
                 decision_report["status"],
                 decision_report.get("failed_checks"),
             )
-            if decision_report["status"] != "PASS":
+            if decision_report["status"] == "FAIL":
                 raise RuntimeError(
                     "SSOT integrity gate FAIL on decision-only run (blocking pipeline - D-161/R-062): "
                     + "; ".join(decision_report.get("failed_checks", []))
                 )
+            _warn_if_degraded(decision_report, "decision-only")
 
         existing_date_max = _ssot_date_max_br()
         should_rebuild = True
@@ -390,11 +408,12 @@ def run(
             integrity_report["status"],
             integrity_report.get("failed_checks"),
         )
-        if integrity_report["status"] != "PASS":
+        if integrity_report["status"] == "FAIL":
             raise RuntimeError(
                 "SSOT integrity gate FAIL (blocking pipeline - D-161/R-062): "
                 + "; ".join(integrity_report.get("failed_checks", []))
             )
+        _warn_if_degraded(integrity_report, "daily")
 
         if refresh_macro_features:
             _step(5, "Step 05: Build macro expanded features...")

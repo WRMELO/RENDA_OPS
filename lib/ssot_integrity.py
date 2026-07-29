@@ -1,14 +1,19 @@
-"""SSOT integrity gate for BR factory (D-161/R-062).
+"""SSOT integrity gate for BR factory (D-161/R-062, D-184).
 
 Fail-loud validation of canonical_br.parquet + macro.parquet + fx_ptax.parquet
-before any decision, panel or Analista BR step consumes the SSOT. Persists a
-PASS/FAIL verdict artifact consumable by pipeline/run_daily.py and embedded
-by pipeline/analise_br.py into contexto_analista_br.json.
+before any decision, panel or Analista BR step consumes the SSOT.
+
+The gate emits one of:
+- PASS: all hard checks OK and no soft degradation.
+- PASS_DEGRADED: hard checks OK, but soft degradation exists (quarantine/stale).
+- FAIL: at least one hard check failed.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import json
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -24,6 +29,8 @@ MIN_UNIVERSE_COVERAGE_PCT = 90.0
 MIN_CONTINUITY_PCT = 90.0
 MIN_SPC_COVERAGE_PCT = 80.0
 UNIVERSE_LOOKBACK_SESSIONS = 20
+CATASTROPHIC_COVERAGE_FLOOR_PCT = 60.0
+MAX_STALE_POSITIONS_PCT = 50.0
 
 
 def _persist(report: dict) -> None:
@@ -33,10 +40,92 @@ def _persist(report: dict) -> None:
     )
 
 
+def _load_trading_days_br() -> list[date]:
+    if not CANONICAL_PATH.exists():
+        return []
+    cal = pd.read_parquet(CANONICAL_PATH, columns=["date"])
+    if cal.empty:
+        return []
+    cal["date"] = pd.to_datetime(cal["date"], errors="coerce")
+    return sorted(set(cal["date"].dt.date.dropna().tolist()))
+
+
+def _is_rebalance_market_day(as_of_day: date) -> bool | None:
+    """Espelho de analise_br.py:_calc_is_rebalance_day."""
+    cfg_path = ROOT / "config" / "winner.json"
+    if not cfg_path.exists():
+        return None
+    try:
+        cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+        wcfg = cfg.get("winner_config_snapshot", {})
+        cadence = max(int(wcfg.get("rebalance_cadence", 7)), 1)
+        anchor_date_str = str(wcfg.get("rebalance_anchor_date", "2026-04-06"))
+        phase_offset = int(wcfg.get("rebalance_phase_offset", 0))
+    except Exception:
+        return None
+
+    trading_days = sorted(set(_load_trading_days_br()))
+    if not trading_days:
+        return None
+    if cadence == 1:
+        return True
+    try:
+        anchor = date.fromisoformat(anchor_date_str)
+    except Exception:
+        return None
+
+    idx_map = {d: i for i, d in enumerate(trading_days)}
+    if anchor not in idx_map:
+        next_anchor = [d for d in trading_days if d >= anchor]
+        if not next_anchor:
+            return None
+        anchor = min(next_anchor)
+    as_of_candidates = [d for d in trading_days if d <= as_of_day]
+    if not as_of_candidates:
+        return None
+    as_of_ref = max(as_of_candidates)
+    anchor_idx = idx_map[anchor]
+    as_of_idx = idx_map[as_of_ref]
+    phase = phase_offset % cadence
+    delta = as_of_idx - anchor_idx
+    return delta >= 0 and (delta % cadence) == phase
+
+
+def _open_positions_at(as_of_day: date) -> set[str]:
+    ledger_path = ROOT / "pipeline" / "ledger_br.py"
+    if not ledger_path.exists():
+        raise FileNotFoundError(f"ledger module ausente: {ledger_path}")
+
+    module_name = "_ssot_integrity_dynamic_ledger_br"
+    spec = importlib.util.spec_from_file_location(module_name, ledger_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("falha ao carregar spec de pipeline/ledger_br.py")
+    module = importlib.util.module_from_spec(spec)
+    # Necessario registrar no sys.modules para evitar erro de dataclass frozen.
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+
+    compute_positions = getattr(module, "compute_positions", None)
+    if not callable(compute_positions):
+        raise RuntimeError("pipeline/ledger_br.py sem compute_positions(as_of_date)")
+
+    pos = compute_positions(as_of_day)
+    if not isinstance(pos, dict):
+        raise RuntimeError("compute_positions retornou estrutura invalida")
+    return {
+        str(tk).upper().strip()
+        for tk in pos.keys()
+        if str(tk).strip()
+    }
+
+
 def check_ssot_integrity_br(
     expected_date_max: date,
     persist: bool = True,
     allow_ahead: bool = False,
+    *,
+    open_positions: set[str] | None = None,
+    is_rebalance_day: bool | None = None,
 ) -> dict:
     """Validate BR SSOT completeness/coherence against expected_date_max.
 
@@ -45,6 +134,7 @@ def check_ssot_integrity_br(
     """
     checks: dict[str, dict] = {}
     failed: list[str] = []
+    degraded_reasons: list[str] = []
 
     if not CANONICAL_PATH.exists():
         report = {
@@ -53,6 +143,8 @@ def check_ssot_integrity_br(
             "canonical_date_max": None,
             "checks": {},
             "failed_checks": ["canonical_br.parquet ausente"],
+            "degraded_reasons": [],
+            "quarantine": {"missing_tickers": [], "n_missing": 0},
             "generated_at": pd.Timestamp.now(tz="UTC").isoformat(),
         }
         if persist:
@@ -61,8 +153,12 @@ def check_ssot_integrity_br(
 
     canonical = pd.read_parquet(CANONICAL_PATH, columns=["ticker", "date", "i_ucl", "i_lcl"])
     canonical["date"] = pd.to_datetime(canonical["date"], errors="coerce")
+    canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
     canonical_dates = sorted(canonical["date"].dropna().dt.date.unique())
     date_max = canonical_dates[-1] if canonical_dates else None
+    set_max: set[str] = set()
+    if date_max is not None:
+        set_max = set(canonical.loc[canonical["date"].dt.date == date_max, "ticker"].dropna().unique())
 
     check1_pass = (
         date_max is not None and date_max >= expected_date_max
@@ -112,29 +208,56 @@ def check_ssot_integrity_br(
 
     n_at_max = 0
     median_recent = 0.0
+    coverage_pct: float | None = None
+    missing_tickers: list[str] = []
     check3_pass = False
+    is_reb = is_rebalance_day
+    rebalance_day_resolution = "explicit_input" if is_rebalance_day is not None else "config"
     if date_max is not None:
-        n_at_max = int(canonical.loc[canonical["date"].dt.date == date_max, "ticker"].nunique())
+        n_at_max = int(len(set_max))
         prior_dates_all = [d for d in canonical_dates if d < date_max]
         lookback_dates = prior_dates_all[-UNIVERSE_LOOKBACK_SESSIONS:]
+        lookback_universe: set[str] = set()
         if lookback_dates:
-            recent_counts = (
-                canonical[canonical["date"].dt.date.isin(lookback_dates)]
-                .groupby(canonical["date"].dt.date)["ticker"]
-                .nunique()
-            )
+            lookback_mask = canonical["date"].dt.date.isin(lookback_dates)
+            lookback_slice = canonical[lookback_mask]
+            recent_counts = lookback_slice.groupby(lookback_slice["date"].dt.date)["ticker"].nunique()
             median_recent = float(recent_counts.median()) if not recent_counts.empty else 0.0
+            lookback_universe = set(lookback_slice["ticker"].dropna().unique())
             if median_recent > 0:
-                check3_pass = (n_at_max / median_recent) * 100.0 >= MIN_UNIVERSE_COVERAGE_PCT
+                coverage_pct = round((n_at_max / median_recent) * 100.0, 1)
+        if coverage_pct is not None and coverage_pct < MIN_UNIVERSE_COVERAGE_PCT:
+            missing_tickers = sorted(lookback_universe - set_max)
+
+    if is_reb is None:
+        is_reb = _is_rebalance_market_day(expected_date_max)
+        if is_reb is None:
+            rebalance_day_resolution = "unknown"
+
+    if is_reb is True:
+        check3_pass = coverage_pct is not None and coverage_pct >= MIN_UNIVERSE_COVERAGE_PCT
+        if not check3_pass:
+            failed.append(f"universe_coverage(rebalance_day): n={n_at_max} median_recent={median_recent}")
+    else:
+        check3_pass = coverage_pct is not None and coverage_pct >= CATASTROPHIC_COVERAGE_FLOOR_PCT
+        if not check3_pass:
+            failed.append(f"universe_coverage_floor: n={n_at_max} median_recent={median_recent}")
+
     checks["universe_coverage"] = {
         "pass": check3_pass,
         "n_tickers_date_max": n_at_max,
         "median_recent_sessions": median_recent,
-        "coverage_pct": round((n_at_max / median_recent) * 100.0, 1) if median_recent else None,
-        "min_required_pct": MIN_UNIVERSE_COVERAGE_PCT,
+        "coverage_pct": coverage_pct,
+        "min_required_pct": (
+            MIN_UNIVERSE_COVERAGE_PCT
+            if is_reb is True
+            else CATASTROPHIC_COVERAGE_FLOOR_PCT
+        ),
+        "strict_threshold_pct": MIN_UNIVERSE_COVERAGE_PCT,
+        "floor_pct": CATASTROPHIC_COVERAGE_FLOOR_PCT,
+        "is_rebalance_day": is_reb,
+        "rebalance_day_resolution": rebalance_day_resolution,
     }
-    if not check3_pass:
-        failed.append(f"universe_coverage: n={n_at_max} median_recent={median_recent}")
 
     intersection_pct = None
     check4_pass = False
@@ -175,13 +298,66 @@ def check_ssot_integrity_br(
     if not check5_pass:
         failed.append(f"spc_integrity: coverage_pct={spc_cov}")
 
-    status = "PASS" if not failed else "FAIL"
+    stale_positions: list[str] = []
+    open_positions_count = 0
+    stale_pct = 0.0
+    check6_pass = False
+    ledger_error = None
+    pos_source = "input" if open_positions is not None else "ledger"
+    try:
+        pos_set = (
+            {str(tk).upper().strip() for tk in open_positions if str(tk).strip()}
+            if open_positions is not None
+            else _open_positions_at(expected_date_max)
+        )
+        open_positions_count = len(pos_set)
+        stale_positions = sorted(tk for tk in pos_set if tk not in set_max)
+        if open_positions_count > 0:
+            stale_pct = round(100.0 * len(stale_positions) / open_positions_count, 1)
+        check6_pass = stale_pct <= MAX_STALE_POSITIONS_PCT
+        if not check6_pass:
+            failed.append(
+                f"open_positions_coverage: stale={len(stale_positions)}/{open_positions_count}"
+            )
+    except Exception as exc:
+        ledger_error = f"{type(exc).__name__}: {exc}"
+        failed.append("open_positions_coverage: ledger_unavailable")
+
+    checks["open_positions_coverage"] = {
+        "pass": check6_pass,
+        "source": pos_source,
+        "open_positions_count": open_positions_count,
+        "stale_positions": stale_positions,
+        "stale_pct": stale_pct,
+        "max_stale_pct": MAX_STALE_POSITIONS_PCT,
+    }
+    if ledger_error:
+        checks["open_positions_coverage"]["error"] = ledger_error
+
+    if not failed:
+        if coverage_pct is not None and coverage_pct < MIN_UNIVERSE_COVERAGE_PCT:
+            degraded_reasons.append(
+                f"universe_coverage_soft: {coverage_pct}%<{MIN_UNIVERSE_COVERAGE_PCT}%"
+            )
+        if stale_positions:
+            degraded_reasons.append(
+                f"open_positions_stale: {len(stale_positions)}/{open_positions_count}"
+            )
+
+    status = "FAIL" if failed else ("PASS_DEGRADED" if degraded_reasons else "PASS")
+    quarantine = {
+        "missing_tickers": missing_tickers if (coverage_pct is not None and coverage_pct < MIN_UNIVERSE_COVERAGE_PCT) else [],
+        "n_missing": len(missing_tickers) if (coverage_pct is not None and coverage_pct < MIN_UNIVERSE_COVERAGE_PCT) else 0,
+    }
+
     report = {
         "status": status,
         "expected_date_max": str(expected_date_max),
         "canonical_date_max": str(date_max) if date_max else None,
         "checks": checks,
         "failed_checks": failed,
+        "degraded_reasons": degraded_reasons,
+        "quarantine": quarantine,
         "generated_at": pd.Timestamp.now(tz="UTC").isoformat(),
     }
     if persist:

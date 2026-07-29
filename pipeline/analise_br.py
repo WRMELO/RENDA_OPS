@@ -496,6 +496,17 @@ def build_context(market_day: date) -> dict:
             df_tk = can[(can["ticker"] == tk) & (can["date"] <= pd.Timestamp(d_prev))].sort_values("date")
 
         close_d1 = _safe_float(df_tk.iloc[-1].get("close_operational", 0.0) if not df_tk.empty else 0.0)
+        if not df_tk.empty:
+            last_price_ts = pd.to_datetime(df_tk.iloc[-1].get("date"), errors="coerce")
+            if pd.notna(last_price_ts):
+                price_date = last_price_ts.date().isoformat()
+                price_stale = last_price_ts.date() < d_prev
+            else:
+                price_date = ""
+                price_stale = True
+        else:
+            price_date = ""
+            price_stale = True
         valor_mkt = qty * close_d1
         total_mkt += valor_mkt
 
@@ -529,6 +540,8 @@ def build_context(market_day: date) -> dict:
                 "qty": qty,
                 "avg_cost": round(avg_cost, 4),
                 "close_d1": round(close_d1, 4),
+                "price_date": price_date,
+                "price_stale": bool(price_stale),
                 "valor_mercado": round(valor_mkt, 2),
                 "heat_pct": round(heat_pct, 2),
                 "peak_close": round(peak_close, 4),
