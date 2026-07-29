@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -26,16 +27,23 @@ def patched_paths(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     macro = tmp_path / "macro.parquet"
     ptax = tmp_path / "fx_ptax.parquet"
     report = tmp_path / "ssot_integrity_br.json"
+    exclusions = tmp_path / "universe_exclusions.json"
     monkeypatch.setattr(gate, "CANONICAL_PATH", canonical)
     monkeypatch.setattr(gate, "MACRO_PATH", macro)
     monkeypatch.setattr(gate, "PTAX_PATH", ptax)
     monkeypatch.setattr(gate, "REPORT_PATH", report)
-    return canonical, macro, ptax
+    monkeypatch.setattr(gate, "EXCLUSIONS_PATH", exclusions)
+    return canonical, macro, ptax, exclusions
 
 
 def _write_support_tables(macro_path: Path, ptax_path: Path, day: date) -> None:
     pd.DataFrame({"date": [day]}).to_parquet(macro_path, index=False)
     pd.DataFrame({"date": [day]}).to_parquet(ptax_path, index=False)
+
+
+def _write_exclusions(path: Path, tickers: list[str]) -> None:
+    payload = {"excluded_tickers": tickers}
+    path.write_text(json.dumps(payload), encoding="utf-8")
 
 
 def _write_canonical(
@@ -75,7 +83,7 @@ def _write_canonical(
 
 
 def test_gate_pass_clean(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
     _write_support_tables(macro, ptax, dates[-1])
@@ -95,7 +103,7 @@ def test_gate_pass_clean(patched_paths):
 
 
 def test_gate_pass_degraded_with_quarantine_and_one_stale_position(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     last_tickers = universe[:78]
     dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=last_tickers)
@@ -117,7 +125,7 @@ def test_gate_pass_degraded_with_quarantine_and_one_stale_position(patched_paths
 
 
 def test_gate_fails_when_coverage_below_floor(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     last_tickers = universe[:55]
     dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=last_tickers)
@@ -135,7 +143,7 @@ def test_gate_fails_when_coverage_below_floor(patched_paths):
 
 
 def test_gate_fails_when_stale_open_positions_exceed_limit(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     # 78% coverage: TK001..TK078 available, TK079..TK100 ausentes.
     last_tickers = universe[:78]
@@ -152,11 +160,11 @@ def test_gate_fails_when_stale_open_positions_exceed_limit(patched_paths):
 
     assert report["status"] == "FAIL"
     assert report["checks"]["open_positions_coverage"]["stale_pct"] == 60.0
-    assert any("open_positions_coverage: stale=6/10" in x for x in report["failed_checks"])
+    assert any("open_positions_coverage: stale+blind=6/10" in x for x in report["failed_checks"])
 
 
 def test_rebalance_day_keeps_strict_90pct_rule(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
 
     dates_low = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe[:78])
@@ -182,7 +190,7 @@ def test_rebalance_day_keeps_strict_90pct_rule(patched_paths):
 
 
 def test_regression_checks_macro_continuity_and_spc_still_fail(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
 
     # macro_alignment FAIL
@@ -240,7 +248,7 @@ def test_regression_checks_macro_continuity_and_spc_still_fail(patched_paths):
 
 
 def test_allow_ahead_mode_preserved_for_catchup(patched_paths):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
     _write_support_tables(macro, ptax, dates[-1])
@@ -259,7 +267,7 @@ def test_allow_ahead_mode_preserved_for_catchup(patched_paths):
 
 
 def test_gate_fails_when_ledger_is_unavailable(patched_paths, monkeypatch: pytest.MonkeyPatch):
-    canonical, macro, ptax = patched_paths
+    canonical, macro, ptax, _ = patched_paths
     universe = _tickers("TK", 100)
     dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe[:78])
     _write_support_tables(macro, ptax, dates[-1])
@@ -273,3 +281,49 @@ def test_gate_fails_when_ledger_is_unavailable(patched_paths, monkeypatch: pytes
 
     assert report["status"] == "FAIL"
     assert any("open_positions_coverage: ledger_unavailable" in x for x in report["failed_checks"])
+
+
+def test_gate_pass_with_blind_positions_under_threshold(patched_paths):
+    canonical, macro, ptax, exclusions = patched_paths
+    universe = _tickers("TK", 100)
+    dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
+    _write_support_tables(macro, ptax, dates[-1])
+    _write_exclusions(exclusions, ["BLIND1"])
+
+    report = gate.check_ssot_integrity_br(
+        expected_date_max=dates[-1],
+        persist=False,
+        open_positions={"TK001", "BLIND1"},
+        is_rebalance_day=False,
+    )
+
+    assert report["status"] == "PASS"
+    open_cov = report["checks"]["open_positions_coverage"]
+    assert open_cov["stale_positions"] == []
+    assert open_cov["blind_positions"] == ["BLIND1"]
+    assert open_cov["stale_plus_blind_pct"] == 50.0
+    assert report["warnings"]
+
+
+def test_gate_fails_when_blind_positions_exceed_limit(patched_paths):
+    canonical, macro, ptax, exclusions = patched_paths
+    universe = _tickers("TK", 100)
+    dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
+    _write_support_tables(macro, ptax, dates[-1])
+    blind = [f"BL{i}" for i in range(1, 7)]
+    _write_exclusions(exclusions, blind)
+    open_positions = {"TK001", "TK002", "TK003", "TK004", *blind}
+
+    report = gate.check_ssot_integrity_br(
+        expected_date_max=dates[-1],
+        persist=False,
+        open_positions=open_positions,
+        is_rebalance_day=False,
+    )
+
+    assert report["status"] == "FAIL"
+    open_cov = report["checks"]["open_positions_coverage"]
+    assert open_cov["stale_positions"] == []
+    assert sorted(open_cov["blind_positions"]) == sorted(blind)
+    assert open_cov["stale_plus_blind_pct"] == 60.0
+    assert any("open_positions_coverage: stale+blind=6/10" in x for x in report["failed_checks"])

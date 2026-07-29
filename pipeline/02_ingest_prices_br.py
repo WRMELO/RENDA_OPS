@@ -1,18 +1,15 @@
-"""02 — Ingest BR + BDR(B3) prices via BRAPI (incremental).
+"""02 — Ingest BR + BDR(B3) prices via EODHD base (incremental).
 
 Operational mode:
 - Uses only B3-tradable tickers in BRL.
 - Excludes US_DIRECT tickers by decision D-004.
-- Uses adaptive BRAPI ranges by ticker staleness (1mo/3mo/1y/2y) and
-  merges incrementally into market_data_raw.parquet.
-- Falls back to 2y when short-range fetch returns empty results.
+- Reads data from the local EODHD SA base (no network calls).
+- Merges incrementally into market_data_raw.parquet without retroaction.
 """
 from __future__ import annotations
 
 import sys
-import time
 from datetime import date
-from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -20,26 +17,11 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lib.trading_calendar import is_session, prev_session
+from lib.trading_calendar import prev_session
 
 UNIVERSE_FILE = ROOT / "data" / "ssot" / "universe.parquet"
 BDR_UNIVERSE_FILE = ROOT / "data" / "ssot" / "bdr_universe.parquet"
 TARGET = ROOT / "data" / "ssot" / "market_data_raw.parquet"
-SLEEP_SECONDS = 0.05
-DEFAULT_RANGE = "2y"
-
-
-def _adaptive_range(ticker_last: date | None, end: date) -> str:
-    if ticker_last is None:
-        return DEFAULT_RANGE
-    gap_days = (end - ticker_last).days
-    if gap_days <= 5:
-        return "1mo"
-    if gap_days <= 30:
-        return "3mo"
-    if gap_days <= 180:
-        return "1y"
-    return DEFAULT_RANGE
 
 
 def _get_operational_tickers() -> list[str]:
@@ -84,191 +66,41 @@ def _get_last_date_per_ticker() -> dict[str, date]:
     return {t: g["date"].max().date() for t, g in raw.groupby("ticker")}
 
 
-def _parse_date_mixed(value) -> pd.Timestamp | pd.NaT:
-    if value is None:
-        return pd.NaT
-    if isinstance(value, (int, float)):
-        return pd.to_datetime(value, unit="s", utc=True, errors="coerce").tz_convert(None).normalize()
-    ts = pd.to_datetime(value, utc=True, errors="coerce")
-    if pd.isna(ts):
-        return pd.NaT
-    try:
-        return ts.tz_convert(None).normalize()
-    except Exception:
-        return pd.to_datetime(value, errors="coerce")
-
-
-def _parse_brapi_iso_date(raw: object) -> pd.Timestamp | pd.NaT:
-    if raw is None:
-        return pd.NaT
-    if not isinstance(raw, str):
-        return pd.NaT
-    try:
-        return pd.Timestamp(datetime.fromisoformat(raw.replace("Z", "+00:00")).date())
-    except ValueError:
-        return pd.NaT
-
-
-def _extract_dividend_maps(result: dict) -> tuple[dict[pd.Timestamp, float], dict[pd.Timestamp, str]]:
-    by_date_rate: dict[pd.Timestamp, float] = {}
-    by_date_label: dict[pd.Timestamp, str] = {}
-    dividends_data = result.get("dividendsData") or {}
-    for item in dividends_data.get("cashDividends") or []:
-        ex_date = _parse_brapi_iso_date(item.get("lastDatePrior"))
-        if pd.isna(ex_date):
-            # Fallback: if BRAPI does not provide ex-date, use payment date.
-            ex_date = _parse_brapi_iso_date(item.get("paymentDate"))
-        if pd.isna(ex_date):
-            continue
-        rate = pd.to_numeric(item.get("rate"), errors="coerce")
-        if pd.isna(rate) or float(rate) <= 0:
-            continue
-        by_date_rate[ex_date] = float(by_date_rate.get(ex_date, 0.0) + float(rate))
-        label = str(item.get("label", "DIVIDENDO")).strip()
-        if label:
-            by_date_label[ex_date] = label
-    return by_date_rate, by_date_label
-
-
-def _fetch_history(adapter, ticker: str, range_hint: str = DEFAULT_RANGE) -> pd.DataFrame:
-    payload = adapter._request(  # noqa: SLF001
-        f"quote/{ticker}",
-        params={"range": range_hint, "interval": "1d", "dividends": "true"},
-    )
-    results = payload.get("results") or []
-    if not results:
-        return pd.DataFrame()
-    result = results[0]
-    rows = result.get("historicalDataPrice") or []
-    if not rows:
-        return pd.DataFrame()
-    df = pd.DataFrame(rows)
-    if "date" not in df.columns:
-        return pd.DataFrame()
-    df["date"] = df["date"].apply(_parse_date_mixed)
-    for col in ["open", "high", "low", "close", "adjustedClose", "volume", "splits", "dividends"]:
-        if col not in df.columns:
-            df[col] = None
-    out = df[["date", "open", "high", "low", "close", "volume", "adjustedClose", "dividends", "splits"]].copy()
-    out = out.rename(columns={"adjustedClose": "adjusted_close"})
-    div_rate_map, div_label_map = _extract_dividend_maps(result)
-    out["dividend_rate"] = out["date"].map(div_rate_map).fillna(0.0).astype(float)
-    out["dividend_label"] = out["date"].map(div_label_map).fillna("")
-    out["ticker"] = ticker
-    out["date"] = pd.to_datetime(out["date"], errors="coerce")
-    return out.dropna(subset=["date", "close"])
-
-
 def run(end_date: date | None = None) -> Path:
     load_dotenv(ROOT / ".env")
-    from lib.adapters import BrapiAdapter
+    from lib.eodhd_source import load_incremental_rows_from_eodhd
 
     end = end_date or date.today()
     # D-161/R-062: never ingest beyond the last closed BVMF session.
-    # BRAPI can return pre-open rows stamped with today's civil date before
-    # the session has actually closed. Without this clamp those rows can be
-    # stored as if they were end-of-day data and fragment the SSOT.
     end = min(end, prev_session(date.today(), exchange="BVMF"))
     op_tickers = _get_operational_tickers()
     last_dates = _get_last_date_per_ticker()
-    adapter = BrapiAdapter(timeout_seconds=8.0)
 
-    frames: list[pd.DataFrame] = []
-    ok, fail, skipped = 0, 0, 0
-
-    for idx, ticker in enumerate(op_tickers, 1):
-        ticker_last = last_dates.get(ticker)
-        if ticker_last and ticker_last >= end:
-            skipped += 1
-            continue
-
-        try:
-            chosen_range = _adaptive_range(ticker_last, end)
-            df = _fetch_history(adapter, ticker=ticker, range_hint=chosen_range)
-            if df.empty and chosen_range != DEFAULT_RANGE:
-                df = _fetch_history(adapter, ticker=ticker, range_hint=DEFAULT_RANGE)
-            if not df.empty:
-                df = df[df["date"] <= pd.Timestamp(end)]
-                if ticker_last:
-                    df = df[df["date"] > pd.Timestamp(ticker_last)]
-                df = df[df["date"].apply(lambda d: is_session(d.date(), exchange="BVMF"))]
-                if not df.empty:
-                    frames.append(
-                        df[
-                            [
-                                "ticker",
-                                "date",
-                                "open",
-                                "high",
-                                "low",
-                                "close",
-                                "volume",
-                                "adjusted_close",
-                                "dividends",
-                                "splits",
-                                "dividend_rate",
-                                "dividend_label",
-                            ]
-                        ].copy()
-                    )
-            ok += 1
-        except Exception as exc:
-            # One technical retry with shorter window.
-            try:
-                payload = adapter._request(  # noqa: SLF001
-                    f"quote/{ticker}",
-                    params={"range": "1y", "interval": "1d", "dividends": "true"},
-                )
-                results = payload.get("results") or []
-                if results and results[0].get("historicalDataPrice"):
-                    result = results[0]
-                    df2 = pd.DataFrame(result["historicalDataPrice"])
-                    df2["date"] = df2["date"].apply(_parse_date_mixed)
-                    for col in ["open", "high", "low", "close", "adjustedClose", "volume", "splits", "dividends"]:
-                        if col not in df2.columns:
-                            df2[col] = None
-                    df2 = df2.rename(columns={"adjustedClose": "adjusted_close"})
-                    div_rate_map, div_label_map = _extract_dividend_maps(result)
-                    df2["dividend_rate"] = pd.to_datetime(df2["date"], errors="coerce").map(div_rate_map).fillna(0.0).astype(float)
-                    df2["dividend_label"] = pd.to_datetime(df2["date"], errors="coerce").map(div_label_map).fillna("")
-                    df2["ticker"] = ticker
-                    df2 = df2[df2["date"] <= pd.Timestamp(end)]
-                    if ticker_last:
-                        df2 = df2[df2["date"] > pd.Timestamp(ticker_last)]
-                    df2 = df2[df2["date"].apply(lambda d: is_session(d.date(), exchange="BVMF"))]
-                    if not df2.empty:
-                        frames.append(
-                            df2[
-                                [
-                                    "ticker",
-                                    "date",
-                                    "open",
-                                    "high",
-                                    "low",
-                                    "close",
-                                    "volume",
-                                    "adjusted_close",
-                                    "dividends",
-                                    "splits",
-                                    "dividend_rate",
-                                    "dividend_label",
-                                ]
-                            ].copy()
-                        )
-                ok += 1
-            except Exception:
-                fail += 1
-                if fail <= 8:
-                    print(f"  WARN: {ticker} failed: {str(exc)[:120]}", flush=True)
-        if idx % 50 == 0:
-            print(f"  [{idx}/{len(op_tickers)}] ok={ok} fail={fail} skipped={skipped}", flush=True)
-        time.sleep(SLEEP_SECONDS)
-
-    if not frames:
-        print(f"[02] No new BR/BDR data to ingest (ok={ok} fail={fail} skipped={skipped})")
+    new_data = load_incremental_rows_from_eodhd(
+        tickers=op_tickers,
+        ticker_last_dates=last_dates,
+        end_date=end,
+    )
+    if new_data.empty:
+        print("[02] No new BR/BDR data to ingest from EODHD base")
         return TARGET
 
-    new_data = pd.concat(frames, ignore_index=True)
+    new_data = new_data[
+        [
+            "ticker",
+            "date",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "adjusted_close",
+            "dividends",
+            "splits",
+            "dividend_rate",
+            "dividend_label",
+        ]
+    ].copy()
     new_data["date"] = pd.to_datetime(new_data["date"]).dt.strftime("%Y-%m-%d")
 
     if TARGET.exists():
@@ -287,9 +119,10 @@ def run(end_date: date | None = None) -> Path:
     combined = combined.sort_values(["ticker", "date"]).reset_index(drop=True)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     combined.to_parquet(TARGET, index=False)
+    added_tickers = int(new_data["ticker"].nunique())
     print(
         f"[02] BR/BDR market data: {len(new_data)} new rows, total {len(combined)} "
-        f"(ok={ok} fail={fail} skipped={skipped}) -> {TARGET}"
+        f"(source=EODHD base, tickers={added_tickers}) -> {TARGET}"
     )
     return TARGET
 

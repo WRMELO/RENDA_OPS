@@ -1,7 +1,7 @@
 """03 — Update PTAX reference series and validate BDR universe.
 
 PTAX is kept as macro/risk reference only. BDR prices in operation mode
-come directly from B3 via BRAPI (see D-008), not from US+PTAX synthesis.
+come from the BR SSOT built from EODHD SA data, not from US+PTAX synthesis.
 """
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""01 — Ingest macro data: CDI (BCB), Ibov (BRAPI), S&P 500 (Yahoo).
+"""01 — Ingest macro data: CDI (BCB), Ibov (EODHD), S&P 500 (Yahoo).
 
 Incremental: reads existing macro.parquet, fetches only new dates, appends.
 """
@@ -21,7 +21,7 @@ START_DATE = date(2018, 1, 1)
 
 def run(end_date: date | None = None) -> Path:
     load_dotenv(ROOT / ".env")
-    from lib.adapters import BrapiAdapter, BcbAdapter, YahooAdapter
+    from lib.adapters import BcbAdapter, EodhdAdapter, YahooAdapter
     from lib.trading_calendar import prev_session, sessions_in_range
 
     end = end_date or date.today()
@@ -40,7 +40,7 @@ def run(end_date: date | None = None) -> Path:
         return TARGET
 
     fetch_start = last_existing
-    brapi = BrapiAdapter()
+    eodhd = EodhdAdapter()
     bcb = BcbAdapter()
     yahoo = YahooAdapter()
 
@@ -49,10 +49,9 @@ def run(end_date: date | None = None) -> Path:
         print(f"[01] No new B3 trading days after {last_existing}")
         return TARGET
 
-    ibov_hist = brapi.get_historical_data(ticker="^BVSP", start=fetch_start, end=end)
-    ibov_df = pd.DataFrame(ibov_hist.price_data)
+    ibov_df = eodhd.get_daily_close("BVSP.INDX", start=fetch_start, end=end)
     if ibov_df.empty or "date" not in ibov_df.columns:
-        print(f"[01] BRAPI returned no usable data for ^BVSP ({last_existing}..{end})")
+        print(f"[01] EODHD returned no usable data for BVSP.INDX ({last_existing}..{end})")
         return TARGET
     ibov_df["date"] = pd.to_datetime(ibov_df["date"], errors="coerce")
     ibov_df["ibov_close"] = pd.to_numeric(ibov_df["close"], errors="coerce")

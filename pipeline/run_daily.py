@@ -295,16 +295,20 @@ def run(
         if report.get("status") != "PASS_DEGRADED":
             return
         reasons = report.get("degraded_reasons") or []
+        report_warnings = report.get("warnings") or []
         quarantine = report.get("quarantine") or {}
         checks = report.get("checks") or {}
         open_cov = checks.get("open_positions_coverage") or {}
         stale_positions = open_cov.get("stale_positions") or []
+        blind_positions = open_cov.get("blind_positions") or []
         logger.warning(
-            "SSOT integrity gate DEGRADED (%s): reasons=%s n_missing=%s stale_positions=%s",
+            "SSOT integrity gate DEGRADED (%s): reasons=%s warnings=%s n_missing=%s stale_positions=%s blind_positions=%s",
             phase,
             reasons,
+            report_warnings,
             quarantine.get("n_missing", 0),
             stale_positions,
+            blind_positions,
         )
 
     try:

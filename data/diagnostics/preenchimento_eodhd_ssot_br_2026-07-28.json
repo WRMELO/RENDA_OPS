@@ -1,0 +1,36 @@
+{
+  "task_id": "T-SDC-EODHD-ADDITIVE-FILL-UNBLOCK-BR-20260728-V1",
+  "generated_at": "2026-07-29T13:07:09.768976+00:00",
+  "target_date": "2026-07-28",
+  "operational_tickers": 1124,
+  "tickers_with_history_in_raw": 1121,
+  "tickers_without_history_in_raw": 3,
+  "rows_before": 533830,
+  "rows_after": 534405,
+  "rows_added": 575,
+  "candidate_pairs_target_date_only": 921,
+  "recoverable_pairs_eodhd": 575,
+  "recoverable_tickers_eodhd": 575,
+  "pairs_filled_by_date": {
+    "2026-07-28": 575
+  },
+  "unrecoverable_pairs": 346,
+  "unrecoverable_tickers": 346,
+  "unrecoverable_pairs_by_date": {
+    "2026-07-28": 346
+  },
+  "split_collision_count": 0,
+  "dividend_collision_count": 0,
+  "split_collision_examples": [],
+  "dividend_collision_examples": [],
+  "sha256_before": "7b7ae393a40904af08841ec78c490da97c0ea571a4f5a0d2d79ad71f13e94703",
+  "sha256_after": "c0c42cb1a7153d5360de9f3b47a7b58e2d28d09c140d407ec8c14a385f81523b",
+  "backup_path": "/home/wilson/RENDA_OPS/data/ssot/market_data_raw.parquet.bak_pre_eodhd_fill_20260728_100709",
+  "integrity_assertion_passed": true,
+  "source_files": {
+    "raw": "/home/wilson/RENDA_OPS/data/ssot/market_data_raw.parquet",
+    "eod_raw_sa": "/home/wilson/SALA_DE_CONTROLE/eodhd_base_unica/data/eodhd_raw_sa.parquet",
+    "eod_splits_sa": "/home/wilson/SALA_DE_CONTROLE/eodhd_base_unica/data/eodhd_splits_sa.parquet",
+    "eod_dividends_sa": "/home/wilson/SALA_DE_CONTROLE/eodhd_base_unica/data/eodhd_dividends_sa.parquet"
+  }
+}

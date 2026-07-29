@@ -1,4 +1,4 @@
-"""Data adapters for external market data sources (BRAPI, BCB, Yahoo, FRED)."""
+"""Data adapters for external market data sources (BRAPI, BCB, Yahoo, EODHD, FRED)."""
 from __future__ import annotations
 
 import os
@@ -198,6 +198,59 @@ class YahooAdapter:
         df = pd.DataFrame({"timestamp": timestamps, "close": closes})
         df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert(None).dt.normalize()
         df["close"] = pd.to_numeric(df["close"], errors="coerce")
+        return df[["date", "close"]].dropna().sort_values("date").reset_index(drop=True)
+
+
+class EodhdAdapter:
+    """EODHD adapter for index daily closes."""
+
+    BASE_URL = "https://eodhd.com/api"
+
+    def __init__(self, timeout_seconds: float = 20.0, max_retries: int = 5) -> None:
+        token = (os.getenv("EODHD_API_TOKEN") or os.getenv("EODHD_API_KEY") or "").strip()
+        if not token:
+            raise ValueError("EODHD_API_TOKEN not found in environment.")
+        self.api_token = token
+        self.timeout = timeout_seconds
+        self.max_retries = max_retries
+
+    def get_daily_close(self, symbol: str, start: date, end: date) -> pd.DataFrame:
+        url = f"{self.BASE_URL}/eod/{symbol}"
+        params = {
+            "from": start.isoformat(),
+            "to": end.isoformat(),
+            "period": "d",
+            "fmt": "json",
+            "api_token": self.api_token,
+        }
+        payload: Any = []
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                resp = requests.get(url, params=params, timeout=self.timeout)
+                if resp.status_code in {401, 403}:
+                    raise RuntimeError(f"EODHD auth failed for {symbol}: {resp.text[:200]}")
+                resp.raise_for_status()
+                payload = resp.json()
+                break
+            except (RequestException, ValueError, RuntimeError) as exc:
+                if attempt == self.max_retries:
+                    raise RuntimeError(f"EODHD fetch failed for {symbol}.") from exc
+                wait_s = min(2 ** attempt, 60)
+                print(
+                    f"[EODHD] Attempt {attempt}/{self.max_retries} failed for {symbol}; "
+                    f"retrying in {wait_s}s..."
+                )
+                time.sleep(float(wait_s))
+        if not isinstance(payload, list) or not payload:
+            return pd.DataFrame(columns=["date", "close"])
+        df = pd.DataFrame(payload)
+        if "date" not in df.columns:
+            return pd.DataFrame(columns=["date", "close"])
+        close_col = "close" if "close" in df.columns else "adjusted_close"
+        if close_col not in df.columns:
+            return pd.DataFrame(columns=["date", "close"])
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df["close"] = pd.to_numeric(df[close_col], errors="coerce")
         return df[["date", "close"]].dropna().sort_values("date").reset_index(drop=True)
 
 

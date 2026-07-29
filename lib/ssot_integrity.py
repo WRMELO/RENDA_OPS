@@ -24,6 +24,7 @@ CANONICAL_PATH = ROOT / "data" / "ssot" / "canonical_br.parquet"
 MACRO_PATH = ROOT / "data" / "ssot" / "macro.parquet"
 PTAX_PATH = ROOT / "data" / "ssot" / "fx_ptax.parquet"
 REPORT_PATH = ROOT / "data" / "ssot" / "ssot_integrity_br.json"
+EXCLUSIONS_PATH = ROOT / "config" / "universe_exclusions.json"
 
 MIN_UNIVERSE_COVERAGE_PCT = 90.0
 MIN_CONTINUITY_PCT = 90.0
@@ -119,6 +120,19 @@ def _open_positions_at(as_of_day: date) -> set[str]:
     }
 
 
+def _load_excluded_universe_tickers() -> set[str]:
+    if not EXCLUSIONS_PATH.exists():
+        return set()
+    try:
+        payload = json.loads(EXCLUSIONS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    raw = payload.get("excluded_tickers") or []
+    if not isinstance(raw, list):
+        return set()
+    return {str(tk).upper().strip() for tk in raw if str(tk).strip()}
+
+
 def check_ssot_integrity_br(
     expected_date_max: date,
     persist: bool = True,
@@ -135,6 +149,7 @@ def check_ssot_integrity_br(
     checks: dict[str, dict] = {}
     failed: list[str] = []
     degraded_reasons: list[str] = []
+    warnings: list[str] = []
 
     if not CANONICAL_PATH.exists():
         report = {
@@ -144,6 +159,7 @@ def check_ssot_integrity_br(
             "checks": {},
             "failed_checks": ["canonical_br.parquet ausente"],
             "degraded_reasons": [],
+            "warnings": [],
             "quarantine": {"missing_tickers": [], "n_missing": 0},
             "generated_at": pd.Timestamp.now(tz="UTC").isoformat(),
         }
@@ -299,6 +315,9 @@ def check_ssot_integrity_br(
         failed.append(f"spc_integrity: coverage_pct={spc_cov}")
 
     stale_positions: list[str] = []
+    blind_positions: list[str] = []
+    stale_plus_blind_count = 0
+    stale_plus_blind_pct = 0.0
     open_positions_count = 0
     stale_pct = 0.0
     check6_pass = False
@@ -310,14 +329,22 @@ def check_ssot_integrity_br(
             if open_positions is not None
             else _open_positions_at(expected_date_max)
         )
+        excluded_universe = _load_excluded_universe_tickers()
         open_positions_count = len(pos_set)
-        stale_positions = sorted(tk for tk in pos_set if tk not in set_max)
+        blind_positions = sorted(tk for tk in pos_set if tk in excluded_universe)
+        stale_positions = sorted(tk for tk in pos_set if tk not in set_max and tk not in excluded_universe)
         if open_positions_count > 0:
             stale_pct = round(100.0 * len(stale_positions) / open_positions_count, 1)
-        check6_pass = stale_pct <= MAX_STALE_POSITIONS_PCT
+            stale_plus_blind_count = len(stale_positions) + len(blind_positions)
+            stale_plus_blind_pct = round(100.0 * stale_plus_blind_count / open_positions_count, 1)
+        check6_pass = stale_plus_blind_pct <= MAX_STALE_POSITIONS_PCT
         if not check6_pass:
             failed.append(
-                f"open_positions_coverage: stale={len(stale_positions)}/{open_positions_count}"
+                f"open_positions_coverage: stale+blind={stale_plus_blind_count}/{open_positions_count}"
+            )
+        if blind_positions:
+            warnings.append(
+                "blind_positions sem preco no universo ativo: " + ", ".join(blind_positions)
             )
     except Exception as exc:
         ledger_error = f"{type(exc).__name__}: {exc}"
@@ -328,7 +355,10 @@ def check_ssot_integrity_br(
         "source": pos_source,
         "open_positions_count": open_positions_count,
         "stale_positions": stale_positions,
+        "blind_positions": blind_positions,
         "stale_pct": stale_pct,
+        "stale_plus_blind_count": stale_plus_blind_count,
+        "stale_plus_blind_pct": stale_plus_blind_pct,
         "max_stale_pct": MAX_STALE_POSITIONS_PCT,
     }
     if ledger_error:
@@ -357,6 +387,7 @@ def check_ssot_integrity_br(
         "checks": checks,
         "failed_checks": failed,
         "degraded_reasons": degraded_reasons,
+        "warnings": warnings,
         "quarantine": quarantine,
         "generated_at": pd.Timestamp.now(tz="UTC").isoformat(),
     }

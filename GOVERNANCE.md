@@ -102,12 +102,13 @@ Correcoes urgentes durante a simulacao:
 
 ### 6.4.1 Gate de integridade do SSOT (D-181/R-062)
 
-- `lib/ssot_integrity.py` implementa `check_ssot_integrity_br(expected_date_max, persist=True)`, validando alinhamento de datas entre fontes (canonical/macro/PTAX), cobertura de universo, continuidade interpregao e integridade SPC.
+- `lib/ssot_integrity.py` implementa `check_ssot_integrity_br(expected_date_max, persist=True)`, validando alinhamento de datas entre fontes (canonical/macro/PTAX), cobertura de universo, continuidade interpregao, integridade SPC e cobertura nominal de posicoes abertas (`stale_positions` + `blind_positions`).
 - `pipeline/run_daily.py` chama este gate apos ingest/rebuild e interrompe com `RuntimeError` em qualquer FAIL, antes de gerar decisao/painel/boletim.
 - O veredito e persistido em `data/ssot/ssot_integrity_br.json` e embutido em `data/ssot/contexto_analista_br.json` (campo `ssot_integrity`) para consumo obrigatorio pela skill `analista-br`.
 - Este gate e politica permanente do pipeline BR. Qualquer alteracao de criterio/limiar exige nova task formal via cadeia completa.
 - **Nota 2026-07-24 (D-182/R-063)**: o gate passou a aceitar dois modos explicitos: modo diario/decisao (`allow_ahead=False`, igualdade estrita `canonical_date_max == expected_date_max`) e modo catch-up (`allow_ahead=True`, `canonical_date_max >= expected_date_max`), usado exclusivamente quando `run_daily.run(is_catchup=True)` processa pregao historico faltante. O Step 04 (rebuild do canonical) ganhou guarda que pula o rebuild quando o canonical ja cobre o pregao do catch-up, para nunca truncar dados mais novos (R-019).
 - **Nota 2026-07-29 (D-184)**: no modo diario nao-rebalance, o criterio de cobertura deixou de ser binario. O gate passou a classificar `coverage_pct < 90%` como degradacao (`PASS_DEGRADED`) com quarentena nominal de tickers ausentes e checagem de posicoes abertas via `pipeline/ledger_br.py::compute_positions(as_of_date)`. O bloqueio hard permanece em tres casos: (i) dia de rebalance com cobertura `< 90%`; (ii) cobertura abaixo do piso catastrofico (`< 60%` da mediana das ultimas 20 sessoes); (iii) mais de `50%` das posicoes abertas sem preco no `date_max` (stale). Checks de macro/PTAX/continuidade/SPC continuam fail-loud sem relaxamento.
+- **Nota 2026-07-29 (D-185)**: a Fase 3 BR foi promovida para operacao com EODHD como fonte primaria. O Step 02 (`pipeline/02_ingest_prices_br.py`) deixou de consumir BRAPI e passou a ler incrementalmente a base local EODHD (`/home/wilson/SALA_DE_CONTROLE/eodhd_base_unica/data/eodhd_raw_sa.parquet`, com eventos em `eodhd_div_sa.parquet` e `eodhd_splits_sa.parquet`) via `lib/eodhd_source.py`. O Step 04 passou a respeitar exclusoes formais de universo (`config/universe_exclusions.json`) para manter coerencia entre cobertura EODHD e universo operacional. Resultado operacional exigido pelo Owner foi cumprido: `market_day=2026-07-28` regenerado com `status=PASS` (sem `degraded_reasons`).
 
 ### 6.5 Blindagem do Motor Operacional (D-025)
 
@@ -116,7 +117,7 @@ Correcoes urgentes durante a simulacao:
 | Arquivo | Funcao | Auditorias |
 |---------|--------|------------|
 | `pipeline/painel_diario.py` | CEP defensivo, quarentena SPC, C2 K=15, proventos automaticos, Base 1 patrimônio real | Sonnet, Gemini, Kimi, Kimi re-audit, T-029 re-audit |
-| `pipeline/02_ingest_prices_br.py` | Ingestao BRAPI + dividendos/JCP | Sonnet, Gemini |
+| `pipeline/02_ingest_prices_br.py` | Ingestao BR a partir da base local EODHD (preco + dividendos/splits) | Sonnet, Gemini |
 | `pipeline/04_build_canonical.py` | Canonical com dividend_rate/dividend_label | Sonnet, Gemini |
 | `lib/spc.py` | Classificador SPC B+C enriquecido: gate de entrada e release de quarentena (D-088/D-090) | Gemini, Kimi (T-091) |
 | `lib/engine.py` | Motor M3: `compute_m3_scores` (primitivo para backtests/ML) e `compute_filtered_m3_scores` (wrapper gate D-110 para callers produtivos) (D-115, T-LIQUIDITY-FILTER-WRAP-MOTOR-BR) | Gemini, Kimi (T-LIQUIDITY-FILTER-WRAP-MOTOR-BR) |

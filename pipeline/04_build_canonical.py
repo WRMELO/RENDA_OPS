@@ -10,6 +10,7 @@ US_DIRECT remains excluded from operational ingestion/ranking by D-004.
 from __future__ import annotations
 
 import math
+import json
 import re
 import sys
 from datetime import date, timedelta
@@ -28,6 +29,7 @@ IN_MACRO = ROOT / "data" / "ssot" / "macro.parquet"
 IN_UNIVERSE = ROOT / "data" / "ssot" / "universe.parquet"
 IN_BDR_UNIVERSE = ROOT / "data" / "ssot" / "bdr_universe.parquet"
 IN_FUNDAMENTALS = ROOT / "data" / "ssot" / "fundamentals.parquet"
+EXCLUSIONS_FILE = ROOT / "config" / "universe_exclusions.json"
 OUT_CANONICAL = IN_CANONICAL  # overwrite in place for operational use
 DEFAULT_WINDOW_DAYS = 730
 
@@ -131,6 +133,19 @@ def _get_operational_tickers() -> set[str]:
     )
     br_only = all_tickers - us_direct_sources - set(bdr["ticker"].astype(str).str.upper().str.strip().dropna())
     return br_only | b3_bdr
+
+
+def _load_excluded_universe_tickers() -> set[str]:
+    if not EXCLUSIONS_FILE.exists():
+        return set()
+    try:
+        payload = json.loads(EXCLUSIONS_FILE.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return set()
+    raw = payload.get("excluded_tickers") or []
+    if not isinstance(raw, list):
+        return set()
+    return {str(tk).upper().strip() for tk in raw if str(tk).strip()}
 
 
 def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) -> Path:
@@ -297,20 +312,25 @@ def run(end_date: date | None = None, window_days: int = DEFAULT_WINDOW_DAYS) ->
     recent_counts = final[final["_date_ts"] >= cutoff_date].groupby("ticker").size()
     stale_tickers = set(recent_counts[recent_counts < MIN_RECENT_DAYS].index)
     never_recent = set(final["ticker"].unique()) - set(recent_counts.index)
+    decision_exclusions = _load_excluded_universe_tickers()
+    decision_excluded = set(final["ticker"].unique()) & decision_exclusions
     zombie_tickers = stale_tickers | never_recent
+    zombie_only = zombie_tickers - decision_excluded
+    purged_tickers = zombie_only | decision_excluded
 
-    if zombie_tickers:
+    if purged_tickers:
         archive_path = ROOT / "data" / "ssot" / "canonical_br_archive.parquet"
-        archive = final[final["ticker"].isin(zombie_tickers)].drop(columns=["_date_ts"]).copy()
+        archive = final[final["ticker"].isin(purged_tickers)].drop(columns=["_date_ts"]).copy()
         if archive_path.exists():
             old_archive = pd.read_parquet(archive_path)
             archive = pd.concat([old_archive, archive], ignore_index=True)
             archive = archive.drop_duplicates(subset=["ticker", "date"], keep="last")
         archive.to_parquet(archive_path, index=False)
-        final = final[~final["ticker"].isin(zombie_tickers)].copy()
+        final = final[~final["ticker"].isin(purged_tickers)].copy()
         print(
-            f"[04] Purged {len(zombie_tickers)} zombie tickers to {archive_path.name} "
-            f"(< {MIN_RECENT_DAYS} days in last {STALE_WINDOW_DAYS}d)"
+            f"[04] Purged {len(purged_tickers)} tickers to {archive_path.name} "
+            f"(zombies={len(zombie_only)}, decision_exclusions={len(decision_excluded)}, "
+            f"criterion=< {MIN_RECENT_DAYS} days in last {STALE_WINDOW_DAYS}d)"
         )
 
     final = final.drop(columns=["_date_ts"])

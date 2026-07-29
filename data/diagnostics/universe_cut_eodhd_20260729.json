@@ -1,0 +1,8996 @@
+{
+  "generated_at": "2026-07-29T20:16:35.007533+00:00",
+  "decision_ref": "D-185",
+  "lookback": {
+    "canonical_dates": [
+      "2026-07-01",
+      "2026-07-02",
+      "2026-07-03",
+      "2026-07-06",
+      "2026-07-07",
+      "2026-07-08",
+      "2026-07-09",
+      "2026-07-10",
+      "2026-07-13",
+      "2026-07-14",
+      "2026-07-15",
+      "2026-07-16",
+      "2026-07-17",
+      "2026-07-20",
+      "2026-07-21",
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-24",
+      "2026-07-27",
+      "2026-07-28"
+    ],
+    "eodhd_dates": [
+      "2026-07-01",
+      "2026-07-02",
+      "2026-07-03",
+      "2026-07-06",
+      "2026-07-07",
+      "2026-07-08",
+      "2026-07-09",
+      "2026-07-10",
+      "2026-07-13",
+      "2026-07-14",
+      "2026-07-15",
+      "2026-07-16",
+      "2026-07-17",
+      "2026-07-20",
+      "2026-07-21",
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-24",
+      "2026-07-27",
+      "2026-07-28"
+    ]
+  },
+  "coverage_projection": {
+    "market_day": "2026-07-28",
+    "n_before": 724,
+    "median_before": 880.0,
+    "n_after": 715,
+    "median_after": 712.0,
+    "coverage_after_pct": 100.4
+  },
+  "counts": {
+    "universe_recent": 1124,
+    "excluded": 409,
+    "kept": 715,
+    "excluded_low_presence": 252,
+    "excluded_missing_market_day": 400
+  },
+  "details": [
+    {
+      "ticker": "A1CR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1DI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1DM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1EE34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1EN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1EP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1ES34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1FL34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1GI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1GN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1JG34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1KA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1LB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1LG34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1MD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1ME34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1MP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1MT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1NE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1ON34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1OS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1PA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1PD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1PH34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1RE34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1SU34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1TM34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1TT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1UT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1VB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A1VY34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "A1WK34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "A2XO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AADA39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AALR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AAPL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ABBV34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ABCB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ABEV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ABGD39",
+      "presence_sessions": 6,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ABTT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ACNB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ACWX39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ADBE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ADMF3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ADPR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AERI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AETH39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AFLT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AGRO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AGXY3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AHEB3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AHEB5",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AHEB6",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AIGB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AIRB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALLD3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALOS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALPA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALPA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALPK3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALUP11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALUP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ALUP4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMAR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMBP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMER3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMGN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMOB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AMZO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ANGV39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ANIM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "APTI4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "APTV34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ARGT39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ARML3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ARNC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ARND3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ASAI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ATED3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ATTB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AUAU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AURA33",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AURE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AVGO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AVLL3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AXIA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AXIA5",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AXIA6",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AXPB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AXRP39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AZEV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AZEV4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AZOI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AZTE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "AZUL53",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "AZZA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "B1AX34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "B1BT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "B1DX34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "B1KR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "B1LL34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "B1RF34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "B1SX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "B3SA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BAAX39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BACW39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BAER39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BAGG39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAGY39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAIQ39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BALM3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BALM4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BAOA39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAOK39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAOM39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAOR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BARY39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BASK39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAUH3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAUH4",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BAZA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBAJ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BBAS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBDC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBDC4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBER39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BBJP39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BBSE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBUG39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BBYY34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCAT39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BCHI39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCHQ39",
+      "presence_sessions": 10,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BCIR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BCLO39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCNY39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCOM39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCPX39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BCRB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BCTE39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BCWV39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BDLL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BDRI39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BDVD39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BDVE39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BDVY39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BECH39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEEF3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEEM39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEES3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEES4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEFA39",
+      "presence_sessions": 11,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEFG39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEFV39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEGD39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEGE39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEGU39",
+      "presence_sessions": 11,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BEIS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEMC39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEMV39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEPP39",
+      "presence_sessions": 14,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BEPU39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEUF39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEUW39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWA39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWC39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWD39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWG39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWH39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWI39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWJ39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWL39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWN39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWO39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWP39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWQ39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWT39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWU39",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWW39",
+      "presence_sessions": 10,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEWY39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEWZ39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BEZA39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BEZU39",
+      "presence_sessions": 14,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFAL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFAV39",
+      "presence_sessions": 11,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BFBI39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFCG39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFDA39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFDN39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFEM39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFIW39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFLO39",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFNX39",
+      "presence_sessions": 13,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFPX39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFTS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BFXI39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGAR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGIP3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGIP4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BGLC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGNO39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGOV39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BGOZ39",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BGRT39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BGWH39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BHDV39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BHEF39",
+      "presence_sessions": 7,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BHER39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BHIA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BHYC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BHYG39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BHYS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIAG39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIAI39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIAK39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIAT39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIAU39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIBB39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BICL39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIDN39",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIDV39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIED3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIEF39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIEI39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIEM39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIEO39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIET39",
+      "presence_sessions": 14,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BIEU39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIEV39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIEZ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIGF39",
+      "presence_sessions": 11,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIGL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIGO39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIGS39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIHA39",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIHE39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIHF39",
+      "presence_sessions": 7,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIHI39",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIIB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIJH39",
+      "presence_sessions": 11,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIJR39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIJS39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIJT39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BILF39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIOM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIPC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIPZ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BITB39",
+      "presence_sessions": 8,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BITO39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIUS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIVB39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIVE39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIVW39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIWD39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIWF39",
+      "presence_sessions": 14,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIWM39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIXC39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIXG39",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIXJ39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIXN39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIXU39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYC39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYE39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYF39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYG39",
+      "presence_sessions": 10,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BIYJ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIYK39",
+      "presence_sessions": 13,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIYM39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BIYT39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYW39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BIYZ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BJPI39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BJQU39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BKCH39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BKNG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BKSA39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BKWB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BKXI39",
+      "presence_sessions": 13,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BKYY39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BLAK34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BLAU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BLBT39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BLPA39",
+      "presence_sessions": 7,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "BLPX39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BLQD39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BLTP39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BMBB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BMEB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMEB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMGB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMIL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BMIN3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BMIN4",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BMKS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMOB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMTU39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BMYB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BNBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BNDA39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BOAC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BOBR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BOBR4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BOEF39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BOEI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BONY34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BOTZ39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BOXP34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BPAC11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BPAC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BPAC5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BPAR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BPFR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BPFV39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BPIC39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BPVE39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BQCL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BQLT39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BQQW39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BQTC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BQUA39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BQYL39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRAP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRAP4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRAV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRBI11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BREZ39",
+      "presence_sessions": 13,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BRKM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRKM5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRKM6",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BROB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BRSR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRSR5",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BRSR6",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BRST3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSCZ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSDV39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSHV39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSHY39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSIL39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSIZ39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSLI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSLI4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSLV39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSNS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSOC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSOX39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSRE39",
+      "presence_sessions": 15,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BSTI39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BSUS39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BTFL39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BTHD39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BTIP39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BTLH39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BTLT39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BUAE39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BURA39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BURT39",
+      "presence_sessions": 14,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BUSF39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BUSM39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BUSR39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BUTL39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BVEG39",
+      "presence_sessions": 3,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "BVLU39",
+      "presence_sessions": 17,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "BXTC39",
+      "presence_sessions": 16,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1AG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1AH34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1BL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1BO34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1BR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1CI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1CL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1DN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1DW34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1FG34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1FI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1GP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1HR34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1IC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1MG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1MI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1MS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1NC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1NP34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1OG34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1OO34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1PB34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "C1PR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1RR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1TA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C1TV34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C2OI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C2PT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C2RW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "C2ZR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CALI3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CAMB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CAML3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CAON34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CASH3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CASN3",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CASN4",
+      "presence_sessions": 5,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CATP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CBAV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CBEE3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CBTC39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CCTY3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CEAB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEBR5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEBR6",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEDO3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CEDO4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEEB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CEEB5",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CEED3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CEED4",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CEGR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CGAS3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CGAS5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CGRA3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CGRA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CHCM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CHDC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CHME34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CHVX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CINF34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CLSC3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CLSC4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CLXC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CMCS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CMIG3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CMIG4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CMIN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COCA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COCE3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "COCE5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COGN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COLG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COPH34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "COWC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CPFE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CPLE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CRPG3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CRPG5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CRPG6",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CSAN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSCO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSED3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSMG3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSNA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSUD3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CSXC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTAX3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTGP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CTKA3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTKA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CTNM4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTSA3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTSA4",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CTSH34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "CURY3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CVCB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CVSH34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CXSE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CYRE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "CYRE4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1DG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1EL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1EX34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "D1HI34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "D1LR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1OM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1OV34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "D1OW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D1RI34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "D1TE34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "D1VN34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D2AS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "D2PZ34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DASA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DDNB34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DEAI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DEEC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DEFT31",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DESK3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DEXP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DEXP4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DGCO34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DHER34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DIRR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DISB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DLTR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DMVF3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DOHL3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DOHL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DOLL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DOTZ3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DTCR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DTCY3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DUKB34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "DVAI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "DXCO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E1CL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1DI34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1IX34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1LV34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1MN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1MR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E1OG34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1QR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E1SE34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1SS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1TN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E1TR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1VR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1WL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1XC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E1XP34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "E1XR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E2NP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "E2PA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EAIN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EALT3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EALT4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EBAY34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ECOR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EFXB31",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EGIE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EIDO39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EKTR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EKTR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ELCI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EMAE3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EMAE4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EMBJ3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENEV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENGI11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENGI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENGI4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENJU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENMT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ENMT4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EPAR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EPHE39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EPOL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EQIX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EQPA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EQPA5",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EQPA6",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EQTL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ESPA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ESTR3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ESTR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ETER3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ETHA39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EUCA3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EUCA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EVEB31",
+      "presence_sessions": 1,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "EVEN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EVTC31",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EWJV39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EXGR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EXPB31",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "EXXO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "EZTC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "F1AN34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "F1EC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "F1FI34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "F1NI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "F1RA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "F1TN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "F1TV34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "F2IC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FASL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FCXO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FDMO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FDXB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FESA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FESA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FFTD34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FHER3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FICT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FIEI3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FIGE3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FIQE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FLRY3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FOXC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FRAS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "FRIO3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "FSLR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G1AR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G1LL34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "G1LW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G1MI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G1PC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "G1PI34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "G1RM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G1TR39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "G1WW34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G2DD34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "G2DI33",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GDBR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "GDXB39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GEOO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GEPA3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "GEPA4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "GFSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GGBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GGBR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GGPS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GILD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GMAT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GMCO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GOAU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GOAU4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GOGL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GOGL35",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GOLL54",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "GPAR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "GRND3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GROP31",
+      "presence_sessions": 1,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "GSGI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GSHP3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "GUAR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1AS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1BA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "H1CA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "H1IG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "H1II34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "H1LT34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1OL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1PE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "H1RL34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1SI34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1ST34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "H1UM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HAGA3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HAGA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HALI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HAPV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HBOR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HBRE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HBSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HBTS5",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HETA3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HETA4",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HOME34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HONB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HOOT3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HOOT4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HSHY34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "HYEM39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "HYPE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1CE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1DX34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1EX34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "I1FF34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1NC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "I1PC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1QV34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1RM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1RP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1SR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "I1TW34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "I1VZ34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "I2NV34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "I2RS34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "IBIT39",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IBMB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IFCM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IGTI11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IGTI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IGTI4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "INBR32",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "INEP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "INEP4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "INTB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "INTU34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "IRBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ISAE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ISAE4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ITLC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ITSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ITSA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ITUB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ITUB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "J1BH34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "J1CI34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "J1EG34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "J1KH34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "J2BL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "JALL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JBSS32",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JFEN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JHSF3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JNJB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JOPA3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JOPA4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "JPMC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "JSLG3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "K1EY34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "K1IM34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "K1LA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "K1MX34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "K1RC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "K1SG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KEPL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KHCB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KLBN11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KLBN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KLBN4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KMBB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "KMIC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1CA34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "L1DO34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "L1EN34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1HX34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1KQ34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "L1OE34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1RC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1UL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1VS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "L1WH34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "L1YB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "L1YV34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "LAND3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LAVV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LEVE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LIGT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LILY34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LJQQ3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LMTB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LOGG3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LOGN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LOWC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LPSB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LREN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LUPA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LUXM4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "LWSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1AA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1AS34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M1CB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M1CH34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1CK34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1GM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M1HK34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1KC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1KT34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M1LM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1NS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1PC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1RN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1SC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1SI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1TA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1TB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1TC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M1TD34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "M1TT34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "M2PR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MAPT3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MAPT4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MATD3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MBRF3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MCDC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MCOR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MDIA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MDLZ34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MDNE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MDTC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MEAL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MELK3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MERC3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MERC4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "METB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MGEL4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MGLU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MILS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MLAS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MMAQ3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MMAQ4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MMMC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MNDL3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MNPR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MOAR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MOOO34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MOSC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MOTV3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MOVI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MRCK34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MRVE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MSBR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MSCD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MSFT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MSPA3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MSPA4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MTRE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MTSA3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MTSA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MULT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MUTC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "MWET3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MWET4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "MYPK3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1CL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1DA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1EM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1IS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1OW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1RG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1SC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "N1TA34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "N1TR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "N1UE34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1VR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1WS34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "N1WS35",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "N1XP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NATU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NEMO3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "NEOE3",
+      "presence_sessions": 3,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "NEXP3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "NEXT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NFLX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NGRD3",
+      "presence_sessions": 10,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "NIKE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NOCG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NORD3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "NUTR3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "NVDC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "O1DF34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "O1KE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "O1MC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "O1TI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "O2NS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OBTC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ODER4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "ODPV3",
+      "presence_sessions": 3,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "OFSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OIBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OIBR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ONCO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OPCT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ORCL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ORLY34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ORVR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OSXB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "OXYP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1AC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P1AY34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1DT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1EG34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P1FG34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1GR34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1HC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P1HM34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P1KG34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P1LD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1NR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1NW34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1PG34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1PL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1SA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1SX34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P1YC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P2AN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P2LT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "P2OD34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "P2TC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PATI3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PATI4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PCAR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PDGR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PDTC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PEAB3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PEAB4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PEPB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PETR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PETR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PFIZ34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PFRM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PGCO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PGMN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PHMO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PINE3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PINE4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PLAS3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PLPL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PMAM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PNCS34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PNVL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "POMO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "POMO4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "POSI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PPLA11",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PRIO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PRNR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PSSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PTBL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "PTNT3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PTNT4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "PYPL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "Q1UA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "Q1UE34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "QCOM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "QUAL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1CL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1EG34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1FC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1IN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1JF34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1LC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1MD34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1OK34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1OL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1OP34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "R1SG34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "R1VT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RADL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RAIL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RAIZ4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RANI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RAPT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RAPT4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RCSL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RCSL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RDOR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RECV3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "REDE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "REGN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RENT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RENT4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RIOS3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "RNEW3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RNEW4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ROMI3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "ROST34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RPAD3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RPAD5",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RPAD6",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RSID3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RSSL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "RSUL3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "RSUL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "RVEE3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "RYTT34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1BA34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1HW34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1JM34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1NA34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1NP34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1OU34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1RE34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1SL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1TE34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1TT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1TX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1WK34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1YF34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1YK34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "S1YM34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "S1YY34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SANB11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SANB3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SANB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SAPR11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SAPR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SAPR4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SBFG3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SBSP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SBUB34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SCAR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SCHW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SEER3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SEQL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SGPS3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SHOW3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SHUL3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SHUL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SIMH3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SIMN34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SIVR39",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SLBG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SLCE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SLXB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SMFT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SMIN39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SMTO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SNSY3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SNSY5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SNSY6",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SOJA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SOLN39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SOND3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SOND5",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SOND6",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "SPGI34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SSFO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "STZB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SUZB3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "SYNE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1CH34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T1DG34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1EL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T1MU34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1OW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1RO34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T1SO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1TW34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T1XT34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T2ER34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T2RM34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "T2TD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "T2YL34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TAEE11",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TAEE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TAEE4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TASA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TASA4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TBIL39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TCCO34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TCSA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TECN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TELB3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TELB4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TEND3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TEXA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TFCO4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TGMA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TGTB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TIMS3",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TJXC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TKNO3",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TKNO4",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TMOS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TOKY3",
+      "presence_sessions": 1,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD"
+      ]
+    },
+    {
+      "ticker": "TOPB39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TOTS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TPIS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TPRY34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TRAD3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TRIS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TRVC34",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TSLA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TSNF34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TTEN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TUPY3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "TURK39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TXRX3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "TXRX4",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "U1AL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "U1BE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "U1DR34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "U1HS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "U1LT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "U1RI34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UCAS3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UGPA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UNHH34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UNIP3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UNIP5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UNIP6",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UPAC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "UPSS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "USBC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "USIG39",
+      "presence_sessions": 0,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "LOW_PRESENCE_EODHD",
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "USIM3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "USIM5",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "USIM6",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "V1MC34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "V1RS34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "V1TA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "VALE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VAMO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VBBR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VERZ34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VISA34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VITT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VIVA3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VIVR3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VIVT3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VLID3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VLOE34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VRSN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "VRTX34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VSTE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VTRU3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VULC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "VVEO3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1AB34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "W1BD34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1DA34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1DC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1EC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1EL34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1LT34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1MB34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1MC34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1RB34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "W1YC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "W1YN34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "W2ST34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "WALM34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WATC34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WDCN3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WEGE3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WEST3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WFCO34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WHRL3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WHRL4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WIZC3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "WLMM3",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "WLMM4",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "X1EL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "X1YL34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "XPBR31",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "YDUQ3",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "YUMR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "Z1BH34",
+      "presence_sessions": 18,
+      "required_sessions": 15,
+      "status": "EXCLUDED",
+      "reasons": [
+        "MISSING_MARKET_DAY"
+      ]
+    },
+    {
+      "ticker": "Z1BR34",
+      "presence_sessions": 19,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    },
+    {
+      "ticker": "Z1TS34",
+      "presence_sessions": 20,
+      "required_sessions": 15,
+      "status": "KEPT",
+      "reasons": []
+    }
+  ]
+}
