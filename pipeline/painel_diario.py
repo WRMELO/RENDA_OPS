@@ -358,18 +358,51 @@ def load_valid_tickers() -> set[str]:
     return {t for t in tickers.tolist() if t}
 
 
+def load_ledger_position_tickers(as_of_date: date | None = None) -> set[str]:
+    if _compute_positions_ledger is None:
+        return set()
+    ref_date = as_of_date or date.today()
+    try:
+        positions = _compute_positions_ledger(ref_date)
+    except Exception:
+        return set()
+    if not isinstance(positions, dict):
+        return set()
+    out: set[str] = set()
+    for ticker, lots in positions.items():
+        tk = str(ticker).upper().strip()
+        if not tk or not isinstance(lots, list):
+            continue
+        for lot in lots:
+            if not isinstance(lot, dict):
+                continue
+            if _safe_int(lot.get("qtd"), 0) > 0:
+                out.add(tk)
+                break
+    return out
+
+
 def find_invalid_operation_tickers(
-    operations: Any, valid_tickers: set[str] | None = None
+    operations: Any,
+    valid_tickers: set[str] | None = None,
+    position_tickers: set[str] | None = None,
 ) -> list[str]:
-    valid = valid_tickers if valid_tickers is not None else load_valid_tickers()
+    valid = set(valid_tickers) if valid_tickers is not None else load_valid_tickers()
+    sellable = (
+        set(position_tickers)
+        if position_tickers is not None
+        else load_ledger_position_tickers()
+    )
     if not isinstance(operations, list):
         return []
     invalid: set[str] = set()
     for op in operations:
         if not isinstance(op, dict):
             continue
+        op_type = str(op.get("type", "")).upper().strip()
         ticker = str(op.get("ticker", "")).upper().strip()
-        if ticker and ticker not in valid:
+        allowed = valid | sellable if op_type == "VENDA" else valid
+        if ticker and ticker not in allowed:
             invalid.add(ticker)
     return sorted(invalid)
 
@@ -2488,6 +2521,8 @@ const CORPORATE_ACTIONS = {json.dumps(corporate_actions, ensure_ascii=False)};
 const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
 const VALID_TICKERS = {json.dumps(sorted(load_valid_tickers()), ensure_ascii=False)};
 const VALID_TICKERS_SET = new Set(VALID_TICKERS);
+const SELLABLE_TICKERS = {json.dumps(sorted(load_valid_tickers() | load_ledger_position_tickers()), ensure_ascii=False)};
+const SELLABLE_TICKERS_SET = new Set(SELLABLE_TICKERS);
 
 let opIdx = 0;
 let cashIdx = 0;
@@ -2710,9 +2745,11 @@ function collectTopBuyOps() {{
 function invalidTickers(ops) {{
   const out = [];
   for (const op of (ops || [])) {{
+    const opType = String(op?.type || '').trim().toUpperCase();
     const ticker = String(op?.ticker || '').trim().toUpperCase();
+    const allowedSet = opType === 'VENDA' ? SELLABLE_TICKERS_SET : VALID_TICKERS_SET;
     if (!ticker) continue;
-    if (!VALID_TICKERS_SET.has(ticker)) out.push(ticker);
+    if (!allowedSet.has(ticker)) out.push(ticker);
   }}
   return [...new Set(out)].sort();
 }}
