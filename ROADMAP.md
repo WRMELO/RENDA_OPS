@@ -155,6 +155,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-033 | Top-10 ativo para compra: Qtd+Preço editáveis (default D-1), Valor auto | pipeline/painel_diario.py | 2026-03-20 | D-037 |
 | T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | pipeline/painel_diario.py, pipeline/servidor.py | 2026-03-22 | D-039 |
 | T-036 | SSOT ledger imutável BR — Fase 1 (módulo + migração + servidor) | pipeline/ledger_br.py, scripts/migrate_boletins_to_ledger_br.py, pipeline/servidor.py, tests/test_ledger_br.py | 2026-04-03 | D-045 |
+| T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1 | Regularizacao append-only do ledger BR de 2026-07-30 com regeneracao do boletim espelho | scripts/migrate_ledger_regularizacao_20260730_br.py, data/ssot/ledger_br.jsonl, data/real/2026-07-29.json, data/cycles/2026-07-29/boletim_preenchido.json, CHANGELOG.md, DECISION_LOG.md | 2026-07-30 | D-192 |
 
 ---
 

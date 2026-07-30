@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-30
+
+- fix(ledger-br): `T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1` — regulariza append-only o ledger do `exec_day=2026-07-30` sem rewrite: adiciona 3 eventos `CORRECTION` para cancelar o `BUY GEOO34` indevido e substituir os `BUY` de `CSCO34`/`A1MT34` com os preços de execução (`118.03` e `227.05`), adiciona as 3 `SELL` executadas (`A1MD34`, `MUTC34`, `N1TA34`) e regenera os espelhos `data/real/2026-07-29.json` e `data/cycles/2026-07-29/boletim_preenchido.json` com 5 operações reais + snapshot coerente. Evidência operacional: ledger `140 -> 148` linhas com prefixo histórico intacto (primeiras 140 linhas idênticas ao backup), `compute_cash(2026-07-30)` em `cash_free=182.78` e `cash_accounting=231376.72`, além de idempotência confirmada (`--confirm` subsequente com `applied=0`). Decision: SALA D-192 (refs: D-167, R-038).
+
 ## 2026-07-29
 
 - feat(ssot-br-eodhd): `T-SDC-EODHD-SSOT-BR-FONTE-PRIMARIA-V1` — promove EODHD a fonte primária do SSOT BR e remove BRAPI do caminho operacional: cria `lib/eodhd_source.py` para leitura incremental local (`eodhd_raw_sa.parquet` + `eodhd_div_sa.parquet` + `eodhd_splits_sa.parquet`), refatora `pipeline/02_ingest_prices_br.py` para consumir somente essa camada, adiciona `EodhdAdapter` em `lib/adapters.py` e troca o Ibov de `pipeline/01_ingest_macro.py` para `BVSP.INDX`; `pipeline/04_build_canonical.py` passa a aplicar `config/universe_exclusions.json`; `lib/ssot_integrity.py` introduz `blind_positions` e `warnings`; `pipeline/run_daily.py` expõe o novo diagnóstico; adiciona `scripts/gerar_corte_universo_eodhd_20260729.py` e testes `tests/test_eodhd_source.py` + novos casos em `tests/test_ssot_integrity.py`. Evidência operacional: `pipeline/run_daily.py --decision-only --date 2026-07-29` concluiu com `status=PASS`, `failed_checks=[]`, `degraded_reasons=[]` e boletim regenerado em `data/daily/2026-07-28.json`. Decision: D-185 (ref cruzada SALA D-188).

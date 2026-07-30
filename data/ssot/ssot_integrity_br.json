@@ -1,29 +1,29 @@
 {
   "status": "PASS",
-  "expected_date_max": "2026-07-28",
-  "canonical_date_max": "2026-07-28",
+  "expected_date_max": "2026-07-29",
+  "canonical_date_max": "2026-07-29",
   "checks": {
     "date_max_matches_expected": {
       "pass": true,
-      "canonical_date_max": "2026-07-28",
-      "expected_date_max": "2026-07-28",
+      "canonical_date_max": "2026-07-29",
+      "expected_date_max": "2026-07-29",
       "mode": "exact"
     },
     "macro_alignment": {
       "pass": true,
-      "macro_date_max": "2026-07-28",
-      "canonical_date_max": "2026-07-28"
+      "macro_date_max": "2026-07-29",
+      "canonical_date_max": "2026-07-29"
     },
     "ptax_alignment": {
       "pass": true,
-      "ptax_date_max": "2026-07-28",
-      "canonical_date_max": "2026-07-28"
+      "ptax_date_max": "2026-07-29",
+      "canonical_date_max": "2026-07-29"
     },
     "universe_coverage": {
       "pass": true,
-      "n_tickers_date_max": 704,
-      "median_recent_sessions": 689.0,
-      "coverage_pct": 102.2,
+      "n_tickers_date_max": 629,
+      "median_recent_sessions": 694.0,
+      "coverage_pct": 90.6,
       "min_required_pct": 60.0,
       "strict_threshold_pct": 90.0,
       "floor_pct": 60.0,
@@ -32,14 +32,14 @@
     },
     "inter_session_continuity": {
       "pass": true,
-      "date_max": "2026-07-28",
-      "prior_date_in_ssot": "2026-07-27",
+      "date_max": "2026-07-29",
+      "prior_date_in_ssot": "2026-07-28",
       "intersection_pct": 100.0,
       "min_required_pct": 90.0
     },
     "spc_integrity": {
       "pass": true,
-      "coverage_pct": 99.4,
+      "coverage_pct": 99.5,
       "min_required_pct": 80.0
     },
     "open_positions_coverage": {
@@ -65,5 +65,5 @@
     "missing_tickers": [],
     "n_missing": 0
   },
-  "generated_at": "2026-07-29T20:22:22.210180+00:00"
+  "generated_at": "2026-07-30T15:29:46.158521+00:00"
 }

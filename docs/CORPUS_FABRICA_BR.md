@@ -295,6 +295,14 @@ Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.
 | **Dado manual sem validação** | Owner digita e o sistema aceita sem checar | E-04 | Validação de ticker contra canonical no save |
 | **Artefato de alinhamento temporal** | Parâmetro temporal parece ótimo por coincidir com grade favorável de pregões, não por mérito intrínseco — o resultado é artefato do alinhamento | E-13, E-14, E-17 | Phase sweep obrigatório antes de adotar qualquer parâmetro temporal ou periódico |
 
+### 7.4 Lição de engenharia
+
+**Heurística de ajuste de split que aceita "não ajustar" como candidata anula o split registrado (2026-07-30)**
+
+A função `apply_heuristic_split_adjustment` de `pipeline/04_build_canonical.py` escolhia, entre os candidatos `(1.0, factor, 1.0/factor)`, aquele que minimizava o retorno log absoluto na barra do evento. Incluir `1.0` no conjunto significa oferecer "não ajustar" como resposta legítima — e ela vencia sempre que as barras pós-evento eram idênticas (dado stale) ou quando o fator oficial carregava resíduo de mercado no dia do evento maior que o próprio movimento. Resultado: split formalmente registrado na coluna `splits` era silenciosamente ignorado, o histórico não era escalado, e o `i_value` ganhava um pico artificial que contaminava SPC e score M3.
+
+A lição é sobre o desenho da heurística, não sobre o valor dos limiares: quando um evento corporativo está **registrado**, a pergunta correta é "qual fator aplicar", não "aplicar ou não". Oferecer a identidade como candidata converte um fato conhecido em hipótese a ser vencida por ruído. O patch imediato removeu `1.0` do conjunto; o redesenho do critério ficou para ciclo formal, por se tratar de arquivo blindado (GOVERNANCE §6.5).
+
 ---
 
 ## 8. Catálogo de Componentes

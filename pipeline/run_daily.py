@@ -366,7 +366,8 @@ def run(
             from lib.ssot_integrity import check_ssot_integrity_br
 
             decision_report = check_ssot_integrity_br(
-                expected_date_max=prev_session(run_date, exchange="BVMF")
+                expected_date_max=prev_session(run_date, exchange="BVMF"),
+                allow_ahead=is_catchup,
             )
             logger.info(
                 "SSOT integrity gate (decision-only): status=%s failed_checks=%s",
