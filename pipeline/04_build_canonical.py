@@ -92,7 +92,10 @@ def apply_heuristic_split_adjustment(gdf: pd.DataFrame) -> pd.DataFrame:
                 continue
             p_prev = float(g.at[anchor - 1, "close_raw"])
             p_cur = float(g.at[anchor, "close_raw"])
-            for adj in (1.0, factor, 1.0 / factor):
+            # Split registrado deve escalar historico: sem a identidade 1.0,
+            # a heuristica escolhe entre fator e inverso mesmo com barra stale
+            # ou com pequeno residuo de mercado no dia do evento.
+            for adj in (factor, 1.0 / factor):
                 lr = safe_log_ratio(p_cur * adj, p_prev)
                 score = abs(lr)
                 if best is None or score < float(best["score"]):

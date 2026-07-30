@@ -3,6 +3,7 @@
 ## 2026-07-30
 
 - fix(ledger-br): `T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1` — regulariza append-only o ledger do `exec_day=2026-07-30` sem rewrite: adiciona 3 eventos `CORRECTION` para cancelar o `BUY GEOO34` indevido e substituir os `BUY` de `CSCO34`/`A1MT34` com os preços de execução (`118.03` e `227.05`), adiciona as 3 `SELL` executadas (`A1MD34`, `MUTC34`, `N1TA34`) e regenera os espelhos `data/real/2026-07-29.json` e `data/cycles/2026-07-29/boletim_preenchido.json` com 5 operações reais + snapshot coerente. Evidência operacional: ledger `140 -> 148` linhas com prefixo histórico intacto (primeiras 140 linhas idênticas ao backup), `compute_cash(2026-07-30)` em `cash_free=182.78` e `cash_accounting=231376.72`, além de idempotência confirmada (`--confirm` subsequente com `applied=0`). Decision: SALA D-192 (refs: D-167, R-038).
+- fix(motor-split): `T-MOTOR-SPLIT-REGISTRADO-SEM-IDENTIDADE-BR-V1` — `pipeline/04_build_canonical.py` deixa de aceitar `adj=1.0` como candidata em `apply_heuristic_split_adjustment` quando ha `split_factor` registrado, forçando decisao entre `factor` e `1/factor` para preservar escala historica sob barra stale/residuo de evento; adiciona `tests/test_build_canonical_split_heuristic.py` (5 casos dedicados) e valida pos-fix com suite completa verde (`34 passed`), rebuild `--end-date 2026-07-29` equivalente ao canonical pre-task (`rows=1171696`, `max_abs_diff=0.0`) e gate SSOT final `PASS`. Decision: D-186 (refs: SALA D-192, R-068, corpus BR §7.4).
 
 ## 2026-07-29
 

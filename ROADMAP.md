@@ -156,6 +156,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-034 | Validação de tickers no painel: front+backend bloqueia tickers fora do canonical | pipeline/painel_diario.py, pipeline/servidor.py | 2026-03-22 | D-039 |
 | T-036 | SSOT ledger imutável BR — Fase 1 (módulo + migração + servidor) | pipeline/ledger_br.py, scripts/migrate_boletins_to_ledger_br.py, pipeline/servidor.py, tests/test_ledger_br.py | 2026-04-03 | D-045 |
 | T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1 | Regularizacao append-only do ledger BR de 2026-07-30 com regeneracao do boletim espelho | scripts/migrate_ledger_regularizacao_20260730_br.py, data/ssot/ledger_br.jsonl, data/real/2026-07-29.json, data/cycles/2026-07-29/boletim_preenchido.json, CHANGELOG.md, DECISION_LOG.md | 2026-07-30 | D-192 |
+| T-MOTOR-SPLIT-REGISTRADO-SEM-IDENTIDADE-BR-V1 | Ajustar heuristica de split do Step 04 para remover candidata identidade (`adj=1.0`) quando split estiver registrado, com teste dedicado e prova de equivalencia do canonical | pipeline/04_build_canonical.py, tests/test_build_canonical_split_heuristic.py, data/ssot/canonical_br.parquet, data/ssot/ssot_integrity_br.json, CHANGELOG.md, DECISION_LOG.md | 2026-07-30 | D-186 |
 
 ---
 
