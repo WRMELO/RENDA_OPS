@@ -22,6 +22,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from lib.trading_calendar import is_session, prev_session
+from lib.corporate_actions import SPLIT_VIGENCY_LOG_TOLERANCE
 
 IN_CANONICAL = ROOT / "data" / "ssot" / "canonical_br.parquet"
 IN_RAW = ROOT / "data" / "ssot" / "market_data_raw.parquet"
@@ -92,6 +93,8 @@ def apply_heuristic_split_adjustment(gdf: pd.DataFrame) -> pd.DataFrame:
                 continue
             p_prev = float(g.at[anchor - 1, "close_raw"])
             p_cur = float(g.at[anchor, "close_raw"])
+            if math.isnan(p_prev) or math.isnan(p_cur):
+                continue
             # Split registrado deve escalar historico: sem a identidade 1.0,
             # a heuristica escolhe entre fator e inverso mesmo com barra stale
             # ou com pequeno residuo de mercado no dia do evento.
@@ -105,6 +108,16 @@ def apply_heuristic_split_adjustment(gdf: pd.DataFrame) -> pd.DataFrame:
             continue
         anchor = int(best["anchor"])
         chosen_adj = float(best["adj"])
+        best_score = float(best["score"])
+        if best_score > SPLIT_VIGENCY_LOG_TOLERANCE:
+            ticker = str(g.at[i, "ticker"])
+            split_date = pd.Timestamp(g.at[anchor, "date"]).date().isoformat()
+            raise RuntimeError(
+                "[04] Split coherence FAIL: "
+                f"ticker={ticker} date={split_date} factor={factor:.6f} "
+                f"residual_log={best_score:.6f} tol_log={SPLIT_VIGENCY_LOG_TOLERANCE:.6f}. "
+                "Evento de split marcado sem queda de preco coerente."
+            )
         hist_scale = 1.0 / chosen_adj
         if abs(hist_scale - 1.0) > 1e-12:
             multipliers[:anchor] *= hist_scale

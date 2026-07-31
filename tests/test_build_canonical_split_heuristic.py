@@ -26,12 +26,12 @@ def _build_df(close_raw: list[float], split_factor: list[float | None]) -> pd.Da
     )
 
 
-def test_split_registrado_com_barra_stale_aplica_escala():
-    df = _build_df([100.0, 100.0, 100.0, 100.0], [np.nan, np.nan, 2.0, np.nan])
+def test_split_registrado_coerente_aplica_escala():
+    df = _build_df([100.0, 100.0, 50.0, 50.0], [np.nan, np.nan, 2.0, np.nan])
 
     out = apply_heuristic_split_adjustment(df)
 
-    assert np.allclose(out["close_operational"].to_numpy(), [50.0, 50.0, 100.0, 100.0], atol=1e-9)
+    assert np.allclose(out["close_operational"].to_numpy(), [50.0, 50.0, 50.0, 50.0], atol=1e-9)
 
 
 def test_residuo_no_evento_escolhe_melhor_entre_fator_e_inverso():
@@ -69,3 +69,10 @@ def test_split_factor_invalido_ou_nan_e_ignorado_sem_excecao():
     out = apply_heuristic_split_adjustment(df)
 
     assert np.allclose(out["close_operational"].to_numpy(), raw, atol=1e-9)
+
+
+def test_split_incoerente_dispara_fail_loud():
+    df = _build_df([100.0, 100.0, 100.0, 100.0], [np.nan, np.nan, 2.0, np.nan])
+
+    with np.testing.assert_raises(RuntimeError):
+        apply_heuristic_split_adjustment(df)

@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from lib.corporate_actions import resolve_split_vigency
 from lib.trading_calendar import is_session
 
 SALA_DATA_DIR = Path("/home/wilson/SALA_DE_CONTROLE/eodhd_base_unica/data")
@@ -130,6 +131,7 @@ def load_incremental_rows_from_eodhd(
     raw = raw[raw["date"] <= pd.Timestamp(end_date)]
     if raw.empty:
         return _empty_output()
+    raw_for_vigency = raw[["ticker", "date", "close"]].copy()
 
     if ticker_last_dates:
         last_map: dict[str, pd.Timestamp] = {
@@ -158,6 +160,12 @@ def load_incremental_rows_from_eodhd(
     split_path = _resolve_path("EODHD_SPLITS_SA_PATH", DEFAULT_SPLITS_PATH)
     splits = _load_splits(split_path, tickers_set, end_date)
     if not splits.empty:
+        splits, _ = resolve_split_vigency(
+            raw_prices=raw_for_vigency,
+            split_events=splits,
+            as_of_date=end_date,
+            persist=True,
+        )
         raw = raw.merge(splits, on=["ticker", "date"], how="left")
     else:
         raw["splits"] = ""

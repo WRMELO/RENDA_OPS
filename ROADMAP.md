@@ -89,6 +89,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 73 | T-123-IMPLEMENT-A2-DEFENSIVE-BR | Implementar A2_ANY_RULE no motor BR: substituir gate D-021 por venda per-ticker any_rule, sell_pct=100%, preservando Camada 2 B+C | D-126 | pipeline/painel_diario.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md, GOVERNANCE.md | DONE |
 | 74 | T-127-MACRO-FRED-FALLBACK-TRADING-DAYS-BR | Corrigir fallback D-027 do Step 05: substituir tolerancia por dias corridos por contagem de pregoes | D-127 | pipeline/run_daily.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 75 | T-SPC-MACRO-FIX-BASE1-HARDENING-BR-V1 | Corrigir o CDI faltante de 2026-06-15, endurecer o canonical com gate de integridade SPC e blindar `analista-br` contra `SPC_INDISPONIVEL`; Base 1 nao forward-filla alem do ultimo boletim salvo | D-133 / SALA D-066 | data/ssot/macro.parquet, pipeline/04_build_canonical.py, pipeline/painel_diario.py, /home/wilson/.cursor/skills/analista-br/SKILL.md, DECISION_LOG.md, CHANGELOG.md | DONE |
+| 76 | T-SSOT-BR-SPLIT-VIGENCIA-ROLLBACK-V1-FIX1 | Restaurar a coerência preço-fator no Step 04, manter o tratamento de `NaN` e fechar a correção de vigência de corporate actions com tag `v1.29.0-motor` | D-188 | pipeline/04_build_canonical.py, lib/corporate_actions.py, tests/test_build_canonical_split_heuristic.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 
 ### Marcos Estratégicos
 

@@ -75,6 +75,8 @@ def _write_canonical(
                     "date": day,
                     "i_ucl": None if is_nan_spc else 1.0,
                     "i_lcl": None if is_nan_spc else 0.0,
+                    "close_raw": 100.0 + idx * 0.1,
+                    "split_factor": 1.0,
                 }
             )
 
@@ -327,3 +329,50 @@ def test_gate_fails_when_blind_positions_exceed_limit(patched_paths):
     assert sorted(open_cov["blind_positions"]) == sorted(blind)
     assert open_cov["stale_plus_blind_pct"] == 60.0
     assert any("open_positions_coverage: stale+blind=6/10" in x for x in report["failed_checks"])
+
+
+def test_split_coherence_pass_for_confirmed_event(patched_paths):
+    canonical, macro, ptax, _ = patched_paths
+    universe = _tickers("TK", 100)
+    dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
+    _write_support_tables(macro, ptax, dates[-1])
+
+    df = pd.read_parquet(canonical)
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-2]), "close_raw"] = 200.0
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-1]), "close_raw"] = 100.0
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-1]), "split_factor"] = 2.0
+    df.to_parquet(canonical, index=False)
+
+    report = gate.check_ssot_integrity_br(
+        expected_date_max=dates[-1],
+        persist=False,
+        open_positions=set(),
+        is_rebalance_day=False,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["checks"]["split_coherence_ok"]["pass"] is True
+
+
+def test_split_coherence_fail_for_incoherent_event(patched_paths):
+    canonical, macro, ptax, _ = patched_paths
+    universe = _tickers("TK", 100)
+    dates = _write_canonical(canonical_path=canonical, prior_tickers=universe, last_tickers=universe)
+    _write_support_tables(macro, ptax, dates[-1])
+
+    df = pd.read_parquet(canonical)
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-2]), "close_raw"] = 200.0
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-1]), "close_raw"] = 192.0
+    df.loc[(df["ticker"] == "TK001") & (pd.to_datetime(df["date"]).dt.date == dates[-1]), "split_factor"] = 2.0
+    df.to_parquet(canonical, index=False)
+
+    report = gate.check_ssot_integrity_br(
+        expected_date_max=dates[-1],
+        persist=False,
+        open_positions=set(),
+        is_rebalance_day=False,
+    )
+
+    assert report["status"] == "FAIL"
+    assert report["checks"]["split_coherence_ok"]["pass"] is False
+    assert any("split_coherence_ok" in x for x in report["failed_checks"])

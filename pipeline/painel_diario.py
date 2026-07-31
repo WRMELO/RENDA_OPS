@@ -30,6 +30,7 @@ from pipeline.ptbr import (
     fmt_pct_br as _fmt_pct,
     validate_html_ptbr,
 )
+from lib.corporate_actions import SPLIT_VIGENCY_LOG_TOLERANCE, safe_log_ratio
 from lib.engine import compute_filtered_m3_scores, select_top_n
 from lib.spc import is_spc_bc_blocked as _is_spc_bc_blocked
 from lib.trading_calendar import next_session as _next_session, prev_session as _prev_session
@@ -133,13 +134,14 @@ def _detect_and_adjust_splits(
         return lots, []
     tickers = sorted({lot.ticker for lot in lots})
     try:
-        df = pd.read_parquet(path, columns=["date", "ticker", "split_factor"])
+        df = pd.read_parquet(path, columns=["date", "ticker", "split_factor", "close_operational"])
     except Exception:
         return lots, []
 
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["ticker"] = df["ticker"].astype(str).str.upper().str.strip()
     df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(1.0)
+    df["close_operational"] = pd.to_numeric(df["close_operational"], errors="coerce")
     # Auditor Gemini H1: nunca usar split_factor futuro para boletim historico.
     df = df[df["date"] <= pd.Timestamp(as_of_day)]
     df = df[df["ticker"].isin(tickers)].sort_values(["ticker", "date"]).dropna(subset=["date"])
@@ -151,11 +153,14 @@ def _detect_and_adjust_splits(
         sub = df[df["ticker"] == tk]
         if sub.empty:
             continue
+        sub = sub[["date", "ticker", "split_factor", "close_operational"]].copy().reset_index(drop=True)
+        sub["prev_close_operational"] = sub["close_operational"].shift(1)
         sf_by_ticker[tk] = sub
 
     corporate_actions: list[dict[str, Any]] = []
     adjusted: list[Lot] = []
-    seen_splits: set[tuple[str, str]] = set()
+    seen_splits: set[tuple[str, str, str]] = set()
+    blocked_tickers: set[str] = set()
 
     for lot in lots:
         tk = lot.ticker
@@ -171,18 +176,68 @@ def _detect_and_adjust_splits(
             adjusted.append(lot)
             continue
 
-        ratio = float(events["split_factor"].prod())
+        coherent_factors: list[float] = []
+        blocked_events: list[dict[str, Any]] = []
+        for _, ev in events.iterrows():
+            factor = float(ev["split_factor"])
+            prev_px = _safe_float(ev.get("prev_close_operational"), 0.0)
+            cur_px = _safe_float(ev.get("close_operational"), 0.0)
+            observed_log = safe_log_ratio(cur_px, prev_px)  # log(close_event / close_prev)
+            target_log = safe_log_ratio(1.0, factor)  # log(1/factor)
+            residual_log = abs(observed_log - target_log)
+            if math.isinf(residual_log) or residual_log > SPLIT_VIGENCY_LOG_TOLERANCE:
+                blocked_events.append(
+                    {
+                        "event_date": pd.Timestamp(ev["date"]).date().isoformat(),
+                        "split_factor": factor,
+                        "prev_close_operational": prev_px,
+                        "close_operational": cur_px,
+                        "residual_log": residual_log,
+                        "tolerance_log": SPLIT_VIGENCY_LOG_TOLERANCE,
+                    }
+                )
+            else:
+                coherent_factors.append(factor)
+
+        if blocked_events:
+            if tk not in blocked_tickers:
+                blocked_tickers.add(tk)
+                blocked_dates = sorted({str(ev["event_date"]) for ev in blocked_events})
+                corporate_actions.append(
+                    {
+                        "type": "SPLIT",
+                        "status": "BLOQUEADO_INCOERENTE",
+                        "ticker": tk,
+                        "ratio": "N/A",
+                        "detection_date": as_of_day.isoformat(),
+                        "source": "canonical_br.split_factor + close_operational coherence gate",
+                        "blocked_events": blocked_events,
+                        "note": (
+                            "Split bloqueado por incoerencia preco/fator. "
+                            f"Eventos={', '.join(blocked_dates)}. /salvar bloqueado para evitar "
+                            "ajuste de quantidade sem preco em escala coerente."
+                        ),
+                    }
+                )
+            adjusted.append(lot)
+            continue
+
+        ratio = float(math.prod(coherent_factors)) if coherent_factors else 1.0
+        if ratio <= 0 or abs(ratio - 1.0) <= 1e-12:
+            adjusted.append(lot)
+            continue
         new_qtd = round(lot.qtd * ratio)
         new_price = round(lot.buy_price / ratio, 4)
         int_ratio = int(round(ratio))
         ratio_str = f"{int_ratio}:1" if ratio > 1 else f"1:{int(round(1 / ratio))}"
 
-        key = (tk, ratio_str)
+        key = (tk, ratio_str, "APLICADO")
         if key not in seen_splits:
             seen_splits.add(key)
             corporate_actions.append(
                 {
                     "type": "SPLIT",
+                    "status": "APLICADO",
                     "ticker": tk,
                     "ratio": ratio_str,
                     "detection_date": as_of_day.isoformat(),
@@ -2259,7 +2314,27 @@ def build_painel(exec_day: date) -> Path:
     corporate_actions = ctx.get("corporate_actions", [])
     if corporate_actions:
         items = []
+        blocked_exists = any(
+            str(ca.get("status", "")).upper() == "BLOQUEADO_INCOERENTE"
+            for ca in corporate_actions
+        )
         for ca in corporate_actions:
+            status = str(ca.get("status", "APLICADO")).upper()
+            if status == "BLOQUEADO_INCOERENTE":
+                blocked_events = ca.get("blocked_events", [])
+                details = ""
+                if blocked_events:
+                    be = blocked_events[0]
+                    details = (
+                        f" primeiro evento: {be.get('event_date', '?')} "
+                        f"(resíduo log={_safe_float(be.get('residual_log'), 0.0):.4f}, "
+                        f"tol={_safe_float(be.get('tolerance_log'), 0.0):.4f})."
+                    )
+                items.append(
+                    f"<li><strong>{ca['ticker']}</strong> — split bloqueado por incoerência preço/fator;"
+                    f" posição não ajustada.{details}</li>"
+                )
+                continue
             adj = ca.get("adjustment_applied", {})
             items.append(
                 f"<li><strong>{ca['ticker']}</strong> — split {ca.get('ratio', '?')} detectado em "
@@ -2268,12 +2343,23 @@ def build_painel(exec_day: date) -> Path:
                 f"preço R$ {adj.get('preco_compra_before', 0):.2f} → R$ {adj.get('preco_compra_after', 0):.4f}. "
                 f"Custo total invariante.</li>"
             )
+        title = (
+            "CORPORATE ACTION — Split bloqueado por incoerência no SSOT"
+            if blocked_exists
+            else "CORPORATE ACTION — Split detectado no SSOT"
+        )
+        footer = (
+            "<p style='margin:6px 0 0;font-size:12px;'>Bloqueio ativo: /salvar indisponível até "
+            "coerência preço/fator ser restabelecida no canônico.</p>"
+            if blocked_exists
+            else "<p style='margin:6px 0 0;font-size:12px;'>O snapshot de posições foi ajustado automaticamente. "
+            "Confira o extrato da corretora e salve o boletim para registrar o ajuste.</p>"
+        )
         split_alert_html = (
             "<div class='split-alert'>"
-            "<strong>CORPORATE ACTION — Split detectado no SSOT</strong>"
+            f"<strong>{title}</strong>"
             f"<ul>{''.join(items)}</ul>"
-            "<p style='margin:6px 0 0;font-size:12px;'>O snapshot de posições foi ajustado automaticamente. "
-            "Confira o extrato da corretora e salve o boletim para registrar o ajuste.</p>"
+            f"{footer}"
             "</div>"
         )
 
@@ -2518,6 +2604,9 @@ const SNAPSHOT_D1 = {json.dumps(ctx["lots_snapshot"], ensure_ascii=False)};
 const PENDING_SALES = {json.dumps(ctx["pending_sales"], ensure_ascii=False)};
 const IN_SETTLEMENT = {json.dumps(ctx["sells_in_settlement"], ensure_ascii=False)};
 const CORPORATE_ACTIONS = {json.dumps(corporate_actions, ensure_ascii=False)};
+const BLOCKED_CORPORATE_ACTIONS = (CORPORATE_ACTIONS || []).filter(
+  ca => (ca.status || '').toUpperCase() === 'BLOQUEADO_INCOERENTE'
+);
 const DEFENSIVE_QUARANTINE_NEXT = {json.dumps(sorted(next_quarantine), ensure_ascii=False)};
 const VALID_TICKERS = {json.dumps(sorted(load_valid_tickers()), ensure_ascii=False)};
 const VALID_TICKERS_SET = new Set(VALID_TICKERS);
@@ -2866,6 +2955,15 @@ function recalc() {{
 
   const btn = document.getElementById('btnSave');
   const msg = document.getElementById('saveMsg');
+  if (BLOCKED_CORPORATE_ACTIONS.length > 0) {{
+    const blockedTickers = [...new Set(BLOCKED_CORPORATE_ACTIONS.map(ca => ca.ticker || '').filter(Boolean))];
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+    msg.className = 'save-msg error';
+    msg.textContent = 'Corporate action bloqueado por incoerência preço/fator: ' + blockedTickers.join(', ') + '.';
+    return;
+  }}
   if (free < -0.00001) {{
     btn.disabled = true;
     btn.style.opacity = '0.6';
@@ -2927,6 +3025,13 @@ function buildSnapshotAfterOps(ops) {{
 }}
 
 function savePanel() {{
+  if (BLOCKED_CORPORATE_ACTIONS.length > 0) {{
+    const msg = document.getElementById('saveMsg');
+    const blockedTickers = [...new Set(BLOCKED_CORPORATE_ACTIONS.map(ca => ca.ticker || '').filter(Boolean))];
+    msg.className = 'save-msg error';
+    msg.textContent = 'Salvamento bloqueado: split incoerente em ' + blockedTickers.join(', ') + '.';
+    return;
+  }}
   const opsManual = collectOps();
   const opsTop = collectTopBuyOps();
   const invalidManualTickers = invalidTickers(opsManual);
@@ -3102,6 +3207,34 @@ def serve_painel(exec_day: date, port: int = 8787) -> None:
                         "application/json",
                         json.dumps(
                             {"ok": False, "error": f"Ticker(s) inválido(s): {', '.join(invalid_tickers)}"}
+                        ).encode("utf-8"),
+                    )
+                    return
+                corporate_actions = payload.get("corporate_actions", [])
+                if not isinstance(corporate_actions, list):
+                    corporate_actions = []
+                blocked = []
+                for ca in corporate_actions:
+                    if not isinstance(ca, dict):
+                        continue
+                    status = str(ca.get("status", "")).upper().strip()
+                    if status == "BLOQUEADO_INCOERENTE":
+                        tk = str(ca.get("ticker", "")).upper().strip()
+                        if tk:
+                            blocked.append(tk)
+                if blocked:
+                    blocked_txt = ", ".join(sorted(set(blocked)))
+                    self._respond(
+                        400,
+                        "application/json",
+                        json.dumps(
+                            {
+                                "ok": False,
+                                "error": (
+                                    "Salvamento bloqueado: split incoerente em "
+                                    f"{blocked_txt}. Corrija o canonical antes de salvar."
+                                ),
+                            }
                         ).encode("utf-8"),
                     )
                     return

@@ -13,11 +13,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import math
 import sys
 from datetime import date
 from pathlib import Path
 
 import pandas as pd
+
+from lib.corporate_actions import SPLIT_VIGENCY_LOG_TOLERANCE, safe_log_ratio
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL_PATH = ROOT / "data" / "ssot" / "canonical_br.parquet"
@@ -32,6 +35,7 @@ MIN_SPC_COVERAGE_PCT = 80.0
 UNIVERSE_LOOKBACK_SESSIONS = 20
 CATASTROPHIC_COVERAGE_FLOOR_PCT = 60.0
 MAX_STALE_POSITIONS_PCT = 50.0
+SPLIT_COHERENCE_LOOKBACK_SESSIONS = 20
 
 
 def _persist(report: dict) -> None:
@@ -167,9 +171,22 @@ def check_ssot_integrity_br(
             _persist(report)
         return report
 
-    canonical = pd.read_parquet(CANONICAL_PATH, columns=["ticker", "date", "i_ucl", "i_lcl"])
+    base_cols = ["ticker", "date", "i_ucl", "i_lcl"]
+    ext_cols = ["close_raw", "split_factor"]
+    try:
+        canonical = pd.read_parquet(CANONICAL_PATH, columns=base_cols + ext_cols)
+    except Exception:
+        canonical = pd.read_parquet(CANONICAL_PATH, columns=base_cols)
+        canonical["close_raw"] = pd.NA
+        canonical["split_factor"] = 1.0
+    if "close_raw" not in canonical.columns:
+        canonical["close_raw"] = pd.NA
+    if "split_factor" not in canonical.columns:
+        canonical["split_factor"] = 1.0
     canonical["date"] = pd.to_datetime(canonical["date"], errors="coerce")
     canonical["ticker"] = canonical["ticker"].astype(str).str.upper().str.strip()
+    canonical["close_raw"] = pd.to_numeric(canonical["close_raw"], errors="coerce")
+    canonical["split_factor"] = pd.to_numeric(canonical["split_factor"], errors="coerce").fillna(1.0)
     canonical_dates = sorted(canonical["date"].dropna().dt.date.unique())
     date_max = canonical_dates[-1] if canonical_dates else None
     set_max: set[str] = set()
@@ -314,13 +331,97 @@ def check_ssot_integrity_br(
     if not check5_pass:
         failed.append(f"spc_integrity: coverage_pct={spc_cov}")
 
+    split_violations: list[dict[str, object]] = []
+    check6_pass = True
+    recent_dates = set(canonical_dates[-SPLIT_COHERENCE_LOOKBACK_SESSIONS:]) if canonical_dates else set()
+    if recent_dates:
+        recent_mask = canonical["date"].dt.date.isin(recent_dates)
+        split_events = canonical[
+            recent_mask
+            & canonical["split_factor"].notna()
+            & (canonical["split_factor"] != 1.0)
+        ].copy()
+        if not split_events.empty:
+            split_events = split_events.sort_values(["ticker", "date"]).drop_duplicates(
+                subset=["ticker", "date"], keep="last"
+            )
+            for _, ev in split_events.iterrows():
+                ticker = str(ev["ticker"])
+                event_ts = pd.Timestamp(ev["date"])
+                factor = float(ev["split_factor"])
+                if factor <= 0:
+                    split_violations.append(
+                        {
+                            "ticker": ticker,
+                            "date": event_ts.date().isoformat(),
+                            "factor": factor,
+                            "reason": "invalid_factor",
+                        }
+                    )
+                    continue
+                sub = canonical[
+                    (canonical["ticker"] == ticker)
+                    & (canonical["date"] <= event_ts)
+                    & canonical["close_raw"].notna()
+                ][["date", "close_raw"]].sort_values("date")
+                if len(sub) < 2:
+                    split_violations.append(
+                        {
+                            "ticker": ticker,
+                            "date": event_ts.date().isoformat(),
+                            "factor": factor,
+                            "reason": "missing_previous_close",
+                        }
+                    )
+                    continue
+                prev_close = float(sub.iloc[-2]["close_raw"])
+                cur_close = float(sub.iloc[-1]["close_raw"])
+                observed_log = safe_log_ratio(prev_close, cur_close)
+                target_log = math.log(factor)
+                residual_log = abs(observed_log - target_log)
+                if math.isinf(residual_log) or residual_log > SPLIT_VIGENCY_LOG_TOLERANCE:
+                    split_violations.append(
+                        {
+                            "ticker": ticker,
+                            "date": event_ts.date().isoformat(),
+                            "factor": factor,
+                            "prev_close_raw": prev_close,
+                            "close_raw": cur_close,
+                            "observed_ratio": (prev_close / cur_close) if cur_close > 0 else None,
+                            "residual_log": residual_log,
+                            "tolerance_log": SPLIT_VIGENCY_LOG_TOLERANCE,
+                        }
+                    )
+
+    check6_pass = len(split_violations) == 0
+    checks["split_coherence_ok"] = {
+        "pass": check6_pass,
+        "lookback_sessions": SPLIT_COHERENCE_LOOKBACK_SESSIONS,
+        "tolerance_log": SPLIT_VIGENCY_LOG_TOLERANCE,
+        "n_events_checked": int(
+            len(
+                canonical[
+                    canonical["date"].dt.date.isin(recent_dates)
+                    & canonical["split_factor"].notna()
+                    & (canonical["split_factor"] != 1.0)
+                ]
+            )
+        )
+        if recent_dates
+        else 0,
+        "violations": split_violations,
+    }
+    if not check6_pass:
+        failed_labels = [f"{v.get('ticker')}@{v.get('date')}" for v in split_violations]
+        failed.append("split_coherence_ok: " + ", ".join(failed_labels))
+
     stale_positions: list[str] = []
     blind_positions: list[str] = []
     stale_plus_blind_count = 0
     stale_plus_blind_pct = 0.0
     open_positions_count = 0
     stale_pct = 0.0
-    check6_pass = False
+    check7_pass = False
     ledger_error = None
     pos_source = "input" if open_positions is not None else "ledger"
     try:
@@ -337,8 +438,8 @@ def check_ssot_integrity_br(
             stale_pct = round(100.0 * len(stale_positions) / open_positions_count, 1)
             stale_plus_blind_count = len(stale_positions) + len(blind_positions)
             stale_plus_blind_pct = round(100.0 * stale_plus_blind_count / open_positions_count, 1)
-        check6_pass = stale_plus_blind_pct <= MAX_STALE_POSITIONS_PCT
-        if not check6_pass:
+        check7_pass = stale_plus_blind_pct <= MAX_STALE_POSITIONS_PCT
+        if not check7_pass:
             failed.append(
                 f"open_positions_coverage: stale+blind={stale_plus_blind_count}/{open_positions_count}"
             )
@@ -351,7 +452,7 @@ def check_ssot_integrity_br(
         failed.append("open_positions_coverage: ledger_unavailable")
 
     checks["open_positions_coverage"] = {
-        "pass": check6_pass,
+        "pass": check7_pass,
         "source": pos_source,
         "open_positions_count": open_positions_count,
         "stale_positions": stale_positions,

@@ -22,6 +22,17 @@ def test_load_incremental_rows_maps_schema_and_events(tmp_path, monkeypatch: pyt
             {
                 "ticker": "AAA3",
                 "api_symbol": "AAA3.SA",
+                "date": "2026-07-27",
+                "open": 20.0,
+                "high": 21.2,
+                "low": 19.8,
+                "close": 21.0,
+                "adjusted_close": 20.9,
+                "volume": 900,
+            },
+            {
+                "ticker": "AAA3",
+                "api_symbol": "AAA3.SA",
                 "date": "2026-07-28",
                 "open": 10.0,
                 "high": 11.0,
@@ -50,7 +61,7 @@ def test_load_incremental_rows_maps_schema_and_events(tmp_path, monkeypatch: pyt
 
     out = load_incremental_rows_from_eodhd(
         tickers=["AAA3"],
-        ticker_last_dates={},
+        ticker_last_dates={"AAA3": date(2026, 7, 27)},
         end_date=date(2026, 7, 29),
     )
 

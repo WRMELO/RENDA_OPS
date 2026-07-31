@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-07-31
+
+- fix(motor): `T-SSOT-BR-SPLIT-VIGENCIA-ROLLBACK-V1-FIX1` — restaura o guard fail-loud de coerência preço-fator no Step 04, mantém o tratamento de `NaN` em `safe_log_ratio` e sela a correção com `v1.29.0-motor` após PASS do Auditor. Artefatos: `pipeline/04_build_canonical.py`, `lib/corporate_actions.py`, `tests/test_build_canonical_split_heuristic.py`, `data/ssot/corporate_actions_pending_br.json`. Decision: D-188.
+
 ## 2026-07-30
 
 - fix(ledger-br): `T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1` — regulariza append-only o ledger do `exec_day=2026-07-30` sem rewrite: adiciona 3 eventos `CORRECTION` para cancelar o `BUY GEOO34` indevido e substituir os `BUY` de `CSCO34`/`A1MT34` com os preços de execução (`118.03` e `227.05`), adiciona as 3 `SELL` executadas (`A1MD34`, `MUTC34`, `N1TA34`) e regenera os espelhos `data/real/2026-07-29.json` e `data/cycles/2026-07-29/boletim_preenchido.json` com 5 operações reais + snapshot coerente. Evidência operacional: ledger `140 -> 148` linhas com prefixo histórico intacto (primeiras 140 linhas idênticas ao backup), `compute_cash(2026-07-30)` em `cash_free=182.78` e `cash_accounting=231376.72`, além de idempotência confirmada (`--confirm` subsequente com `applied=0`). Decision: SALA D-192 (refs: D-167, R-038).
