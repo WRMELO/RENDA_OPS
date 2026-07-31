@@ -101,10 +101,12 @@ def run(end_date: date | None = None) -> Path:
             "dividend_label",
         ]
     ].copy()
-    new_data["date"] = pd.to_datetime(new_data["date"]).dt.strftime("%Y-%m-%d")
+    # Contrato D-189: coluna date do raw BR e datetime64 normalizado (nunca string).
+    new_data["date"] = pd.to_datetime(new_data["date"], errors="coerce")
 
     if TARGET.exists():
         existing = pd.read_parquet(TARGET)
+        existing["date"] = pd.to_datetime(existing["date"], errors="coerce")
         combined = pd.concat([existing, new_data], ignore_index=True)
         combined = combined.drop_duplicates(subset=["ticker", "date"], keep="last")
     else:
@@ -116,6 +118,7 @@ def run(end_date: date | None = None) -> Path:
         combined["dividend_label"] = ""
     combined["dividend_rate"] = pd.to_numeric(combined["dividend_rate"], errors="coerce").fillna(0.0).astype(float)
     combined["dividend_label"] = combined["dividend_label"].fillna("").astype(str)
+    combined = combined.dropna(subset=["date"])
     combined = combined.sort_values(["ticker", "date"]).reset_index(drop=True)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     combined.to_parquet(TARGET, index=False)

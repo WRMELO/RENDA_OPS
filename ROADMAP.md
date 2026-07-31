@@ -159,6 +159,7 @@ Decisões: D-019 (backtest inicial), D-021 (correção venda defensiva como cama
 | T-LEDGER-BR-REGULARIZACAO-BOLETIM-20260730-V1 | Regularizacao append-only do ledger BR de 2026-07-30 com regeneracao do boletim espelho | scripts/migrate_ledger_regularizacao_20260730_br.py, data/ssot/ledger_br.jsonl, data/real/2026-07-29.json, data/cycles/2026-07-29/boletim_preenchido.json, CHANGELOG.md, DECISION_LOG.md | 2026-07-30 | D-192 |
 | T-MOTOR-SPLIT-REGISTRADO-SEM-IDENTIDADE-BR-V1 | Ajustar heuristica de split do Step 04 para remover candidata identidade (`adj=1.0`) quando split estiver registrado, com teste dedicado e prova de equivalencia do canonical | pipeline/04_build_canonical.py, tests/test_build_canonical_split_heuristic.py, data/ssot/canonical_br.parquet, data/ssot/ssot_integrity_br.json, CHANGELOG.md, DECISION_LOG.md | 2026-07-30 | D-186 |
 | T-MOTOR-R066-VALIDACAO-SAIDA-LEDGER-BR-V1 | Materializar R-066 na validacao de ticker do painel BR: liberar apenas `VENDA` para posicao aberta no ledger fora do canônico, mantendo R-016 para entrada | pipeline/painel_diario.py, tests/test_painel_ticker_validation.py, DECISION_LOG.md, ../SALA_DE_CONTROLE/DECISION_LOG.md, ../SALA_DE_CONTROLE/REGRAS_OPERACIONAIS.md, CHANGELOG.md, ROADMAP.md | 2026-07-30 | D-187 |
+| T-SSOT-BR-RAW-DATE-SCHEMA-CONTRACT-V1 | Contrato datetime64 do raw BR e validacao de schema+ingest no Step 02 | pipeline/02_ingest_prices_br.py, tests/test_ingest_prices_br_schema.py, DECISION_LOG.md, GOVERNANCE.md, CHANGELOG.md, ROADMAP.md | 2026-07-31 | D-189 |
 
 ---
 

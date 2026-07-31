@@ -2,6 +2,7 @@
 
 ## 2026-07-31
 
+- fix(ssot-br): `T-SSOT-BR-RAW-DATE-SCHEMA-CONTRACT-V1` — formaliza o contrato `datetime64` para `data/ssot/market_data_raw.parquet::date`, resgata os backups D-188 fora do git, adiciona teste de schema dedicado e fecha a regressao de ingest com validacao real. Artefatos: `pipeline/02_ingest_prices_br.py`, `tests/test_ingest_prices_br_schema.py`, `DECISION_LOG.md`, `GOVERNANCE.md`, `data/ssot/*.json`. Decision: D-189.
 - fix(motor): `T-SSOT-BR-SPLIT-VIGENCIA-ROLLBACK-V1-FIX1` — restaura o guard fail-loud de coerência preço-fator no Step 04, mantém o tratamento de `NaN` em `safe_log_ratio` e sela a correção com `v1.29.0-motor` após PASS do Auditor. Artefatos: `pipeline/04_build_canonical.py`, `lib/corporate_actions.py`, `tests/test_build_canonical_split_heuristic.py`, `data/ssot/corporate_actions_pending_br.json`. Decision: D-188.
 
 ## 2026-07-30
