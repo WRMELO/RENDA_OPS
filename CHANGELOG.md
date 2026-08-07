@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-08-07
+
+- docs(corpus-br-eodhd): `CFG-20260807-143242-REMED-CORPUS-BR-EODHD` — alinha `docs/CORPUS_FABRICA_BR.md` à fonte vigente EODHD (histórico BRAPI preservado; Phase 1 + §3.1/§3.2/§5.4/§8.2); refs SALA D-224 / RENDA D-185. Sem alteração de código nem `DECISION_LOG` RENDA.
+
 ## 2026-07-31
 
 - fix(ssot-br): `T-SSOT-BR-RAW-DATE-SCHEMA-CONTRACT-V1` — formaliza o contrato `datetime64` para `data/ssot/market_data_raw.parquet::date`, resgata os backups D-188 fora do git, adiciona teste de schema dedicado e fecha a regressao de ingest com validacao real. Artefatos: `pipeline/02_ingest_prices_br.py`, `tests/test_ingest_prices_br_schema.py`, `DECISION_LOG.md`, `GOVERNANCE.md`, `data/ssot/*.json`. Decision: D-189.

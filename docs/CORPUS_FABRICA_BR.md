@@ -34,7 +34,7 @@
 | Fase | Escopo | Tasks | Decisões-chave | Duração |
 | ------ | -------- | ------- | ----------------- | --------- |
 | Phase 0 — Fundação | Setup repo, governança, pipeline skeleton | T-001 | D-001, D-002, D-003 | 1 dia |
-| Phase 1 — Dados Reais | Ingestão BR+BDR via BRAPI, SSOT canônico | T-002 | D-004, D-008, D-010 | 1 dia |
+| Phase 1 — Dados Reais | Ingestão BR+BDR via BRAPI (histórico T-002), SSOT canônico; **vigência operacional atual: EODHD** (D-185 / SALA D-188) | T-002 | D-004, D-008, D-010; vigência D-185/D-188 | 1 dia |
 | Phase 2 — Pipeline E2E | Steps 05-09 operacionais, XGBoost persistido | T-003, T-004 | D-009, D-011 | 1 dia |
 | Remediação | 4 findings pós-auditoria forense | T-014 a T-017 | D-015 | 1 dia |
 | Painel Único | Redesign completo: relatório+boletim+duplo-caixa | T-018 a T-023 | D-016, D-017, D-018 | 1 dia |
@@ -58,8 +58,8 @@
 ### 3.1 Pipeline (12 steps sequenciais)
 
 ```text
-01_ingest_macro      → CDI (BCB), Ibov (BRAPI), S&P 500 (Yahoo)
-02_ingest_prices_br  → Preços BR + BDR via BRAPI [BLINDADO]
+01_ingest_macro      → CDI (BCB), Ibov (BVSP.INDX / EODHD), S&P 500 (Yahoo)
+02_ingest_prices_br  → Preços BR + BDR via eodhd_source (EODHD local; BRAPI não vigente) [BLINDADO]
 03_ingest_ptax_bdr   → PTAX e universo BDR
 04_build_canonical   → SSOT canônico BR expandido [BLINDADO]
 05_build_macro_expanded → Features macro (FRED: VIX, DXY, Treasuries, Fed Funds)
@@ -85,7 +85,7 @@
 | `engine.py` | Motor M3: `compute_m3_scores`, `apply_hysteresis`, `select_top_n` | Agnóstico de mercado |
 | `metrics.py` | `drawdown`, `metrics` (CAGR, MDD, Sharpe) | Agnóstico de mercado |
 | `io.py` | `read_parquet`, `write_parquet`, `read_json`, `write_json`, `sha256_file` | Agnóstico de mercado |
-| `adapters.py` | `BrapiAdapter`, `BcbAdapter`, `YahooAdapter`, `FredAdapter` | FRED portável; demais específicos BR |
+| `adapters.py` | `EodhdAdapter` (vigente Ibov/`BVSP.INDX`), `BrapiAdapter` (legado), `BcbAdapter`, `YahooAdapter`, `FredAdapter`; preços BR via `eodhd_source.py` | FRED portável; EODHD/BRAPI específicos BR |
 
 ### 3.3 Configuração (config/)
 
@@ -203,7 +203,7 @@ Fonte primária do caixa: `ledger_br.jsonl` (D-045/D-046). Boletim `data/real/*.
 
 ### 5.4 Proventos automáticos
 
-- Dividendos e JCP detectados via BRAPI (coluna `dividends` no `market_data_raw.parquet`)
+- Dividendos e JCP detectados via EODHD (base local `eodhd_div_sa.parquet` / coluna `dividends` no `market_data_raw.parquet`; BRAPI não vigente)
 - Propagados ao `canonical_br.parquet` como `dividend_rate` e `dividend_label`
 - Aparecem como eventos extraordinários no boletim, consolidados no caixa ao salvar
 
@@ -327,9 +327,9 @@ A lição é sobre o desenho da heurística, não sobre o valor dos limiares: qu
 
 | Componente | Artefato | O que muda para outro mercado |
 | ----------- | --------- | ------------------------------- |
-| BrapiAdapter | `lib/adapters.py` | Substituir por API do mercado-alvo |
+| EodhdAdapter (vigente) / BrapiAdapter (legado) | `lib/adapters.py`; preços via `lib/eodhd_source.py` | Substituir pela fonte EOD/API do mercado-alvo; BRAPI permanece só como legado histórico |
 | BcbAdapter | `lib/adapters.py` | Substituir por banco central do país-alvo |
-| Ingestão BR | `pipeline/01-03_*.py` | Adaptar fontes de dados |
+| Ingestão BR | `pipeline/01-03_*.py` | Adaptar fontes de dados (macro Ibov=`BVSP.INDX`/EODHD; step 02=`eodhd_source`) |
 | Canonical BR | `pipeline/04_build_canonical.py` | Adaptar universo de ativos |
 | Macro expanded BR | `pipeline/05_build_macro_expanded.py` | Adaptar séries macro |
 | Purga de zumbis | `pipeline/04_build_canonical.py` | Regra BR (20 pregões/100 dias) — recalibrar |
