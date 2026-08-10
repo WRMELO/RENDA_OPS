@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-08-10
+
+- fix(painel-split-gate): `T-SSOT-BR-SPLIT-GATE-CLOSERAW-F1TN34-V1` — `_detect_and_adjust_splits` mede coerência preço-fator em `close_raw`/`prev_close_raw` (source `canonical_br.split_factor + close_raw coherence gate`); valuation de tela permanece em `close_operational`; F1TN34 `APLICADO` 6:1 (446→2676, 402,85→67,1417); testes `test_corporate_actions_vigencia.py` cobrem bloqueio por `close_raw` incoerente e aplicação no padrão F1TN34; sela com `v1.31.0-motor`. Decision: D-190 (ref cruzada SALA D-227).
+
 ## 2026-08-07
 
 - docs(corpus-br-eodhd): `CFG-20260807-143242-REMED-CORPUS-BR-EODHD` — alinha `docs/CORPUS_FABRICA_BR.md` à fonte vigente EODHD (histórico BRAPI preservado; Phase 1 + §3.1/§3.2/§5.4/§8.2); refs SALA D-224 / RENDA D-185. Sem alteração de código nem `DECISION_LOG` RENDA.

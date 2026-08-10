@@ -123,12 +123,14 @@ def test_painel_bloqueia_ajuste_quando_split_esta_incoerente(tmp_path, monkeypat
                 "date": "2026-01-01",
                 "ticker": "TEST3",
                 "split_factor": 1.0,
+                "close_raw": 100.0,
                 "close_operational": 100.0,
             },
             {
                 "date": "2026-01-02",
                 "ticker": "TEST3",
                 "split_factor": 2.0,
+                "close_raw": 99.8,
                 "close_operational": 99.8,
             },
         ]
@@ -145,3 +147,43 @@ def test_painel_bloqueia_ajuste_quando_split_esta_incoerente(tmp_path, monkeypat
     assert len(corporate_actions) == 1
     assert corporate_actions[0]["status"] == "BLOQUEADO_INCOERENTE"
     assert corporate_actions[0]["ticker"] == "TEST3"
+    assert "close_raw" in corporate_actions[0]["source"]
+
+
+def test_painel_aplica_ajuste_quando_close_raw_coerente_e_operational_ja_escalado(tmp_path, monkeypatch):
+    """Padrao F1TN34: close_raw cai com o fator; close_operational ja esta escalado (sem queda)."""
+    ssot_dir = tmp_path / "data" / "ssot"
+    ssot_dir.mkdir(parents=True, exist_ok=True)
+    canonical = pd.DataFrame(
+        [
+            {
+                "date": "2026-01-01",
+                "ticker": "F1TN34",
+                "split_factor": 1.0,
+                "close_raw": 402.85,
+                "close_operational": 67.141667,
+            },
+            {
+                "date": "2026-01-02",
+                "ticker": "F1TN34",
+                "split_factor": 6.0,
+                "close_raw": 67.141667,
+                "close_operational": 67.141667,
+            },
+        ]
+    )
+    canonical.to_parquet(ssot_dir / "canonical_br.parquet", index=False)
+
+    monkeypatch.setattr(painel, "ROOT", tmp_path)
+    lot = painel.Lot(ticker="F1TN34", buy_date="2026-01-01", qtd=446, buy_price=402.85)
+    adjusted, corporate_actions = painel._detect_and_adjust_splits([lot], as_of_day=date(2026, 1, 2))
+
+    assert len(adjusted) == 1
+    assert adjusted[0].qtd == 2676  # 446 * 6
+    assert adjusted[0].buy_price == 67.1417  # 402.85 / 6
+    assert len(corporate_actions) == 1
+    assert corporate_actions[0]["status"] == "APLICADO"
+    assert corporate_actions[0]["ticker"] == "F1TN34"
+    assert corporate_actions[0]["ratio"] == "6:1"
+    assert "close_raw" in corporate_actions[0]["source"] or "split_factor" in corporate_actions[0]["source"]
+    assert abs(adjusted[0].qtd * adjusted[0].buy_price - 446 * 402.85) < 1.0

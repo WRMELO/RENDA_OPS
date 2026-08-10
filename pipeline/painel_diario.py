@@ -134,14 +134,14 @@ def _detect_and_adjust_splits(
         return lots, []
     tickers = sorted({lot.ticker for lot in lots})
     try:
-        df = pd.read_parquet(path, columns=["date", "ticker", "split_factor", "close_operational"])
+        df = pd.read_parquet(path, columns=["date", "ticker", "split_factor", "close_raw"])
     except Exception:
         return lots, []
 
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["ticker"] = df["ticker"].astype(str).str.upper().str.strip()
     df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(1.0)
-    df["close_operational"] = pd.to_numeric(df["close_operational"], errors="coerce")
+    df["close_raw"] = pd.to_numeric(df["close_raw"], errors="coerce")
     # Auditor Gemini H1: nunca usar split_factor futuro para boletim historico.
     df = df[df["date"] <= pd.Timestamp(as_of_day)]
     df = df[df["ticker"].isin(tickers)].sort_values(["ticker", "date"]).dropna(subset=["date"])
@@ -153,8 +153,8 @@ def _detect_and_adjust_splits(
         sub = df[df["ticker"] == tk]
         if sub.empty:
             continue
-        sub = sub[["date", "ticker", "split_factor", "close_operational"]].copy().reset_index(drop=True)
-        sub["prev_close_operational"] = sub["close_operational"].shift(1)
+        sub = sub[["date", "ticker", "split_factor", "close_raw"]].copy().reset_index(drop=True)
+        sub["prev_close_raw"] = sub["close_raw"].shift(1)
         sf_by_ticker[tk] = sub
 
     corporate_actions: list[dict[str, Any]] = []
@@ -180,8 +180,8 @@ def _detect_and_adjust_splits(
         blocked_events: list[dict[str, Any]] = []
         for _, ev in events.iterrows():
             factor = float(ev["split_factor"])
-            prev_px = _safe_float(ev.get("prev_close_operational"), 0.0)
-            cur_px = _safe_float(ev.get("close_operational"), 0.0)
+            prev_px = _safe_float(ev.get("prev_close_raw"), 0.0)
+            cur_px = _safe_float(ev.get("close_raw"), 0.0)
             observed_log = safe_log_ratio(cur_px, prev_px)  # log(close_event / close_prev)
             target_log = safe_log_ratio(1.0, factor)  # log(1/factor)
             residual_log = abs(observed_log - target_log)
@@ -190,8 +190,8 @@ def _detect_and_adjust_splits(
                     {
                         "event_date": pd.Timestamp(ev["date"]).date().isoformat(),
                         "split_factor": factor,
-                        "prev_close_operational": prev_px,
-                        "close_operational": cur_px,
+                        "prev_close_raw": prev_px,
+                        "close_raw": cur_px,
                         "residual_log": residual_log,
                         "tolerance_log": SPLIT_VIGENCY_LOG_TOLERANCE,
                     }
@@ -210,7 +210,7 @@ def _detect_and_adjust_splits(
                         "ticker": tk,
                         "ratio": "N/A",
                         "detection_date": as_of_day.isoformat(),
-                        "source": "canonical_br.split_factor + close_operational coherence gate",
+                        "source": "canonical_br.split_factor + close_raw coherence gate",
                         "blocked_events": blocked_events,
                         "note": (
                             "Split bloqueado por incoerencia preco/fator. "

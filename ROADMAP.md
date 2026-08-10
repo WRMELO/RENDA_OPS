@@ -90,6 +90,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 74 | T-127-MACRO-FRED-FALLBACK-TRADING-DAYS-BR | Corrigir fallback D-027 do Step 05: substituir tolerancia por dias corridos por contagem de pregoes | D-127 | pipeline/run_daily.py, DECISION_LOG.md, ROADMAP.md, CHANGELOG.md | DONE |
 | 75 | T-SPC-MACRO-FIX-BASE1-HARDENING-BR-V1 | Corrigir o CDI faltante de 2026-06-15, endurecer o canonical com gate de integridade SPC e blindar `analista-br` contra `SPC_INDISPONIVEL`; Base 1 nao forward-filla alem do ultimo boletim salvo | D-133 / SALA D-066 | data/ssot/macro.parquet, pipeline/04_build_canonical.py, pipeline/painel_diario.py, /home/wilson/.cursor/skills/analista-br/SKILL.md, DECISION_LOG.md, CHANGELOG.md | DONE |
 | 76 | T-SSOT-BR-SPLIT-VIGENCIA-ROLLBACK-V1-FIX1 | Restaurar a coerência preço-fator no Step 04, manter o tratamento de `NaN` e fechar a correção de vigência de corporate actions com tag `v1.29.0-motor` | D-188 | pipeline/04_build_canonical.py, lib/corporate_actions.py, tests/test_build_canonical_split_heuristic.py, CHANGELOG.md, DECISION_LOG.md | DONE |
+| 77 | T-SSOT-BR-SPLIT-GATE-CLOSERAW-F1TN34-V1 | Alinhar gate do painel à coerência em `close_raw`, liberar F1TN34 6:1 e selar com `v1.31.0-motor` | D-190 / SALA D-227 | pipeline/painel_diario.py, tests/test_corporate_actions_vigencia.py, CHANGELOG.md, DECISION_LOG.md, GOVERNANCE.md | DONE |
 
 ### Marcos Estratégicos
 
