@@ -1,29 +1,29 @@
 {
   "status": "PASS",
-  "expected_date_max": "2026-08-07",
-  "canonical_date_max": "2026-08-07",
+  "expected_date_max": "2026-08-11",
+  "canonical_date_max": "2026-08-11",
   "checks": {
     "date_max_matches_expected": {
       "pass": true,
-      "canonical_date_max": "2026-08-07",
-      "expected_date_max": "2026-08-07",
+      "canonical_date_max": "2026-08-11",
+      "expected_date_max": "2026-08-11",
       "mode": "exact"
     },
     "macro_alignment": {
       "pass": true,
-      "macro_date_max": "2026-08-07",
-      "canonical_date_max": "2026-08-07"
+      "macro_date_max": "2026-08-11",
+      "canonical_date_max": "2026-08-11"
     },
     "ptax_alignment": {
       "pass": true,
-      "ptax_date_max": "2026-08-07",
-      "canonical_date_max": "2026-08-07"
+      "ptax_date_max": "2026-08-11",
+      "canonical_date_max": "2026-08-11"
     },
     "universe_coverage": {
       "pass": true,
-      "n_tickers_date_max": 699,
+      "n_tickers_date_max": 708,
       "median_recent_sessions": 696.0,
-      "coverage_pct": 100.4,
+      "coverage_pct": 101.7,
       "min_required_pct": 60.0,
       "strict_threshold_pct": 90.0,
       "floor_pct": 60.0,
@@ -32,27 +32,27 @@
     },
     "inter_session_continuity": {
       "pass": true,
-      "date_max": "2026-08-07",
-      "prior_date_in_ssot": "2026-08-06",
+      "date_max": "2026-08-11",
+      "prior_date_in_ssot": "2026-08-10",
       "intersection_pct": 100.0,
       "min_required_pct": 90.0
     },
     "spc_integrity": {
       "pass": true,
-      "coverage_pct": 99.4,
+      "coverage_pct": 99.6,
       "min_required_pct": 80.0
     },
     "split_coherence_ok": {
       "pass": true,
       "lookback_sessions": 20,
       "tolerance_log": 0.3364722366212129,
-      "n_events_checked": 37,
+      "n_events_checked": 39,
       "violations": []
     },
     "open_positions_coverage": {
       "pass": true,
       "source": "ledger",
-      "open_positions_count": 10,
+      "open_positions_count": 9,
       "stale_positions": [],
       "blind_positions": [],
       "stale_pct": 0.0,
@@ -68,5 +68,5 @@
     "missing_tickers": [],
     "n_missing": 0
   },
-  "generated_at": "2026-08-10T12:38:00.049538+00:00"
+  "generated_at": "2026-08-12T11:48:28.187952+00:00"
 }
