@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-08-17
+
+- fix(motor-caixa): `T-SDC-BR-CAIXA-INFORMATIVO-SEM-GATE-V1` — regime CAIXA/MERCADO deixa de ser trava operacional; `09_decide` persiste Top-10 + buffer C2 K=15 no rebalance mesmo com `state_cash=1`; lookups ignoram rebalance com listas vazias; `painel_diario` não liquida por `action==CAIXA` (A2/C2 só sobre ledger); sela com `v1.32.0-motor`. Artefatos: `pipeline/09_decide.py`, `pipeline/painel_diario.py`, `pipeline/analise_br.py`. Decision: SALA D-228.
+
 ## 2026-08-10
 
 - fix(painel-split-gate): `T-SSOT-BR-SPLIT-GATE-CLOSERAW-F1TN34-V1` — `_detect_and_adjust_splits` mede coerência preço-fator em `close_raw`/`prev_close_raw` (source `canonical_br.split_factor + close_raw coherence gate`); valuation de tela permanece em `close_operational`; F1TN34 `APLICADO` 6:1 (446→2676, 402,85→67,1417); testes `test_corporate_actions_vigencia.py` cobrem bloqueio por `close_raw` incoerente e aplicação no padrão F1TN34; sela com `v1.31.0-motor`. Decision: D-190 (ref cruzada SALA D-227).

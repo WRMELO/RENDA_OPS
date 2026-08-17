@@ -91,6 +91,7 @@ Tornar a Fabrica BR (winner C060X) operacional para ciclo diario: ingestao, deci
 | 75 | T-SPC-MACRO-FIX-BASE1-HARDENING-BR-V1 | Corrigir o CDI faltante de 2026-06-15, endurecer o canonical com gate de integridade SPC e blindar `analista-br` contra `SPC_INDISPONIVEL`; Base 1 nao forward-filla alem do ultimo boletim salvo | D-133 / SALA D-066 | data/ssot/macro.parquet, pipeline/04_build_canonical.py, pipeline/painel_diario.py, /home/wilson/.cursor/skills/analista-br/SKILL.md, DECISION_LOG.md, CHANGELOG.md | DONE |
 | 76 | T-SSOT-BR-SPLIT-VIGENCIA-ROLLBACK-V1-FIX1 | Restaurar a coerência preço-fator no Step 04, manter o tratamento de `NaN` e fechar a correção de vigência de corporate actions com tag `v1.29.0-motor` | D-188 | pipeline/04_build_canonical.py, lib/corporate_actions.py, tests/test_build_canonical_split_heuristic.py, CHANGELOG.md, DECISION_LOG.md | DONE |
 | 77 | T-SSOT-BR-SPLIT-GATE-CLOSERAW-F1TN34-V1 | Alinhar gate do painel à coerência em `close_raw`, liberar F1TN34 6:1 e selar com `v1.31.0-motor` | D-190 / SALA D-227 | pipeline/painel_diario.py, tests/test_corporate_actions_vigencia.py, CHANGELOG.md, DECISION_LOG.md, GOVERNANCE.md | DONE |
+| 79 | T-SDC-BR-CAIXA-INFORMATIVO-SEM-GATE-V1 | Regime CAIXA informativo: remover gate operacional; persistir Top-10 + C2 no rebalance; selar `v1.32.0-motor` | SALA D-228 | pipeline/09_decide.py, pipeline/painel_diario.py, pipeline/analise_br.py, CHANGELOG.md, ROADMAP.md, GOVERNANCE.md | DONE |
 
 ### Marcos Estratégicos
 

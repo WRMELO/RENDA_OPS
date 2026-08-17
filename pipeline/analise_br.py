@@ -150,7 +150,11 @@ def _load_frozen_master(exec_day: date) -> dict[str, Any] | None:
                 continue
             payload = json.loads(p.read_text())
             if payload.get("is_rebalance_day"):
-                candidates.append((d, payload))
+                _has_operational_list = bool(payload.get("portfolio") or []) or bool(
+                    payload.get("operational_ranking") or []
+                )
+                if _has_operational_list:
+                    candidates.append((d, payload))
         except Exception:
             continue
     if not candidates:

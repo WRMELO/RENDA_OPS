@@ -330,7 +330,11 @@ def load_frozen_master_for_day(exec_day: date) -> dict[str, Any] | None:
                 continue
             payload = _read_json(p)
             if payload.get("is_rebalance_day"):
-                candidates.append((d, payload))
+                _has_operational_list = bool(payload.get("portfolio") or []) or bool(
+                    payload.get("operational_ranking") or []
+                )
+                if _has_operational_list:
+                    candidates.append((d, payload))
         except Exception:
             continue
     if not candidates:
@@ -980,19 +984,6 @@ def _build_sell_suggestions(
     current_port = {str(x.get("ticker", "")).upper().strip() for x in decision.get("portfolio", [])}
     suggestions: list[dict[str, Any]] = []
     quarantine = set(prev_quarantine)
-
-    if action == "CAIXA":
-        for t, qtd in sorted(holdings_qty.items()):
-            suggestions.append(
-                {
-                    "ticker": t,
-                    "sell_pct": 100.0,
-                    "qtd": qtd,
-                    "close_d1": _safe_float(prices_d1.get(t, 0.0), 0.0),
-                    "reason": "Sinal de regime CAIXA (histerese): liquidar posição.",
-                }
-            )
-        return suggestions, quarantine
 
     # Camada 1 — A2_ANY_RULE (D-126/T-122): venda defensiva per-ticker em qualquer
     # Regra 1 nas 4 cartas (I, MR, Xbar, R), sell_pct=100%, sem gate de regime de

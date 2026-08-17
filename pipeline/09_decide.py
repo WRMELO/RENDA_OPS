@@ -65,7 +65,11 @@ def _latest_rebalance_payload_before(target_ts: pd.Timestamp) -> dict | None:
         except Exception:
             continue
         if payload.get("is_rebalance_day"):
-            candidates.append((day, payload))
+            _has_operational_list = bool(payload.get("portfolio") or []) or bool(
+                payload.get("operational_ranking") or []
+            )
+            if _has_operational_list:
+                candidates.append((day, payload))
     if not candidates:
         return None
     candidates.sort(key=lambda x: x[0], reverse=True)
@@ -151,78 +155,76 @@ def run(
 
     portfolio: list[dict] = []
     operational_ranking: list[dict] = []
-    action = "CAIXA"
-    if current_state == 0:
-        action = "MERCADO"
-        blacklist_data = read_json(ROOT / "config" / "blacklist.json")
-        blacklist: set[str] = set()
-        if isinstance(blacklist_data, list):
-            blacklist = {str(t).upper() for t in blacklist_data}
-        elif isinstance(blacklist_data, dict):
-            for v in blacklist_data.values():
-                if isinstance(v, list):
-                    blacklist.update(str(t).upper() for t in v)
+    action = "MERCADO" if current_state == 0 else "CAIXA"
+    blacklist_data = read_json(ROOT / "config" / "blacklist.json")
+    blacklist: set[str] = set()
+    if isinstance(blacklist_data, list):
+        blacklist = {str(t).upper() for t in blacklist_data}
+    elif isinstance(blacklist_data, dict):
+        for v in blacklist_data.values():
+            if isinstance(v, list):
+                blacklist.update(str(t).upper() for t in v)
 
-        # Gate B+C de entrada — T-088 / D-088.
-        # Bloqueia tickers com Regra1 | W2/W3/W4/N3(valor) | W4/N3(dispersao).
-        try:
-            _spc_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
-            if _spc_path.exists():
-                _canonical_spc = pd.read_parquet(
-                    _spc_path,
-                    columns=[
-                        "date",
-                        "ticker",
-                        "i_value",
-                        "i_ucl",
-                        "i_lcl",
-                        "mr_value",
-                        "mr_ucl",
-                        "r_value",
-                        "r_ucl",
-                        "xbar_value",
-                        "xbar_ucl",
-                        "xbar_lcl",
-                    ],
+    # Gate B+C de entrada — T-088 / D-088.
+    # Bloqueia tickers com Regra1 | W2/W3/W4/N3(valor) | W4/N3(dispersao).
+    try:
+        _spc_path = ROOT / "data" / "ssot" / "canonical_br.parquet"
+        if _spc_path.exists():
+            _canonical_spc = pd.read_parquet(
+                _spc_path,
+                columns=[
+                    "date",
+                    "ticker",
+                    "i_value",
+                    "i_ucl",
+                    "i_lcl",
+                    "mr_value",
+                    "mr_ucl",
+                    "r_value",
+                    "r_ucl",
+                    "xbar_value",
+                    "xbar_ucl",
+                    "xbar_lcl",
+                ],
+            )
+            blacklist = blacklist | _build_spc_bc_blocked_set(_canonical_spc, as_of_day=target_ts)
+    except Exception:
+        pass  # fallback conservador: manter blacklist original sem SPC B+C
+
+    scores_for_ranking: pd.DataFrame | None = None
+    if is_rebalance_day and target_ts in scores_by_day:
+        scores_for_ranking = scores_by_day[target_ts]
+        selected = select_top_n(scores_by_day[target_ts], top_n=top_n, blacklist=blacklist)
+        weight = 1.0 / top_n
+        for rank, ticker in enumerate(selected, 1):
+            score = float(scores_by_day[target_ts].loc[ticker, "score_m3"])
+            portfolio.append({"rank": rank, "ticker": ticker, "score_m3": round(score, 4), "weight": round(weight, 4)})
+        operational_ranking = _build_operational_ranking(scores_for_ranking, selected, buffer_k=buffer_k)
+    elif not is_rebalance_day:
+        frozen = _latest_rebalance_payload_before(target_ts)
+        if frozen:
+            portfolio = list(frozen.get("portfolio", []) or [])
+            operational_ranking = list(frozen.get("operational_ranking", []) or [])
+            ranking_day = pd.Timestamp(str(frozen.get("date", target_ts.date()))).normalize()
+            if not operational_ranking and ranking_day in scores_by_day:
+                frozen_top10 = [
+                    str(row.get("ticker", "")).upper().strip()
+                    for row in portfolio
+                    if str(row.get("ticker", "")).strip()
+                ]
+                operational_ranking = _build_operational_ranking(
+                    scores_by_day[ranking_day],
+                    frozen_top10,
+                    buffer_k=buffer_k,
                 )
-                blacklist = blacklist | _build_spc_bc_blocked_set(_canonical_spc, as_of_day=target_ts)
-        except Exception:
-            pass  # fallback conservador: manter blacklist original sem SPC B+C
-
-        scores_for_ranking: pd.DataFrame | None = None
-        if is_rebalance_day and target_ts in scores_by_day:
+        elif target_ts in scores_by_day:
             scores_for_ranking = scores_by_day[target_ts]
-            selected = select_top_n(scores_by_day[target_ts], top_n=top_n, blacklist=blacklist)
+            selected = select_top_n(scores_for_ranking, top_n=top_n, blacklist=blacklist)
             weight = 1.0 / top_n
             for rank, ticker in enumerate(selected, 1):
-                score = float(scores_by_day[target_ts].loc[ticker, "score_m3"])
+                score = float(scores_for_ranking.loc[ticker, "score_m3"])
                 portfolio.append({"rank": rank, "ticker": ticker, "score_m3": round(score, 4), "weight": round(weight, 4)})
             operational_ranking = _build_operational_ranking(scores_for_ranking, selected, buffer_k=buffer_k)
-        elif not is_rebalance_day:
-            frozen = _latest_rebalance_payload_before(target_ts)
-            if frozen:
-                portfolio = list(frozen.get("portfolio", []) or [])
-                operational_ranking = list(frozen.get("operational_ranking", []) or [])
-                ranking_day = pd.Timestamp(str(frozen.get("date", target_ts.date()))).normalize()
-                if not operational_ranking and ranking_day in scores_by_day:
-                    frozen_top10 = [
-                        str(row.get("ticker", "")).upper().strip()
-                        for row in portfolio
-                        if str(row.get("ticker", "")).strip()
-                    ]
-                    operational_ranking = _build_operational_ranking(
-                        scores_by_day[ranking_day],
-                        frozen_top10,
-                        buffer_k=buffer_k,
-                    )
-            elif target_ts in scores_by_day:
-                scores_for_ranking = scores_by_day[target_ts]
-                selected = select_top_n(scores_for_ranking, top_n=top_n, blacklist=blacklist)
-                weight = 1.0 / top_n
-                for rank, ticker in enumerate(selected, 1):
-                    score = float(scores_for_ranking.loc[ticker, "score_m3"])
-                    portfolio.append({"rank": rank, "ticker": ticker, "score_m3": round(score, 4), "weight": round(weight, 4)})
-                operational_ranking = _build_operational_ranking(scores_for_ranking, selected, buffer_k=buffer_k)
 
     decision = {
         "date": str(target_ts.date()),
