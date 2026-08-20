@@ -132,12 +132,57 @@ class BcbAdapter:
     def get_series(self, series_id: int, start: date, end: date) -> pd.DataFrame:
         url = f"{self.BASE_URL}{series_id}/dados"
         params = {"formato": "json", "dataInicial": start.strftime("%d/%m/%Y"), "dataFinal": end.strftime("%d/%m/%Y")}
+        empty = pd.DataFrame(columns=["date", "value"])
+        marker = "Value(s) not found"
+
+        def is_sgs_value_not_found(status: int, parsed: Any, text: str) -> bool:
+            if status == 404 and marker in text:
+                return True
+            if isinstance(parsed, dict):
+                detalhe = str(
+                    parsed.get("detalhe")
+                    or parsed.get("mensagem")
+                    or parsed.get("message")
+                    or ""
+                )
+                status_code = parsed.get("statusCode")
+                has_erro = "erro" in parsed
+                blob = str(parsed)
+                if has_erro and (status_code == 404 or marker in detalhe or marker in blob):
+                    return True
+                if status_code == 404 and marker in (detalhe + blob):
+                    return True
+            return False
+
+        def is_sgs_series_payload(parsed: Any) -> bool:
+            if not isinstance(parsed, list):
+                return False
+            if not parsed:
+                return False
+            frame = pd.DataFrame(parsed)
+            return "data" in frame.columns and "valor" in frame.columns
+
+        payload: Any = None
         for attempt in range(1, self.max_retries + 1):
             try:
                 resp = requests.get(url, params=params, timeout=self.timeout)
+                try:
+                    parsed: Any = resp.json()
+                except ValueError:
+                    parsed = None
+                text = resp.text or ""
+                status = int(resp.status_code)
+                if is_sgs_value_not_found(status, parsed, text):
+                    return empty
+                if 400 <= status < 500:
+                    raise RuntimeError(f"BCB series {series_id} client error {status}.")
                 resp.raise_for_status()
-                payload: list[dict[str, Any]] = resp.json()
+                payload = parsed
+                if payload is None:
+                    raise ValueError("BCB payload is not valid JSON.")
                 break
+            except RuntimeError:
+                raise
             except (RequestException, ValueError) as exc:
                 if attempt == self.max_retries:
                     raise RuntimeError(f"BCB series {series_id} fetch failed.") from exc
@@ -147,8 +192,8 @@ class BcbAdapter:
                     f"retrying in {wait_s}s..."
                 )
                 time.sleep(float(wait_s))
-        if not payload:
-            return pd.DataFrame(columns=["date", "value"])
+        if not is_sgs_series_payload(payload):
+            return empty
         df = pd.DataFrame(payload)
         df["date"] = pd.to_datetime(df["data"], format="%d/%m/%Y", errors="coerce")
         df["value"] = pd.to_numeric(df["valor"], errors="coerce")

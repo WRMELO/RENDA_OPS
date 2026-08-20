@@ -1,8 +1,16 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-08-20
+
+- fix(cdi-carry): `T-SDC-BR-CDI-CARRY-FALLBACK-5S-V1` — BcbAdapter trata SGS 404/erro 'Value(s) not found' como vazio sem retry; Step 01 carrega ultimo CDI oficial ate 5 pregoes BVMF com WARN cdi_carried e aborta no 6o; sem tag de motor. Run PDCA-20260820-061430. Decision: SALA D-229 / RENDA D-192.
+
 ## 2026-08-17
 
 - fix(motor-caixa): `T-SDC-BR-CAIXA-INFORMATIVO-SEM-GATE-V1` — regime CAIXA/MERCADO deixa de ser trava operacional; `09_decide` persiste Top-10 + buffer C2 K=15 no rebalance mesmo com `state_cash=1`; lookups ignoram rebalance com listas vazias; `painel_diario` não liquida por `action==CAIXA` (A2/C2 só sobre ledger); sela com `v1.32.0-motor`. Artefatos: `pipeline/09_decide.py`, `pipeline/painel_diario.py`, `pipeline/analise_br.py`. Decision: SALA D-228.
+
+## 2026-08-13
+
+- feat(backtest): `T-124-CADENCE-COHORT-DECISION-BR-V1` — estudo decisorio `7x1` vs `10x2` vs `9x3` no SSOT atual via phase sweep completo (`cad=7/9/10`, 26 rodadas) + 2 sleeves `50k` para gate de agregacao; artefatos novos em `backtest/t124_cadence_cohort_decision_br/` (`decision_criterion_t124.json`, `run_t124_sweep.py`, `aggregate_t124.py`, `results/*`, `REPORT.md`). Resultado do criterio pre-registrado: `G1=PASS`, `G3=PASS`, `G2=FAIL (equity_final_rel_diff=4.41% > 2.0%)`, veredito `INCONCLUSIVO`. Rastreabilidade atualizada com `D-191` e linha 78 no `ROADMAP.md`.
 
 ## 2026-08-10
 

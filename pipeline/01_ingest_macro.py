@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 TARGET = ROOT / "data" / "ssot" / "macro.parquet"
 START_DATE = date(2018, 1, 1)
+CDI_CARRY_MAX_SESSIONS = 5
 
 
 def run(end_date: date | None = None) -> Path:
@@ -87,10 +88,55 @@ def run(end_date: date | None = None) -> Path:
             macro["sp500_close"] = macro["sp500_close"].fillna(prev_sp)
         if np.isfinite(prev_ib):
             macro["ibov_close"] = macro["ibov_close"].fillna(prev_ib)
+    prev_official_asof = None
+    if not existing.empty:
+        if "cdi_log_daily" in existing.columns:
+            cdi_num = pd.to_numeric(existing["cdi_log_daily"], errors="coerce")
+            finite_cdi = existing.loc[cdi_num.notna() & np.isfinite(cdi_num)]
+            if not finite_cdi.empty:
+                prev_official_asof = pd.Timestamp(finite_cdi["date"].iloc[-1]).date()
+        if "cdi_asof_date" in existing.columns:
+            asof_ok = pd.to_datetime(existing["cdi_asof_date"], errors="coerce").dropna()
+            if not asof_ok.empty:
+                prev_official_asof = pd.Timestamp(asof_ok.iloc[-1]).date()
+    prev_cdi_rate_annual_pct = np.nan
     if np.isfinite(prev_cdi_log):
         prev_cdi_rate_annual_pct = float(np.expm1(prev_cdi_log) * 100.0)
-        macro["cdi_rate_annual_pct"] = macro["cdi_rate_annual_pct"].fillna(prev_cdi_rate_annual_pct)
-    macro["cdi_rate_annual_pct"] = macro["cdi_rate_annual_pct"].ffill().bfill()
+    rate_cursor = prev_cdi_rate_annual_pct
+    asof_cursor = prev_official_asof
+    rate_out: list[float] = []
+    asof_out: list[pd.Timestamp] = []
+    for data_ts, raw in zip(macro["date"], macro["cdi_rate_annual_pct"], strict=True):
+        data_alvo = pd.Timestamp(data_ts).date()
+        if pd.notna(raw) and np.isfinite(float(raw)):
+            rate_cursor = float(raw)
+            asof_cursor = data_alvo
+            rate_out.append(rate_cursor)
+            asof_out.append(pd.Timestamp(asof_cursor))
+            continue
+        if asof_cursor is None or not np.isfinite(rate_cursor):
+            raise RuntimeError("[01] CDI unavailable: no official seed and BCB series empty.")
+        n = len(sessions_in_range(asof_cursor, data_alvo, exchange="BVMF")) - 1
+        if n > CDI_CARRY_MAX_SESSIONS:
+            print(
+                f"[01] ERROR cdi_carry_exceeded official_date={asof_cursor.isoformat()} "
+                f"n={n} max={CDI_CARRY_MAX_SESSIONS}"
+            )
+            raise RuntimeError(
+                f"cdi_carry_exceeded official_date={asof_cursor.isoformat()} "
+                f"n={n} max={CDI_CARRY_MAX_SESSIONS}"
+            )
+        if n < 1:
+            raise RuntimeError(
+                f"[01] CDI missing on {data_alvo.isoformat()} without positive carry gap."
+            )
+        rate_out.append(float(rate_cursor))
+        asof_out.append(pd.Timestamp(asof_cursor))
+        print(
+            f"[01] WARN cdi_carried official_date={asof_cursor.isoformat()} n={n}"
+        )
+    macro["cdi_rate_annual_pct"] = rate_out
+    macro["cdi_asof_date"] = pd.to_datetime(asof_out, errors="coerce")
     macro["sp500_close"] = macro["sp500_close"].ffill().bfill()
     macro["ibov_close"] = macro["ibov_close"].ffill().bfill()
 
@@ -111,7 +157,7 @@ def run(end_date: date | None = None) -> Path:
                 np.log(macro["ibov_close"].iloc[0] / prev_ib)
             )
 
-    output_cols = ["date", "ibov_close", "ibov_log_ret", "sp500_close", "sp500_log_ret", "cdi_log_daily"]
+    output_cols = ["date", "ibov_close", "ibov_log_ret", "sp500_close", "sp500_log_ret", "cdi_log_daily", "cdi_asof_date"]
     new_rows = macro[output_cols].copy()
 
     if not existing.empty:
@@ -122,8 +168,6 @@ def run(end_date: date | None = None) -> Path:
 
     combined["date"] = pd.to_datetime(combined["date"], errors="coerce")
     combined = combined.drop_duplicates(subset=["date"], keep="last").sort_values("date").reset_index(drop=True)
-    if "cdi_log_daily" in combined.columns:
-        combined["cdi_log_daily"] = pd.to_numeric(combined["cdi_log_daily"], errors="coerce").ffill().bfill()
 
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     combined.to_parquet(TARGET, index=False)
