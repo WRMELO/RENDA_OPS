@@ -1,5 +1,9 @@
 # CHANGELOG — RENDA_OPS
 
+## 2026-10-16 — ordenamento da árvore
+
+- Pedido do Owner via `/curator`: publicar o working tree deste repositório. Sem decisão nova. Desvio R-053: Grok 4.7, frase «AUTORIZADO O GROCK». Recomendada: GPT-5.4 Mini.
+
 ## 2026-08-20
 
 - fix(cdi-carry): `T-SDC-BR-CDI-CARRY-FALLBACK-5S-V1` — BcbAdapter trata SGS 404/erro 'Value(s) not found' como vazio sem retry; Step 01 carrega ultimo CDI oficial ate 5 pregoes BVMF com WARN cdi_carried e aborta no 6o; sem tag de motor. Run PDCA-20260820-061430. Decision: SALA D-229 / RENDA D-192.

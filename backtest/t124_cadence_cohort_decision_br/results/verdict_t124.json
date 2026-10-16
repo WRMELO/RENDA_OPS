@@ -1,0 +1,49 @@
+{
+  "task_id": "T-124-CADENCE-COHORT-DECISION-BR-V1",
+  "decision_ref": "PENDING-DECISION-LOG",
+  "gates": {
+    "G1_mechanics": {
+      "status": "PASS",
+      "total_runs": 26,
+      "failed_runs": 0,
+      "fail_examples": []
+    },
+    "G2_aggregation": {
+      "status": "FAIL",
+      "native": {
+        "equity_final": 1359195.8659512673,
+        "cagr_pct": 44.340407867683936,
+        "mdd_pct": -31.529603763942227,
+        "sharpe_excess": 0.504956136356153,
+        "sharpe_raw": 0.6409665327639995,
+        "n_pregoes_holdout": 898
+      },
+      "proxy": {
+        "equity_final": 1301747.6168284442,
+        "cagr_pct": 41.644329385079935,
+        "mdd_pct": -32.375582959962415,
+        "sharpe_excess": 0.47837514932323316,
+        "sharpe_raw": 0.6072225745761941,
+        "n_pregoes_holdout": 898
+      },
+      "equity_final_rel_diff": 0.044131633797639624,
+      "sharpe_abs_diff": 0.026580987032919834,
+      "tolerances": {
+        "equity_final_rel_diff_max": 0.02,
+        "sharpe_abs_diff_max": 0.05
+      }
+    },
+    "G3_completeness": {
+      "status": "PASS",
+      "required_runs": 26,
+      "runs_with_any_row": 26,
+      "missing_variants": [],
+      "bad_split_variants": []
+    }
+  },
+  "decision": {
+    "verdict": "INCONCLUSIVO",
+    "reason": "G2_aggregation FAIL",
+    "selected_config": null
+  }
+}

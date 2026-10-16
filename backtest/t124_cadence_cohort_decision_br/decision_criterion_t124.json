@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "task_id": "T-124-CADENCE-COHORT-DECISION-BR-V1",
+    "decision_ref": "PENDING-DECISION-LOG",
+    "created_before_execution": true,
+    "owner_session_date": "2026-08-13"
+  },
+  "evaluation_scope": {
+    "split_for_decision": {
+      "name": "HOLDOUT",
+      "rule": "date > 2022-12-30"
+    },
+    "cadences_swept": [
+      7,
+      9,
+      10
+    ],
+    "phases_per_cadence_rule": "all phases 0..cadence-1"
+  },
+  "configurations": {
+    "A_7X1": {
+      "cadence": 7,
+      "cohorts": 1,
+      "portfolio_count": 7,
+      "portfolio_construction": "each portfolio is one single phase curve C07_Pf for f in [0..6]"
+    },
+    "B_10X2": {
+      "cadence": 10,
+      "cohorts": 2,
+      "portfolio_count": 5,
+      "portfolio_construction": "each portfolio is simple mean of two phase curves (f, f+5) for f in [0..4]"
+    },
+    "C_9X3": {
+      "cadence": 9,
+      "cohorts": 3,
+      "portfolio_count": 3,
+      "portfolio_construction": "each portfolio is simple mean of three phase curves (f, f+3, f+6) for f in [0..2]"
+    }
+  },
+  "metrics": {
+    "per_portfolio": [
+      "sharpe_excess",
+      "cagr",
+      "mdd",
+      "note_days_holdout"
+    ],
+    "per_configuration": [
+      "sharpe_mean",
+      "sharpe_std",
+      "sharpe_min",
+      "cagr_mean",
+      "mdd_mean",
+      "note_days_holdout_mean",
+      "n_pregoes_holdout"
+    ]
+  },
+  "fixed_cost_model": {
+    "per_note_brl": 9.0,
+    "source": "owner_declared_2026-08-13",
+    "scales_brl": [
+      100000,
+      750000
+    ],
+    "note_days_definition": "distinct trade days with at least one rebalance event across sleeves plus distinct days with defensive_sell outside rebalance; phase-staggered sleeves do not collide on rebalance days",
+    "note_days_per_year_formula": "note_days_holdout / (n_pregoes_holdout / 252)",
+    "drag_anual_pct_formula": "note_days_per_year * 9.0 / scale_brl * 100",
+    "cagr_net_100k_formula": "cagr_mean - drag_anual_pct(scale_brl=100000)"
+  },
+  "gates": {
+    "G1_mechanics": {
+      "description": "for each of 26 sweep runs, sum(is_rebalance_day) equals count of indices where idx % cadence == phase",
+      "expected_total_runs": 26,
+      "status_values": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "G2_aggregation": {
+      "description": "native-vs-proxy equivalence for 10x2 using phases 0 and 5",
+      "native_definition": "sum of two sleeves run natively with BASE_CAPITAL=50000 each for cadence=10 phases 0 and 5",
+      "proxy_definition": "simple mean of the two 100k phase curves cadence=10 phases 0 and 5",
+      "split": "HOLDOUT",
+      "tolerance_equity_final_relative": 0.02,
+      "tolerance_sharpe_abs": 0.05,
+      "status_values": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "G3_completeness": {
+      "description": "all 26/26 sweep runs have both TRAIN and HOLDOUT rows",
+      "required_runs": 26,
+      "required_splits_per_run": [
+        "TRAIN",
+        "HOLDOUT"
+      ],
+      "status_values": [
+        "PASS",
+        "FAIL"
+      ]
+    }
+  },
+  "decision_rule": {
+    "primary_objective": "maximize sharpe_min on HOLDOUT",
+    "constraint": "winner cagr_net_100k >= cagr_net_100k of A_7X1",
+    "tie_breaker": "if abs(sharpe_mean_winner - sharpe_mean_A_7X1) < 0.05 then A_7X1 wins",
+    "on_gate_fail": {
+      "G2_aggregation": "INCONCLUSIVO"
+    },
+    "verdict_enum": [
+      "MANTER_7X1",
+      "MIGRAR_10X2",
+      "MIGRAR_9X3",
+      "INCONCLUSIVO"
+    ]
+  }
+}
